@@ -8,8 +8,8 @@ public class Cooldown : MonoBehaviour
     private float nextFireTime;
     public bool isStanding = true;
 
-    public Texture2D cursor;
-    public Texture2D cursorInteract;
+    public Texture2D cursor, cursorInteract, cursorAttack;
+    public bool checkbox;
     public GameObject standing;
     public GameObject crouching;
 
@@ -23,7 +23,7 @@ public class Cooldown : MonoBehaviour
     {
         if(Time.time > nextFireTime)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Stance"))
             {
                 if(isStanding)
                 {
@@ -42,7 +42,12 @@ public class Cooldown : MonoBehaviour
 
                 nextFireTime = Time.time + cooldownTime;
             }
-            if(Input.GetButton("Interact"))
+
+            if (Input.GetButton("Attack"))
+            {
+                Cursor.SetCursor(cursorAttack, Vector2.zero, CursorMode.ForceSoftware);
+            }
+            else if (Input.GetButton("Interact"))
             {
                 Cursor.SetCursor(cursorInteract, Vector2.zero, CursorMode.ForceSoftware);
             }
