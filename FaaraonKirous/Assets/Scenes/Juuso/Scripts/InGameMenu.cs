@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class InGameMenu : MonoBehaviour
 {
-    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel;
+    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     public GameObject gameplayButton, audioButton, controlsButton, videoButton;
 
@@ -15,10 +15,6 @@ public class InGameMenu : MonoBehaviour
     private float startTime;
 
     public bool menuActive;
-
-    int hours = 0;
-    int minutes = 0;
-    int seconds = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -29,41 +25,57 @@ public class InGameMenu : MonoBehaviour
         optionsPanel.SetActive(false);
         audioPanel.SetActive(false);
         videoPanel.SetActive(false);
+        controlsPanel.SetActive(false);
+        gameplayPanel.SetActive(false);
 
         startTime = Time.time;
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer();
+        Scene sceneName = SceneManager.GetActiveScene();
 
-        if(Input.GetButtonDown("Cancel") && !menuActive)
+        if (sceneName.name != "MainMenu")
         {
-            menuActive = true;
+            timer();
 
-            menuPanel.SetActive(true);
+            if (Input.GetButtonDown("Cancel") && !menuActive)
+            {
+                menuActive = true;
 
-            continueButton.SetActive(true);
-            loadButton.SetActive(true);
-            saveButton.SetActive(true);
-            optionsButton.SetActive(true);
-            restartButton.SetActive(true);
-            mainMenuButton.SetActive(true);
-            gameplayButton.SetActive(true);
-            audioButton.SetActive(true);
-            controlsButton.SetActive(true);
-            videoButton.SetActive(true);
+                menuPanel.SetActive(true);
+
+                continueButton.SetActive(true);
+                loadButton.SetActive(true);
+                saveButton.SetActive(true);
+                optionsButton.SetActive(true);
+                restartButton.SetActive(true);
+                mainMenuButton.SetActive(true);
+                gameplayButton.SetActive(true);
+                audioButton.SetActive(true);
+                controlsButton.SetActive(true);
+                videoButton.SetActive(true);
+            }
+
+            else if (Input.GetButtonDown("Cancel") && menuActive)
+            {
+                menuActive = false;
+
+                menuPanel.SetActive(false);
+                optionsPanel.SetActive(false);
+                audioPanel.SetActive(false);
+                videoPanel.SetActive(false);
+                controlsPanel.SetActive(false);
+                gameplayPanel.SetActive(false);
+            }
         }
 
-        else if(Input.GetButtonDown("Cancel") && menuActive)
+        else
         {
-            menuActive = false;
-
-            menuPanel.SetActive(false);
-            optionsPanel.SetActive(false);
-            audioPanel.SetActive(false);
-            videoPanel.SetActive(false);
+            menuPanel.SetActive(true);
         }
     }
 
@@ -76,5 +88,20 @@ public class InGameMenu : MonoBehaviour
         string seconds = (t % 60).ToString("f1");
 
         timeText.text = "Level time: " + hours + ":" + minutes + ":" + seconds;
+    }
+
+    public void DeactivateMenu()
+    {
+        menuActive = false;
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene("JuusonScene");
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
