@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class InGameMenu : MonoBehaviour
 {
-    public GameObject menuPanel, optionsPanel, audioPanel;
+    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel;
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     public GameObject gameplayButton, audioButton, controlsButton, videoButton;
-    public AudioSource backgroundMusic;
+
+    public Text timeText;
+    private float startTime;
 
     public bool menuActive;
+
+    int hours = 0;
+    int minutes = 0;
+    int seconds = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -21,11 +28,16 @@ public class InGameMenu : MonoBehaviour
         menuPanel.SetActive(false);
         optionsPanel.SetActive(false);
         audioPanel.SetActive(false);
+        videoPanel.SetActive(false);
+
+        startTime = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
+        timer();
+
         if(Input.GetButtonDown("Cancel") && !menuActive)
         {
             menuActive = true;
@@ -51,23 +63,18 @@ public class InGameMenu : MonoBehaviour
             menuPanel.SetActive(false);
             optionsPanel.SetActive(false);
             audioPanel.SetActive(false);
+            videoPanel.SetActive(false);
         }
     }
 
-    //public void DisableChildren()
-    //{
-    //    foreach (Transform weapon in menuPanel.GetComponentsInChildren<Transform>())
-    //    {
-    //        for (int i = 0; i < menuPanel.transform.childCount; i++)
-    //        {
-    //            // deactivates other weapons and stances
-    //            var child = menuPanel.transform.GetChild(i).gameObject;
+    public void timer()
+    {
+        float t = Time.time - startTime;
 
-    //            if (child != null && child.name.Contains("Button") /*|| child.name.Contains("Hand")*/)
-    //            {
-    //                child.SetActive(false);
-    //            }
-    //        }
-    //    }
-    //}
+        string hours = ((int)t / 3600).ToString();
+        string minutes = ((int)t / 60).ToString();
+        string seconds = (t % 60).ToString("f1");
+
+        timeText.text = "Level time: " + hours + ":" + minutes + ":" + seconds;
+    }
 }
