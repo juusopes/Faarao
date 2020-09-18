@@ -59,15 +59,15 @@
     <Compile Include="Assets\Scripts\Network\ClientHandle.cs" />
     <Compile Include="Assets\Scripts\Network\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Network\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Network\ProjectileManager.cs" />
     <Compile Include="Assets\Scripts\Network\ThreadManager.cs" />
+    <Compile Include="Assets\Scripts\Network\ItemSpawner.cs" />
     <Compile Include="Assets\Scripts\Network\CameraController.cs" />
     <Compile Include="Assets\Scripts\Network\GameManager.cs" />
     <Compile Include="Assets\Scripts\Network\Client.cs" />
     <Compile Include="Assets\Scripts\Network\ClientSend.cs" />
     <Compile Include="Assets\Scripts\Network\Packet.cs" />
     <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
-    <Compile Include="Assets\Scripts\Network\ItemSpawner.cs" />
-    <Compile Include="Assets\Scripts\Network\ProjectileManager.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ParrelSync\VERSION.txt" />
