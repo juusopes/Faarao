@@ -57,12 +57,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scenes\Juuso\Scripts\ObjectiveCounter.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\UnitInteractions.cs" />
-    <Compile Include="Assets\Scripts\CameraControl.cs" />
-    <Compile Include="Assets\Scripts\LevelController.cs" />
+    <Compile Include="Assets\Scripts\Olli\CameraControl.cs" />
+    <Compile Include="Assets\Scripts\Olli\LevelController.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\InGameMenu.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\MenuSettings.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\AbilityIndicator.cs" />
+    <Compile Include="Assets\Scripts\Olli\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Olli\AbilityIndicator.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
