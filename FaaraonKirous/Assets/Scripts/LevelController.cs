@@ -4,24 +4,32 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    //Switch Character
     private GameObject[] characters;
-    private GameObject activeCharacter;
+    public GameObject activeCharacter;
     private int current;
+
+    //CameraControl
+    private GameObject mainCam;
+
     // Start is called before the first frame update
     void Start()
     {
-        characters = GameObject.FindGameObjectsWithTag("Player");
         Initialize();
     }
 
     // Update is called once per frame
     void Update()
     {
-        SwitchCharacter();
+        KeyBoardControls();
     }
 
     private void Initialize()
     {
+        characters = GameObject.FindGameObjectsWithTag("Player");
+        mainCam = GameObject.FindGameObjectWithTag("MainCamera");
+        mainCam = mainCam.transform.parent.gameObject;
+        //SetACtiveCharacter
         current = 0;
         foreach (GameObject character in characters)
         {
@@ -29,20 +37,30 @@ public class LevelController : MonoBehaviour
         }
         characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
         activeCharacter = characters[current];
+        //SetCameraPos
+        mainCam.transform.parent = activeCharacter.transform;
     }
 
-    private void SwitchCharacter()
+    public void SwitchCharacter()
+    {
+        //Switch Player
+        characters[current].GetComponent<PlayerController>().isActiveCharacter = false;
+        current++;
+        if (current > characters.Length - 1)
+        {
+            current = 0;
+        }
+        activeCharacter = characters[current];
+        characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
+        mainCam.GetComponent<CameraControl>().activeCharacter = activeCharacter;
+        mainCam.transform.parent = activeCharacter.transform;
+    }
+
+    private void KeyBoardControls()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            characters[current].GetComponent<PlayerController>().isActiveCharacter = false;
-            current++;
-            if (current > characters.Length - 1)
-            {
-                Debug.Log("C");
-                current = 0;
-            }
-            characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
+            SwitchCharacter();
         }
     }
 }

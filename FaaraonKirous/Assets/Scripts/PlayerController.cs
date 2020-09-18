@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -20,8 +21,14 @@ public class PlayerController : MonoBehaviour
     private bool lineOfSight;
 
     //Crouch
-    [HideInInspector]
     public bool isCrouching;
+
+    //Abilities
+    //Indicator
+    private bool abilityIsActive;
+    public GameObject indicator;
+    private GameObject line;
+    private GameObject visibleInd;
 
     //Invisibility
     public bool isInvisible;
@@ -40,6 +47,7 @@ public class PlayerController : MonoBehaviour
         LineOfSight();
         KeyControls();
         Invisibility();
+        SetIndicator();
     }
 
     private void Initialize()
@@ -88,6 +96,9 @@ public class PlayerController : MonoBehaviour
         if (isRunning)
         {
             navMeshAgent.speed = movementSpeed * 1.5f;
+        } else if (isCrouching)
+        {
+            navMeshAgent.speed = movementSpeed * 0.5f;
         }
         else
         {
@@ -114,11 +125,9 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(transform.position, direction, out hit))
         {
-            Debug.Log("RayHIT!");
             if (hit.collider.tag != "Player")
             {
                 lineOfSight = false;
-                Debug.Log("RayHIT!" + hit.collider);
             }
         }
         else
@@ -133,16 +142,10 @@ public class PlayerController : MonoBehaviour
             if (!isCrouching)
             {
                 isCrouching = true;
-                Material newMat = new Material(this.gameObject.GetComponent<Renderer>().material.shader);
-                newMat.color = Color.blue;
-                this.gameObject.GetComponent<Renderer>().material = newMat;
             }
             else
             {
                 isCrouching = false;
-                Material newMat = new Material(this.gameObject.GetComponent<Renderer>().material.shader);
-                newMat.color = Color.green;
-                this.gameObject.GetComponent<Renderer>().material = newMat;
             }
         }
     }
@@ -187,6 +190,42 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void SetIndicator()
+    {
+        if (isActiveCharacter)
+        {
+            if (abilityIsActive)
+            {
+                if (visibleInd == null)
+                {
+                    visibleInd = Instantiate(indicator);
+                    line = visibleInd.transform.GetChild(0).gameObject;
+                    visibleInd.GetComponent<AbilityIndicator>().player = this.gameObject;
+                }
+                else
+                {
+                    visibleInd.SetActive(true);
+                    line.SetActive(true);
+                }
+            }
+            else
+            {
+                if (visibleInd != null)
+                {
+                    visibleInd.SetActive(false);
+                    line.SetActive(false);
+                }
+            }
+        } else
+        {
+            if (visibleInd != null)
+            {
+                visibleInd.SetActive(false);
+                line.SetActive(false);
+            }
+        }
+    }
+
     private void KeyControls()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -196,6 +235,16 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             InvisiblitySpell();
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (!abilityIsActive)
+            {
+                abilityIsActive = true;
+            } else
+            {
+                abilityIsActive = false;
+            }
         }
     }
 }
