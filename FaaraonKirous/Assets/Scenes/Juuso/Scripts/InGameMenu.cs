@@ -29,8 +29,6 @@ public class InGameMenu : MonoBehaviour
         gameplayPanel.SetActive(false);
 
         startTime = Time.time;
-
-
     }
 
     // Update is called once per frame
@@ -62,14 +60,7 @@ public class InGameMenu : MonoBehaviour
 
             else if (Input.GetButtonDown("Cancel") && menuActive)
             {
-                menuActive = false;
-
-                menuPanel.SetActive(false);
-                optionsPanel.SetActive(false);
-                audioPanel.SetActive(false);
-                videoPanel.SetActive(false);
-                controlsPanel.SetActive(false);
-                gameplayPanel.SetActive(false);
+                DeactivateMenu();
             }
         }
 
@@ -93,6 +84,13 @@ public class InGameMenu : MonoBehaviour
     public void DeactivateMenu()
     {
         menuActive = false;
+
+        menuPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+        audioPanel.SetActive(false);
+        videoPanel.SetActive(false);
+        controlsPanel.SetActive(false);
+        gameplayPanel.SetActive(false);
     }
 
     public void RestartLevel()
@@ -103,5 +101,20 @@ public class InGameMenu : MonoBehaviour
     public void GoToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void LoadLevel()
+    {
+        SceneManager.LoadScene("JuusonScene");
+    }
+
+    public void SaveLevel()
+    {
+
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 public class MenuSettings : MonoBehaviour
 {
     private AudioSource audioSrc;
-    private float musicVolume = 1f;
+    private float musicVolume = 0.2f;
 
     public Dropdown resolutionDropDown;
 
@@ -18,17 +19,20 @@ public class MenuSettings : MonoBehaviour
         audioSrc = GetComponent<AudioSource>();
 
         resolutions = Screen.resolutions;
-
         resolutionDropDown.ClearOptions();
-
         List<string> options = new List<string>();
-
         int currentResolution = 0;
 
         for (int i = 0; i < resolutions.Length; i++)
         {
             string option = resolutions[i].width + " x " + resolutions[i].height;
+
             options.Add(option);
+
+            if ( i > 0 && resolutions[i].width == resolutions[i - 1].width && resolutions[i].height == resolutions[i - 1].height)
+            {
+                options.Remove(option);
+            }
 
             if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
             {

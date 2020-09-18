@@ -23,6 +23,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.Dropdown
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.HorizontalLayoutGroup
     - UnityEngine.UI.Image
     - UnityEngine.UI.Mask
     - UnityEngine.UI.RawImage
@@ -33,6 +34,85 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Toggle
   sceneClasses:
     Assets/Scenes/Juuso/JuusonScene.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11728}
+    - Class: 114
+      Script: {instanceID: 11750}
+    - Class: 114
+      Script: {instanceID: 11852}
+    - Class: 114
+      Script: {instanceID: 11858}
+    - Class: 114
+      Script: {instanceID: 11932}
+    - Class: 114
+      Script: {instanceID: 11934}
+    - Class: 114
+      Script: {instanceID: 11972}
+    - Class: 114
+      Script: {instanceID: 12308}
+    - Class: 114
+      Script: {instanceID: 12406}
+    - Class: 114
+      Script: {instanceID: 12632}
+    - Class: 114
+      Script: {instanceID: 12864}
+    - Class: 114
+      Script: {instanceID: 12892}
+    - Class: 114
+      Script: {instanceID: 13078}
+    - Class: 114
+      Script: {instanceID: 13108}
+    - Class: 114
+      Script: {instanceID: 13256}
+    - Class: 114
+      Script: {instanceID: 13402}
+    - Class: 114
+      Script: {instanceID: 13770}
+    - Class: 114
+      Script: {instanceID: 13784}
+    - Class: 114
+      Script: {instanceID: 13802}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    Assets/Scenes/Juuso/MainMenu.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -58,49 +138,47 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11722}
+      Script: {instanceID: 11728}
     - Class: 114
-      Script: {instanceID: 11824}
+      Script: {instanceID: 11750}
     - Class: 114
-      Script: {instanceID: 11830}
+      Script: {instanceID: 11852}
     - Class: 114
-      Script: {instanceID: 11904}
+      Script: {instanceID: 11858}
     - Class: 114
-      Script: {instanceID: 11906}
+      Script: {instanceID: 11932}
     - Class: 114
-      Script: {instanceID: 11944}
+      Script: {instanceID: 11934}
     - Class: 114
-      Script: {instanceID: 12280}
+      Script: {instanceID: 11972}
     - Class: 114
-      Script: {instanceID: 12378}
+      Script: {instanceID: 12308}
     - Class: 114
-      Script: {instanceID: 12410}
+      Script: {instanceID: 12406}
     - Class: 114
-      Script: {instanceID: 12604}
+      Script: {instanceID: 12438}
     - Class: 114
-      Script: {instanceID: 12836}
+      Script: {instanceID: 12632}
     - Class: 114
       Script: {instanceID: 12864}
     - Class: 114
-      Script: {instanceID: 13050}
+      Script: {instanceID: 13078}
     - Class: 114
-      Script: {instanceID: 13084}
+      Script: {instanceID: 13112}
     - Class: 114
-      Script: {instanceID: 13100}
+      Script: {instanceID: 13128}
     - Class: 114
-      Script: {instanceID: 13228}
+      Script: {instanceID: 13256}
     - Class: 114
-      Script: {instanceID: 13374}
+      Script: {instanceID: 13402}
     - Class: 114
-      Script: {instanceID: 13542}
+      Script: {instanceID: 13570}
     - Class: 114
-      Script: {instanceID: 13742}
+      Script: {instanceID: 13770}
     - Class: 114
-      Script: {instanceID: 13756}
+      Script: {instanceID: 13784}
     - Class: 114
-      Script: {instanceID: 13774}
-    - Class: 114
-      Script: {instanceID: 13792}
+      Script: {instanceID: 13802}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -108,8 +186,6 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
-      Script: {instanceID: 0}
-    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -120,6 +196,12 @@ ScriptsOnlyBuild:
     - Class: 224
       Script: {instanceID: 0}
   scriptHashData:
+  - hash:
+      serializedVersion: 2
+      Hash: 0c05f2bfb402def3f0a85a62a2323c7f
+    assemblyName: UnityEngine.UI.dll
+    namespaceName: UnityEngine.UI
+    className: Slider
   - hash:
       serializedVersion: 2
       Hash: 4bc4346a71a8df53a6b106f68ef3a190
@@ -374,7 +456,7 @@ ScriptsOnlyBuild:
     className: VerticalLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: dedecd2bf4de640193a3e951779db047
+      Hash: 5b56eb27ede2b66534ae7a25ecc2f67e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameMenu
@@ -548,12 +630,6 @@ ScriptsOnlyBuild:
     className: SignalEmitter
   - hash:
       serializedVersion: 2
-      Hash: 0c05f2bfb402def3f0a85a62a2323c7f
-    assemblyName: UnityEngine.UI.dll
-    namespaceName: UnityEngine.UI
-    className: Slider
-  - hash:
-      serializedVersion: 2
       Hash: 0fd6822f6177297bd0eb4d83cc7a9030
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -566,5 +642,6 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   platform: 5
   scenePathNames:
+  - Assets/Scenes/Juuso/MainMenu.unity
   - Assets/Scenes/Juuso/JuusonScene.unity
   playerPath: C:/Users/Juuso/Desktop/pp2testibuild/FaaraonKirous.exe
