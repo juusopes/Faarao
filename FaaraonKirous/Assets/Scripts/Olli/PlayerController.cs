@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviour
 
     //Abilities
     //Indicator
-    private bool abilityIsActive;
+    [HideInInspector]
+    public bool abilityIsActive;
     public GameObject indicator;
     private GameObject line;
     private GameObject visibleInd;
@@ -33,6 +34,9 @@ public class PlayerController : MonoBehaviour
     //Invisibility
     public bool isInvisible;
     private float invisibilityTimer;
+
+    //Camera
+    private GameObject camControl;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +59,7 @@ public class PlayerController : MonoBehaviour
         navMeshAgent = this.GetComponent<NavMeshAgent>();
         targetV3 = transform.position;
         invisibilityTimer = 10;
+        camControl = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
 
         GameObject[] tempCharacters = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject tempCharacter in tempCharacters)
@@ -78,13 +83,13 @@ public class PlayerController : MonoBehaviour
                 {
                     targetV3 = hit.point;
                 }
-                if (doubleClickTimer >= 0.5f)
-                {
-                    doubleClickTimer = 0;
-                }
                 if (doubleClickTimer < 0.5f)
                 {
                     isRunning = true;
+                }
+                if (doubleClickTimer >= 0.5f)
+                {
+                    doubleClickTimer = 0;
                 }
             }
         }
@@ -95,10 +100,11 @@ public class PlayerController : MonoBehaviour
         //Moving
         if (isRunning)
         {
-            navMeshAgent.speed = movementSpeed * 1.5f;
-        } else if (isCrouching)
+            navMeshAgent.speed = movementSpeed * 5f;
+        }
+        else if (isCrouching)
         {
-            navMeshAgent.speed = movementSpeed * 0.5f;
+            navMeshAgent.speed = movementSpeed * 0.2f;
         }
         else
         {
@@ -182,7 +188,8 @@ public class PlayerController : MonoBehaviour
                 newMat.color = Color.black;
                 this.gameObject.GetComponent<Renderer>().material = newMat;
             }
-        } else
+        }
+        else
         {
             Material newMat = new Material(this.gameObject.GetComponent<Renderer>().material.shader);
             newMat.color = Color.green;
@@ -216,7 +223,8 @@ public class PlayerController : MonoBehaviour
                     line.SetActive(false);
                 }
             }
-        } else
+        }
+        else
         {
             if (visibleInd != null)
             {
@@ -226,9 +234,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void CamFollow()
+    {
+        if (isActiveCharacter)
+        {
+            if (camControl.GetComponent<CameraControl>().camFollow)
+            {
+                camControl.GetComponent<CameraControl>().camFollow = false;
+                camControl.transform.parent = null;
+            } else
+            {
+                camControl.GetComponent<CameraControl>().camFollow = true;
+                camControl.transform.parent = this.gameObject.transform;
+            }
+        }
+    }
+
     private void KeyControls()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Crouch();
         }
@@ -241,10 +265,16 @@ public class PlayerController : MonoBehaviour
             if (!abilityIsActive)
             {
                 abilityIsActive = true;
-            } else
+            }
+            else
             {
                 abilityIsActive = false;
             }
         }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            CamFollow();
+        }
     }
 }
+

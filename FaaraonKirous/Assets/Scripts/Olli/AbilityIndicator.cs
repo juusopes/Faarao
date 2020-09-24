@@ -7,6 +7,8 @@ public class AbilityIndicator : MonoBehaviour
 {
     public LineRenderer line;
     public GameObject player;
+    public GameObject target;
+    private LevelController levelControl;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,7 @@ public class AbilityIndicator : MonoBehaviour
     {
         line = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
         line.transform.parent = null;
+        levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
     }
     private void MoveInd()
     {
@@ -29,26 +32,51 @@ public class AbilityIndicator : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.collider.tag != "Indicator")
+            if (hit.collider.tag == "TargetableObject")
+            {
+                target = hit.collider.gameObject;
+                levelControl.targetObject = hit.collider.gameObject;
+                transform.position = target.transform.position;
+            }
+            else if (hit.collider.tag != "Indicator")
             {
                 Vector3 targetV3 = hit.point;
                 transform.position = targetV3;
+                target = null;
+                levelControl.targetObject = null;
             }
         }
         LineCalculator();
     }
     private void LineCalculator()
     {
-        //Line Start
-        line.SetPosition(0, player.transform.position);
+        if (target != null)
+        {
+            //Line Start
+            line.SetPosition(0, player.transform.position);
 
-        //Vector Top point
-        Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
-        topPoint.y = 10;
-        line.SetPosition(line.positionCount / 2, topPoint);
+            //Vector Top point
+            Vector3 topPoint = player.transform.position + ((target.transform.position - player.transform.position) / 2);
+            topPoint.y = 10;
+            line.SetPosition(line.positionCount / 2, topPoint);
 
-        //Line End
-        line.SetPosition(line.positionCount -1, transform.position);
+            //Line End
+            line.SetPosition(line.positionCount - 1, target.transform.position);
+        }
+        else
+        {
+            //Line Start
+            line.SetPosition(0, player.transform.position);
+
+            //Vector Top point
+            Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
+            topPoint.y = 10;
+            line.SetPosition(line.positionCount / 2, topPoint);
+
+            //Line End
+            line.SetPosition(line.positionCount - 1, transform.position);
+        }
+
     }
 
 

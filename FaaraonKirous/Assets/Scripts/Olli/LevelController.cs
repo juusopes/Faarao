@@ -12,6 +12,10 @@ public class LevelController : MonoBehaviour
     //CameraControl
     private GameObject mainCam;
 
+    //AbilitySupport
+    [HideInInspector]
+    public GameObject targetObject;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +42,7 @@ public class LevelController : MonoBehaviour
         characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
         activeCharacter = characters[current];
         //SetCameraPos
-        mainCam.transform.parent = activeCharacter.transform;
+            mainCam.transform.parent = activeCharacter.transform;
     }
 
     public void SwitchCharacter()
@@ -53,7 +57,10 @@ public class LevelController : MonoBehaviour
         activeCharacter = characters[current];
         characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
         mainCam.GetComponent<CameraControl>().activeCharacter = activeCharacter;
-        mainCam.transform.parent = activeCharacter.transform;
+        if (mainCam.GetComponent<CameraControl>().camFollow)
+        {
+            mainCam.transform.parent = activeCharacter.transform;
+        }
     }
 
     private void KeyBoardControls()
