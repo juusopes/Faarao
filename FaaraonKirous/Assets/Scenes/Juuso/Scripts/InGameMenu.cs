@@ -4,17 +4,25 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class InGameMenu : MonoBehaviour
 {
     public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     public GameObject gameplayButton, audioButton, controlsButton, videoButton;
+    public int savedLevel;
+    public float lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ;
+    public float lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2;
 
     public Text timeText;
     private float startTime;
 
     public bool menuActive;
+
+    //testejä varten
+    public GameObject player, player2;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +37,9 @@ public class InGameMenu : MonoBehaviour
         gameplayPanel.SetActive(false);
 
         startTime = Time.time;
+
+        player.transform.position = new Vector3(lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ);
+        player2.transform.position = new Vector3(lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2);
     }
 
     // Update is called once per frame
@@ -93,9 +104,15 @@ public class InGameMenu : MonoBehaviour
         gameplayPanel.SetActive(false);
     }
 
+    public void NewGame()
+    {
+        SceneManager.LoadScene("OllinScene");
+    }
+
     public void RestartLevel()
     {
-        SceneManager.LoadScene("JuusonScene");
+        string restartLevel = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(restartLevel);
     }
 
     public void GoToMainMenu()
@@ -103,18 +120,73 @@ public class InGameMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void LoadLevel()
-    {
-        SceneManager.LoadScene("JuusonScene");
-    }
-
     public void SaveLevel()
     {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/LevelInfo.dat");
+        LevelData data = new LevelData();
 
+        print("Level saved at: " + player.transform.position);
+
+        data.lastSaveSpotX = player.transform.position.x;
+        data.lastSaveSpotY = player.transform.position.y;
+        data.lastSaveSpotZ = player.transform.position.z;
+
+        data.lastSaveSpotX2 = player2.transform.position.x;
+        data.lastSaveSpotY2 = player2.transform.position.y;
+        data.lastSaveSpotZ2 = player2.transform.position.z;
+
+        string savedLevel = SceneManager.GetActiveScene().name;
+        data.savedLevel = savedLevel;
+
+        bf.Serialize(file, data);
+
+        file.Close();
+    }
+
+    public void LoadLevel()
+    {
+        if (File.Exists(Application.persistentDataPath + "/LevelInfo.dat"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/LevelInfo.dat", FileMode.Open);
+            LevelData data = (LevelData)bf.Deserialize(file);
+
+            print("Level loaded at: " + player.transform.position);
+
+            file.Close();
+
+            player.transform.position = new Vector3(data.lastSaveSpotX, data.lastSaveSpotY, data.lastSaveSpotZ);
+            player2.transform.position = new Vector3(data.lastSaveSpotX2, data.lastSaveSpotY2, data.lastSaveSpotZ2);
+        }
+    }
+
+    public void LoadLevelFromMenu()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + "/LevelInfo.dat", FileMode.Open);
+        LevelData data = (LevelData)bf.Deserialize(file);
+
+        // atm vain yksi load slot
+        SceneManager.LoadScene(data.savedLevel);
     }
 
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    [System.Serializable]
+    class LevelData
+    {
+        public float lastSaveSpotX;
+        public float lastSaveSpotY;
+        public float lastSaveSpotZ;
+
+        public float lastSaveSpotX2;
+        public float lastSaveSpotY2;
+        public float lastSaveSpotZ2;
+
+        public string savedLevel;
     }
 }

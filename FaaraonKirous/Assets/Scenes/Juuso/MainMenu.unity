@@ -4219,12 +4219,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f788e01f3c48d478962bded126989c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objective1: 0
-  objective2: 0
-  objective3: 0
-  objective4: 0
-  objective5: 0
-  objectives: 0
+  objective1: {fileID: 0}
+  objective1text: {fileID: 0}
+  objective2: {fileID: 0}
+  objective2text: {fileID: 0}
+  objective3: {fileID: 0}
+  objective3text: {fileID: 0}
+  objective4: {fileID: 0}
+  objective4text: {fileID: 0}
+  objective5: {fileID: 0}
+  objective5text: {fileID: 0}
 --- !u!114 &945227647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4253,8 +4257,17 @@ MonoBehaviour:
   audioButton: {fileID: 116836791}
   controlsButton: {fileID: 493836801}
   videoButton: {fileID: 1702283373}
+  savedLevel: 0
+  lastSaveSpotX: 0
+  lastSaveSpotY: 0
+  lastSaveSpotZ: 0
+  lastSaveSpotX2: 0
+  lastSaveSpotY2: 0
+  lastSaveSpotZ2: 0
   timeText: {fileID: 0}
   menuActive: 0
+  player: {fileID: 0}
+  player2: {fileID: 0}
 --- !u!114 &945227648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6805,7 +6818,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 945227647}
         m_TargetAssemblyTypeName: InGameMenu, Assembly-CSharp
-        m_MethodName: RestartLevel
+        m_MethodName: NewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
