@@ -30,70 +30,77 @@ public class PriestAbilities : MonoBehaviour
     private void Initialize()
     {
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
-        telekinesisActive = true;
+        telekinesisActive = false;
         telekinesisTimer = 5;
     }
 
     public void Telekinesis()
     {
-        //TempSetActive
-        if (GetComponent<PlayerController>().abilityIsActive)
+        if (GetComponent<PlayerController>().isActiveCharacter)
         {
-            telekinesisActive = true;
-        }
-
-        //TelekinesisSpell
-        if (levelControl.targetObject != null)
-        {
-            target = levelControl.targetObject;
-        }
-        if (target != null) {
-            Debug.Log("NoNullTarget");
-            if (telekinesisActive)
+            //TempSetActive
+            if (GetComponent<PlayerController>().abilityIsActive)
             {
-                Debug.Log(target);
-                if (Input.GetKeyDown(KeyCode.Mouse1))
+                telekinesisActive = true;
+                if (GetComponent<PlayerController>().visibleInd != null)
                 {
-                    Debug.Log("TeleTimer0");
-                    telekinesisTimer = 0;
-                    useTeleknesis = true;
-                    target.GetComponent<Rigidbody>().isKinematic = true;
-                    GetComponent<PlayerController>().abilityIsActive = false;
+                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "TargetableObject";
                 }
-                if (telekinesisTimer <= 4)
+            }
+
+            //TelekinesisSpell
+            if (levelControl.targetObject != null)
+            {
+                target = levelControl.targetObject;
+            } else if (!useTeleknesis)
+            {
+                target = null;
+            }
+            if (target != null)
+            {
+                if (telekinesisActive)
                 {
-                    telekinesisTimer += Time.deltaTime;
-                }
-                if (telekinesisTimer < 1)
-                {
-                    float yAxisValue = 0.01f;
-                    target.transform.Translate(new Vector3(0, yAxisValue, 0));
-                    Debug.Log("Up");
-                }
-                else if (telekinesisTimer > 1 && telekinesisTimer < 2)
-                {
-                    telekinesisHeight = target.transform.position;
-                    playerSavePos = transform.position;
-                    telekinesisTimer = 2;
-                    Debug.Log("Side");
-                }
-                else if (telekinesisTimer >= 2 && telekinesisTimer < 4)
-                {
-                    target.transform.Translate((playerSavePos - target.transform.position) * (Time.deltaTime * 0.5f));
-                    target.transform.position = new Vector3(target.transform.position.x, telekinesisHeight.y, target.transform.position.z);
-                }
-                if (telekinesisTimer >= 4 && useTeleknesis)
-                {
-                    target.GetComponent<Rigidbody>().isKinematic = false;
-                    telekinesisActive = false;
-                    useTeleknesis = false;
-                    target = null;
-                    Debug.Log("TeleKinesisInActive");
+                    if (Input.GetKeyDown(KeyCode.Mouse1))
+                    {
+                        if (target.tag == "TargetableObject")
+                        {
+                            telekinesisTimer = 0;
+                            useTeleknesis = true;
+                            target.GetComponent<Rigidbody>().isKinematic = true;
+                            GetComponent<PlayerController>().abilityIsActive = false;
+                        }
+                    }
                 }
             }
         }
+        if (telekinesisTimer <= 4)
+        {
+            telekinesisTimer += Time.deltaTime;
+        }
+        if (telekinesisTimer < 1)
+        {
+            float yAxisValue = 0.01f;
+            target.transform.Translate(new Vector3(0, yAxisValue, 0));
+        }
+        else if (telekinesisTimer > 1 && telekinesisTimer < 2)
+        {
+            telekinesisHeight = target.transform.position;
+            playerSavePos = transform.position;
+            telekinesisTimer = 2;
+        }
+        else if (telekinesisTimer >= 2 && telekinesisTimer < 4)
+        {
+            target.transform.Translate((playerSavePos - target.transform.position) * (Time.deltaTime * 0.5f));
+            target.transform.position = new Vector3(target.transform.position.x, telekinesisHeight.y, target.transform.position.z);
+        }
+        if (telekinesisTimer >= 4 && useTeleknesis)
+        {
+            target.GetComponent<Rigidbody>().isKinematic = false;
+            telekinesisActive = false;
+            useTeleknesis = false;
+            target = null;
+        }
     }
-    
 
     private void TelekinesisActivate()
     {

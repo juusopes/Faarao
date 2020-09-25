@@ -9,6 +9,8 @@ public class AbilityIndicator : MonoBehaviour
     public GameObject player;
     public GameObject target;
     private LevelController levelControl;
+    //[HideInInspector]
+    public string targetTag;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +34,8 @@ public class AbilityIndicator : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.collider.tag == "TargetableObject")
+            Debug.Log(hit.collider.tag);
+            if (hit.collider.tag == targetTag)
             {
                 target = hit.collider.gameObject;
                 levelControl.targetObject = hit.collider.gameObject;

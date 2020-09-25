@@ -89,14 +89,12 @@ public class CameraCanvasMover : MonoBehaviour, IPointerExitHandler, IPointerEnt
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Here!");
         mouseOn = true;
         camMoving = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("NotHere!");
         mouseOn = false;
         camMoving = false;
     }

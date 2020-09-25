@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class LevelController : MonoBehaviour
 {
@@ -11,10 +12,12 @@ public class LevelController : MonoBehaviour
 
     //CameraControl
     private GameObject mainCam;
+    private float postProcessWeight;
 
     //AbilitySupport
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject targetObject;
+
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +29,7 @@ public class LevelController : MonoBehaviour
     void Update()
     {
         KeyBoardControls();
+        InivsibilityView();
     }
 
     private void Initialize()
@@ -45,6 +49,23 @@ public class LevelController : MonoBehaviour
             mainCam.transform.parent = activeCharacter.transform;
     }
 
+    private void InivsibilityView()
+    {
+        if (activeCharacter.GetComponent<PlayerController>().isInvisible)
+        {
+            if (postProcessWeight <= 1)
+            {
+                postProcessWeight += Time.deltaTime;
+            }
+        } else
+        {
+            if (postProcessWeight >= 0)
+            {
+                postProcessWeight -= Time.deltaTime;
+            }
+        }
+        mainCam.transform.GetChild(0).GetComponent<PostProcessVolume>().weight = postProcessWeight;
+    }
     public void SwitchCharacter()
     {
         //Switch Player

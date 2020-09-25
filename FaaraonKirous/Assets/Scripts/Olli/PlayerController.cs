@@ -29,11 +29,11 @@ public class PlayerController : MonoBehaviour
     public bool abilityIsActive;
     public GameObject indicator;
     private GameObject line;
-    private GameObject visibleInd;
+    [HideInInspector]
+    public GameObject visibleInd;
 
     //Invisibility
     public bool isInvisible;
-    private float invisibilityTimer;
 
     //Camera
     private GameObject camControl;
@@ -58,7 +58,6 @@ public class PlayerController : MonoBehaviour
     {
         navMeshAgent = this.GetComponent<NavMeshAgent>();
         targetV3 = transform.position;
-        invisibilityTimer = 10;
         camControl = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
 
         GameObject[] tempCharacters = GameObject.FindGameObjectsWithTag("Player");
@@ -82,6 +81,10 @@ public class PlayerController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     targetV3 = hit.point;
+                }
+                if (isRunning)
+                {
+                    isRunning = false;
                 }
                 if (doubleClickTimer < 0.5f)
                 {
@@ -170,30 +173,6 @@ public class PlayerController : MonoBehaviour
     {
         if (isInvisible)
         {
-            if (invisibilityTimer > 5 && invisibilityTimer < 6)
-            {
-                isInvisible = false;
-                invisibilityTimer = 10;
-            }
-
-            if (invisibilityTimer > 6)
-            {
-                invisibilityTimer = 0;
-            }
-            if (invisibilityTimer <= 6)
-            {
-                invisibilityTimer += Time.deltaTime;
-                Color tempColor = Color.blue;
-                Material newMat = new Material(this.gameObject.GetComponent<Renderer>().material.shader);
-                newMat.color = Color.black;
-                this.gameObject.GetComponent<Renderer>().material = newMat;
-            }
-        }
-        else
-        {
-            Material newMat = new Material(this.gameObject.GetComponent<Renderer>().material.shader);
-            newMat.color = Color.green;
-            this.gameObject.GetComponent<Renderer>().material = newMat;
         }
     }
 
