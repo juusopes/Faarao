@@ -307,6 +307,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5009509171035699393, guid: 6f754ab70b7f6454ea396d67214c3ea6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f754ab70b7f6454ea396d67214c3ea6, type: 3}
 --- !u!1 &725864260
@@ -770,6 +774,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1190661680}
   - component: {fileID: 1190661679}
+  - component: {fileID: 1190661681}
   m_Layer: 0
   m_Name: CameraControl
   m_TagString: Untagged
@@ -806,6 +811,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1190661681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190661678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6cf8dab8367ac4bbcd337dfd435c6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveAmount: 20
+  borderThickness: 10
+  panLimit: {x: 50, y: 50}
+  cameraAnchor: {fileID: 1519968753}
 --- !u!1 &1483868341 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4714770901397459800, guid: 6f754ab70b7f6454ea396d67214c3ea6, type: 3}
@@ -1069,7 +1090,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 8d049c03641dc8f4e8a4360ef87cdff1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
