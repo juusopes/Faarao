@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 333, y: 271}
   m_MaxSize: {x: 14003, y: 10021}
   vertical: 0
-  controlID: 61
+  controlID: 109
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_MinSize: {x: 679, y: 492}
   m_MaxSize: {x: 18004, y: 14042}
   vertical: 0
-  controlID: 25
+  controlID: 162
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 492}
   m_MaxSize: {x: 14003, y: 14042}
   vertical: 1
-  controlID: 26
+  controlID: 163
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 221}
   m_MaxSize: {x: 8003, y: 4021}
   vertical: 0
-  controlID: 27
+  controlID: 164
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -355,7 +355,7 @@ MonoBehaviour:
     height: 279
   m_ViewDataDictionary: {fileID: 0}
   m_SearchFilter:
-    m_NameFilter: dianans
+    m_NameFilter: dianan
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -367,12 +367,12 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes/Diana
+    - Assets/Scenes/Diana/DiananSkene/Dianan_assetit/Prefabs
     m_Globs: []
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scenes/Diana
+  - Assets/Scenes/Diana/DiananSkene/Dianan_assetit/Prefabs
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Software\Faarao\FaaraonKirous
   m_LockTracker:
@@ -381,7 +381,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 61}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000fa4b0000fc4b0000fe4b0000004c0000024c0000044c0000
+    m_ExpandedIDs: 00000000e23d0000e43d0000e63d0000e83d0000ea3d0000ec3d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -409,7 +409,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000fa4b0000fc4b0000fe4b0000004c0000024c0000044c0000
+    m_ExpandedIDs: 00000000e23d0000e43d0000e63d0000e83d0000ea3d0000ec3d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -531,9 +531,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: ea4d0000
+      m_SelectedIDs: 163e0000
       m_LastClickedID: 0
-      m_ExpandedIDs: 869cffff34fbffff7e3a0000283b0000
+      m_ExpandedIDs: 7078ffff7edeffff34e5ffff34fbfffff2380000383d0000ea490000544b0000764b0000c64b0000204c0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -593,9 +593,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -30.77037, y: 2.0014505, z: 9.050892}
+    m_Target: {x: -25.9, y: 2, z: 7.9399996}
     speed: 2
-    m_Value: {x: -30.77037, y: 2.0014505, z: 9.050892}
+    m_Value: {x: -25.9, y: 2, z: 7.9399996}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -642,13 +642,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.51
   m_Rotation:
-    m_Target: {x: 0.1417621, y: -0.3914003, z: 0.06104456, w: 0.90761256}
+    m_Target: {x: 0.22618914, y: 0.05350435, z: -0.012150268, w: 0.9729467}
     speed: 2
-    m_Value: {x: 0.14016435, y: -0.39406008, z: 0.06085389, w: 0.9062932}
+    m_Value: {x: 0.22608057, y: 0.054941818, z: -0.012484563, w: 0.9724778}
   m_Size:
-    m_Target: 5.450403
+    m_Target: 17.885681
     speed: 2
-    m_Value: 5.488894
+    m_Value: 17.115484
   m_Ortho:
     m_Target: 0
     speed: 2
