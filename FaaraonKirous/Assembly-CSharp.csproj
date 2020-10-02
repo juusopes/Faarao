@@ -55,20 +55,35 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\AI\Combat\FieldOfView.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\ObjectiveCounter.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\UnitInteractions.cs" />
+    <Compile Include="Assets\Scripts\AI\States\PatrolState.cs" />
     <Compile Include="Assets\Scripts\Olli\PriestAbilities.cs" />
     <Compile Include="Assets\Scripts\Olli\PlayerActiveArea.cs" />
     <Compile Include="Assets\Scripts\Olli\Activator.cs" />
+    <Compile Include="Assets\Scripts\AI\Settings\AIClass.cs" />
     <Compile Include="Assets\Scripts\Olli\CameraCanvasMover.cs" />
+    <Compile Include="Assets\Scripts\AI\Abstract\State.cs" />
+    <Compile Include="Assets\Scripts\AI\Utilities\UtilsClass.cs" />
+    <Compile Include="Assets\Scripts\AI\States\ChaseState.cs" />
+    <Compile Include="Assets\Scripts\AI\States\TrackingState.cs" />
     <Compile Include="Assets\Scripts\Olli\CameraControl.cs" />
     <Compile Include="Assets\Scripts\Olli\LevelController.cs" />
+    <Compile Include="Assets\Scripts\Henkka\TEST\PlayerControl.cs" />
+    <Compile Include="Assets\Scripts\Henkka\HenkkaPlayerContainer.cs" />
+    <Compile Include="Assets\Scripts\AI\Character.cs" />
+    <Compile Include="Assets\Scripts\AI\States\AlertState.cs" />
+    <Compile Include="Assets\Scripts\AI\Navigator.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\InGameMenu.cs" />
+    <Compile Include="Assets\Scripts\AI\StateMachine.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\CameraMovementScript.cs" />
     <Compile Include="Assets\Scripts\Olli\PharaohAbilities.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\MenuSettings.cs" />
+    <Compile Include="Assets\Scripts\AI\Abstract\PatrolEnums.cs" />
     <Compile Include="Assets\Scripts\Olli\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Olli\AbilityIndicator.cs" />
+    <Compile Include="Assets\Scripts\AI\Waypoint\Waypoint.cs" />
     <Compile Include="Assets\Scenes\Juuso\Scripts\ObjController.cs" />
   </ItemGroup>
   <ItemGroup>
