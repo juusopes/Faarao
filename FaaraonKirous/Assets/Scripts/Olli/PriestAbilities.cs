@@ -10,7 +10,7 @@ public class PriestAbilities : MonoBehaviour
     private GameObject target;
     private LevelController levelControl;
     private bool telekinesisActive;
-    private bool useTeleknesis;
+    public bool useTeleknesis;
     private float telekinesisTimer;
     private Vector3 telekinesisHeight;
     private Vector3 playerSavePos;
@@ -90,7 +90,7 @@ public class PriestAbilities : MonoBehaviour
         }
         else if (telekinesisTimer >= 2 && telekinesisTimer < 4)
         {
-            target.transform.Translate((playerSavePos - target.transform.position) * (Time.deltaTime * 0.5f));
+            target.transform.Translate((playerSavePos - target.transform.position).normalized * Time.deltaTime * 5);
             target.transform.position = new Vector3(target.transform.position.x, telekinesisHeight.y, target.transform.position.z);
         }
         if (telekinesisTimer >= 4 && useTeleknesis)
