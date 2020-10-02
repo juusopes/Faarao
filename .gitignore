@@ -15,7 +15,7 @@
 /[Mm]emoryCaptures/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
-!/[Aa]ssets/*/.meta
+!/[Aa]ssets/**/*.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
@@ -47,6 +47,9 @@ ExportedObj/
 *.opendb
 *.VC.db
 
+*.log
+*DB
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
@@ -58,14 +61,23 @@ sysinfo.txt
 # Builds
 *.apk
 *.aab
-.unitypackage
+*.unitypackage
 
 # Crashlytics generated file
 crashlytics-build.properties
 
 # Packed Addressables
-/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata//.bin
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+FaaraonKirous/Library/shadercompiler-UnityShaderCompiler.exe1.log
+FaaraonKirous/Library/shadercompiler-UnityShaderCompiler.exe0.log
+FaaraonKirous/Library/ArtifactDB
+FaaraonKirous/Library/EditorInstance.json
+FaaraonKirous/Library/ArtifactDB
+FaaraonKirous/Library/SourceAssetDB
+FaaraonKirous/Temp/UnityLockfile
+FaaraonKirous/Library/SourceAssetDB
+FaaraonKirous/Library/CurrentLayout-default.dwlt

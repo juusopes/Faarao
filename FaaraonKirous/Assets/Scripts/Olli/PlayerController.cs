@@ -229,7 +229,8 @@ public class PlayerController : MonoBehaviour
             {
                 camControl.GetComponent<CameraControl>().camFollow = false;
                 camControl.transform.parent = null;
-            } else
+            }
+            else
             {
                 camControl.GetComponent<CameraControl>().camFollow = true;
                 camControl.transform.parent = this.gameObject.transform;
