@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private GameObject camControl;
 
     //Interactive
-    public List<GameObject> interactList = new List<GameObject>();
+    public GameObject interactObject;
 
     // Start is called before the first frame update
     void Start()
@@ -237,6 +237,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Interact()
+    {
+        if (interactObject != null)
+        {
+            if (!interactObject.GetComponent<Activator>().activated)
+            {
+                interactObject.GetComponent<Activator>().activated = true;
+            } else
+            {
+                interactObject.GetComponent<Activator>().activated = false;
+            }
+        }
+    }
     private void KeyControls()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -261,6 +274,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             CamFollow();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Interact();
         }
     }
 }

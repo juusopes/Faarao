@@ -17,7 +17,7 @@ public class Activator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        ActiveEffect();
     }
 
     private void ActiveEffect()

@@ -8,7 +8,7 @@ public class PlayerActiveArea : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Initialize();
     }
 
     // Update is called once per frame
@@ -24,19 +24,17 @@ public class PlayerActiveArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "TargetableOnject")
+        Debug.Log("ENter");
+        if (other.tag == "TargetableObject")
         {
-            player.GetComponent<PlayerController>().interactList.Add(other.gameObject);
+            player.GetComponent<PlayerController>().interactObject = other.gameObject;
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        foreach (GameObject gO in player.GetComponent<PlayerController>().interactList)
+        if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().interactObject)
         {
-            if (gO == other.gameObject)
-            {
-                player.GetComponent<PlayerController>().interactList.Remove(gO);
-            }
+            player.GetComponent<PlayerController>().interactObject = null;
         }
     }
 }
