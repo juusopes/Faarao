@@ -7,6 +7,8 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
+    //Which Player
+    public bool playerOne;
     //Moving
     public float movementSpeed;
     public float doubleClickTimer;
@@ -37,6 +39,9 @@ public class PlayerController : MonoBehaviour
 
     //Camera
     private GameObject camControl;
+
+    //Interactive
+    public List<GameObject> interactList = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -101,26 +106,29 @@ public class PlayerController : MonoBehaviour
             doubleClickTimer += Time.deltaTime;
         }
         //Moving
-        if (isRunning)
+        if ((!playerOne && !GetComponent<PriestAbilities>().useTeleknesis) || playerOne)
         {
-            navMeshAgent.speed = movementSpeed * 5f;
-        }
-        else if (isCrouching)
-        {
-            navMeshAgent.speed = movementSpeed * 0.2f;
-        }
-        else
-        {
-            navMeshAgent.speed = movementSpeed;
-        }
-        navMeshAgent.SetDestination(targetV3);
-        if (position == transform.position)
-        {
-            isRunning = false;
-        }
-        else
-        {
-            position = transform.position;
+            if (isRunning)
+            {
+                navMeshAgent.speed = movementSpeed * 5f;
+            }
+            else if (isCrouching)
+            {
+                navMeshAgent.speed = movementSpeed * 0.2f;
+            }
+            else
+            {
+                navMeshAgent.speed = movementSpeed;
+            }
+            navMeshAgent.SetDestination(targetV3);
+            if (position == transform.position)
+            {
+                isRunning = false;
+            }
+            else
+            {
+                position = transform.position;
+            }
         }
     }
     private void LineOfSight()
