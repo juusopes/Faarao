@@ -13,7 +13,6 @@ public class CameraMovementScript : MonoBehaviour
 
     private void Start()
     {
-
     }
 
     private void Update()
