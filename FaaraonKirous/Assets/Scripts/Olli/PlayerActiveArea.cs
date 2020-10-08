@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +26,11 @@ public class PlayerActiveArea : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("ENter");
-        if (other.tag == "TargetableObject")
+        if (other.tag == "ClimbableObject")
+        {
+            player.GetComponent<PlayerController>().climbObject = other.gameObject;
+        }
+        else if (other.tag == "TargetableObject")
         {
             player.GetComponent<PlayerController>().interactObject = other.gameObject;
         }
@@ -35,6 +40,10 @@ public class PlayerActiveArea : MonoBehaviour
         if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().interactObject)
         {
             player.GetComponent<PlayerController>().interactObject = null;
+        }
+        else if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().climbObject)
+        {
+            player.GetComponent<PlayerController>().climbObject = null;
         }
     }
 }

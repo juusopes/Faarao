@@ -43,6 +43,13 @@ public class PlayerController : MonoBehaviour
     //Interactive
     public GameObject interactObject;
 
+    //Climbing
+    public GameObject climbObject;
+    private GameObject savedClimbable;
+    private bool climbing;
+    private bool climbSuccess;
+    public bool grounded;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +64,7 @@ public class PlayerController : MonoBehaviour
         KeyControls();
         Invisibility();
         SetIndicator();
+        Climb();
     }
 
     private void Initialize()
@@ -73,6 +81,7 @@ public class PlayerController : MonoBehaviour
                 anotherCharacter = tempCharacter;
             }
         }
+        climbing = false;
     }
     public void Moving()
     {
@@ -120,7 +129,10 @@ public class PlayerController : MonoBehaviour
             {
                 navMeshAgent.speed = movementSpeed;
             }
-            navMeshAgent.SetDestination(targetV3);
+            if (!climbing)
+            {
+                navMeshAgent.SetDestination(targetV3);
+            }
             if (position == transform.position)
             {
                 isRunning = false;
@@ -245,12 +257,39 @@ public class PlayerController : MonoBehaviour
             if (!interactObject.GetComponent<Activator>().activated)
             {
                 interactObject.GetComponent<Activator>().activated = true;
-            } else
+            }
+            else
             {
                 interactObject.GetComponent<Activator>().activated = false;
             }
         }
     }
+    public void Climb()
+    {
+        if (climbObject != null && climbing)
+        {
+            Vector3 rot = Vector3.RotateTowards(transform.position, climbObject.transform.position, 360, 360);
+            transform.rotation = Quaternion.LookRotation(rot);
+            Debug.Log(climbing);
+            climbSuccess = true;
+            float yAxisValue = 0.01f;
+            GetComponent<Rigidbody>().isKinematic = true;
+            GetComponent<NavMeshAgent>().enabled = false;
+            transform.Translate(new Vector3(0, yAxisValue, 0));
+            savedClimbable = climbObject;
+        } else if(climbSuccess)
+        {
+            transform.Translate(new Vector3(0.01f, 0, 0));
+            if (grounded)
+            {
+                climbSuccess = false;
+            }
+        } else
+        {
+            GetComponent<NavMeshAgent>().enabled = true;
+        }
+    }
+
     private void KeyControls()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -276,10 +315,20 @@ public class PlayerController : MonoBehaviour
         {
             CamFollow();
         }
-
         if (Input.GetKeyDown(KeyCode.E))
         {
             Interact();
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            if (climbing)
+            {
+                climbing = false;
+            }
+            else
+            {
+                climbing = true;
+            }
         }
     }
 }
