@@ -20,7 +20,7 @@ public class FieldOfViewRenderer : MonoBehaviour
     float angle;
     private Vector3 offset = new Vector3(0, -0.2f, 0);
 
-    private void Awake()
+    void Awake()
     {
         Assert.IsNotNull(character, "Character is not set!");
         classSettings = character.classSettings;

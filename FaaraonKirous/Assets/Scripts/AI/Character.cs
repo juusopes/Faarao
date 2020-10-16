@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -7,20 +8,10 @@ public class Character : MonoBehaviour
     #region Fields
     [Header("AI Class")]
     public AIClass classSettings;
-
-    [Header("Patrol Settings")]
-    [Tooltip("\tThe order waypoints are travelled:\n\n" +
-        "\t*InOrderOnce: \nTravel in order stop on last waypoint\n" +
-        "\t*InOrderLoopBackAndForth : \nLoop 1-2-3-2-1-2-3...\n" +
-        "\t*InOrderLoopCircle : \nLoop 1-2-3-1-2-3..\n" +
-        "\t*ShorterOnce : \nChoose closest waypoint from the remaining path, stop on last\n" +
-        "\t*ShorterBackAndForth : \nChoose closest waypoint from the remaining path, Loop: 1-x-5-x-1-x-5-x-1...\n" +
-        "\t*Random : \nJust choose random waypoint")]
-    public PatrolType patrolType;
+    [Header("Patrol route")]
     [Tooltip("All my child gameObjects with component Waypoint and that is nav mesh reachable will be added to a list of patrol route.")]
     [SerializeField]
-    private GameObject waypointGroup;
-
+    private WaypointGroup waypointGroup;
     [Header("General")]
     public Transform sightPosition;
 
@@ -35,7 +26,7 @@ public class Character : MonoBehaviour
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
-    public LineMaterials lm;
+
 
     //Aid scripts
     private Navigator navigator;
@@ -52,28 +43,26 @@ public class Character : MonoBehaviour
     void Awake()
     {
         stateMachine = new StateMachine(this);
-        player1SightDetection = new SightDetection(gameObject, lm, 0.1f);
-        player2SightDetection = new SightDetection(gameObject, lm, 0.1f);
+        player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
+        player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
-        InitNavigator();
-    }
-    private void InitNavigator()
-    {
-        if(waypointGroup == null)
-        {
-            Debug.LogWarning("No wp group!");
-            waypointGroup = new GameObject();
-        }
-        navigator = new Navigator(this.transform, waypointGroup, patrolType);
-        currentWaypoint = navigator.GetFirstWaypoint();
+
     }
 
     private void Start()
     {
         RefreshPlayers();
+        InitNavigator();
     }
 
+    private void InitNavigator()
+    {
+        if (waypointGroup == null)
+            Debug.Log("Character with no wp group!", this);
+        navigator = new Navigator(this.transform, waypointGroup);
+        currentWaypoint = navigator.GetFirstWaypoint();
+    }
 
     private void Update()
     {
@@ -267,4 +256,10 @@ public class Character : MonoBehaviour
         return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending;
     }
     #endregion
+
+    void OnDrawGizmos()
+    {
+        if(waypointGroup != null)
+            Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);
+    }
 }

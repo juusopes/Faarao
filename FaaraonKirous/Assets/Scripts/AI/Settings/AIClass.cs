@@ -15,4 +15,5 @@ public class AIClass : ScriptableObject
     public float fov;
     [Range(0,180)]
     public float alertHorizontalArc;
+    public LineMaterials lm;
 }
