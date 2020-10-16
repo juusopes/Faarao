@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    #region Fields
+    #region Mono Fields
     [Header("AI Class")]
     public AIClass classSettings;
     [Header("Patrol route")]
@@ -14,7 +14,9 @@ public class Character : MonoBehaviour
     private WaypointGroup waypointGroup;
     [Header("General")]
     public Transform sightPosition;
+    #endregion 
 
+    #region Regular fields
     [HideInInspector]
     public Vector3 chaseTarget;
     [HideInInspector]
@@ -27,7 +29,6 @@ public class Character : MonoBehaviour
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
 
-
     //Aid scripts
     private Navigator navigator;
     private StateMachine stateMachine;
@@ -35,11 +36,12 @@ public class Character : MonoBehaviour
     private SightDetection player2SightDetection;
     #endregion
 
-    #region Generic
-
+    #region Expression bodies
     public GameObject Player1 => players[0];
     public GameObject Player2 => players[1];
+    #endregion
 
+    #region Start and update
     void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -47,7 +49,6 @@ public class Character : MonoBehaviour
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
-
     }
 
     private void Start()
@@ -67,13 +68,18 @@ public class Character : MonoBehaviour
     private void Update()
     {
         stateMachine.UpdateSM();
-        player1SightDetection.SimulateSightDetection(CanDetectPlayer(Player1));
-        //Debug.Log("Player1 sighted");
-        player2SightDetection.SimulateSightDetection(CanDetectPlayer(Player2));
-            //Debug.Log("Player2 sighted");
     }
 
-    public void RefreshPlayers()
+    private void LateUpdate()
+    {
+        TryDetectPlayer();
+    }
+
+    #endregion
+
+    #region Generic
+
+    private void RefreshPlayers()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
         player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed);
@@ -87,6 +93,12 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Sight
+
+    private void TryDetectPlayer()
+    {
+        player1SightDetection.SimulateSightDetection(CanDetectPlayer(Player1));
+        player2SightDetection.SimulateSightDetection(CanDetectPlayer(Player2));
+    }
 
     /// <summary>
     /// Returns true if player is in sight, fov and can be raycasted. Allows sightline simulation to begin, which dictates actually seeing player.
@@ -108,7 +120,6 @@ public class Character : MonoBehaviour
         Vector3 dirToPlayer = (player.transform.position - transform.position).normalized;
         if(Vector3.Angle(transform.forward, dirToPlayer) < classSettings.fov / 2f)
         {
-            Debug.Log("Player inside fov");
             return true;
         }
         return false;
@@ -257,9 +268,11 @@ public class Character : MonoBehaviour
     }
     #endregion
 
+    #region Editor stuff
     void OnDrawGizmos()
     {
         if(waypointGroup != null)
             Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);
     }
+    #endregion
 }

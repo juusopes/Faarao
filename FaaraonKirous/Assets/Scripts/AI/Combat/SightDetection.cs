@@ -66,7 +66,7 @@ public class SightDetection
 
             DrawLine(OwnPosition, end);
 
-            if (lineScalar / PlayerDistance >= 0.99f)
+            if (CanSeePlayer && lineScalar / PlayerDistance >= 0.99f)
                 hasCaughtPlayer = true;
         }
 
