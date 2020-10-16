@@ -9,6 +9,10 @@ public class AIClass : ScriptableObject
     public float searchingDuration;
     [Range(0, 1000)]
     public float sightRange;
+    [Range(0, 100)]
+    public float sightSpeed;
+    [Range(0, 180)]
+    public float fov;
     [Range(0,180)]
     public float alertHorizontalArc;
 }

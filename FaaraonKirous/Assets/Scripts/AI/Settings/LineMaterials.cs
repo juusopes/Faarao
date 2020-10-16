@@ -11,5 +11,14 @@ public class LineMaterials : ScriptableObject
     public Material RedLine;
     public Material YellowLine;
     public Material GreenLine;
+
+    public Material GetMaterial(LineType lc)
+    {
+        if (lc == LineType.Red)
+            return RedLine;
+        else if (lc == LineType.Yellow)
+            return YellowLine;
+        return GreenLine;
+    }
 }
 

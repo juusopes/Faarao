@@ -55,6 +55,9 @@ public class Navigator
 
     public Waypoint GetNextWaypoint()
     {
+        if (waypoints.Count == 0)
+            return null;
+
         if (waypoints[currentWaypoint].type == WaypointType.GuardForEver)
             return waypoints[currentWaypoint];
 

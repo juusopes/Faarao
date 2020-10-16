@@ -20,7 +20,6 @@ public class Character : MonoBehaviour
     [Tooltip("All my child gameObjects with component Waypoint and that is nav mesh reachable will be added to a list of patrol route.")]
     [SerializeField]
     private GameObject waypointGroup;
-    private Navigator navigator;
 
     [Header("General")]
     public Transform sightPosition;
@@ -32,36 +31,64 @@ public class Character : MonoBehaviour
     private Waypoint currentWaypoint;
     private bool waypointFinished = true;
     private bool waypointTimer = false;
+    private GameObject[] players = new GameObject[2];
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
+    public LineMaterials lm;
+
+    //Aid scripts
+    private Navigator navigator;
     private StateMachine stateMachine;
+    private SightDetection player1SightDetection;
+    private SightDetection player2SightDetection;
     #endregion
 
     #region Generic
 
+    public GameObject Player1 => players[0];
+    public GameObject Player2 => players[1];
+
     void Awake()
     {
         stateMachine = new StateMachine(this);
+        player1SightDetection = new SightDetection(gameObject, lm, 0.1f);
+        player2SightDetection = new SightDetection(gameObject, lm, 0.1f);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
         InitNavigator();
     }
     private void InitNavigator()
     {
+        if(waypointGroup == null)
+        {
+            Debug.LogWarning("No wp group!");
+            waypointGroup = new GameObject();
+        }
         navigator = new Navigator(this.transform, waypointGroup, patrolType);
         currentWaypoint = navigator.GetFirstWaypoint();
     }
 
     private void Start()
     {
-
+        RefreshPlayers();
     }
 
 
     private void Update()
     {
         stateMachine.UpdateSM();
+        player1SightDetection.SimulateSightDetection(CanDetectPlayer(Player1));
+        //Debug.Log("Player1 sighted");
+        player2SightDetection.SimulateSightDetection(CanDetectPlayer(Player2));
+            //Debug.Log("Player2 sighted");
+    }
+
+    public void RefreshPlayers()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
+        player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed);
+        player2SightDetection.ResetLineRenderer(Player2, classSettings.sightSpeed);
     }
 
     public void UpdateIndicator(Color color)
@@ -72,10 +99,36 @@ public class Character : MonoBehaviour
 
     #region Sight
 
+    /// <summary>
+    /// Returns true if player is in sight, fov and can be raycasted. Allows sightline simulation to begin, which dictates actually seeing player.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public bool CanDetectPlayer(GameObject player)
+    {
+        return PlayerIsInRange(player) && PlayerIsInFov(player) && CanRayCastPlayer(player);
+    }
+
+    private bool PlayerIsInRange(GameObject player)
+    {
+        return Vector3.Distance(player.transform.position, transform.position) <= classSettings.sightRange;
+    }
+
+    private bool PlayerIsInFov(GameObject player)
+    {
+        Vector3 dirToPlayer = (player.transform.position - transform.position).normalized;
+        if(Vector3.Angle(transform.forward, dirToPlayer) < classSettings.fov / 2f)
+        {
+            Debug.Log("Player inside fov");
+            return true;
+        }
+        return false;
+    }
+
     public bool CanSeePlayer()
     {
-        RaycastHit hit = RayCastEyes();
-        if (RayCastHitPlayer(hit))
+        RaycastHit hit = RayCaster.Forward(gameObject, classSettings.sightRange);
+        if (RayCaster.HitPlayer(hit))
         {
             chaseTarget = hit.transform.position;
             return true;
@@ -84,10 +137,10 @@ public class Character : MonoBehaviour
         return false;
     }
 
-    public bool CanChasePlayer()
+    public bool CanRayCastPlayer(GameObject player)
     {
-        RaycastHit hit = RayCastEyesChaseTarget();
-        if (RayCastHitPlayer(hit))
+        RaycastHit hit = RayCaster.ToTarget(gameObject, player, classSettings.sightRange);
+        if (RayCaster.HitPlayer(hit))
         {
             chaseTarget = hit.transform.position;
             return true;
@@ -107,6 +160,8 @@ public class Character : MonoBehaviour
 
     public void SearchRotate()
     {
+        if (currentWaypoint == null)
+            return;
         MatchRotation(currentWaypoint.transform.rotation, currentWaypoint.GetRotationSpeed());
     }
 
@@ -211,40 +266,5 @@ public class Character : MonoBehaviour
     {
         return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending;
     }
-    #endregion
-
-    #region RayCaster
-
-    public RaycastHit RayCastEyesChaseTarget()
-    {
-        RaycastHit hit;
-        Vector3 enemyToTarget = chaseTarget - sightPosition.transform.position;
-
-        Debug.DrawRay(sightPosition.transform.position, enemyToTarget, Color.red, 1f);
-
-
-        Physics.Raycast(sightPosition.transform.position, enemyToTarget, out hit, classSettings.sightRange);
-
-        return hit;
-    }
-
-    public RaycastHit RayCastEyes()
-    {
-        Debug.DrawRay(sightPosition.transform.position, sightPosition.transform.forward * classSettings.sightRange, Color.green, 1f);
-
-        RaycastHit hit;
-        Physics.Raycast(sightPosition.transform.position, sightPosition.transform.forward, out hit, classSettings.sightRange);
-
-        return hit;
-    }
-
-    
-    public bool RayCastHitPlayer(RaycastHit hit)
-    {
-        if (hit.collider == null)
-            return false;
-        return hit.collider.CompareTag("Player");
-    }
-
     #endregion
 }
