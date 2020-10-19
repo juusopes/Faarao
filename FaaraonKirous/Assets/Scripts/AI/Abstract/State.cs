@@ -8,7 +8,7 @@
     public virtual void OnStateEnter() { }
     public virtual void OnStateExit() { }
 
-    protected bool CanSeePlayer => !character.CanRayCastPlayer(character.Player1) || !character.CanRayCastPlayer(character.Player2);
+    protected bool CanSeePlayer => character.CanRayCastPlayer(character.Player1) || character.CanRayCastPlayer(character.Player2);
 
     public State(Character character, StateMachine stateMachine)
     {
