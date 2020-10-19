@@ -64,7 +64,7 @@ public class SightDetection
             //TODO: Fix speed when AI is moving
             lineScalar = Mathf.Min(CurrentLineLenght + scalingDirection * lineSpeed * Time.deltaTime, PlayerDistance);
             Vector3 end = OwnPosition + PlayerDirection * lineScalar;
-            Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);
+            //Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);
 
             DrawLine(OwnPosition, end);
 

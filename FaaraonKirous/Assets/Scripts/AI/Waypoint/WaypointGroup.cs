@@ -17,7 +17,7 @@ public class WaypointGroup : MonoBehaviour
     "\t*ShorterBackAndForth : \nChoose closest waypoint from the remaining path, Loop: 1-x-5-x-1-x-5-x-1...\n" +
     "\t*Random : \nJust choose random waypoint")]
     [SerializeField]
-    private PatrolType patrolType;
+    private PatrolType patrolType = 0;
     private List<Waypoint> waypoints = new List<Waypoint>();
 
     // Start is called before the first frame update

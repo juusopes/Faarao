@@ -5,17 +5,13 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    #region Debug
-    private bool ShowStateText = true;
-    #endregion
-
     #region Mono Fields
     [Header("AI Class")]
     public AIClass classSettings;
     [Header("Patrol route")]
     [Tooltip("All my child gameObjects with component Waypoint and that is nav mesh reachable will be added to a list of patrol route.")]
     [SerializeField]
-    private WaypointGroup waypointGroup;
+    private WaypointGroup waypointGroup = null;
     [Header("General")]
     public Transform sightPosition;
     #endregion 
@@ -261,17 +257,12 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Editor stuff
+#if UNITY_EDITOR
+
     void OnDrawGizmos()
     {
         if (waypointGroup != null)
             Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);
-    }
-
-#if UNITY_EDITOR
-    void OnGUI()
-    {
-        if (ShowStateText)
-            UnityEditor.Handles.Label(transform.position + Vector3.up, stateMachine.GetStateName());
     }
 #endif
     #endregion
