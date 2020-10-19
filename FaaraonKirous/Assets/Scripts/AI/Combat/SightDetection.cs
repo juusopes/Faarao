@@ -12,6 +12,7 @@ public class SightDetection
     public bool hasCaughtPlayer = false;
     private float lineSpeed;
     private float lineScalar = 0;
+    private float linePercentage;
     private int scalingDirection = 1;      //Going towards 1 or away -1
     public SightDetection(GameObject parent, LineMaterials lm, float lineWidth)
     {
@@ -57,16 +58,19 @@ public class SightDetection
         {
             DrawLine(OwnPosition, PlayerPosition);
         }
-        else
+        else if (CanSeePlayer || linePercentage > 0)        //Only run if we see player or line is out
         {
             scalingDirection = CanSeePlayer ? 1 : -1;
 
             lineScalar = Mathf.Min(CurrentLineLenght + scalingDirection * lineSpeed * Time.deltaTime, PlayerDistance);
             Vector3 end = OwnPosition + PlayerDirection * lineScalar;
+            Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);
 
             DrawLine(OwnPosition, end);
 
-            if (CanSeePlayer && lineScalar / PlayerDistance >= 0.99f)
+            linePercentage = lineScalar / PlayerDistance;
+
+            if (CanSeePlayer && linePercentage >= 0.99f)
                 hasCaughtPlayer = true;
         }
 

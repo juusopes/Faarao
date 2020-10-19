@@ -19,7 +19,6 @@ public class WaypointGroup : MonoBehaviour
     [SerializeField]
     private PatrolType patrolType;
     private List<Waypoint> waypoints = new List<Waypoint>();
-    public int ai = 0;
 
     // Start is called before the first frame update
     void Awake()

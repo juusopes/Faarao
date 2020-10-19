@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.TerrainAPI;
 using UnityEngine;
 
 public class StateMachine
@@ -37,12 +38,14 @@ public class StateMachine
             currentState.OnStateExit();
 
         currentState = state;
-        character.gameObject.name = "Enemy State - " + state.GetType().Name;
+        character.gameObject.name = "Enemy State - " + GetStateName();
 
         if (currentState != null)
             currentState.OnStateEnter();
 
+#if UNITY_EDITOR
         SetIndicator();
+#endif
     }
 
     public void SetIndicator()
@@ -57,6 +60,9 @@ public class StateMachine
             character.UpdateIndicator(Color.blue);
     }
 
-
+    public string GetStateName()
+    {
+        return currentState.GetType().Name;
+    }
 
 }

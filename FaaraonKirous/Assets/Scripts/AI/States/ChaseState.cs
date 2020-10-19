@@ -21,7 +21,7 @@ public class ChaseState : State
 
     void Look()
     {
-        if (!character.CanRayCastPlayer(character.Player1)|| character.CanRayCastPlayer(character.Player2))
+        if (CanSeePlayer)
         {
             character.LostTrackOfPlayer();
             ToTrackingState();

@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    #region Debug
+    private bool ShowStateText = true;
+    #endregion
+
     #region Mono Fields
     [Header("AI Class")]
     public AIClass classSettings;
@@ -118,22 +122,10 @@ public class Character : MonoBehaviour
     private bool PlayerIsInFov(GameObject player)
     {
         Vector3 dirToPlayer = (player.transform.position - transform.position).normalized;
-        if(Vector3.Angle(transform.forward, dirToPlayer) < classSettings.fov / 2f)
+        if (Vector3.Angle(transform.forward, dirToPlayer) < classSettings.fov / 2f)
         {
             return true;
         }
-        return false;
-    }
-
-    public bool CanSeePlayer()
-    {
-        RaycastHit hit = RayCaster.Forward(gameObject, classSettings.sightRange);
-        if (RayCaster.HitPlayer(hit))
-        {
-            chaseTarget = hit.transform.position;
-            return true;
-        }
-
         return false;
     }
 
@@ -180,7 +172,7 @@ public class Character : MonoBehaviour
     }
     private void MatchRotation(Quaternion targetRotation, float rotateSpeed = 1)
     {
-        if (targetRotation == null) 
+        if (targetRotation == null)
             return;
 
         Vector3 eulerAngles = targetRotation.eulerAngles;
@@ -207,9 +199,9 @@ public class Character : MonoBehaviour
         if (currentWaypoint == null)
             return;
 
-        switch(currentWaypoint.type)
+        switch (currentWaypoint.type)
         {
-            case WaypointType.WalkPast :
+            case WaypointType.WalkPast:
                 waypointFinished = true;
                 SetDestination(currentWaypoint.transform.position);
                 break;
@@ -271,8 +263,16 @@ public class Character : MonoBehaviour
     #region Editor stuff
     void OnDrawGizmos()
     {
-        if(waypointGroup != null)
+        if (waypointGroup != null)
             Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);
     }
+
+#if UNITY_EDITOR
+    void OnGUI()
+    {
+        if (ShowStateText)
+            UnityEditor.Handles.Label(transform.position + Vector3.up, stateMachine.GetStateName());
+    }
+#endif
     #endregion
 }
