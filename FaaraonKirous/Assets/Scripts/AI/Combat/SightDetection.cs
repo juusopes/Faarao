@@ -61,7 +61,7 @@ public class SightDetection
         else if (CanSeePlayer || linePercentage > 0)        //Only run if we see player or line is out
         {
             scalingDirection = CanSeePlayer ? 1 : -1;
-
+            //TODO: Fix speed when AI is moving
             lineScalar = Mathf.Min(CurrentLineLenght + scalingDirection * lineSpeed * Time.deltaTime, PlayerDistance);
             Vector3 end = OwnPosition + PlayerDirection * lineScalar;
             Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);

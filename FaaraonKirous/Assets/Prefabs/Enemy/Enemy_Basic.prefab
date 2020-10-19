@@ -148,13 +148,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classSettings: {fileID: 11400000, guid: f9e8619650cb27348a6f2419c48361f8, type: 2}
-  patrolType: 3
   waypointGroup: {fileID: 0}
   sightPosition: {fileID: 1295752339806913344}
   chaseTarget: {x: 0, y: 0, z: 0}
   lastSeenPosition: {x: 0, y: 0, z: 0}
   navMeshAgent: {fileID: 0}
-  lm: {fileID: 11400000, guid: f4ef20cc2111dc44d91ec9bb70430a43, type: 2}
 --- !u!1 &1295752339806913345
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,7 +321,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d60f8b1c0f8939a419fc0a739e24bdda, type: 2}
+  - {fileID: 2100000, guid: 90672cb54cefd2c40aa602307c35e250, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
