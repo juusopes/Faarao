@@ -185,6 +185,8 @@ public class Character : MonoBehaviour
             return;
         waypointTimer = false;
         Waypoint nextWaypoint = navigator.GetNextWaypoint();
+        if(currentWaypoint.type == WaypointType.Climb && nextWaypoint.type != WaypointType.Climb)
+            navMeshAgent.enabled = true;
         if (nextWaypoint == null)
             navigator = null;
         else
@@ -236,10 +238,11 @@ public class Character : MonoBehaviour
     private void Climb()
     {
         transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.transform.position, Time.deltaTime * navMeshAgent.speed);
-        if (Vector3.Distance(transform.position, currentWaypoint.transform.position) < 0.004f)
+        MatchRotation(currentWaypoint.transform.rotation, currentWaypoint.GetRotationSpeed());
+
+        if (Mathf.Approximately(Vector3.Distance(transform.position, currentWaypoint.transform.position), 0))
         {
             waypointFinished = true;
-            navMeshAgent.enabled = true;
         }
     }
 
@@ -254,7 +257,7 @@ public class Character : MonoBehaviour
 
     public void SetDestination(Vector3 position)
     {
-        if (position != null && navMeshAgent.destination != position)
+        if (position != null && navMeshAgent.destination != position && navMeshAgent.enabled)
         {
             navMeshAgent.destination = position;
             navMeshAgent.isStopped = false;
@@ -263,7 +266,8 @@ public class Character : MonoBehaviour
 
     public void StopDestination()
     {
-        navMeshAgent.isStopped = true;
+        if(navMeshAgent.enabled)
+            navMeshAgent.isStopped = true;
     }
 
     public bool HasFinishedWaypointTask()
@@ -273,6 +277,8 @@ public class Character : MonoBehaviour
 
     public bool HasReachedDestination()
     {
+        if (navMeshAgent.enabled == false)
+            return true;
         return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending;
     }
     #endregion
