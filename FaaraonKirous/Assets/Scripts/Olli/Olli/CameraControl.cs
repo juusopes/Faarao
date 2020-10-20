@@ -31,7 +31,7 @@ public class CameraControl : MonoBehaviour
     {
         camRot = transform.rotation;
         camHeight = 40;
-        camFollow = true;
+        camFollow = false;
     }
 
     private void CamPos()
@@ -55,6 +55,10 @@ public class CameraControl : MonoBehaviour
         else
         {
             MoveCam();
+            if (transform.parent != null)
+            {
+                transform.parent = null;
+            }
         }
     }
     private void MoveCam()
