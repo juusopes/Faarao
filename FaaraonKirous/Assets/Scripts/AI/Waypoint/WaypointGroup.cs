@@ -31,24 +31,23 @@ public class WaypointGroup : MonoBehaviour
             Transform trans = transform.GetChild(i);
             if (trans != null)
             {
-                if (NavMesh.CalculatePath(navTestTrans.position, trans.position, NavMesh.AllAreas, new NavMeshPath()))
+                Waypoint wp = trans.GetComponent<Waypoint>();
+                if (wp != null)
                 {
-                    Waypoint wp = trans.GetComponent<Waypoint>();
-                    if (wp != null)
+                    if (Navigator.IsReachable(navTestTrans, trans) || wp.type == WaypointType.Climb)
                     {
                         waypoints.Add(wp);
                     }
                     else
                     {
-                        Debug.LogWarning("Ignored a waypoint without Waypoint component: " + trans.position + " name: " + trans.name + ". Click while playing to select!", trans.gameObject);
-                        //Object.Destroy(trans.gameObject); Don't destroy so we can select it.
+                        Debug.LogWarning("Ignored a waypoint navmesh found unreachable: " + trans.position + " name: " + trans.name + ". Click while playing to select!", trans.gameObject);
                     }
                 }
                 else
                 {
-                    Debug.LogWarning("Ignored a waypoint navmesh found unreachable: " + trans.position + " name: " + trans.name + ". Click while playing to select!", trans.gameObject);
-                    //Object.Destroy(trans.gameObject); Don't destroy so we can select it.
+                    Debug.LogWarning("Ignored a waypoint without Waypoint component: " + trans.position + " name: " + trans.name + ". Click while playing to select!", trans.gameObject);
                 }
+
             }
         }
 

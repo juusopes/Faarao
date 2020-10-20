@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Character : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class Character : MonoBehaviour
     [HideInInspector]
     public Vector3 lastSeenPosition;
     private Waypoint currentWaypoint;
-    private bool waypointFinished = true;
+    private bool waypointFinished = false;
     private bool waypointTimer = false;
     private GameObject[] players = new GameObject[2];
 
@@ -210,7 +211,7 @@ public class Character : MonoBehaviour
                 {
                     waypointTimer = true;
                     waypointFinished = false;
-                    StartCoroutine("startWaypointTimer", currentWaypoint.GetGuardDuration());
+                    StartCoroutine("StartWaypointTimer", currentWaypoint.GetGuardDuration());
                 }
                 break;
             case WaypointType.GuardForEver:
@@ -219,10 +220,30 @@ public class Character : MonoBehaviour
                     SearchRotate();
                 waypointFinished = false;
                 break;
+            case WaypointType.Climb:
+                if(waypointFinished == true)
+                {
+                    waypointFinished = false;
+                    StopDestination();
+                    navMeshAgent.enabled = false;
+                }
+                
+                Climb();
+                break;
         }
     }
 
-    private IEnumerator startWaypointTimer(float waitTime)
+    private void Climb()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.transform.position, Time.deltaTime * navMeshAgent.speed);
+        if (Vector3.Distance(transform.position, currentWaypoint.transform.position) < 0.004f)
+        {
+            waypointFinished = true;
+            navMeshAgent.enabled = true;
+        }
+    }
+
+    private IEnumerator StartWaypointTimer(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         waypointFinished = true;
@@ -246,7 +267,7 @@ public class Character : MonoBehaviour
     }
 
     public bool HasFinishedWaypointTask()
-    {
+    {           
         return waypointFinished && HasReachedDestination();
     }
 
