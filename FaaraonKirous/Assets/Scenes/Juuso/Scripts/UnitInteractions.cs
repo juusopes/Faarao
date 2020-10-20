@@ -12,7 +12,7 @@ public class UnitInteractions : MonoBehaviour
 
     public Texture2D cursor, cursorInteract, cursorAttack;
     public bool checkbox;
-    public GameObject standing, crouching;
+    public UnityEngine.GameObject standing, crouching;
     public Image imageCooldown;
 
     private void Start()

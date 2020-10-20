@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    public GameObject activeCharacter;
+    public UnityEngine.GameObject activeCharacter;
     private float camHeight;
     private Quaternion camRot;
     public bool camFollow;

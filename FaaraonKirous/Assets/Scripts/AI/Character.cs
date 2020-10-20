@@ -19,7 +19,7 @@ public class Character : MonoBehaviour
     public PatrolType patrolType;
     [Tooltip("All my child gameObjects with component Waypoint and that is nav mesh reachable will be added to a list of patrol route.")]
     [SerializeField]
-    private GameObject waypointGroup;
+    private UnityEngine.GameObject waypointGroup;
     private Navigator navigator;
 
     [Header("General")]

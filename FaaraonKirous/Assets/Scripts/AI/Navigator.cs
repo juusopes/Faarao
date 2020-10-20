@@ -11,7 +11,7 @@ public class Navigator
     private int direction = 1; // -1 or 1
     private Transform startTrans;
 
-    public Navigator(Transform startPos, GameObject wpGroup, PatrolType pt)
+    public Navigator(Transform startPos, UnityEngine.GameObject wpGroup, PatrolType pt)
     {
         this.waypoints = new List<Waypoint>();
         this.patrolType = pt;

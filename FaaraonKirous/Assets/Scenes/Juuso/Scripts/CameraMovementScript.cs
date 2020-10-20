@@ -9,7 +9,7 @@ public class CameraMovementScript : MonoBehaviour
     public float borderThickness = 10;
     public Vector2 panLimit;
 
-    public GameObject cameraAnchor;
+    public UnityEngine.GameObject cameraAnchor;
 
     private void Start()
     {

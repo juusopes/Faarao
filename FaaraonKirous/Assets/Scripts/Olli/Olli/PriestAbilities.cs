@@ -7,7 +7,7 @@ public class PriestAbilities : MonoBehaviour
 {
     private PlayerController pharaoh;
     //Telekinesis
-    private GameObject target;
+    private UnityEngine.GameObject target;
     private LevelController levelControl;
     private bool telekinesisActive;
     public bool useTeleknesis;
@@ -29,7 +29,7 @@ public class PriestAbilities : MonoBehaviour
 
     private void Initialize()
     {
-        levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
+        levelControl = UnityEngine.GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         telekinesisActive = false;
         telekinesisTimer = 5;
     }

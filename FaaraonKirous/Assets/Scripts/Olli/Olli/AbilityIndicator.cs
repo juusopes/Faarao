@@ -6,8 +6,8 @@ using UnityEngine.UIElements;
 public class AbilityIndicator : MonoBehaviour
 {
     public LineRenderer line;
-    public GameObject player;
-    public GameObject target;
+    public UnityEngine.GameObject player;
+    public UnityEngine.GameObject target;
     private LevelController levelControl;
     //[HideInInspector]
     public string targetTag;
@@ -26,7 +26,7 @@ public class AbilityIndicator : MonoBehaviour
     {
         line = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
         line.transform.parent = null;
-        levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
+        levelControl = UnityEngine.GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
     }
     private void MoveInd()
     {

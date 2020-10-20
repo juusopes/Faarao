@@ -7,7 +7,7 @@ public class HenkkaPlayerContainer : MonoBehaviour
     private static HenkkaPlayerContainer _instance;
 
     public static HenkkaPlayerContainer Instance { get { return _instance; } }
-    private static GameObject[] players;
+    private static UnityEngine.GameObject[] players;
 
     private void Awake()
     {
@@ -28,14 +28,14 @@ public class HenkkaPlayerContainer : MonoBehaviour
 
     private void UpdatePlayerReferences()
     {
-        players = GameObject.FindGameObjectsWithTag("Player");
+        players = UnityEngine.GameObject.FindGameObjectsWithTag("Player");
         if(players.Length == 0)
         {
             Debug.LogError("No players found!");
         }
     }
 
-    public GameObject[] GetPlayerReferences()
+    public UnityEngine.GameObject[] GetPlayerReferences()
     {
         return players;
     }

@@ -6,17 +6,17 @@ using UnityEngine.Rendering.PostProcessing;
 public class LevelController : MonoBehaviour
 {
     //Switch Character
-    private GameObject[] characters;
-    public GameObject activeCharacter;
+    private UnityEngine.GameObject[] characters;
+    public UnityEngine.GameObject activeCharacter;
     private int current;
 
     //CameraControl
-    private GameObject mainCam;
+    private UnityEngine.GameObject mainCam;
     private float postProcessWeight;
 
     //AbilitySupport
     //[HideInInspector]
-    public GameObject targetObject;
+    public UnityEngine.GameObject targetObject;
 
 
     // Start is called before the first frame update
@@ -34,12 +34,12 @@ public class LevelController : MonoBehaviour
 
     private void Initialize()
     {
-        characters = GameObject.FindGameObjectsWithTag("Player");
-        mainCam = GameObject.FindGameObjectWithTag("MainCamera");
+        characters = UnityEngine.GameObject.FindGameObjectsWithTag("Player");
+        mainCam = UnityEngine.GameObject.FindGameObjectWithTag("MainCamera");
         mainCam = mainCam.transform.parent.gameObject;
         //SetACtiveCharacter
         current = 0;
-        foreach (GameObject character in characters)
+        foreach (UnityEngine.GameObject character in characters)
         {
             character.GetComponent<PlayerController>().isActiveCharacter = false;
         }

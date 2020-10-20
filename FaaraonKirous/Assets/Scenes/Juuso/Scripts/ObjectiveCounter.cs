@@ -5,19 +5,19 @@ using UnityEngine.UI;
 
 public class ObjectiveCounter : MonoBehaviour
 {
-    public GameObject objective1;
+    public UnityEngine.GameObject objective1;
     public Text objective1text;
 
-    public GameObject objective2;
+    public UnityEngine.GameObject objective2;
     public Text objective2text;
 
-    public GameObject objective3;
+    public UnityEngine.GameObject objective3;
     public Text objective3text;
 
-    public GameObject objective4;
+    public UnityEngine.GameObject objective4;
     public Text objective4text;
 
-    public GameObject objective5;
+    public UnityEngine.GameObject objective5;
     public Text objective5text;
 
     // Start is called before the first frame update

@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class CameraCanvasMover : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
-    private GameObject camControl;
+    private UnityEngine.GameObject camControl;
     private Color oldColor;
 
     public bool up;
@@ -32,7 +32,7 @@ public class CameraCanvasMover : MonoBehaviour, IPointerExitHandler, IPointerEnt
 
     private void Initialize()
     {
-        camControl = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
+        camControl = UnityEngine.GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
         oldColor = this.gameObject.GetComponent<Image>().color;
         this.gameObject.GetComponent<Image>().color = new Color(0,0,0,0);
     }

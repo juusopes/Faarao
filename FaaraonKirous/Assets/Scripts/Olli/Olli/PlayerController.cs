@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 position;
 
     //PlayerSynergy
-    private GameObject anotherCharacter;
+    private UnityEngine.GameObject anotherCharacter;
     private bool lineOfSight;
 
     //Crouch
@@ -29,23 +29,23 @@ public class PlayerController : MonoBehaviour
     //Indicator
     [HideInInspector]
     public bool abilityIsActive;
-    public GameObject indicator;
-    private GameObject line;
+    public UnityEngine.GameObject indicator;
+    private UnityEngine.GameObject line;
     [HideInInspector]
-    public GameObject visibleInd;
+    public UnityEngine.GameObject visibleInd;
 
     //Invisibility
     public bool isInvisible;
 
     //Camera
-    private GameObject camControl;
+    private UnityEngine.GameObject camControl;
 
     //Interactive
-    public GameObject interactObject;
+    public UnityEngine.GameObject interactObject;
 
     //Climbing
-    public GameObject climbObject;
-    private GameObject savedClimbable;
+    public UnityEngine.GameObject climbObject;
+    private UnityEngine.GameObject savedClimbable;
     private bool climbing;
     private bool climbSuccess;
     public bool grounded;
@@ -71,10 +71,10 @@ public class PlayerController : MonoBehaviour
     {
         navMeshAgent = this.GetComponent<NavMeshAgent>();
         targetV3 = transform.position;
-        camControl = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
+        camControl = UnityEngine.GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
 
-        GameObject[] tempCharacters = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject tempCharacter in tempCharacters)
+        UnityEngine.GameObject[] tempCharacters = UnityEngine.GameObject.FindGameObjectsWithTag("Player");
+        foreach (UnityEngine.GameObject tempCharacter in tempCharacters)
         {
             if (tempCharacter != this.gameObject)
             {

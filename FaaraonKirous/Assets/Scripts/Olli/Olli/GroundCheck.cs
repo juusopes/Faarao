@@ -19,7 +19,7 @@ public class GroundCheck : MonoBehaviour
 
     private void Initialize()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        player = UnityEngine.GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
     private void OnTriggerEnter(Collider other)
     {

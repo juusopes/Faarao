@@ -6,7 +6,7 @@ public class PharaohAbilities : MonoBehaviour
 {
     private PlayerController priest;
     //Invisibility
-    private GameObject target;
+    private UnityEngine.GameObject target;
     private LevelController levelControl;
     private bool invisibilityActive;
     private bool useInvisibility;
@@ -26,7 +26,7 @@ public class PharaohAbilities : MonoBehaviour
 
     private void Initialize()
     {
-        levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
+        levelControl = UnityEngine.GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         invisibilityActive = false;
         invisibilityTimer = 5;
     }

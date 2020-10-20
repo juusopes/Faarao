@@ -9,9 +9,9 @@ using System.IO;
 
 public class InGameMenu : MonoBehaviour
 {
-    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
-    public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
-    public GameObject gameplayButton, audioButton, controlsButton, videoButton;
+    public UnityEngine.GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
+    public UnityEngine.GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
+    public UnityEngine.GameObject gameplayButton, audioButton, controlsButton, videoButton;
     public int savedLevel;
     public float lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ;
     public float lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2;
@@ -22,7 +22,7 @@ public class InGameMenu : MonoBehaviour
     public bool menuActive;
 
     //testejä varten
-    public GameObject player, player2;
+    public UnityEngine.GameObject player, player2;
 
     // Start is called before the first frame update
     void Start()
