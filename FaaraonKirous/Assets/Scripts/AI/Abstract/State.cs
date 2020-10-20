@@ -8,6 +8,8 @@
     public virtual void OnStateEnter() { }
     public virtual void OnStateExit() { }
 
+    protected bool CanSeePlayer => character.CanDetectPlayer(character.Player1) || character.CanDetectPlayer(character.Player2);
+
     public State(Character character, StateMachine stateMachine)
     {
         this.character = character;

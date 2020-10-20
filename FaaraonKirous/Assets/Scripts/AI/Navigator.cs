@@ -5,70 +5,48 @@ using UnityEngine.AI;
 
 public class Navigator
 {
-    private List<Waypoint> waypoints;
-    private PatrolType patrolType;
+    private WaypointGroup wpGroup;
     private int currentWaypoint = 0;
     private int direction = 1; // -1 or 1
     private Transform startTrans;
 
-    public Navigator(Transform startPos, GameObject wpGroup, PatrolType pt)
-    {
-        this.waypoints = new List<Waypoint>();
-        this.patrolType = pt;
-        this.startTrans = startPos;
+    private PatrolType patrolType => wpGroup == null ? 0 : wpGroup.GetPatrolType();
+    private int waypointCount => wpGroup == null ? 0 : wpGroup.GetWaypointCount();
 
-        for (int i = 0; i < wpGroup.transform.childCount; i++)
-        {
-            Transform trans = wpGroup.transform.GetChild(i);
-            if (trans != null)
-            {
-                if (NavMesh.CalculatePath(startTrans.position, trans.position, NavMesh.AllAreas, new NavMeshPath()))
-                {
-                    Waypoint wp = trans.GetComponent<Waypoint>();
-                    if (wp != null)
-                    {
-                        waypoints.Add(wp);
-                    }
-                    else
-                    {
-                        Debug.LogWarning("Ignored a waypoint without Waypoint component: " + trans.position + " name: " + trans.name + ". Click while playing to select!", trans.gameObject);
-                        //Object.Destroy(trans.gameObject); Don't destroy so we can select it.
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning("Ignored a waypoint navmesh found unreachable: " + trans.position + " name: " + trans.name + ". Click while playing to select!", trans.gameObject);
-                    //Object.Destroy(trans.gameObject); Don't destroy so we can select it.
-                }
-            }
-        }
+    public Navigator(Transform startPos, WaypointGroup wpGroup)
+    {
+        this.wpGroup = wpGroup;
+        this.startTrans = startPos;
     }
 
     public Waypoint GetFirstWaypoint()
     {
-        if (waypoints.Count == 0)
+        if (waypointCount == 0)
             return null;
         if (patrolType == PatrolType.ShorterBackAndForth || patrolType == PatrolType.ShorterOnce)
-            return waypoints[GetClosestWaypoint(startTrans)];
-        return waypoints[0];
+            return wpGroup.GetWaypoint(GetClosestWaypoint(startTrans));
+        return wpGroup.GetWaypoint(0);
     }
 
     public Waypoint GetNextWaypoint()
     {
-        if (waypoints[currentWaypoint].type == WaypointType.GuardForEver)
-            return waypoints[currentWaypoint];
+        if (waypointCount == 0)
+           return null;
+
+        if (wpGroup.GetWaypoint(currentWaypoint).type == WaypointType.GuardForEver)
+            return wpGroup.GetWaypoint(currentWaypoint);
 
         //Debug.Log("Before:" + currentWaypoint);
 
         switch (patrolType)
         {
             case PatrolType.InOrderOnce:
-                if (currentWaypoint < waypoints.Count - 1)
+                if (currentWaypoint < waypointCount - 1)
                     currentWaypoint++;
                 break;
 
             case PatrolType.InOrderLoopCircle:
-                currentWaypoint = (currentWaypoint + 1) % waypoints.Count;
+                currentWaypoint = (currentWaypoint + 1) % waypointCount;
                 break;
 
             case PatrolType.InOrderLoopBackAndForth:
@@ -76,14 +54,14 @@ public class Navigator
                 currentWaypoint += direction;
                 break;
             case PatrolType.ShorterOnce:
-                currentWaypoint = GetClosestWaypoint(waypoints[currentWaypoint].transform);
+                currentWaypoint = GetClosestWaypoint(wpGroup.GetWaypoint(currentWaypoint).transform);
                 break;
             case PatrolType.ShorterBackAndForth:
                 CheckDirection();
-                currentWaypoint = GetClosestWaypoint(waypoints[currentWaypoint].transform);
+                currentWaypoint = GetClosestWaypoint(wpGroup.GetWaypoint(currentWaypoint).transform);
                 break;
             case PatrolType.Random:
-                currentWaypoint = Random.Range(0, waypoints.Count);
+                currentWaypoint = Random.Range(0, waypointCount);
                 break;
             default:
                 break;
@@ -94,7 +72,7 @@ public class Navigator
         Waypoint result = null;
 
         if (IsValidIndex())
-            result = waypoints[currentWaypoint];
+            result = wpGroup.GetWaypoint(currentWaypoint);
 
         return result;
     }
@@ -110,9 +88,9 @@ public class Navigator
         float distance = Mathf.Infinity;
         Vector3 currentPosition = testSubject.position;
 
-        for(int i = currentWaypoint + direction; i >= 0 && i < waypoints.Count ; i  += direction)
+        for(int i = currentWaypoint + direction; i >= 0 && i < waypointCount ; i  += direction)
         {
-            Vector3 diff = waypoints[i].transform.position - currentPosition;
+            Vector3 diff = wpGroup.GetWaypoint(i).transform.position - currentPosition;
             float curDistance = diff.sqrMagnitude;
             if (curDistance < distance)
             {
@@ -125,7 +103,7 @@ public class Navigator
 
     private void CheckDirection()
     {
-        if (currentWaypoint == waypoints.Count - 1 && direction == 1)
+        if (currentWaypoint == waypointCount - 1 && direction == 1)
             direction = -1;
         else if (currentWaypoint == 0 && direction == -1)
             direction = 1;
@@ -133,6 +111,6 @@ public class Navigator
 
     private bool IsValidIndex()
     {
-        return currentWaypoint >= 0 && currentWaypoint < waypoints.Count;
+        return currentWaypoint >= 0 && currentWaypoint < waypointCount;
     }
 }

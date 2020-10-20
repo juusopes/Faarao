@@ -30,12 +30,12 @@ public class ObjectiveCounter : MonoBehaviour
         objective5.SetActive(false);
 
         objective1text.text = "step on platform";
-        objective2text.text = "such important";
-        objective3text.text = "all your base are belong to us";
+        objective2text.text = "Get to souteast corner";
+        objective3text.text = "Get to northeast corner";
         objective4text.text = "banana for scale";
         objective5text.text = "fish for sale ipsum lorem mitelie meneekää testinä että saa toiselle riville asti asdasdasd";
 
-        AddObjectives(1);
+        AddObjectives(3);
     }
 
     // Update is called once per frame
