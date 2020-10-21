@@ -25,6 +25,7 @@ public class Character : MonoBehaviour
     private Waypoint currentWaypoint;
     private bool waypointFinished = false;
     private bool waypointTimer = false;
+
     private GameObject[] players = new GameObject[2];
 
     [HideInInspector]
@@ -35,6 +36,7 @@ public class Character : MonoBehaviour
     private StateMachine stateMachine;
     private SightDetection player1SightDetection;
     private SightDetection player2SightDetection;
+    private OffMeshLinkMovement linkMovement;
     #endregion
 
     #region Expression bodies
@@ -50,6 +52,7 @@ public class Character : MonoBehaviour
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
+        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, navMeshAgent.radius, navMeshAgent.height);      //TODO: Check radius and height
     }
 
     private void Start()
@@ -185,7 +188,7 @@ public class Character : MonoBehaviour
             return;
         waypointTimer = false;
         Waypoint nextWaypoint = navigator.GetNextWaypoint();
-        if(currentWaypoint.type == WaypointType.Climb && nextWaypoint.type != WaypointType.Climb)
+        if (currentWaypoint.type == WaypointType.Climb && nextWaypoint.type != WaypointType.Climb)
             navMeshAgent.enabled = true;
         if (nextWaypoint == null)
             navigator = null;
@@ -203,6 +206,7 @@ public class Character : MonoBehaviour
             case WaypointType.WalkPast:
                 waypointFinished = true;
                 SetDestination(currentWaypoint.transform.position);
+                TestOffLink();
                 break;
             case WaypointType.GuardForDuration:
                 SetDestination(currentWaypoint.transform.position);
@@ -223,15 +227,23 @@ public class Character : MonoBehaviour
                 waypointFinished = false;
                 break;
             case WaypointType.Climb:
-                if(waypointFinished == true)
+                if (waypointFinished == true)
                 {
                     waypointFinished = false;
                     StopDestination();
                     navMeshAgent.enabled = false;
                 }
-                
                 Climb();
                 break;
+        }
+    }
+
+    private void TestOffLink()
+    {
+        if (navMeshAgent.isOnOffMeshLink && linkMovement.CanStartLink())
+        {
+            OffMeshLinkRoute route = linkMovement.GetOffMeshLinkRoute();
+            StartCoroutine(linkMovement.MoveAcrossNavMeshLink(route));
         }
     }
 
@@ -245,6 +257,7 @@ public class Character : MonoBehaviour
             waypointFinished = true;
         }
     }
+
 
     private IEnumerator StartWaypointTimer(float waitTime)
     {
@@ -261,17 +274,18 @@ public class Character : MonoBehaviour
         {
             navMeshAgent.destination = position;
             navMeshAgent.isStopped = false;
+            navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : classSettings.navStoppingDistance;
         }
     }
 
     public void StopDestination()
     {
-        if(navMeshAgent.enabled)
+        if (navMeshAgent.enabled)
             navMeshAgent.isStopped = true;
     }
 
     public bool HasFinishedWaypointTask()
-    {           
+    {
         return waypointFinished && HasReachedDestination();
     }
 

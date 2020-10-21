@@ -15,5 +15,8 @@ public class AIClass : ScriptableObject
     public float fov;
     [Range(0,180)]
     public float alertHorizontalArc;
+    [Range(0, 100)]
+    public float navStoppingDistance;
     public LineMaterials lm;
+
 }
