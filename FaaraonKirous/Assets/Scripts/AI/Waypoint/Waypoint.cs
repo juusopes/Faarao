@@ -3,13 +3,6 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
-public enum WaypointType
-{
-    WalkPast,
-    GuardForDuration,
-    GuardForEver
-}
-
 public class Waypoint : MonoBehaviour
 {
     [Header("Waypoint Type")]
@@ -86,6 +79,10 @@ public class Waypoint : MonoBehaviour
             if (type == WaypointType.WalkPast)
             {
                 DrawWalkPast(vecLenght, offset, Color.green);
+            }
+            else if (type == WaypointType.Climb)
+            {
+                DrawWalkPast(vecLenght, offset, Color.blue);
             }
             else if(type == WaypointType.GuardForDuration)
             {

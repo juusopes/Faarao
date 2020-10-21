@@ -7,6 +7,9 @@ public static class RayCaster
 {
     public static LayerMask defaultLayerMask = ~(1 << 2);
     public static LayerMask defaultLayerMaskMinusPlayer = ~(1 << 2 | 1 << LayerMask.NameToLayer("Player"));
+    public static LayerMask defaultLayerMaskMinusCharacters = ~(1 << 2 | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy"));
+    public static LayerMask ladderLayerMask = 1 << LayerMask.NameToLayer("EditorOnly/Ladder");
+    public static LayerMask onlyZeroLayerMask = 1 << 0;
     public static RaycastHit ToTarget(GameObject start, GameObject target, float range)
     {
         RaycastHit hit;
@@ -29,6 +32,7 @@ public static class RayCaster
 
         return hit;
     }
+
 
 
     public static bool HitPlayer(RaycastHit hit)
