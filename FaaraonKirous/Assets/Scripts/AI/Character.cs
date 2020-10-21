@@ -52,7 +52,7 @@ public class Character : MonoBehaviour
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
-        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, navMeshAgent.radius, navMeshAgent.height);      //TODO: Check radius and height
+        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, navMeshAgent.radius, navMeshAgent.height * 1.5f);      //TODO: Check radius and height
     }
 
     private void Start()
