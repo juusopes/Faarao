@@ -119,11 +119,19 @@ public class PlayerController : MonoBehaviour
         {
             if (isRunning)
             {
+<<<<<<< Updated upstream:FaaraonKirous/Assets/Scripts/Olli/Olli/PlayerController.cs
                 navMeshAgent.speed = movementSpeed * 2.1f;
             }
             else if (isCrouching)
             {
                 navMeshAgent.speed = movementSpeed * 0.4f;
+=======
+                navMeshAgent.speed = movementSpeed * 1.5f;
+            }
+            else if (isCrouching)
+            {
+                navMeshAgent.speed = movementSpeed * 0.5f;
+>>>>>>> Stashed changes:FaaraonKirous/Assets/Scripts/OllinScriptit/Olli/PlayerController.cs
             }
             else
             {
