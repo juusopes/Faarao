@@ -50,15 +50,25 @@ public class Character : MonoBehaviour
         stateMachine = new StateMachine(this);
         player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
-        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        navMeshAgent.updateRotation = true;
-        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, navMeshAgent.radius, navMeshAgent.height * 1.5f);      //TODO: Check radius and height
+        InitNavMeshAgent();
+        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
     }
 
     private void Start()
     {
         RefreshPlayers();
         InitNavigator();
+    }
+
+    private void InitNavMeshAgent()
+    {
+        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        navMeshAgent.updateRotation = true;
+
+        navMeshAgent.speed = classSettings.navSpeed;
+        navMeshAgent.angularSpeed = classSettings.navAngularSpeed;
+        navMeshAgent.acceleration = classSettings.navAcceleration;
+        navMeshAgent.stoppingDistance = classSettings.navStoppingDistance;
     }
 
     private void InitNavigator()
