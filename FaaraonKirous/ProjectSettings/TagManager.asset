@@ -7,8 +7,6 @@ TagManager:
   - Indicator
   - LevelController
   - TargetableObject
-  - ClimbableObject
-  - Ground
   layers:
   - Default
   - TransparentFX
@@ -20,9 +18,9 @@ TagManager:
   - 
   - Player
   - PostProcessing
-  - 
-  - 
-  - 
+  - Enemy
+  - EditorOnly/Ladder
+  - EditorOnly/Trigger
   - 
   - 
   - 

@@ -19,7 +19,7 @@ public class AlertState : State
  
     void Look()
     {
-        if(character.CanSeePlayer())
+        if(CanSeePlayer)
             ToChaseState();
     }
 

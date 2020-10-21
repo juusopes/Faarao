@@ -1,67 +1,93 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Character : MonoBehaviour
 {
-    #region Fields
+    #region Mono Fields
     [Header("AI Class")]
     public AIClass classSettings;
-
-    [Header("Patrol Settings")]
-    [Tooltip("\tThe order waypoints are travelled:\n\n" +
-        "\t*InOrderOnce: \nTravel in order stop on last waypoint\n" +
-        "\t*InOrderLoopBackAndForth : \nLoop 1-2-3-2-1-2-3...\n" +
-        "\t*InOrderLoopCircle : \nLoop 1-2-3-1-2-3..\n" +
-        "\t*ShorterOnce : \nChoose closest waypoint from the remaining path, stop on last\n" +
-        "\t*ShorterBackAndForth : \nChoose closest waypoint from the remaining path, Loop: 1-x-5-x-1-x-5-x-1...\n" +
-        "\t*Random : \nJust choose random waypoint")]
-    public PatrolType patrolType;
+    [Header("Patrol route")]
     [Tooltip("All my child gameObjects with component Waypoint and that is nav mesh reachable will be added to a list of patrol route.")]
     [SerializeField]
-    private GameObject waypointGroup;
-    private Navigator navigator;
-
+    private WaypointGroup waypointGroup = null;
     [Header("General")]
     public Transform sightPosition;
+    #endregion 
 
+    #region Regular fields
     [HideInInspector]
     public Vector3 chaseTarget;
     [HideInInspector]
     public Vector3 lastSeenPosition;
     private Waypoint currentWaypoint;
-    private bool waypointFinished = true;
+    private bool waypointFinished = false;
     private bool waypointTimer = false;
+
+    private GameObject[] players = new GameObject[2];
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
+
+    //Aid scripts
+    private Navigator navigator;
     private StateMachine stateMachine;
+    private SightDetection player1SightDetection;
+    private SightDetection player2SightDetection;
+    private OffMeshLinkMovement linkMovement;
     #endregion
 
-    #region Generic
+    #region Expression bodies
+    public GameObject Player1 => players[0];
+    public GameObject Player2 => players[1];
+    #endregion
 
+    #region Start and update
     void Awake()
     {
         stateMachine = new StateMachine(this);
+        player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
+        player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
-        InitNavigator();
-    }
-    private void InitNavigator()
-    {
-        navigator = new Navigator(this.transform, waypointGroup, patrolType);
-        currentWaypoint = navigator.GetFirstWaypoint();
+        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, navMeshAgent.radius, navMeshAgent.height * 1.5f);      //TODO: Check radius and height
     }
 
     private void Start()
     {
-
+        RefreshPlayers();
+        InitNavigator();
     }
 
+    private void InitNavigator()
+    {
+        if (waypointGroup == null)
+            Debug.Log("Character with no wp group!", this);
+        navigator = new Navigator(this.transform, waypointGroup);
+        currentWaypoint = navigator.GetFirstWaypoint();
+    }
 
     private void Update()
     {
         stateMachine.UpdateSM();
+    }
+
+    private void LateUpdate()
+    {
+        TryDetectPlayer();
+    }
+
+    #endregion
+
+    #region Generic
+
+    private void RefreshPlayers()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
+        player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed);
+        player2SightDetection.ResetLineRenderer(Player2, classSettings.sightSpeed);
     }
 
     public void UpdateIndicator(Color color)
@@ -72,22 +98,41 @@ public class Character : MonoBehaviour
 
     #region Sight
 
-    public bool CanSeePlayer()
+    private void TryDetectPlayer()
     {
-        RaycastHit hit = RayCastEyes();
-        if (RayCastHitPlayer(hit))
+        player1SightDetection.SimulateSightDetection(CanDetectPlayer(Player1));
+        player2SightDetection.SimulateSightDetection(CanDetectPlayer(Player2));
+    }
+
+    /// <summary>
+    /// Returns true if player is in sight, fov and can be raycasted. Allows sightline simulation to begin, which dictates actually seeing player.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    public bool CanDetectPlayer(GameObject player)
+    {
+        return PlayerIsInRange(player) && PlayerIsInFov(player) && CanRayCastPlayer(player);
+    }
+
+    private bool PlayerIsInRange(GameObject player)
+    {
+        return Vector3.Distance(player.transform.position, transform.position) <= classSettings.sightRange;
+    }
+
+    private bool PlayerIsInFov(GameObject player)
+    {
+        Vector3 dirToPlayer = (player.transform.position - transform.position).normalized;
+        if (Vector3.Angle(transform.forward, dirToPlayer) < classSettings.fov / 2f)
         {
-            chaseTarget = hit.transform.position;
             return true;
         }
-
         return false;
     }
 
-    public bool CanChasePlayer()
+    public bool CanRayCastPlayer(GameObject player)
     {
-        RaycastHit hit = RayCastEyesChaseTarget();
-        if (RayCastHitPlayer(hit))
+        RaycastHit hit = RayCaster.ToTarget(gameObject, player, classSettings.sightRange);
+        if (RayCaster.HitPlayer(hit))
         {
             chaseTarget = hit.transform.position;
             return true;
@@ -107,6 +152,8 @@ public class Character : MonoBehaviour
 
     public void SearchRotate()
     {
+        if (currentWaypoint == null)
+            return;
         MatchRotation(currentWaypoint.transform.rotation, currentWaypoint.GetRotationSpeed());
     }
 
@@ -125,7 +172,7 @@ public class Character : MonoBehaviour
     }
     private void MatchRotation(Quaternion targetRotation, float rotateSpeed = 1)
     {
-        if (targetRotation == null) 
+        if (targetRotation == null)
             return;
 
         Vector3 eulerAngles = targetRotation.eulerAngles;
@@ -141,6 +188,8 @@ public class Character : MonoBehaviour
             return;
         waypointTimer = false;
         Waypoint nextWaypoint = navigator.GetNextWaypoint();
+        if (currentWaypoint.type == WaypointType.Climb && nextWaypoint.type != WaypointType.Climb)
+            navMeshAgent.enabled = true;
         if (nextWaypoint == null)
             navigator = null;
         else
@@ -152,11 +201,12 @@ public class Character : MonoBehaviour
         if (currentWaypoint == null)
             return;
 
-        switch(currentWaypoint.type)
+        switch (currentWaypoint.type)
         {
-            case WaypointType.WalkPast :
+            case WaypointType.WalkPast:
                 waypointFinished = true;
                 SetDestination(currentWaypoint.transform.position);
+                TestOffLink();
                 break;
             case WaypointType.GuardForDuration:
                 SetDestination(currentWaypoint.transform.position);
@@ -167,7 +217,7 @@ public class Character : MonoBehaviour
                 {
                     waypointTimer = true;
                     waypointFinished = false;
-                    StartCoroutine("startWaypointTimer", currentWaypoint.GetGuardDuration());
+                    StartCoroutine("StartWaypointTimer", currentWaypoint.GetGuardDuration());
                 }
                 break;
             case WaypointType.GuardForEver:
@@ -176,10 +226,40 @@ public class Character : MonoBehaviour
                     SearchRotate();
                 waypointFinished = false;
                 break;
+            case WaypointType.Climb:
+                if (waypointFinished == true)
+                {
+                    waypointFinished = false;
+                    StopDestination();
+                    navMeshAgent.enabled = false;
+                }
+                Climb();
+                break;
         }
     }
 
-    private IEnumerator startWaypointTimer(float waitTime)
+    private void TestOffLink()
+    {
+        if (navMeshAgent.isOnOffMeshLink && linkMovement.CanStartLink())
+        {
+            OffMeshLinkRoute route = linkMovement.GetOffMeshLinkRoute();
+            StartCoroutine(linkMovement.MoveAcrossNavMeshLink(route));
+        }
+    }
+
+    private void Climb()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.transform.position, Time.deltaTime * navMeshAgent.speed);
+        MatchRotation(currentWaypoint.transform.rotation, currentWaypoint.GetRotationSpeed());
+
+        if (Mathf.Approximately(Vector3.Distance(transform.position, currentWaypoint.transform.position), 0))
+        {
+            waypointFinished = true;
+        }
+    }
+
+
+    private IEnumerator StartWaypointTimer(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         waypointFinished = true;
@@ -190,16 +270,18 @@ public class Character : MonoBehaviour
 
     public void SetDestination(Vector3 position)
     {
-        if (position != null && navMeshAgent.destination != position)
+        if (position != null && navMeshAgent.destination != position && navMeshAgent.enabled)
         {
             navMeshAgent.destination = position;
             navMeshAgent.isStopped = false;
+            navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : classSettings.navStoppingDistance;
         }
     }
 
     public void StopDestination()
     {
-        navMeshAgent.isStopped = true;
+        if (navMeshAgent.enabled)
+            navMeshAgent.isStopped = true;
     }
 
     public bool HasFinishedWaypointTask()
@@ -209,42 +291,20 @@ public class Character : MonoBehaviour
 
     public bool HasReachedDestination()
     {
+        if (navMeshAgent.enabled == false)
+            return true;
         return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending;
     }
     #endregion
 
-    #region RayCaster
+    #region Editor stuff
+#if UNITY_EDITOR
 
-    public RaycastHit RayCastEyesChaseTarget()
+    void OnDrawGizmos()
     {
-        RaycastHit hit;
-        Vector3 enemyToTarget = chaseTarget - sightPosition.transform.position;
-
-        Debug.DrawRay(sightPosition.transform.position, enemyToTarget, Color.red, 1f);
-
-
-        Physics.Raycast(sightPosition.transform.position, enemyToTarget, out hit, classSettings.sightRange);
-
-        return hit;
+        if (waypointGroup != null)
+            Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);
     }
-
-    public RaycastHit RayCastEyes()
-    {
-        Debug.DrawRay(sightPosition.transform.position, sightPosition.transform.forward * classSettings.sightRange, Color.green, 1f);
-
-        RaycastHit hit;
-        Physics.Raycast(sightPosition.transform.position, sightPosition.transform.forward, out hit, classSettings.sightRange);
-
-        return hit;
-    }
-
-    
-    public bool RayCastHitPlayer(RaycastHit hit)
-    {
-        if (hit.collider == null)
-            return false;
-        return hit.collider.CompareTag("Player");
-    }
-
+#endif
     #endregion
 }
