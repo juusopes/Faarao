@@ -10,7 +10,7 @@ public class CameraControl : MonoBehaviour
     public bool camFollow;
 
     //Move Camera
-    public float moveAmount = 20f;
+    public float moveAmount = 21f;
     public float borderThickness = 10;
     public Vector2 panLimit;
 

@@ -119,11 +119,11 @@ public class PlayerController : MonoBehaviour
         {
             if (isRunning)
             {
-                navMeshAgent.speed = movementSpeed * 2f;
+                navMeshAgent.speed = movementSpeed * 2.1f;
             }
             else if (isCrouching)
             {
-                navMeshAgent.speed = movementSpeed * 0.5f;
+                navMeshAgent.speed = movementSpeed * 0.4f;
             }
             else
             {
