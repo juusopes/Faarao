@@ -43,7 +43,7 @@ class OffMeshLinkMovement
         //if(areaLink != null)
             //area = areaLink.area;
 
-        //Debug.Log("Area: " + area);
+        Debug.Log("Area: " + area);
 
         if (area == 3)
             return GetOffMeshLinkRouteJumpGap(data);

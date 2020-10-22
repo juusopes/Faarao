@@ -150,22 +150,8 @@ MonoBehaviour:
   classSettings: {fileID: 11400000, guid: f9e8619650cb27348a6f2419c48361f8, type: 2}
   waypointGroup: {fileID: 0}
   sightPosition: {fileID: 1295752339806913344}
-  fov: {fileID: 6024281465610095457}
-  playerDetectLayerMask:
-    serializedVersion: 2
-    m_Bits: 257
-  distractionLayerMask:
-    serializedVersion: 2
-    m_Bits: 2049
   chaseTarget: {x: 0, y: 0, z: 0}
-  lastSightTarget: {x: 0, y: 0, z: 0}
   lastSeenPosition: {x: 0, y: 0, z: 0}
-  currentDistraction: {fileID: 0}
-  currentDistractionPos: {x: 0, y: 0, z: 0}
-  distractionTimer: 0
-  impairedSightRange: 0
-  impairedFOV: 0
-  isDistracted: 0
   navMeshAgent: {fileID: 0}
 --- !u!1 &1295752339806913345
 GameObject:
@@ -307,9 +293,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba2dca498dc80842937c102b4644e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewConeLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
   character: {fileID: 1295752339492584506}
 --- !u!33 &6024281465610095463
 MeshFilter:
