@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     //Which Player
     public bool playerOne;
+
     //Moving
     public float movementSpeed;
     public float doubleClickTimer;
