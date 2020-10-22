@@ -18,10 +18,14 @@ public class LevelController : MonoBehaviour
     //[HideInInspector]
     public GameObject targetObject;
 
+    public GameObject canvasPrefab;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        canvasPrefab.SetActive(true);
+
         Initialize();
     }
 
