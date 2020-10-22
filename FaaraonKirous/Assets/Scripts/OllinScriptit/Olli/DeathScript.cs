@@ -5,7 +5,6 @@ using UnityEngine.Rendering;
 
 public class DeathScript : MonoBehaviour
 {
-    //
     [SerializeField]
     private float hp;
     public float damage;
