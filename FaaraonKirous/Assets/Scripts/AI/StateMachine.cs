@@ -15,6 +15,8 @@ public class StateMachine
     public ChaseState chaseState;
     [HideInInspector]
     public TrackingState trackingState;
+    [HideInInspector]
+    public DistractedState distractedState;
     Character character;
     public StateMachine(Character owner)
     {
@@ -23,6 +25,7 @@ public class StateMachine
         alertState = new AlertState(owner, this);
         chaseState = new ChaseState(owner, this);
         trackingState = new TrackingState(owner, this);
+        distractedState = new DistractedState(owner, this);
 
         SetState(patrolState);
     }
@@ -34,14 +37,16 @@ public class StateMachine
 
     public void SetState(State state)
     {
+        if (state == null || currentState == state)
+            return;
+
         if (currentState != null)
             currentState.OnStateExit();
 
         currentState = state;
         character.gameObject.name = "Enemy State - " + GetStateName();
 
-        if (currentState != null)
-            currentState.OnStateEnter();
+        currentState.OnStateEnter();
 
 #if UNITY_EDITOR
         SetIndicator();
@@ -58,6 +63,8 @@ public class StateMachine
             character.UpdateIndicator(Color.yellow);
         else if (currentState == trackingState)
             character.UpdateIndicator(Color.blue);
+        else if (currentState == distractedState)
+            character.UpdateIndicator(Color.black);
     }
 
     public string GetStateName()
