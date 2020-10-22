@@ -8,8 +8,6 @@ public class CameraControl : MonoBehaviour
     private float camHeight;
     private Quaternion camRot;
     public bool camFollow;
-<<<<<<< HEAD
-=======
 
     //Movement Script
     public float moveAmount = 20f;
@@ -18,7 +16,6 @@ public class CameraControl : MonoBehaviour
 
     public GameObject cameraAnchor;
 
->>>>>>> OllinBranch
     // Start is called before the first frame update
     void Start()
     {
@@ -35,28 +32,11 @@ public class CameraControl : MonoBehaviour
     {
         camRot = transform.rotation;
         camHeight = 40;
-<<<<<<< HEAD
-        camFollow = true;
-=======
         camFollow = false;
->>>>>>> OllinBranch
     }
 
     private void CamPos()
     {
-<<<<<<< HEAD
-        if (transform.parent != null)
-        {
-            transform.rotation = camRot;
-            transform.position = new Vector3(transform.parent.transform.position.x, camHeight, transform.parent.transform.position.z);
-        }
-        if (transform.parent == null)
-        {
-            float xAxisValue = Input.GetAxis("Horizontal");
-            float zAxisValue = Input.GetAxis("Vertical");
-            this.gameObject.transform.Translate(new Vector3(xAxisValue, zAxisValue, 0.0f));
-        }
-=======
         if (camFollow)
         {
             if (transform.parent != null)
@@ -105,6 +85,5 @@ public class CameraControl : MonoBehaviour
         pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
         pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
         transform.position = pos;
->>>>>>> OllinBranch
     }
 }

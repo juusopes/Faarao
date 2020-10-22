@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 5706328075926723928}
   - component: {fileID: 5706328075926723929}
   - component: {fileID: 2795708155777838719}
-  - component: {fileID: -2370286539409642136}
+  - component: {fileID: 121060119210227552}
   m_Layer: 8
   m_Name: Pharaoh
   m_TagString: Player
@@ -353,6 +353,7 @@ MonoBehaviour:
   interactObject: {fileID: 0}
   climbObject: {fileID: 0}
   grounded: 0
+  targetEnemy: {fileID: 0}
 --- !u!54 &5706328075926723929
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -381,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad1d92bf22e48d46a1047790c941412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-2370286539409642136
+--- !u!114 &121060119210227552
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -390,8 +391,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5706328075926723934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3161cff3cfed10847963285a53f1bf92, type: 3}
+  m_Script: {fileID: 11500000, guid: 3116d7e4460f45744b82f3a575df2729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1
+  hp: 0
+  damage: 0
   isDead: 0
