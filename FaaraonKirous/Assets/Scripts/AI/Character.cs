@@ -17,8 +17,6 @@ public class Character : MonoBehaviour
     public Transform sightPosition;
     [SerializeField]
     private GameObject fov = null;
-    public LayerMask playerDetectLayerMask;
-    public LayerMask distractionLayerMask;
     #endregion 
 
     #region Regular fields
@@ -151,7 +149,7 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CanDetectPlayer(GameObject player)
     {
-        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, playerDetectLayerMask, RayCaster.PLAYER_TAG);
+        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
     }
 
     /// <summary>
@@ -161,7 +159,7 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CanDetectDistraction(GameObject testObj)
     {
-        return ObjectIsInRange(testObj) && ObjectIsInFov(testObj) && CanRayCastObject(testObj, distractionLayerMask);
+        return ObjectIsInRange(testObj) && ObjectIsInFov(testObj) && CanRayCastObject(testObj, RayCaster.distractionLayerMask, RayCaster.DISTRACTION_TAG);
     }
 
     private bool ObjectIsInRange(GameObject testObj)
@@ -188,7 +186,7 @@ public class Character : MonoBehaviour
     {
         RaycastHit hit = RayCaster.ToTarget(gameObject, testObj, SightRange, layerMask);
         if (RayCaster.HitObject(hit, tag))
-        {
+        {            
             if (tag == RayCaster.PLAYER_TAG)
                 chaseTarget = hit.transform.position;
             return true;

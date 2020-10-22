@@ -5,33 +5,33 @@ using UnityEngine;
 
 public static class RayCaster
 {
-    public static string PLAYER_TAG = "Player";
-    public static LayerMask layerDefault = 1;
-    public static LayerMask layerTrans = 1 << 1;
-    public static LayerMask layerIgnoreRay = 1 << 2;
-    public static LayerMask layerPlayer = 1 << LayerMask.NameToLayer("Player");
-    public static LayerMask layerEnemy = 1 << LayerMask.NameToLayer("Enemy");
-    public static LayerMask layerLadder = 1 << LayerMask.NameToLayer("Raycast/Ladder");
-    public static LayerMask layerDistraction = 1 << LayerMask.NameToLayer("Raycast/Distraction");
-    public static LayerMask layerEditor = 1 << LayerMask.NameToLayer("EditorOnly");
+    public static readonly string PLAYER_TAG = "Player";
+    public static readonly string DISTRACTION_TAG = "Distraction";
 
-    public static  LayerMask defaultLayerMask = ~(1 << 2);   //~() means all other than what is inside
+    public static readonly LayerMask layerDefault = 1;
+    public static readonly LayerMask layerTrans = 1 << 1;
+    public static readonly LayerMask layerIgnoreRay = 1 << 2;
+    public static readonly LayerMask layerPlayer = 1 << LayerMask.NameToLayer("Player");
+    public static readonly LayerMask layerEnemy = 1 << LayerMask.NameToLayer("Enemy");
+    public static readonly LayerMask layerLadder = 1 << LayerMask.NameToLayer("Raycast/Ladder");
+    public static readonly LayerMask layerDistraction = 1 << LayerMask.NameToLayer("Raycast/Distraction");
+    public static readonly LayerMask layerEditor = 1 << LayerMask.NameToLayer("EditorOnly");
+
+    public static readonly LayerMask defaultLayerMask = ~(1 << 2);   //~() means all other than what is inside
+
+    public static readonly int LayerListStructures = layerDefault;
+    public static readonly int LayerListDefaultIgnore = layerIgnoreRay | layerEditor;
+    public static readonly int LayerListCharacters = layerPlayer | layerEnemy;
+    public static readonly int LayerListRaycastable = layerLadder | layerDistraction;
+    public static readonly int LayerListObjects = LayerListCharacters | LayerListRaycastable;
 
 
-    public static int LayerListStructuses = layerDefault;
-    public static int LayerListDefaultIgnore = layerIgnoreRay | layerEditor;
-    public static int LayerListCharacters = layerPlayer | layerEnemy;
-    public static int LayerListRaycastable = layerLadder | layerDistraction;
-    public static int LayerListObjects = LayerListCharacters | LayerListRaycastable;
-
-    //public static LayerMask defaultLayerMaskMinusPlayer = ~(1 << 2 | 1 << layerPlayer);
-    //public static LayerMask defaultLayerMaskMinusCharacters = ~(1 << 2 | 1 << layerPlayer | 1 << layerEnemy);
-    public static LayerMask ladderLayerMask = layerLadder;
-    //public static LayerMask viewConeLayerMask = ~(LayerListDefaultIgnore | LayerListObjects);
-    //public static LayerMask distractionLayerMask = LayerListStructuses | layerDistraction;
-    //public static LayerMask playerDetectLayerMask = ~(LayerListDefaultIgnore | layerTrans | layerEnemy | LayerListRaycastable);
-
-    //Debug.Log(System.Convert.ToString(layerMask));
+    //public static readonly LayerMask defaultLayerMaskMinusPlayer = ~(1 << 2 | 1 << layerPlayer);
+    //public static readonly LayerMask defaultLayerMaskMinusCharacters = ~(1 << 2 | 1 << layerPlayer | 1 << layerEnemy);
+    public static readonly LayerMask ladderLayerMask = layerLadder;
+    public static readonly LayerMask viewConeLayerMask = ~(LayerListDefaultIgnore | LayerListObjects);
+    public static readonly LayerMask distractionLayerMask = LayerListStructures | layerDistraction;
+    public static readonly LayerMask playerDetectLayerMask = LayerListStructures | layerPlayer;
 
     public static RaycastHit ToTarget(GameObject start, GameObject target, float range, LayerMask layerMask)
     {
@@ -57,6 +57,7 @@ public static class RayCaster
 
     public static bool HitObject(RaycastHit hit, string tag = "")
     {
+        Debug.Log(hit.collider);
         if (hit.collider == null)
             return false;
         //Debug.Log(hit.collider.gameObject.name);

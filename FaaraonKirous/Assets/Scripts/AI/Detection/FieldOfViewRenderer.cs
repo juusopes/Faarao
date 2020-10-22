@@ -7,7 +7,6 @@ using UnityEngine.Assertions;
 
 public class FieldOfViewRenderer : MonoBehaviour
 {
-    public LayerMask viewConeLayerMask;
     Mesh mesh;
     public Character character;
     private Vector3 origin;
@@ -63,7 +62,7 @@ public class FieldOfViewRenderer : MonoBehaviour
             Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector2.right;
             //Debug.DrawRay(origin, direction * viewDistance, Color.green, 10f);
             RaycastHit raycastHit;
-            if (Physics.Raycast(origin, direction, out raycastHit, SightRange, viewConeLayerMask))
+            if (Physics.Raycast(origin, direction, out raycastHit, SightRange, RayCaster.viewConeLayerMask))
             {
                 vertex = transform.InverseTransformPoint(origin + direction * raycastHit.distance);
             }
