@@ -17,6 +17,8 @@ public class Character : MonoBehaviour
     public Transform sightPosition;
     [SerializeField]
     private GameObject fov = null;
+    public LayerMask playerDetectLayerMask;
+    public LayerMask distractionLayerMask;
     #endregion 
 
     #region Regular fields
@@ -28,6 +30,7 @@ public class Character : MonoBehaviour
     public Vector3 lastSeenPosition;
     [HideInInspector]
     public Distraction currentDistraction;
+    public Vector3 currentDistractionPos;
     private Waypoint currentWaypoint;
     private bool waypointFinished = false;
     private bool waypointTimer = false;
@@ -148,7 +151,7 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CanDetectPlayer(GameObject player)
     {
-        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
+        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, playerDetectLayerMask, RayCaster.PLAYER_TAG);
     }
 
     /// <summary>
@@ -158,7 +161,7 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CanDetectDistraction(GameObject testObj)
     {
-        return ObjectIsInRange(testObj) && ObjectIsInFov(testObj) && CanRayCastObject(testObj, RayCaster.distractionLayerMask);
+        return ObjectIsInRange(testObj) && ObjectIsInFov(testObj) && CanRayCastObject(testObj, distractionLayerMask);
     }
 
     private bool ObjectIsInRange(GameObject testObj)
@@ -243,7 +246,7 @@ public class Character : MonoBehaviour
         //Always get blinded
         if (distraction.option == DistractionOption.BlindingLight)
             StartImpairSightRange(distraction.effectTime);
-
+        currentDistractionPos = distraction.transform.position; 
         isDistracted = true;
         waypointFinished = true;
         currentDistraction = distraction;
@@ -376,8 +379,9 @@ public class Character : MonoBehaviour
             return;
         waypointTimer = false;
         Waypoint nextWaypoint = navigator.GetNextWaypoint();
-        if (currentWaypoint.type == WaypointType.Climb && nextWaypoint.type != WaypointType.Climb)
-            navMeshAgent.enabled = true;
+        if (nextWaypoint != null) 
+            if(currentWaypoint.type == WaypointType.Climb  && nextWaypoint.type != WaypointType.Climb)
+                navMeshAgent.enabled = true;
         if (nextWaypoint == null)
             navigator = null;
         else

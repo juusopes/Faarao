@@ -43,13 +43,13 @@ public class DistractedState : State
                 character.PanicRunAround();
                 break;
             case DistractionOption.InspectableNoise:
-                character.SetDestination(distraction.transform.position);
+                character.SetDestination(character.currentDistractionPos);
                 break;
             case DistractionOption.SomethingToGoTo:
-                character.SetDestination(distraction.transform.position);
+                character.SetDestination(character.currentDistractionPos);
                 break;
             case DistractionOption.SomethingToLookAt:
-                character.LerpLookAt(distraction.transform.position);
+                character.LerpLookAt(character.currentDistractionPos);
                 break;
         }
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 public static class RayCaster
 {
     public static string PLAYER_TAG = "Player";
-    public static LayerMask layerDefault = 1 << 0;
+    public static LayerMask layerDefault = 1;
     public static LayerMask layerTrans = 1 << 1;
     public static LayerMask layerIgnoreRay = 1 << 2;
     public static LayerMask layerPlayer = 1 << LayerMask.NameToLayer("Player");
@@ -27,13 +27,15 @@ public static class RayCaster
     //public static LayerMask defaultLayerMaskMinusPlayer = ~(1 << 2 | 1 << layerPlayer);
     //public static LayerMask defaultLayerMaskMinusCharacters = ~(1 << 2 | 1 << layerPlayer | 1 << layerEnemy);
     public static LayerMask ladderLayerMask = layerLadder;
-    public static LayerMask viewConeLayerMask = ~(LayerListDefaultIgnore | LayerListObjects);
-    public static LayerMask distractionLayerMask = LayerListStructuses | layerDistraction;
-    public static LayerMask playerDetectLayerMask = ~(LayerListDefaultIgnore | layerTrans | layerEnemy | LayerListRaycastable);
+    //public static LayerMask viewConeLayerMask = ~(LayerListDefaultIgnore | LayerListObjects);
+    //public static LayerMask distractionLayerMask = LayerListStructuses | layerDistraction;
+    //public static LayerMask playerDetectLayerMask = ~(LayerListDefaultIgnore | layerTrans | layerEnemy | LayerListRaycastable);
 
+    //Debug.Log(System.Convert.ToString(layerMask));
 
     public static RaycastHit ToTarget(GameObject start, GameObject target, float range, LayerMask layerMask)
     {
+        //Debug.Log(System.Convert.ToString(layerMask));
         RaycastHit hit;
         Vector3 startToTarget = target.transform.position - start.transform.position;
         //Debug.DrawRay(start.transform.position, startToTarget, Color.red, 1f);
