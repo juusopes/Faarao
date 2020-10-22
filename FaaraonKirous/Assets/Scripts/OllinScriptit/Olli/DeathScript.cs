@@ -5,7 +5,9 @@ using UnityEngine.Rendering;
 
 public class DeathScript : MonoBehaviour
 {
-    public int hp;
+    [SerializeField]
+    private float hp;
+    public float damage;
     public bool isDead;
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,15 @@ public class DeathScript : MonoBehaviour
 
     private void DeathCheck()
     {
+        if (damage > 0)
+        {
+            hp -= damage;
+            if (hp < 0)
+            {
+                hp = 0;
+            }
+            damage = 0;
+        }
         if (hp == 0)
         {
             isDead = true;

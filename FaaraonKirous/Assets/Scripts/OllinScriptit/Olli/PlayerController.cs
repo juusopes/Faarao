@@ -310,7 +310,7 @@ public class PlayerController : MonoBehaviour
     {
         if (targetEnemy != null)
         {
-            targetEnemy.GetComponent<DeathScript>().hp--;
+            targetEnemy.GetComponent<DeathScript>().damage = 1;
         }
     }
 
