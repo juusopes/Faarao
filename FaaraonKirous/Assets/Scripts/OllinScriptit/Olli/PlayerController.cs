@@ -50,6 +50,11 @@ public class PlayerController : MonoBehaviour
     private bool climbSuccess;
     public bool grounded;
 
+    //Dying
+    private DeathScript death;
+
+    //Attack
+    public GameObject targetEnemy;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,12 +64,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Moving();
-        LineOfSight();
-        KeyControls();
-        Invisibility();
-        SetIndicator();
-        Climb();
+        if (!death.isDead)
+        {
+            Moving();
+            LineOfSight();
+            KeyControls();
+            Invisibility();
+            SetIndicator();
+            Climb();
+        }
     }
 
     private void Initialize()
@@ -82,6 +90,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         climbing = false;
+        death = GetComponent<DeathScript>();
     }
     public void Moving()
     {
@@ -119,11 +128,11 @@ public class PlayerController : MonoBehaviour
         {
             if (isRunning)
             {
-                navMeshAgent.speed = movementSpeed * 5f;
+                navMeshAgent.speed = movementSpeed * 1.5f;
             }
             else if (isCrouching)
             {
-                navMeshAgent.speed = movementSpeed * 0.2f;
+                navMeshAgent.speed = movementSpeed * 0.5f;
             }
             else
             {
@@ -193,6 +202,11 @@ public class PlayerController : MonoBehaviour
     {
         if (isInvisible)
         {
+            this.gameObject.tag = "PlayerInvisible";
+        }
+        else
+        {
+            this.gameObject.tag = "Player";
         }
     }
 
@@ -274,12 +288,13 @@ public class PlayerController : MonoBehaviour
             climbSuccess = true;
             float yAxisValue = 0.01f;
             GetComponent<Rigidbody>().isKinematic = true;
+            gameObject.GetComponent<NavMeshAgent>().isStopped = true;
             GetComponent<NavMeshAgent>().enabled = false;
             transform.Translate(new Vector3(0, yAxisValue, 0));
             savedClimbable = climbObject;
         } else if(climbSuccess)
         {
-            transform.Translate(new Vector3(0.01f, 0, 0));
+            transform.Translate(new Vector3(0, 0, 0.01f));
             if (grounded)
             {
                 climbSuccess = false;
@@ -287,6 +302,15 @@ public class PlayerController : MonoBehaviour
         } else
         {
             GetComponent<NavMeshAgent>().enabled = true;
+            gameObject.GetComponent<NavMeshAgent>().isStopped = false;
+        }
+    }
+
+    private void Attack()
+    {
+        if (targetEnemy != null)
+        {
+            targetEnemy.GetComponent<DeathScript>().damage = 1;
         }
     }
 
@@ -299,6 +323,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             InvisiblitySpell();
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Attack();
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
