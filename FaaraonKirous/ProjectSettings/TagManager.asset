@@ -7,7 +7,7 @@ TagManager:
   - Indicator
   - LevelController
   - TargetableObject
-  - Enemy
+  - Distraction
   layers:
   - Default
   - TransparentFX
@@ -20,9 +20,9 @@ TagManager:
   - Player
   - PostProcessing
   - Enemy
-  - EditorOnly/Ladder
-  - EditorOnly/Trigger
-  - 
+  - Raycast/Distraction
+  - EditorOnly
+  - Raycast/Ladder
   - 
   - 
   - 
