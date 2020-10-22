@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
 public class AlertState : State
 {
     private float searchTimer;
@@ -16,17 +15,14 @@ public class AlertState : State
         Look();
     }
 
- 
-    void Look()
+    public override void OnStateEnter()
     {
-        if(CanSeePlayer)
-            ToChaseState();
+        searchTimer = 0;
     }
-
 
     void Search()
     {
-        character.StopDestination();
+        character.StopNavigation();
         character.SearchRotate();
         searchTimer += Time.deltaTime;
         if (searchTimer >= character.classSettings.searchingDuration)
@@ -34,8 +30,11 @@ public class AlertState : State
             stateMachine.SetState(stateMachine.patrolState);
             ToPatrolState();
         }
-
     }
 
+    void Look()
+    {
+        DefaultLook();
+    }
 }
 

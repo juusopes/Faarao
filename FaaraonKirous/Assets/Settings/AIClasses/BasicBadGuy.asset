@@ -12,11 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2c80b2e792180429952c6844362efe, type: 3}
   m_Name: BasicBadGuy
   m_EditorClassIdentifier: 
-  searchTurnSpeed: 150
-  searchingDuration: 4
+  hearingRange: 15
   sightRange: 25
+  impairedSightRange: 10
   sightSpeed: 5
   fov: 75
+  impairedFov: 30
+  searchingDuration: 4
+  searchTurnSpeed: 20
   alertHorizontalArc: 45
+  navSpeed: 4
+  navAngularSpeed: 100
+  navAcceleration: 16
   navStoppingDistance: 0.5
+  navJumpHeight: 1.5
+  modelRadius: 0.6
   lm: {fileID: 11400000, guid: f4ef20cc2111dc44d91ec9bb70430a43, type: 2}

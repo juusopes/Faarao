@@ -9,7 +9,6 @@ public class FieldOfViewRenderer : MonoBehaviour
 {
     Mesh mesh;
     public Character character;
-    private AIClass classSettings;
     private Vector3 origin;
     private float startingAngle = 0;
     private int rayCount = 50;
@@ -19,11 +18,12 @@ public class FieldOfViewRenderer : MonoBehaviour
     int[] triangles;
     float angle;
     private Vector3 offset = new Vector3(0, -0.2f, 0);
+    private float FOV => character.FOV;
+    private float SightRange => character.SightRange;
 
     void Awake()
     {
         Assert.IsNotNull(character, "Character is not set!");
-        classSettings = character.classSettings;
     }
 
     // Start is called before the first frame update
@@ -32,7 +32,6 @@ public class FieldOfViewRenderer : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         origin = Vector3.zero;
-        angleIncrease = classSettings.fov / rayCount;
         vertices = new Vector3[rayCount + 1 + 1];
         vertices[0] = origin;
         uv = new Vector2[vertices.Length];
@@ -63,13 +62,13 @@ public class FieldOfViewRenderer : MonoBehaviour
             Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector2.right;
             //Debug.DrawRay(origin, direction * viewDistance, Color.green, 10f);
             RaycastHit raycastHit;
-            if (Physics.Raycast(origin, direction, out raycastHit, classSettings.sightRange, RayCaster.defaultLayerMaskMinusPlayer))
+            if (Physics.Raycast(origin, direction, out raycastHit, SightRange, RayCaster.viewConeLayerMask))
             {
                 vertex = transform.InverseTransformPoint(origin + direction * raycastHit.distance);
             }
             else
             {
-                vertex = transform.InverseTransformPoint(origin + direction * classSettings.sightRange);
+                vertex = transform.InverseTransformPoint(origin + direction * SightRange);
             }
                 
 
@@ -108,7 +107,8 @@ public class FieldOfViewRenderer : MonoBehaviour
 
     public void SetAimDirection(Vector3 aimDirection)
     {
-        startingAngle = transform.rotation.eulerAngles.y + classSettings.fov / 2f - 90f;
+        startingAngle = transform.rotation.eulerAngles.y + FOV / 2f - 90f;
+        angleIncrease = FOV / rayCount;
     }
 }
 
