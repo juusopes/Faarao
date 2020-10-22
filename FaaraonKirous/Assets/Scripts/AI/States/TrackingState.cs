@@ -21,8 +21,10 @@ public class TrackingState : State
             ToAlertState();
         }
     }
+
     void Look()
     {
-        DefaultLook();
+        if (CanSeePlayer)
+            ToChaseState();
     }
 }

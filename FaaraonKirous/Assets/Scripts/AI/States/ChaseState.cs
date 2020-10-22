@@ -11,22 +11,20 @@ public class ChaseState : State
     public override void Tick()
     {
         Chase();
+        Look();
     }
 
     private void Chase()
     {
-        if (CanSeePlayer)
+        character.SetDestination(character.chaseTarget);
+    }
+
+    void Look()
+    {
+        if (!CanSeePlayer)
         {
-            character.LerpLookAt(character.chaseTarget, 150f);
-            character.SetDestination(character.chaseTarget);
-        }
-        else
-        {
-            if (!CanSeePlayer)
-            {
-                LostTrackOfPlayer();
-                ToTrackingState();
-            }
+            character.LostTrackOfPlayer();
+            ToTrackingState();
         }
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine.XR;
 
 public class PatrolState : State
 {
+    private int nextWaypoint;
+
     public PatrolState(Character character, StateMachine stateMachine) : base(character, stateMachine) { }
 
     public override void Tick()
@@ -25,7 +27,8 @@ public class PatrolState : State
 
     void Look()
     {
-        DefaultLook();
+        if (CanSeePlayer)
+            ToChaseState();
     }
 }
 

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerActiveArea : MonoBehaviour
 {
-    //
     private GameObject player;
     // Start is called before the first frame update
     void Start()
@@ -26,7 +25,7 @@ public class PlayerActiveArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("ENter");
+        Debug.Log(other.gameObject);
         if (other.tag == "ClimbableObject")
         {
             player.GetComponent<PlayerController>().climbObject = other.gameObject;
@@ -34,6 +33,10 @@ public class PlayerActiveArea : MonoBehaviour
         else if (other.tag == "TargetableObject")
         {
             player.GetComponent<PlayerController>().interactObject = other.gameObject;
+        }
+        else if (other.tag == "Enemy")
+        {
+            player.GetComponent<PlayerController>().targetEnemy = other.gameObject;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -45,6 +48,10 @@ public class PlayerActiveArea : MonoBehaviour
         else if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().climbObject)
         {
             player.GetComponent<PlayerController>().climbObject = null;
+        }
+        else if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().targetEnemy)
+        {
+            player.GetComponent<PlayerController>().targetEnemy = null;
         }
     }
 }

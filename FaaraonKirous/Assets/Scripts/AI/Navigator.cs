@@ -113,4 +113,9 @@ public class Navigator
     {
         return currentWaypoint >= 0 && currentWaypoint < waypointCount;
     }
+
+    public static bool  IsReachable(Transform navObject, Transform testPosition)
+    {
+        return NavMesh.CalculatePath(testPosition.position, navObject.position, NavMesh.AllAreas, new NavMeshPath());
+    }
 }
