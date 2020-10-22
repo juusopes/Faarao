@@ -11,6 +11,6 @@ public class DistractionClass : ScriptableObject
     public DistractionType distractionType;
     [Tooltip("How long the effect affects AI.")]
     public float effectTime;
-    [Tooltip("How long till the gameObject is destroyed.")]
+    [Tooltip("How long till the gameObject is destroyed. Does not affect effect time at all.")]
     public float destroyTime;
 }

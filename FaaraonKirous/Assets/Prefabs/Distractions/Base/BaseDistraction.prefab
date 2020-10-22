@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 505881772312625336}
   - component: {fileID: 505881772312625337}
   - component: {fileID: 8690677218215857718}
-  m_Layer: 12
+  m_Layer: 11
   m_Name: BaseDistraction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d60f8b1c0f8939a419fc0a739e24bdda, type: 2}
+  - {fileID: 2100000, guid: 0d454ed042c36b14388ec89ef4f18013, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -95,3 +95,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distractionClass: {fileID: 0}
+  option: 0

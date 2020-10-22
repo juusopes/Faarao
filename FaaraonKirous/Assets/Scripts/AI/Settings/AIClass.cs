@@ -10,12 +10,18 @@ public class AIClass : ScriptableObject
     [Tooltip("How far AI can see.")]
     [Range(0, 1000)]
     public float sightRange = 25f;
+    [Tooltip("How far AI can see when sight is distracted.")]
+    [Range(0, 1000)]
+    public float impairedSightRange = 10f;
     [Tooltip("How fast AI sightline renderer/detection moves.")]
     [Range(0, 100)]
     public float sightSpeed = 10f;
     [Tooltip("How wide AI can see.")]
     [Range(0, 180)]
     public float fov = 90f;
+    [Tooltip("How wide AI can see when sight is distracted.")]
+    [Range(0, 180)]
+    public float impairedFov = 30f;
     [Tooltip("How long AI will search/wait/inspect by default")]
     [Range(0, 1000)]
     public float searchingDuration = 5f;
