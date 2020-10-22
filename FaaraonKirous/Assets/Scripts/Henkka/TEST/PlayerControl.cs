@@ -34,11 +34,13 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
             dsOption = DistractionOption.InsectSwarm;
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            dsOption = DistractionOption.InspectableNoise;
+            dsOption = DistractionOption.NoiseToGoto;
         if (Input.GetKeyDown(KeyCode.Alpha4))
-            dsOption = DistractionOption.SomethingToGoTo;
+            dsOption = DistractionOption.NoiseToLookAt;
         if (Input.GetKeyDown(KeyCode.Alpha5))
-            dsOption = DistractionOption.SomethingToLookAt;
+            dsOption = DistractionOption.SightToGoTo;
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+            dsOption = DistractionOption.SightToLookAt;
 
         if (Input.GetButtonDown("Fire1"))
         {

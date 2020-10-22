@@ -2,7 +2,8 @@
 {
     BlindingLight,
     InsectSwarm,
-    InspectableNoise,
-    SomethingToGoTo,
-    SomethingToLookAt
+    NoiseToGoto,
+    NoiseToLookAt,
+    SightToGoTo,
+    SightToLookAt
 }

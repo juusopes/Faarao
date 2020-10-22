@@ -2,25 +2,34 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
+public class SomeClass : MonoBehaviour
+{
+
+}
+
 public class DistractionSpawner : MonoBehaviour
 {
-    public static string DISTRACTION_CONTAINER = "DistractionContainer";
+    private static DistractionSpawner _instance;
+    public static DistractionSpawner Instance { get { return _instance; } }
+
     [SerializeField] private GameObject blindingLight = null;
     [SerializeField] private GameObject insectSwarm = null;
-    [SerializeField] private GameObject inspectableNoise = null;
-    [SerializeField] private GameObject somethingToGoTo = null;
-    [SerializeField] private GameObject somethingToLookAt = null;
+    [SerializeField] private GameObject noiseToGoTo = null;
+    [SerializeField] private GameObject noiseToLookAt = null;
+    [SerializeField] private GameObject sightToGoTo = null;
+    [SerializeField] private GameObject sightToLookAt = null;
     private GameObject distractionContainerGO;
 
     private void Awake()
     {
-        distractionContainerGO = GameObject.Find(DISTRACTION_CONTAINER);
-        if (distractionContainerGO == null)
+        if (_instance != null && _instance != this)
         {
-            distractionContainerGO = Instantiate(new GameObject(), Vector3.zero, Quaternion.identity);
-            distractionContainerGO.name = DISTRACTION_CONTAINER;
+            Destroy(this.gameObject);
         }
-        Assert.IsNotNull(distractionContainerGO, "WTF?");
+        else
+        {
+            _instance = this;
+        }
     }
 
     private GameObject GetDistractionObject(DistractionOption options)
@@ -31,12 +40,14 @@ public class DistractionSpawner : MonoBehaviour
                 return blindingLight;
             case DistractionOption.InsectSwarm:
                 return insectSwarm;
-            case DistractionOption.InspectableNoise:
-                return inspectableNoise;
-            case DistractionOption.SomethingToGoTo:
-                return somethingToGoTo;
-            case DistractionOption.SomethingToLookAt:
-                return somethingToLookAt;
+            case DistractionOption.NoiseToGoto:
+                return noiseToGoTo;
+            case DistractionOption.NoiseToLookAt:
+                return noiseToLookAt;
+            case DistractionOption.SightToGoTo:
+                return sightToGoTo;
+            case DistractionOption.SightToLookAt:
+                return sightToLookAt;
             default:
                 return null;
         }
@@ -55,7 +66,7 @@ public class DistractionSpawner : MonoBehaviour
             return;
         }
 
-        Instantiate(go, position, Quaternion.identity, distractionContainerGO.transform);
+        Instantiate(go, position, Quaternion.identity, transform);
         go.GetComponent<Distraction>().option = option;
     }
 }

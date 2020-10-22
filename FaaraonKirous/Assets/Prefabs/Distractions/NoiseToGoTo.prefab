@@ -94,7 +94,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4282466632
+    rgba: 4281488572
 --- !u!1 &4035519808035747640
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +189,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4282466632
+    rgba: 4281488572
 --- !u!1 &4503762046796982368
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,7 +284,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4282466632
+    rgba: 4281488572
 --- !u!1 &6066134257928586314
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,7 +296,6 @@ GameObject:
   - component: {fileID: 384157877564138021}
   - component: {fileID: 5225779663972279460}
   - component: {fileID: 7069703346039264784}
-  - component: {fileID: 7311723845271079958}
   m_Layer: 2
   m_Name: Cylinder
   m_TagString: Distraction
@@ -312,8 +311,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6066134257928586314}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.432, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.2, z: 1}
   m_Children: []
   m_Father: {fileID: 9138302534415762145}
   m_RootOrder: 0
@@ -325,7 +324,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6066134257928586314}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 7861615783042699149, guid: e7f729c7b95fa2740a594c43c1dacae7, type: 3}
 --- !u!23 &7069703346039264784
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -345,7 +344,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 279cbc913a68dc64d8bc893498f8e8b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -367,20 +366,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7311723845271079958
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6066134257928586314}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &6201849409464776198
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,7 +460,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4282466632
+    rgba: 4281488572
 --- !u!1001 &8778788316929409630
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -485,7 +470,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 505881772312625339, guid: 79eec61f9ba90014fa9c43acbf1dd192, type: 3}
       propertyPath: m_Name
-      value: InspectableNoise
+      value: NoiseToGoTo
       objectReference: {fileID: 0}
     - target: {fileID: 505881772312625343, guid: 79eec61f9ba90014fa9c43acbf1dd192, type: 3}
       propertyPath: m_LocalPosition.x
@@ -534,7 +519,7 @@ PrefabInstance:
     - target: {fileID: 8690677218215857718, guid: 79eec61f9ba90014fa9c43acbf1dd192, type: 3}
       propertyPath: distractionClass
       value: 
-      objectReference: {fileID: 11400000, guid: 9958f6c641992ae4d8b9e5dcb4a88175, type: 2}
+      objectReference: {fileID: 11400000, guid: 3967649ed19ab5848a948c477988f105, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79eec61f9ba90014fa9c43acbf1dd192, type: 3}
 --- !u!4 &9138302534415762145 stripped

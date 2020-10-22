@@ -53,11 +53,9 @@ public static class RayCaster
         return hit;
     }
 
-
-
     public static bool HitObject(RaycastHit hit, string tag = "")
     {
-        Debug.Log(hit.collider);
+        //Debug.Log(hit.collider);
         if (hit.collider == null)
             return false;
         //Debug.Log(hit.collider.gameObject.name);

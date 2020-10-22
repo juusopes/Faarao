@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -55,7 +56,7 @@ public class Character : MonoBehaviour
     private SightDetection player1SightDetection;
     private SightDetection player2SightDetection;
     private OffMeshLinkMovement linkMovement;
-    private GameObject distractionContainerGO;
+    private Transform distractionContainer;
     #endregion
 
     #region Expression bodies
@@ -81,7 +82,10 @@ public class Character : MonoBehaviour
     {
         RefreshPlayers();
         InitNavigator();
-        distractionContainerGO = GameObject.Find(DistractionSpawner.DISTRACTION_CONTAINER);
+        if(DistractionSpawner.Instance)
+            distractionContainer = DistractionSpawner.Instance.transform;
+                if(distractionContainer)
+                    Debug.LogWarning("Did not find DistractionSpawner");
     }
 
     private void InitNavMeshAgent()
@@ -201,16 +205,12 @@ public class Character : MonoBehaviour
 
     private void DetectDistractions()
     {
-        if (distractionContainerGO == null)
-        {
-            distractionContainerGO = GameObject.Find(DistractionSpawner.DISTRACTION_CONTAINER);
-            Debug.LogWarning("Did not find distractionContainer");
+        if (distractionContainer == null)
             return;
-        }
 
-        for (int i = distractionContainerGO.transform.childCount - 1; i >= 0; i--)
+        for (int i = distractionContainer.childCount - 1; i >= 0; i--)
         {
-            Transform childTransform = distractionContainerGO.transform.GetChild(i);
+            Transform childTransform = distractionContainer.GetChild(i);
             if (currentDistraction != null)
                 if (childTransform == currentDistraction.transform)
                     return;
@@ -253,6 +253,7 @@ public class Character : MonoBehaviour
 
     public void ResetDistraction()
     {
+        //Commented -- Sight should be impaired even if new distraction appear
         //impairedSightTimer = 0;
         //impairedSightRange = false;
 
@@ -298,7 +299,7 @@ public class Character : MonoBehaviour
 
     public void PanicRunAround()
     {
-        RotateCircle(Random.Range(0.0f, 1.0f) > 0.5f, Random.Range(100f, 300f));
+        RotateCircle(UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f, UnityEngine.Random.Range(100f, 300f));
         if (HasReachedDestination())
         {
             Vector3 dest = OnNavMesh.GetRandomPointSameHeight(transform.position, 3f);

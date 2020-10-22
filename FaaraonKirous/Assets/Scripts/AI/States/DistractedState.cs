@@ -42,14 +42,13 @@ public class DistractedState : State
             case DistractionOption.InsectSwarm:
                 character.PanicRunAround();
                 break;
-            case DistractionOption.InspectableNoise:
-                character.SetDestination(character.currentDistractionPos);
-                break;
-            case DistractionOption.SomethingToGoTo:
-                character.SetDestination(character.currentDistractionPos);
-                break;
-            case DistractionOption.SomethingToLookAt:
+            case DistractionOption.NoiseToLookAt :
+            case DistractionOption.SightToLookAt:
                 character.LerpLookAt(character.currentDistractionPos);
+                break;
+            case DistractionOption.NoiseToGoto:
+            case DistractionOption.SightToGoTo:
+                character.SetDestination(character.currentDistractionPos);
                 break;
         }
     }
