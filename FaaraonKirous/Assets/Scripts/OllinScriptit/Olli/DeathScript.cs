@@ -35,7 +35,7 @@ public class DeathScript : MonoBehaviour
         }
         if (isDead)
         {
-
+            Debug.Log(this.gameObject + "Is Dead!");
         }
     }
 }

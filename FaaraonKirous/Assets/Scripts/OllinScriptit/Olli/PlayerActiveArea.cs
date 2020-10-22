@@ -34,6 +34,10 @@ public class PlayerActiveArea : MonoBehaviour
         {
             player.GetComponent<PlayerController>().interactObject = other.gameObject;
         }
+        else if (other.tag == "Enemy")
+        {
+            player.GetComponent<PlayerController>().targetEnemy = other.gameObject;
+        }
     }
     private void OnTriggerExit(Collider other)
     {
@@ -44,6 +48,10 @@ public class PlayerActiveArea : MonoBehaviour
         else if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().climbObject)
         {
             player.GetComponent<PlayerController>().climbObject = null;
+        }
+        else if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().targetEnemy)
+        {
+            player.GetComponent<PlayerController>().targetEnemy = null;
         }
     }
 }

@@ -50,6 +50,11 @@ public class PlayerController : MonoBehaviour
     private bool climbSuccess;
     public bool grounded;
 
+    //Dying
+    private DeathScript death;
+
+    //Attack
+    public GameObject targetEnemy;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,12 +64,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Moving();
-        LineOfSight();
-        KeyControls();
-        Invisibility();
-        SetIndicator();
-        Climb();
+        if (!death.isDead)
+        {
+            Moving();
+            LineOfSight();
+            KeyControls();
+            Invisibility();
+            SetIndicator();
+            Climb();
+        }
     }
 
     private void Initialize()
@@ -82,6 +90,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         climbing = false;
+        death = GetComponent<DeathScript>();
     }
     public void Moving()
     {
@@ -297,6 +306,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Attack()
+    {
+        if (targetEnemy != null)
+        {
+            targetEnemy.GetComponent<DeathScript>().hp--;
+        }
+    }
+
     private void KeyControls()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -306,6 +323,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             InvisiblitySpell();
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Attack();
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
