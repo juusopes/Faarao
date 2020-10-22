@@ -29,6 +29,11 @@ public class PlayerControl : MonoBehaviour
         Vector3 lookAt = new Vector3(0, xMouse, 0);
         transform.Rotate(lookAt);
 
+        InputDistraction();
+    }
+
+    private void InputDistraction()
+    {
         if (Input.GetKeyDown(KeyCode.Alpha1))
             dsOption = DistractionOption.BlindingLight;
         if (Input.GetKeyDown(KeyCode.Alpha2))
