@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Indicator
+  - LevelController
+  - TargetableObject
+  - Distraction
+  - Enemy
+  - DeadEnemy
+  - PlayerInvisible
   layers:
   - Default
   - TransparentFX
@@ -13,12 +20,12 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - PostProcessing
+  - Enemy
+  - Raycast/Distraction
+  - EditorOnly
+  - Raycast/Ladder
   - 
   - 
   - 
