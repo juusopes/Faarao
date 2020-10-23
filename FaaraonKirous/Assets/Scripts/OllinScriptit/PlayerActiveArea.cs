@@ -26,11 +26,11 @@ public class PlayerActiveArea : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log(other.gameObject);
-        if (other.tag == "ClimbableObject")
-        {
-            player.GetComponent<PlayerController>().climbObject = other.gameObject;
-        }
-        else if (other.tag == "TargetableObject")
+        //if (other.tag == "ClimbableObject")
+        //{
+        //    player.GetComponent<PlayerController>().climbObject = other.gameObject;
+        //}
+        if (other.tag == "TargetableObject")
         {
             player.GetComponent<PlayerController>().interactObject = other.gameObject;
         }
@@ -45,10 +45,10 @@ public class PlayerActiveArea : MonoBehaviour
         {
             player.GetComponent<PlayerController>().interactObject = null;
         }
-        else if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().climbObject)
-        {
-            player.GetComponent<PlayerController>().climbObject = null;
-        }
+        //else if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().climbObject)
+        //{
+        //    player.GetComponent<PlayerController>().climbObject = null;
+        //}
         else if (other.gameObject != null && other.gameObject == player.GetComponent<PlayerController>().targetEnemy)
         {
             player.GetComponent<PlayerController>().targetEnemy = null;

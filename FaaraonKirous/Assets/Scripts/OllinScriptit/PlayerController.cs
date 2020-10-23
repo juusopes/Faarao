@@ -45,11 +45,12 @@ public class PlayerController : MonoBehaviour
     public GameObject interactObject;
 
     //Climbing
-    public GameObject climbObject;
-    private GameObject savedClimbable;
-    private bool climbing;
-    private bool climbSuccess;
-    public bool grounded;
+    //public GameObject climbObject;
+    //private GameObject savedClimbable;
+    //private bool climbing;
+    //private bool climbSuccess;
+    //public bool grounded;
+    private OffMeshLinkMovement linkMovement;       //new create
 
     //Dying
     private DeathScript death;
@@ -61,8 +62,11 @@ public class PlayerController : MonoBehaviour
     public LevelController lC;
     public InGameMenu menu;
 
-    public bool IsDead => death.isDead;
 
+    private void Awake()
+    {
+        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, 0.5f, 1f);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -72,14 +76,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsDead)
+        if (!death.isDead)
         {
             Moving();
             LineOfSight();
             KeyControls();
             Invisibility();
             SetIndicator();
-            Climb();
+            TestOffLink();
+            //Climb();
         }
     }
 
@@ -96,7 +101,6 @@ public class PlayerController : MonoBehaviour
                 anotherCharacter = tempCharacter;
             }
         }
-        climbing = false;
         lC = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         menu = lC.canvas;
         death = GetComponent<DeathScript>();
@@ -154,10 +158,10 @@ public class PlayerController : MonoBehaviour
                 {
                     navMeshAgent.speed = movementSpeed;
                 }
-                if (!climbing)
-                {
+                //if (!climbing)
+                //{
                     navMeshAgent.SetDestination(targetV3);
-                }
+                //}
                 if (position == transform.position)
                 {
                     isRunning = false;
@@ -306,39 +310,40 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    public void Climb()
-    {
-        if (climbObject != null && climbing)
-        {
-            Vector3 rot = Vector3.RotateTowards(transform.position, climbObject.transform.position, 360, 360);
-            transform.rotation = Quaternion.LookRotation(rot);
-            Debug.Log(climbing);
-            climbSuccess = true;
-            float yAxisValue = 0.01f;
-            GetComponent<Rigidbody>().isKinematic = true;
-            gameObject.GetComponent<NavMeshAgent>().isStopped = true;
-            GetComponent<NavMeshAgent>().enabled = false;
-            transform.Translate(new Vector3(0, yAxisValue, 0));
-            savedClimbable = climbObject;
-        } else if(climbSuccess)
-        {
-            transform.Translate(new Vector3(0, 0, 0.01f));
-            if (grounded)
-            {
-                climbSuccess = false;
-            }
-        } else
-        {
-            GetComponent<NavMeshAgent>().enabled = true;
-            gameObject.GetComponent<NavMeshAgent>().isStopped = false;
-        }
-    }
+    //public void Climb()
+    //{
+    //    if (climbObject != null && climbing)
+    //    {
+    //        Vector3 rot = Vector3.RotateTowards(transform.position, climbObject.transform.position, 360, 360);
+    //        transform.rotation = Quaternion.LookRotation(rot);
+    //        Debug.Log(climbing);
+    //        climbSuccess = true;
+    //        float yAxisValue = 0.01f;
+    //        GetComponent<Rigidbody>().isKinematic = true;
+    //        gameObject.GetComponent<NavMeshAgent>().isStopped = true;
+    //        GetComponent<NavMeshAgent>().enabled = false;
+    //        transform.Translate(new Vector3(0, yAxisValue, 0));
+    //        savedClimbable = climbObject;
+    //    } else if(climbSuccess)
+    //    {
+    //        transform.Translate(new Vector3(0, 0, 0.01f));
+    //        if (grounded)
+    //        {
+    //            climbSuccess = false;
+    //        }
+    //    } else
+    //    {
+    //        GetComponent<NavMeshAgent>().enabled = true;
+    //        gameObject.GetComponent<NavMeshAgent>().isStopped = false;
+    //    }
+    //}
 
     public void Attack()
     {
         if (targetEnemy != null)
         {
             targetEnemy.GetComponent<DeathScript>().damage = 1;
+            targetEnemy = null;
         }
     }
 
@@ -352,6 +357,27 @@ public class PlayerController : MonoBehaviour
         {
             ability1Active = false;
         }
+    }
+    private void TestOffLink()
+    {
+        if (navMeshAgent.isOnOffMeshLink && linkMovement.CanStartLink())
+        {
+            OffMeshLinkRoute route = linkMovement.GetOffMeshLinkRoute();
+            StartCoroutine(linkMovement.MoveAcrossNavMeshLink(route));
+        }
+    }
+
+    public void SetDestination(Vector3 position)
+    {
+        if (position == null || navMeshAgent.destination == position || !navMeshAgent.enabled)
+            return;
+
+        if (!OnNavMesh.IsReachable(transform, position))
+            return;
+
+        navMeshAgent.destination = position;
+        navMeshAgent.isStopped = false;
+        navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : 0.5f;
     }
 
     private void KeyControls()
@@ -380,17 +406,17 @@ public class PlayerController : MonoBehaviour
         {
             Interact();
         }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            if (climbing)
-            {
-                climbing = false;
-            }
-            else
-            {
-                climbing = true;
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    if (climbing)
+        //    {
+        //        climbing = false;
+        //    }
+        //    else
+        //    {
+        //        climbing = true;
+        //    }
+        //}
     }
     public bool PointerOverUI()
     {

@@ -43,6 +43,11 @@ public class CameraControl : MonoBehaviour
             {
                 transform.rotation = camRot;
                 transform.position = new Vector3(transform.parent.transform.position.x, camHeight, transform.parent.transform.position.z);
+
+                Vector3 v3 = cameraAnchor.transform.position;
+                v3.x = transform.parent.transform.position.x;
+                cameraAnchor.transform.position = v3;
+
             }
             if (transform.parent == null)
             {
@@ -52,6 +57,8 @@ public class CameraControl : MonoBehaviour
             }
         } else
         {
+            camRot.z = 0;
+            transform.rotation = camRot;
             if (transform.parent != null)
             {
                 transform.parent = null;
