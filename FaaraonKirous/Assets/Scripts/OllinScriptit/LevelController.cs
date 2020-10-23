@@ -20,7 +20,7 @@ public class LevelController : MonoBehaviour
     //[HideInInspector]
     public GameObject targetObject;
 
-    public GameObject canvas;
+    public InGameMenu canvas;
 
 
     // Start is called before the first frame update
@@ -41,9 +41,8 @@ public class LevelController : MonoBehaviour
         characters = GameObject.FindGameObjectsWithTag("Player");
         mainCam = GameObject.FindGameObjectWithTag("MainCamera");
         mainCam = mainCam.transform.parent.gameObject;
-        canvas = GameObject.Find("Canvas");
 
-        canvas.SetActive(true);
+        canvas.gameObject.SetActive(true);
         playerOneImage.SetActive(true);
         //SetACtiveCharacter
         current = 0;

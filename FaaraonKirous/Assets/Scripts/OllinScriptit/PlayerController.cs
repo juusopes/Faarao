@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     public GameObject targetEnemy;
 
     //Menu
+    public LevelController lC;
     public InGameMenu menu;
 
     // Start is called before the first frame update
@@ -94,7 +95,8 @@ public class PlayerController : MonoBehaviour
             }
         }
         climbing = false;
-        menu = GameObject.Find("Canvas").GetComponent<InGameMenu>();
+        lC = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
+        menu = lC.canvas;
         death = GetComponent<DeathScript>();
         targetV3 = transform.position;
         Stay();
