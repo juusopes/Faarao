@@ -25,7 +25,7 @@ public class PlayerActiveArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject);
+        //Debug.Log(other.gameObject);
         if (other.tag == "ClimbableObject")
         {
             player.GetComponent<PlayerController>().climbObject = other.gameObject;

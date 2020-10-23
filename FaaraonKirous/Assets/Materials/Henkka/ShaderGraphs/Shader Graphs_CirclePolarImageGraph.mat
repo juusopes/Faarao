@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HearingOuterCircle
+  m_Name: Shader Graphs_CirclePolarImageGraph
   m_Shader: {fileID: -6465566751694194690, guid: 3e530df29c99d6d468cf4743567e70d4, type: 3}
-  m_ShaderKeywords: ENUM_808DF6A3_RADIALSHEER _TEXTURE_EFFECT_RADIALSHEER
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -24,23 +24,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - BOOLEAN_75EF0F58: 0
-    - Boolean_9791A510: 1
-    - Boolean_AE16060F: 1
-    - ENUM_808DF6A3: 2
-    - Vector1_34DD9EED: 0
-    - Vector1_58C2A1E1: 1
-    - Vector1_5AE8D105: 2
-    - Vector1_ECAA1951: 360
     - _Polar: 1
-    - _PolarLenghtScale: 1
-    - _PolarRadialScale: 1
-    - _Rotation: 0
+    - _PolarLenghtScale: 2
+    - _PolarRadialScale: 0.1
+    - _Rotation: 351
     - _Scale: 1
-    - _Spherize: 1
-    - _TEXTURE_EFFECT: 1
     - _Thickness: 0.05
-    - _Transparency: 0.171
+    - _Transparency: 0.352
     m_Colors:
-    - _Color: {r: 1, g: 0, b: 0.09466362, a: 0.98039216}
+    - _Color: {r: 0.6981132, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
