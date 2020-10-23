@@ -61,6 +61,8 @@ public class PlayerController : MonoBehaviour
     public LevelController lC;
     public InGameMenu menu;
 
+    public bool IsDead => death.isDead;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,7 +72,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!death.isDead)
+        if (!IsDead)
         {
             Moving();
             LineOfSight();
