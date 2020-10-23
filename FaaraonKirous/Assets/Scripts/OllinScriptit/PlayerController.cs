@@ -55,6 +55,8 @@ public class PlayerController : MonoBehaviour
     //Dying
     private DeathScript death;
 
+    public bool IsDead => death.isDead;
+
     //Attack
     public GameObject targetEnemy;
 
@@ -76,7 +78,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!death.isDead)
+        if (!IsDead)
         {
             Moving();
             LineOfSight();
