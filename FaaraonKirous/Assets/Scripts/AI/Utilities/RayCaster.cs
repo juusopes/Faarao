@@ -35,7 +35,7 @@ public static class RayCaster
 
     public static RaycastHit ToTarget(GameObject start, GameObject target, float range, LayerMask layerMask)
     {
-        Debug.Log(System.Convert.ToString(layerMask));
+        //Debug.Log(System.Convert.ToString(layerMask));
         RaycastHit hit;
         Vector3 startToTarget = target.transform.position - start.transform.position;
         //Debug.DrawRay(start.transform.position, startToTarget, Color.red, 1f);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Assertions;
 
 public class Character : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Character : MonoBehaviour
     [Header("General")]
     public Transform sightPosition;
     [SerializeField]
-    private GameObject fov = null;
+    private GameObject fieldOfViewGO = null;
     #endregion 
 
     #region Regular fields
@@ -44,19 +45,21 @@ public class Character : MonoBehaviour
     public bool isDistracted;
     private bool canDetectPlayer1;
     private bool canDetectPlayer2;
+    private DeathScript deathScript;
 
     private GameObject[] players = new GameObject[2];
+    private Transform distractionContainer;
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
 
-    //Aid scripts
-    private Navigator navigator;
-    private StateMachine stateMachine;
-    private SightDetection player1SightDetection;
-    private SightDetection player2SightDetection;
-    private OffMeshLinkMovement linkMovement;
-    private Transform distractionContainer;
+    //Aid scripts (create with new)
+    private Navigator navigator;                    //new create
+    private StateMachine stateMachine;              //new create
+    private SightDetection player1SightDetection;   //new create
+    private SightDetection player2SightDetection;   //new create
+    private OffMeshLinkMovement linkMovement;       //new create
+
     #endregion
 
     #region Expression bodies
@@ -65,6 +68,7 @@ public class Character : MonoBehaviour
     public float SightRange => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRange;
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
     public bool CanDetectAnyPlayer => canDetectPlayer1 || canDetectPlayer2;
+    public bool IsDead => deathScript == null ? false : deathScript.isDead;
 
     #endregion
 
@@ -76,16 +80,18 @@ public class Character : MonoBehaviour
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f);
         InitNavMeshAgent();
         linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
+        deathScript = GetComponent<DeathScript>();
+        Assert.IsNotNull(deathScript, "Me cannut dai!");
     }
 
     private void Start()
     {
         RefreshPlayers();
         InitNavigator();
-        if(DistractionSpawner.Instance)
+        if (DistractionSpawner.Instance)
             distractionContainer = DistractionSpawner.Instance.transform;
-                if(distractionContainer)
-                    Debug.LogWarning("Did not find DistractionSpawner");
+        if (distractionContainer)
+            Debug.LogWarning("Did not find DistractionSpawner");
     }
 
     private void InitNavMeshAgent()
@@ -109,10 +115,31 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
+        if (IsDead)
+        {
+            Die();
+            return;
+        }
+
         stateMachine.UpdateSM();
         DetectDistractions();
         TestOffLink();
         RunImpairementCounters();
+    }
+
+    private void Die()
+    {
+        Debug.Log("Enemy " + gameObject.name + " died");
+        Destroy(navMeshAgent);
+        Destroy(fieldOfViewGO);
+        Destroy(deathScript);
+        player1SightDetection.DestroyLine();
+        player2SightDetection.DestroyLine();
+        gameObject.tag = "DeadEnemy";
+        Collider[] colliders = GetComponents<Collider>();
+        foreach (Collider c in colliders)
+            Destroy(c);
+        Destroy(this);
     }
 
     private void LateUpdate()
@@ -142,8 +169,20 @@ public class Character : MonoBehaviour
     {
         canDetectPlayer1 = CanDetectPlayer(Player1);
         canDetectPlayer2 = CanDetectPlayer(Player2);
-        player1SightDetection.SimulateSightDetection(canDetectPlayer1);
-        player2SightDetection.SimulateSightDetection(canDetectPlayer2);
+        if (player1SightDetection.SimulateSightDetection(canDetectPlayer1))
+        {
+            DeathScript ds = Player1.GetComponent<DeathScript>();
+            if (ds)
+                ds.damage = 1;
+            player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed);
+        }
+        if (player2SightDetection.SimulateSightDetection(canDetectPlayer2))
+        {
+            DeathScript ds = Player2.GetComponent<DeathScript>();
+            if (ds)
+                ds.damage = 1;
+            player2SightDetection.ResetLineRenderer(Player2, classSettings.sightSpeed);
+        }
     }
 
     /// <summary>
@@ -153,7 +192,7 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CanDetectPlayer(GameObject player)
     {
-        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
+        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG && player.);
     }
 
     /// <summary>
@@ -178,8 +217,8 @@ public class Character : MonoBehaviour
 
     private bool ObjectIsInFov(GameObject testObj)
     {
-        Vector3 dirToObj = (testObj.transform.position - fov.transform.position).normalized;
-        if (Vector3.Angle(fov.transform.forward, dirToObj) < FOV / 2f)
+        Vector3 dirToObj = (testObj.transform.position - fieldOfViewGO.transform.position).normalized;
+        if (Vector3.Angle(fieldOfViewGO.transform.forward, dirToObj) < FOV / 2f)
         {
             return true;
         }
@@ -190,7 +229,7 @@ public class Character : MonoBehaviour
     {
         RaycastHit hit = RayCaster.ToTarget(gameObject, testObj, SightRange, layerMask);
         if (RayCaster.HitObject(hit, tag))
-        {            
+        {
             if (tag == RayCaster.PLAYER_TAG)
                 chaseTarget = hit.transform.position;
             return true;
@@ -244,7 +283,7 @@ public class Character : MonoBehaviour
         //Always get blinded
         if (distraction.option == DistractionOption.BlindingLight)
             StartImpairSightRange(distraction.effectTime);
-        currentDistractionPos = distraction.transform.position; 
+        currentDistractionPos = distraction.transform.position;
         isDistracted = true;
         waypointFinished = true;
         currentDistraction = distraction;
@@ -378,8 +417,8 @@ public class Character : MonoBehaviour
             return;
         waypointTimer = false;
         Waypoint nextWaypoint = navigator.GetNextWaypoint();
-        if (nextWaypoint != null) 
-            if(currentWaypoint.type == WaypointType.Climb  && nextWaypoint.type != WaypointType.Climb)
+        if (nextWaypoint != null)
+            if (currentWaypoint.type == WaypointType.Climb && nextWaypoint.type != WaypointType.Climb)
                 navMeshAgent.enabled = true;
         if (nextWaypoint == null)
             navigator = null;

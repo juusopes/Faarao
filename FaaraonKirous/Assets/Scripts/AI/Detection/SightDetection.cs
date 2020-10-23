@@ -14,11 +14,13 @@ public class SightDetection
     private float lineScalar = 0;
     private float linePercentage;
     private int scalingDirection = 1;      //Going towards 1 or away -1
+    private GameObject newGameObject;
+
     public SightDetection(GameObject parent, LineMaterials lm, float lineWidth)
     {
         this.lm = lm;
         parentObject = parent;
-        GameObject newGameObject = new GameObject("SightLineRenderer");
+        newGameObject = new GameObject("SightLineRenderer");
         newGameObject.transform.SetParent(parent.transform);
         newGameObject.layer = 2;
         lineRenderer = newGameObject.AddComponent<LineRenderer>() as LineRenderer;
@@ -29,11 +31,17 @@ public class SightDetection
         lineRenderer.endWidth = lineWidth;
     }
 
+
     private Vector3 OwnPosition => parentObject.transform.position;
     private Vector3 PlayerPosition => player.transform.position;
     private float PlayerDistance => Vector3.Distance(OwnPosition, PlayerPosition);
     private Vector3 PlayerDirection => (PlayerPosition - OwnPosition).normalized;
     private float CurrentLineLenght => Vector3.Distance(OwnPosition, lineRenderer.GetPosition(1));
+
+    public void DestroyLine()
+    {
+        Object.Destroy(newGameObject);
+    }
 
     public void ResetLineRenderer(GameObject player, float lineSpeed)
     {

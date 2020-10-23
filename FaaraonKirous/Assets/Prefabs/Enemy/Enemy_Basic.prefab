@@ -13,12 +13,11 @@ GameObject:
   - component: {fileID: 1295752339492584509}
   - component: {fileID: 1295752339492584510}
   - component: {fileID: 1295752339492584504}
-  - component: {fileID: 1295752339492584505}
   - component: {fileID: 1295752339492584506}
   - component: {fileID: 8987653627433140945}
   m_Layer: 2
   m_Name: Enemy_Basic
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,19 +122,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!135 &1295752339492584505
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1295752339492584507}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 10
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1295752339492584506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +137,7 @@ MonoBehaviour:
   classSettings: {fileID: 11400000, guid: f9e8619650cb27348a6f2419c48361f8, type: 2}
   waypointGroup: {fileID: 0}
   sightPosition: {fileID: 1295752339806913344}
-  fov: {fileID: 6024281465610095457}
+  fieldOfViewGO: {fileID: 6024281465610095457}
   chaseTarget: {x: 0, y: 0, z: 0}
   lastSightTarget: {x: 0, y: 0, z: 0}
   lastSeenPosition: {x: 0, y: 0, z: 0}
@@ -188,7 +174,6 @@ GameObject:
   - component: {fileID: 1295752339806913344}
   - component: {fileID: 1295752339806913349}
   - component: {fileID: 1295752339806913350}
-  - component: {fileID: 1295752339806913351}
   m_Layer: 2
   m_Name: Eye
   m_TagString: Untagged
@@ -259,19 +244,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &1295752339806913351
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1295752339806913345}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6024281465610095457
 GameObject:
   m_ObjectHideFlags: 0
