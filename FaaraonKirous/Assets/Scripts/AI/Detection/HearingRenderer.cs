@@ -46,6 +46,7 @@ public class HearingRenderer : MonoBehaviour
 
     private void StartEffect()
     {
+        DefaultValues();
         StartCoroutine(RunEffect());
     }
 
@@ -53,7 +54,7 @@ public class HearingRenderer : MonoBehaviour
     {
         innerThickness = 0.8f;
         innerScale = 0f;
-        outerTransparency = 0.9f;
+        outerTransparency = 0.2f;
         outerThickness = 0.05f;
     }
 
@@ -65,13 +66,15 @@ public class HearingRenderer : MonoBehaviour
         yield return new WaitForSeconds(0.5f / animationSpeed);
         StartCoroutine(AssignFloat(value => innerThickness = value, new float[] { 0.8f, 0f }, 1.5f / animationSpeed));
         yield return new WaitForSeconds(0.5f / animationSpeed);
-        StartCoroutine(AssignFloat(value => outerTransparency = value, new float[] { 0.9f, 0f}, 0.2f / animationSpeed));
+        StartCoroutine(AssignFloat(value => outerTransparency = value, new float[] { 0.2f, 0.5f, 0f}, 0.2f / animationSpeed));
         yield return new WaitForSeconds(3f / animationSpeed);
         StartCoroutine(AssignFloat(value => outerThickness = value, new float[] { 0.05f, 0.1f, 0.05f }, 1f / animationSpeed));
         yield return new WaitForSeconds(1f / animationSpeed);
         StartCoroutine(AssignFloat(value => outerTransparency = value, new float[] { 0.6f, 1f }, 1f / animationSpeed));
         yield return StartCoroutine(AssignFloat(value => innerScale = value, new float[] { 1f, 0f }, 0.05f / animationSpeed));
         yield return null;
+        yield return new WaitForSeconds(2f);
+        StartEffect();
     }
 
     // Update is called once per frame
