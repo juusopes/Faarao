@@ -26,9 +26,6 @@ public class LevelController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        canvas.SetActive(true);
-        playerOneImage.SetActive(true);
-
         Initialize();
     }
 
@@ -44,6 +41,10 @@ public class LevelController : MonoBehaviour
         characters = GameObject.FindGameObjectsWithTag("Player");
         mainCam = GameObject.FindGameObjectWithTag("MainCamera");
         mainCam = mainCam.transform.parent.gameObject;
+        canvas = GameObject.Find("Canvas");
+
+        canvas.SetActive(true);
+        playerOneImage.SetActive(true);
         //SetACtiveCharacter
         current = 0;
         foreach (GameObject character in characters)

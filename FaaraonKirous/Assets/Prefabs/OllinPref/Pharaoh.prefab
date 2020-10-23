@@ -90,7 +90,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2795708154943395015}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 2795708156166373222}
   - component: {fileID: 2795708156166373223}
   - component: {fileID: 2795708156166373216}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: ActivatorArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -346,13 +346,15 @@ MonoBehaviour:
   isRunning: 0
   isActiveCharacter: 0
   isCrouching: 0
-  abilityIsActive: 0
+  ability1Active: 0
   indicator: {fileID: 5642665167690723842, guid: 608c7c670fc8a4347b2c9cdb6f954bde, type: 3}
   visibleInd: {fileID: 0}
   isInvisible: 0
   interactObject: {fileID: 0}
   climbObject: {fileID: 0}
   grounded: 0
+  targetEnemy: {fileID: 0}
+  menu: {fileID: 0}
 --- !u!54 &5706328075926723929
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -394,4 +396,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1
+  damage: 0
   isDead: 0
