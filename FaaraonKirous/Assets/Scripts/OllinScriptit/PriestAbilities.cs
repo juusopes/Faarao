@@ -39,7 +39,7 @@ public class PriestAbilities : MonoBehaviour
         if (GetComponent<PlayerController>().isActiveCharacter)
         {
             //TempSetActive
-            if (GetComponent<PlayerController>().abilityIsActive)
+            if (GetComponent<PlayerController>().ability1Active)
             {
                 telekinesisActive = true;
                 if (GetComponent<PlayerController>().visibleInd != null)
@@ -67,7 +67,7 @@ public class PriestAbilities : MonoBehaviour
                             telekinesisTimer = 0;
                             useTeleknesis = true;
                             target.GetComponent<Rigidbody>().isKinematic = true;
-                            GetComponent<PlayerController>().abilityIsActive = false;
+                            GetComponent<PlayerController>().ability1Active = false;
                         }
                     }
                 }

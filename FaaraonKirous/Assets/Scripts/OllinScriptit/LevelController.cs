@@ -20,15 +20,12 @@ public class LevelController : MonoBehaviour
     //[HideInInspector]
     public GameObject targetObject;
 
-    public GameObject canvas;
+    public InGameMenu canvas;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        canvas.SetActive(true);
-        playerOneImage.SetActive(true);
-
         Initialize();
     }
 
@@ -44,14 +41,30 @@ public class LevelController : MonoBehaviour
         characters = GameObject.FindGameObjectsWithTag("Player");
         mainCam = GameObject.FindGameObjectWithTag("MainCamera");
         mainCam = mainCam.transform.parent.gameObject;
+
+        canvas.gameObject.SetActive(true);
+        playerOneImage.SetActive(true);
         //SetACtiveCharacter
         current = 0;
         foreach (GameObject character in characters)
         {
             character.GetComponent<PlayerController>().isActiveCharacter = false;
+            if (character.GetComponent<PlayerController>().playerOne)
+            {
+                activeCharacter = character;
+                character.GetComponent<PlayerController>().isActiveCharacter = true;
+            }
+            if (activeCharacter == null)
+            {
+                current++;
+            }
         }
-        characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
-        activeCharacter = characters[current];
+        if (activeCharacter == null)
+        {
+            current = 0;
+            characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
+            activeCharacter = characters[current];
+        }
         //SetCameraPos
             mainCam.transform.parent = activeCharacter.transform;
 
@@ -106,9 +119,32 @@ public class LevelController : MonoBehaviour
 
     }
 
+    //ButtonInterface
+    public void ActiveCharacterAttack()
+    {
+        activeCharacter.GetComponent<PlayerController>().Attack();
+    }
+    public void ActiveCharacterAbility1()
+    {
+        activeCharacter.GetComponent<PlayerController>().UseAbility1();
+    }
+    public void ActiveCharacterCrouch()
+    {
+        activeCharacter.GetComponent<PlayerController>().Crouch();
+    }
+    public void ActiveCharacterInteract()
+    {
+        activeCharacter.GetComponent<PlayerController>().Interact();
+    }
+    public void ActiveCharacterStay()
+    {
+        activeCharacter.GetComponent<PlayerController>().Stay();
+    }
+
+
     private void KeyBoardControls()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             SwitchCharacter();
         }

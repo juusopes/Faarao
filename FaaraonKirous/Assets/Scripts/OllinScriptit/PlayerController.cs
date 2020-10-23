@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     //Abilities
     //Indicator
     [HideInInspector]
-    public bool abilityIsActive;
+    public bool ability1Active;
     public GameObject indicator;
     private GameObject line;
     [HideInInspector]
@@ -56,6 +56,11 @@ public class PlayerController : MonoBehaviour
 
     //Attack
     public GameObject targetEnemy;
+
+    //Menu
+    public LevelController lC;
+    public InGameMenu menu;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,7 +84,6 @@ public class PlayerController : MonoBehaviour
     private void Initialize()
     {
         navMeshAgent = this.GetComponent<NavMeshAgent>();
-        targetV3 = transform.position;
         camControl = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
 
         GameObject[] tempCharacters = GameObject.FindGameObjectsWithTag("Player");
@@ -91,68 +95,84 @@ public class PlayerController : MonoBehaviour
             }
         }
         climbing = false;
+        lC = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
+        menu = lC.canvas;
         death = GetComponent<DeathScript>();
+        targetV3 = transform.position;
+        Stay();
     }
     public void Moving()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit = new RaycastHit();
-        //DoubleClick Check
-        if (isActiveCharacter)
+        if (menu.menuActive)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            Stay();
+        } else { 
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit = new RaycastHit();
+            //DoubleClick Check
+            if (isActiveCharacter)
             {
-                if (Physics.Raycast(ray, out hit))
+                if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
                 {
-                    targetV3 = hit.point;
+              
+                    if (Physics.Raycast(ray, out hit))
+                    {
+                        targetV3 = hit.point;
+                    }
+                    if (isRunning)
+                    {
+                        isRunning = false;
+                    }
+                    if (doubleClickTimer < 0.5f)
+                    {
+                        isRunning = true;
+                    }
+                    if (doubleClickTimer >= 0.5f)
+                    {
+                        doubleClickTimer = 0;
+                    }
                 }
+            }
+            if (doubleClickTimer < 0.5f)
+            {
+                doubleClickTimer += Time.deltaTime;
+            }
+            //Moving
+            if ((!playerOne && !GetComponent<PriestAbilities>().useTeleknesis) || playerOne)
+            {
                 if (isRunning)
+                {
+                    navMeshAgent.speed = movementSpeed * 1.5f;
+                }
+                else if (isCrouching)
+                {
+                    navMeshAgent.speed = movementSpeed * 0.5f;
+                }
+                else
+                {
+                    navMeshAgent.speed = movementSpeed;
+                }
+                if (!climbing)
+                {
+                    navMeshAgent.SetDestination(targetV3);
+                }
+                if (position == transform.position)
                 {
                     isRunning = false;
                 }
-                if (doubleClickTimer < 0.5f)
+                else
                 {
-                    isRunning = true;
+                    position = transform.position;
                 }
-                if (doubleClickTimer >= 0.5f)
-                {
-                    doubleClickTimer = 0;
-                }
-            }
-        }
-        if (doubleClickTimer < 0.5f)
-        {
-            doubleClickTimer += Time.deltaTime;
-        }
-        //Moving
-        if ((!playerOne && !GetComponent<PriestAbilities>().useTeleknesis) || playerOne)
-        {
-            if (isRunning)
-            {
-                navMeshAgent.speed = movementSpeed * 1.5f;
-            }
-            else if (isCrouching)
-            {
-                navMeshAgent.speed = movementSpeed * 0.5f;
-            }
-            else
-            {
-                navMeshAgent.speed = movementSpeed;
-            }
-            if (!climbing)
-            {
-                navMeshAgent.SetDestination(targetV3);
-            }
-            if (position == transform.position)
-            {
-                isRunning = false;
-            }
-            else
-            {
-                position = transform.position;
             }
         }
     }
+    public void Stay()
+    {
+        navMeshAgent.SetDestination(transform.position);
+        targetV3 = transform.position;
+    }
+
     private void LineOfSight()
     {
         RaycastHit hit;
@@ -178,7 +198,12 @@ public class PlayerController : MonoBehaviour
     {
         if (isActiveCharacter)
         {
-            if (!isCrouching)
+            if (isRunning)
+            {
+                isRunning = false;
+                isCrouching = true;
+            }
+            else if (!isCrouching)
             {
                 isCrouching = true;
             }
@@ -188,16 +213,16 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private void InvisiblitySpell()
-    {
-        if (isActiveCharacter)
-        {
-            if (lineOfSight)
-            {
-                anotherCharacter.GetComponent<PlayerController>().isInvisible = true;
-            }
-        }
-    }
+    //private void InvisiblitySpell()
+    //{
+    //    if (isActiveCharacter)
+    //    {
+    //        if (lineOfSight)
+    //        {
+    //            anotherCharacter.GetComponent<PlayerController>().isInvisible = true;
+    //        }
+    //    }
+    //}
 
     private void Invisibility()
     {
@@ -215,7 +240,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isActiveCharacter)
         {
-            if (abilityIsActive)
+            if (ability1Active)
             {
                 if (visibleInd == null)
                 {
@@ -265,7 +290,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Interact()
+    public void Interact()
     {
         if (interactObject != null)
         {
@@ -307,11 +332,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Attack()
+    public void Attack()
     {
         if (targetEnemy != null)
         {
             targetEnemy.GetComponent<DeathScript>().damage = 1;
+        }
+    }
+
+    public void UseAbility1()
+    {
+        if (!ability1Active)
+        {
+            ability1Active = true;
+        }
+        else
+        {
+            ability1Active = false;
         }
     }
 
@@ -321,30 +358,23 @@ public class PlayerController : MonoBehaviour
         {
             Crouch();
         }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            InvisiblitySpell();
-        }
-        if (Input.GetKeyDown(KeyCode.M))
+        //if (Input.GetKeyDown(KeyCode.I))
+        //{
+        //    InvisiblitySpell();
+        //}
+        if (Input.GetKeyDown(KeyCode.A))
         {
             Attack();
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.S))
         {
-            if (!abilityIsActive)
-            {
-                abilityIsActive = true;
-            }
-            else
-            {
-                abilityIsActive = false;
-            }
+            UseAbility1();
         }
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             CamFollow();
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             Interact();
         }
@@ -359,6 +389,10 @@ public class PlayerController : MonoBehaviour
                 climbing = true;
             }
         }
+    }
+    public bool PointerOverUI()
+    {
+        return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
     }
 }
 
