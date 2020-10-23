@@ -41,8 +41,8 @@ public class Character : MonoBehaviour
     public bool impairedFOV;
     [HideInInspector]
     public bool isDistracted;
-    private bool canDetectPlayer1;
-    private bool canDetectPlayer2;
+    private bool couldDetectPlayer1;
+    private bool couldDetectPlayer2;
     private DeathScript deathScript;
 
     private GameObject[] players = new GameObject[2];
@@ -67,8 +67,9 @@ public class Character : MonoBehaviour
     public PlayerController Player1Controller => playerControllers[0];
     public PlayerController Player2Controller => playerControllers[1];
     public float SightRange => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRange;
+    public float SightRangeCrouching => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRangeCrouching;
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
-    public bool CanDetectAnyPlayer => canDetectPlayer1 || canDetectPlayer2;
+    public bool CanDetectAnyPlayer => couldDetectPlayer1 || couldDetectPlayer2;
     public bool IsDead => deathScript == null ? false : deathScript.isDead;
 
     #endregion
@@ -91,7 +92,7 @@ public class Character : MonoBehaviour
         InitNavigator();
         if (DistractionSpawner.Instance)
             distractionContainer = DistractionSpawner.Instance.transform;
-        if (distractionContainer)
+        if (!distractionContainer)
             Debug.LogWarning("Did not find DistractionSpawner");
     }
 
@@ -162,7 +163,7 @@ public class Character : MonoBehaviour
             playerControllers[1] = Player2.GetComponent<PlayerController>();
 
         if (!Player1Controller || !Player2Controller)
-            Debug.LogError("Did not find playercontroller");
+            Debug.LogWarning("Did not find playercontroller");
 
         StartCoroutine(player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed));
         StartCoroutine(player2SightDetection.ResetLineRenderer(Player2, classSettings.sightSpeed));
@@ -177,9 +178,9 @@ public class Character : MonoBehaviour
     #region Detection
     private void TryDetectPlayers()
     {
-        canDetectPlayer1 = CanDetectPlayer(Player1, Player1Controller);
-        canDetectPlayer2 = CanDetectPlayer(Player2, Player2Controller);
-        if (player1SightDetection.SimulateSightDetection(canDetectPlayer1))
+        couldDetectPlayer1 = CouldDetectPlayer(Player1, Player1Controller);
+        couldDetectPlayer2 = CouldDetectPlayer(Player2, Player2Controller);
+        if (player1SightDetection.SimulateSightDetection(couldDetectPlayer1))
         {
             DeathScript ds = Player1.GetComponent<DeathScript>();
             if (ds)
@@ -188,7 +189,7 @@ public class Character : MonoBehaviour
             stateMachine.PlayerDied();
             Debug.Log("Killed player 1");
         }
-        if (player2SightDetection.SimulateSightDetection(canDetectPlayer2))
+        if (player2SightDetection.SimulateSightDetection(couldDetectPlayer2))
         {
             DeathScript ds = Player2.GetComponent<DeathScript>();
             if (ds)
@@ -204,9 +205,13 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    public bool CanDetectPlayer(GameObject player, PlayerController playerController)
+    public bool CouldDetectPlayer(GameObject player, PlayerController playerController)
     {
-        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG) && playerController != null && !playerController.IsDead;
+        if (playerController == null)
+            return false;
+        if (playerController.IsDead || playerController.isInvisible)        //Call this first so we dont mark targets
+            return false;
+        return ObjectIsInRange(player, playerController.isCrouching ? SightRangeCrouching : SightRange) && ObjectIsInFov(player) && CanRayCastObject(player, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
     }
 
     /// <summary>
@@ -214,19 +219,16 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="testObj"></param>
     /// <returns></returns>
-    public bool CanDetectDistraction(GameObject testObj)
+    public bool CouldDetectDistraction(GameObject testObj)
     {
         return ObjectIsInRange(testObj) && ObjectIsInFov(testObj) && CanRayCastObject(testObj, RayCaster.distractionLayerMask, RayCaster.DISTRACTION_TAG);
     }
 
-    private bool ObjectIsInRange(GameObject testObj)
+    private bool ObjectIsInRange(GameObject testObj, float range = -1)
     {
-        return Vector3.Distance(testObj.transform.position, transform.position) <= SightRange;
-    }
-
-    private bool ObjectIsInHearingRange(GameObject testObj)
-    {
-        return Vector3.Distance(testObj.transform.position, transform.position) <= classSettings.hearingRange;
+        if (range == -1)
+            range = SightRange;
+        return Vector3.Distance(testObj.transform.position, transform.position) <= range;
     }
 
     private bool ObjectIsInFov(GameObject testObj)
@@ -237,6 +239,10 @@ public class Character : MonoBehaviour
             return true;
         }
         return false;
+    }
+    private bool ObjectIsInHearingRange(GameObject testObj)
+    {
+        return Vector3.Distance(testObj.transform.position, transform.position) <= classSettings.hearingRange;
     }
 
     public bool CanRayCastObject(GameObject testObj, LayerMask layerMask, string tag = "")
@@ -286,7 +292,7 @@ public class Character : MonoBehaviour
                 return true;
 
         if (distraction.detectionType == DetectionType.sight)
-            if (CanDetectDistraction(distraction.gameObject))
+            if (CouldDetectDistraction(distraction.gameObject))
                 return true;
         return false;
     }

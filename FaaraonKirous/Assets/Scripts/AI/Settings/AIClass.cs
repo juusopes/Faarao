@@ -10,6 +10,9 @@ public class AIClass : ScriptableObject
     [Tooltip("How far AI can see.")]
     [Range(0, 1000)]
     public float sightRange = 25f;
+    [Tooltip("How far AI can see if player is crouching.")]
+    [Range(0, 1000)]
+    public float sightRangeCrouching = 15f;
     [Tooltip("How far AI can see when sight is distracted.")]
     [Range(0, 1000)]
     public float impairedSightRange = 10f;
