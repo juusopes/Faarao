@@ -15,6 +15,7 @@ public class SightDetection
     private float linePercentage;
     private int scalingDirection = 1;      //Going towards 1 or away -1
     private GameObject newGameObject;
+    private float playerDiedResetTime = 2f;
 
     public SightDetection(GameObject parent, LineMaterials lm, float lineWidth)
     {
@@ -43,13 +44,15 @@ public class SightDetection
         Object.Destroy(newGameObject);
     }
 
-    public void ResetLineRenderer(GameObject player, float lineSpeed)
+    public IEnumerator ResetLineRenderer(GameObject player, float lineSpeed)
     {
+        yield return new WaitForSeconds(playerDiedResetTime);
         this.player = player;
         this.lineSpeed = lineSpeed;
         lineScalar = 0;
         scalingDirection = 1;
         hasCaughtPlayer = false;
+        yield return null;
     }
 
     /// <summary>

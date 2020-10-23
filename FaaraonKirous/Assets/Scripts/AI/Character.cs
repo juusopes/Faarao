@@ -25,8 +25,6 @@ public class Character : MonoBehaviour
     [HideInInspector]
     public Vector3 chaseTarget;
     [HideInInspector]
-    public Vector3 lastSightTarget;
-    [HideInInspector]
     public Vector3 lastSeenPosition;
     [HideInInspector]
     public Distraction currentDistraction;
@@ -48,6 +46,7 @@ public class Character : MonoBehaviour
     private DeathScript deathScript;
 
     private GameObject[] players = new GameObject[2];
+    private PlayerController[] playerControllers = new PlayerController[2];
     private Transform distractionContainer;
 
     [HideInInspector]
@@ -65,6 +64,8 @@ public class Character : MonoBehaviour
     #region Expression bodies
     public GameObject Player1 => players[0];
     public GameObject Player2 => players[1];
+    public PlayerController Player1Controller => playerControllers[0];
+    public PlayerController Player2Controller => playerControllers[1];
     public float SightRange => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRange;
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
     public bool CanDetectAnyPlayer => canDetectPlayer1 || canDetectPlayer2;
@@ -144,7 +145,7 @@ public class Character : MonoBehaviour
 
     private void LateUpdate()
     {
-        TryDetectPlayer();
+        TryDetectPlayers();
     }
 
     #endregion
@@ -153,9 +154,18 @@ public class Character : MonoBehaviour
 
     private void RefreshPlayers()
     {
+        //TODO: Player container not find game object!
         players = GameObject.FindGameObjectsWithTag("Player");
-        player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed);
-        player2SightDetection.ResetLineRenderer(Player2, classSettings.sightSpeed);
+        if (Player1)
+            playerControllers[0] = Player1.GetComponent<PlayerController>();
+        if (Player2)
+            playerControllers[1] = Player2.GetComponent<PlayerController>();
+
+        if (!Player1Controller || !Player2Controller)
+            Debug.LogError("Did not find playercontroller");
+
+        StartCoroutine(player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed));
+        StartCoroutine(player2SightDetection.ResetLineRenderer(Player2, classSettings.sightSpeed));
     }
 
     public void UpdateIndicator(Color color)
@@ -165,23 +175,27 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Detection
-    private void TryDetectPlayer()
+    private void TryDetectPlayers()
     {
-        canDetectPlayer1 = CanDetectPlayer(Player1);
-        canDetectPlayer2 = CanDetectPlayer(Player2);
+        canDetectPlayer1 = CanDetectPlayer(Player1, Player1Controller);
+        canDetectPlayer2 = CanDetectPlayer(Player2, Player2Controller);
         if (player1SightDetection.SimulateSightDetection(canDetectPlayer1))
         {
             DeathScript ds = Player1.GetComponent<DeathScript>();
             if (ds)
                 ds.damage = 1;
-            player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed);
+            StartCoroutine(player1SightDetection.ResetLineRenderer(Player1, classSettings.sightSpeed));
+            stateMachine.PlayerDied();
+            Debug.Log("Killed player 1");
         }
         if (player2SightDetection.SimulateSightDetection(canDetectPlayer2))
         {
             DeathScript ds = Player2.GetComponent<DeathScript>();
             if (ds)
                 ds.damage = 1;
-            player2SightDetection.ResetLineRenderer(Player2, classSettings.sightSpeed);
+            StartCoroutine(player2SightDetection.ResetLineRenderer(Player2, classSettings.sightSpeed));
+            stateMachine.PlayerDied();
+            Debug.Log("Killed player 2");
         }
     }
 
@@ -190,9 +204,9 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    public bool CanDetectPlayer(GameObject player)
+    public bool CanDetectPlayer(GameObject player, PlayerController playerController)
     {
-        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG && player.);
+        return ObjectIsInRange(player) && ObjectIsInFov(player) && CanRayCastObject(player, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG) && playerController != null && !playerController.IsDead;
     }
 
     /// <summary>

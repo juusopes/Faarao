@@ -13,6 +13,11 @@ public class ChaseState : State
         Chase();
     }
 
+    public override void PlayerDied()
+    {
+        ToAlertState();
+    }
+
     private void Chase()
     {
         if (CanSeePlayer)

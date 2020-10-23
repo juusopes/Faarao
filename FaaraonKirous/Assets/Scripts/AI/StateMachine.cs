@@ -35,6 +35,11 @@ public class StateMachine
         currentState.Tick();
     }
 
+    public void PlayerDied()
+    {
+        currentState.PlayerDied();
+    }
+
     public void SetState(State state)
     {
         if (state == null || currentState == state)

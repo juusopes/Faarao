@@ -8,6 +8,7 @@ public abstract class State
 
     public virtual void OnStateEnter() { }
     public virtual void OnStateExit() { }
+    public virtual void PlayerDied() { }
 
     protected bool CanSeePlayer => character.CanDetectAnyPlayer;
     protected bool IsDistracted => character.isDistracted;
