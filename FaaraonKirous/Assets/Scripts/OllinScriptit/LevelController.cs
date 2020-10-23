@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.UIElements;
 
 public class LevelController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class LevelController : MonoBehaviour
     private GameObject[] characters;
     public GameObject activeCharacter;
     private int current;
+    public GameObject playerOneImage, playerTwoImage;
 
     //CameraControl
     private GameObject mainCam;
@@ -18,10 +20,15 @@ public class LevelController : MonoBehaviour
     //[HideInInspector]
     public GameObject targetObject;
 
+    public GameObject canvas;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        canvas.SetActive(true);
+        playerOneImage.SetActive(true);
+
         Initialize();
     }
 
@@ -60,6 +67,8 @@ public class LevelController : MonoBehaviour
         }
         //SetCameraPos
             mainCam.transform.parent = activeCharacter.transform;
+
+
     }
 
     private void InivsibilityView()
@@ -95,6 +104,19 @@ public class LevelController : MonoBehaviour
         {
             mainCam.transform.parent = activeCharacter.transform;
         }
+
+        //Set UI elements
+        if (current == 1)
+        {
+            playerOneImage.SetActive(false);
+            playerTwoImage.SetActive(true);
+        }
+        else
+        {
+            playerOneImage.SetActive(true);
+            playerTwoImage.SetActive(false);
+        }
+
     }
 
     //ButtonInterface
