@@ -17,13 +17,15 @@ public class DistractedState : State
 
     public override void OnStateEnter()
     {
+        character.StopNavigation();
+
         switch (distraction.option)
         {
             //COMMENTED : Always get blinding light
             //case DistractionOption.BlindingLight:
             //    character.StartImpairSightRange(distraction.effectTime);
             //    break;
-            case DistractionOption.InsectSwarm:
+            case AbilityOption.DistractInsectSwarm:
                 character.StartImpairFOV(distraction.effectTime);
                 break;
         }
@@ -34,20 +36,25 @@ public class DistractedState : State
         character.ResetDistraction();
     }
 
+    public override void PlayerTakesControl()
+    {
+        ToControlledState();
+    }
+
 
     void ActDistracted()
     {
         switch (character.currentDistraction.option)
         {
-            case DistractionOption.InsectSwarm:
+            case AbilityOption.DistractInsectSwarm:
                 character.PanicRunAround();
                 break;
-            case DistractionOption.NoiseToLookAt :
-            case DistractionOption.SightToLookAt:
+            case AbilityOption.DistractNoiseToLookAt :
+            case AbilityOption.DistractSightToLookAt:
                 character.LerpLookAt(character.currentDistractionPos);
                 break;
-            case DistractionOption.NoiseToGoto:
-            case DistractionOption.SightToGoTo:
+            case AbilityOption.DistractNoiseToGoto:
+            case AbilityOption.DistractSightToGoTo:
                 character.SetDestination(character.currentDistractionPos);
                 break;
         }

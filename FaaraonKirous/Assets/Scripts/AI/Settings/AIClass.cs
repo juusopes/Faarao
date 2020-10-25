@@ -29,6 +29,11 @@ public class AIClass : ScriptableObject
     [Range(0, 1000)]
     public float searchingDuration = 5f;
 
+    [Header("General")]
+    [Tooltip("How long AI will be controlled once posessed")]
+    [Range(0, 1000)]
+    public float controlledDuration = 10f;
+
     [Header("TODO")]
     [Tooltip("NO EFFECT ATM")]
     [Range(0.01f, 500)]

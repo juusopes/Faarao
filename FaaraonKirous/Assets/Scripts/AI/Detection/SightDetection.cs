@@ -17,7 +17,7 @@ public class SightDetection
     private GameObject newGameObject;
     private float playerDiedResetTime = 2f;
 
-    public SightDetection(GameObject parent, LineMaterials lm, float lineWidth)
+    public SightDetection(GameObject parent, LineMaterials lm, float lineWidth, float lineSpeed)
     {
         this.lm = lm;
         parentObject = parent;
@@ -30,6 +30,7 @@ public class SightDetection
         lineRenderer.textureMode = LineTextureMode.Tile;
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;
+        this.lineSpeed = lineSpeed;
     }
 
 
@@ -44,11 +45,10 @@ public class SightDetection
         Object.Destroy(newGameObject);
     }
 
-    public IEnumerator ResetLineRenderer(GameObject player, float lineSpeed)
+    public IEnumerator ResetLineRenderer(GameObject player)
     {
         yield return new WaitForSeconds(playerDiedResetTime);
         this.player = player;
-        this.lineSpeed = lineSpeed;
         lineScalar = 0;
         scalingDirection = 1;
         hasCaughtPlayer = false;
