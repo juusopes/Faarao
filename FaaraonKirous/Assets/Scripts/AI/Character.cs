@@ -226,8 +226,8 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CouldDetectPlayer(GameObject player, PlayerController playerController)
     {
-        //if (IsPlayerAbsent(playerController))   //Call this first so we dont mark targets
-        //    return false;
+        if (IsPlayerAbsent(playerController))   //Call this first so we dont mark targets
+            return false;
         if (isPosessed)
             return false;
         float testRange = playerController != null && playerController.isCrouching ? SightRangeCrouching : SightRange;
