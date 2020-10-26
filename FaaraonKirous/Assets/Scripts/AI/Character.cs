@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
@@ -640,7 +639,7 @@ public class Character : MonoBehaviour
     void OnDrawGizmos()
     {
         if (waypointGroup != null)
-            Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);
+            UnityEditor.Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);
     }
 #endif
     #endregion
