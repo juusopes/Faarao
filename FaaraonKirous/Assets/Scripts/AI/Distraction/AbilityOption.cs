@@ -10,5 +10,6 @@
     NoMoreDistractions = 9,    //Any value smaller than this is distraction
 
     PosessAI = 10,
-    TestSight = 11
+    TestSight = 11,
+    ViewPath
 }

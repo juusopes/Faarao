@@ -40,6 +40,8 @@ public class AbilityController : MonoBehaviour
             abilityOption = AbilityOption.PosessAI;
         else if (Input.GetKeyDown(KeyCode.Alpha8))
             abilityOption = AbilityOption.TestSight;
+        else if (Input.GetKeyDown(KeyCode.Alpha9))
+            abilityOption = AbilityOption.ViewPath;
         else
             abilityOption = AbilityOption.NoMoreDistractions;
 
@@ -70,6 +72,26 @@ public class AbilityController : MonoBehaviour
             DeselectAI();
 
         if (abilityOption == AbilityOption.PosessAI)
+        {
+            if (selectedAI)
+            {
+                //In case timer runs out before reacting
+                if (selectedAI.isPosessed)
+                {
+                    SpawnAutoRemoved(hit.point, abilityOption);
+                    selectedAI.ControlAI(hit.point);
+                }
+
+                DeselectAI();
+            }
+            else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
+            {
+                SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
+                if (selectedAI)
+                    selectedAI.PosessAI();
+            }
+        }
+        if (abilityOption == AbilityOption.ViewPath)
         {
             if (selectedAI)
             {
