@@ -66,6 +66,7 @@ public class PriestAbilities : MonoBehaviour
                         {
                             telekinesisTimer = 0;
                             useTeleknesis = true;
+
                             target.GetComponent<Rigidbody>().isKinematic = true;
                             GetComponent<PlayerController>().ability1Active = false;
                         }
