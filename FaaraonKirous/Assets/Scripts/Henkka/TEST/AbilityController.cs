@@ -7,7 +7,7 @@ public class AbilityController : MonoBehaviour
     public AbilitySpawner abilitySpawner;
     private Character selectedAI;
     private GameObject lastSpawnedAbility;
-    public LayerMask abilityLayerMask;
+    private LayerMask abilityLayerMask;
 
     private void Start()
     {
@@ -58,9 +58,10 @@ public class AbilityController : MonoBehaviour
 
     private void UseAbility(RaycastHit hit)
     {
+        //TODO: Lazy ? no : object pooling...
         Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)
-            Destroy(lastSpawnedAbility);    //TODO: Lazy ? no : object pooling...
+            Destroy(lastSpawnedAbility);    
 
         if (abilityOption != AbilityOption.PosessAI)
             DeselectAI();
@@ -87,7 +88,7 @@ public class AbilityController : MonoBehaviour
         }
         else if (abilityOption == AbilityOption.TestSight)
         {
-            SpawnRemovable(hit.point, abilityOption);
+            SpawnAutoRemoved(hit.point, abilityOption);
             Debug.Log("Test Sight");
         }
         else if (abilityOption < AbilityOption.NoMoreDistractions)
