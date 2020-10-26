@@ -20,9 +20,13 @@ public class ObjectiveCounter : MonoBehaviour
     public GameObject objective5;
     public Text objective5text;
 
+    public int objCount;
+
     // Start is called before the first frame update
     void Start()
     {
+
+
         objective1.SetActive(false);
         objective2.SetActive(false);
         objective3.SetActive(false);
@@ -35,12 +39,21 @@ public class ObjectiveCounter : MonoBehaviour
         objective4text.text = "banana for scale";
         objective5text.text = "fish for sale ipsum lorem mitelie meneekää testinä että saa toiselle riville asti asdasdasd";
 
-        AddObjectives(3);
+        objCount = 3;
+
+        AddObjectives(objCount);
     }
 
     // Update is called once per frame
     void Update()
     {
+        int objDone = GetComponent<ObjController>().objectivesDone;
+        var sceneChanger = GetComponent<LevelController>(); /////////
+
+        if (objDone == objCount)
+        {
+
+        }
     }
 
     private int AddObjectives(int objCount)
