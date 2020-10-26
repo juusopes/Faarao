@@ -41,7 +41,7 @@ public class AbilityController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha8))
             abilityOption = AbilityOption.TestSight;
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire2"))
         {
             abilityLayerMask = abilityOption == AbilityOption.PosessAI ? RayCaster.clickSelectorLayerMask : RayCaster.clickSpawnerLayerMask;
 
