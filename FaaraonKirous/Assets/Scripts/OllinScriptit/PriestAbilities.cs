@@ -14,6 +14,7 @@ public class PriestAbilities : MonoBehaviour
     private float telekinesisTimer;
     private Vector3 telekinesisHeight;
     private Vector3 playerSavePos;
+    private Vector3 targetSavePos;
 
     // Start is called before the first frame update
     void Start()
@@ -87,11 +88,12 @@ public class PriestAbilities : MonoBehaviour
         {
             telekinesisHeight = target.transform.position;
             playerSavePos = transform.position;
+            targetSavePos = target.transform.position;
             telekinesisTimer = 2;
         }
         else if (telekinesisTimer >= 2 && telekinesisTimer < 4)
         {
-            target.transform.Translate((playerSavePos - target.transform.position).normalized * Time.deltaTime * 5);
+            target.transform.Translate((playerSavePos - targetSavePos).normalized * Time.deltaTime * 5);
             target.transform.position = new Vector3(target.transform.position.x, telekinesisHeight.y, target.transform.position.z);
         }
         if (telekinesisTimer >= 4 && useTeleknesis)
