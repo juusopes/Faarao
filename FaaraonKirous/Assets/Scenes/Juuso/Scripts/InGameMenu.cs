@@ -38,8 +38,11 @@ public class InGameMenu : MonoBehaviour
 
         startTime = Time.time;
 
-        player.transform.position = new Vector3(lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ);
-        player2.transform.position = new Vector3(lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2);
+        if (player != null && player2 != null)
+        {
+            player.transform.position = new Vector3(lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ);
+            player2.transform.position = new Vector3(lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2);
+        }
     }
 
     // Update is called once per frame
@@ -106,7 +109,7 @@ public class InGameMenu : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene("OllinScene");
+        SceneManager.LoadScene(1);
     }
 
     public void RestartLevel()
@@ -126,15 +129,18 @@ public class InGameMenu : MonoBehaviour
         FileStream file = File.Create(Application.persistentDataPath + "/LevelInfo.dat");
         LevelData data = new LevelData();
 
-        print("Level saved at: " + player.transform.position);
+        if (player != null && player2 != null)
+        {
+            print("Level saved at: " + player.transform.position);
 
-        data.lastSaveSpotX = player.transform.position.x;
-        data.lastSaveSpotY = player.transform.position.y;
-        data.lastSaveSpotZ = player.transform.position.z;
+            data.lastSaveSpotX = player.transform.position.x;
+            data.lastSaveSpotY = player.transform.position.y;
+            data.lastSaveSpotZ = player.transform.position.z;
 
-        data.lastSaveSpotX2 = player2.transform.position.x;
-        data.lastSaveSpotY2 = player2.transform.position.y;
-        data.lastSaveSpotZ2 = player2.transform.position.z;
+            data.lastSaveSpotX2 = player2.transform.position.x;
+            data.lastSaveSpotY2 = player2.transform.position.y;
+            data.lastSaveSpotZ2 = player2.transform.position.z;
+        }
 
         string savedLevel = SceneManager.GetActiveScene().name;
         data.savedLevel = savedLevel;
