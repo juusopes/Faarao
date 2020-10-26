@@ -15,9 +15,15 @@ public class AlertState : State
         Look();
     }
 
+
     public override void OnStateEnter()
     {
         searchTimer = 0;
+    }
+
+    public override void PlayerTakesControl()
+    {
+        ToControlledState();
     }
 
     void Search()
@@ -26,10 +32,7 @@ public class AlertState : State
         character.SearchRotate();
         searchTimer += Time.deltaTime;
         if (searchTimer >= character.classSettings.searchingDuration)
-        {
-            stateMachine.SetState(stateMachine.patrolState);
             ToPatrolState();
-        }
     }
 
     void Look()
