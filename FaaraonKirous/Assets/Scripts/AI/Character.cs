@@ -85,9 +85,9 @@ public class Character : MonoBehaviour
     void Awake()
     {
         stateMachine = new StateMachine(this);
-        player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f, classSettings.sightSpeed);
-        player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f, classSettings.sightSpeed);
-        testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f, 1000f);
+        player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
+        player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
+        testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, 1000f);
         InitNavMeshAgent();
         linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
         deathScript = GetComponent<DeathScript>();
