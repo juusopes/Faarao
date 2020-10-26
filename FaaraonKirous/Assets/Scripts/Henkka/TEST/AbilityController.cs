@@ -88,7 +88,8 @@ public class AbilityController : MonoBehaviour
         }
         else if (abilityOption == AbilityOption.TestSight)
         {
-            SpawnAutoRemoved(hit.point, abilityOption);
+            SpawnRemovable(hit.point, abilityOption);
+            //SpawnAutoRemoved(hit.point, abilityOption);
             Debug.Log("Test Sight");
         }
         else if (abilityOption < AbilityOption.NoMoreDistractions)

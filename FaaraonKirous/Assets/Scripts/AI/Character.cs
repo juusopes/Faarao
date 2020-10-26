@@ -297,6 +297,7 @@ public class Character : MonoBehaviour
 
     private void DetectDistractions()
     {
+        //TODO: fix raycast position
         if (distractionContainer == null)
             return;
 
