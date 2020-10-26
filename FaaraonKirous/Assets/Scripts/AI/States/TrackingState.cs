@@ -12,6 +12,16 @@ public class TrackingState : State
         Look();
     }
 
+    public override void PlayerTakesControl()
+    {
+        ToControlledState();
+    }
+
+    public override void PlayerDied()
+    {
+        ToAlertState();
+    }
+
     void Track()
     {
         character.SetDestination(character.lastSeenPosition);

@@ -13,6 +13,11 @@ public class PatrolState : State
         Look();
     }
 
+    public override void PlayerTakesControl()
+    {
+        ToControlledState();
+    }
+
     void Patrol()
     {
         character.OnWaypoint();

@@ -20,6 +20,7 @@ public class FieldOfViewRenderer : MonoBehaviour
     private Vector3 offset = new Vector3(0, -0.2f, 0);
     private float FOV => character.FOV;
     private float SightRange => character.SightRange;
+    private float SightRangeCrouching => character.SightRangeCrouching;
 
     void Awake()
     {

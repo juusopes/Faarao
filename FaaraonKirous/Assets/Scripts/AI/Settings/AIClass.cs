@@ -10,6 +10,9 @@ public class AIClass : ScriptableObject
     [Tooltip("How far AI can see.")]
     [Range(0, 1000)]
     public float sightRange = 25f;
+    [Tooltip("How far AI can see if player is crouching.")]
+    [Range(0, 1000)]
+    public float sightRangeCrouching = 15f;
     [Tooltip("How far AI can see when sight is distracted.")]
     [Range(0, 1000)]
     public float impairedSightRange = 10f;
@@ -25,6 +28,11 @@ public class AIClass : ScriptableObject
     [Tooltip("How long AI will search/wait/inspect by default")]
     [Range(0, 1000)]
     public float searchingDuration = 5f;
+
+    [Header("General")]
+    [Tooltip("How long AI will be controlled once posessed")]
+    [Range(0, 1000)]
+    public float controlledDuration = 10f;
 
     [Header("TODO")]
     [Tooltip("NO EFFECT ATM")]

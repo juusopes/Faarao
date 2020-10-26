@@ -8,7 +8,7 @@ public class Distraction : MonoBehaviour
     [SerializeField]
     private DistractionClass distractionClass = null;
     [HideInInspector]
-    public DistractionOption option;
+    public AbilityOption option;
 
     //Nicer API, nothing else
     public DetectionType detectionType => distractionClass.detectionType;

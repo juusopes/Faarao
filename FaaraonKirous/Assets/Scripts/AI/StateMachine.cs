@@ -17,6 +17,8 @@ public class StateMachine
     public TrackingState trackingState;
     [HideInInspector]
     public DistractedState distractedState;
+    [HideInInspector]
+    public ControlledState controlledState;
     Character character;
     public StateMachine(Character owner)
     {
@@ -26,6 +28,7 @@ public class StateMachine
         chaseState = new ChaseState(owner, this);
         trackingState = new TrackingState(owner, this);
         distractedState = new DistractedState(owner, this);
+        controlledState = new ControlledState(owner, this);
 
         SetState(patrolState);
     }
@@ -33,6 +36,15 @@ public class StateMachine
     public void UpdateSM()
     {
         currentState.Tick();
+    }
+
+    public void PlayerDied()
+    {
+        currentState.PlayerDied();
+    }
+    public void PlayerTakesControl()
+    {
+        currentState.PlayerTakesControl();
     }
 
     public void SetState(State state)
@@ -65,6 +77,8 @@ public class StateMachine
             character.UpdateIndicator(Color.blue);
         else if (currentState == distractedState)
             character.UpdateIndicator(Color.black);
+        else if (currentState == controlledState)
+            character.UpdateIndicator(Color.white);
     }
 
     public string GetStateName()
