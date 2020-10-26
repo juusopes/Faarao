@@ -45,6 +45,22 @@ public class SightDetection
         Object.Destroy(newGameObject);
     }
 
+    public void DisplaySightTester(bool enable, Vector3 position, LineType lt)
+    {
+        lineRenderer.enabled = enable;
+        if (enable)
+        {
+            SetLineColor(lt);
+            DrawLine(OwnPosition, position);
+        }
+    }
+
+    public IEnumerator DisableSightTesterTimed()
+    {
+        yield return new WaitForSeconds(1);
+        lineRenderer.enabled = false;
+    }
+
     public IEnumerator ResetLineRenderer(GameObject player)
     {
         yield return new WaitForSeconds(playerDiedResetTime);
@@ -67,6 +83,7 @@ public class SightDetection
 
         if(hasCaughtPlayer)
         {
+            UpdateLineColor();
             DrawLine(OwnPosition, PlayerPosition);
         }
         else if (CanSeePlayer || linePercentage > 0)        //Only run if we see player or line is out
@@ -77,6 +94,7 @@ public class SightDetection
             Vector3 end = OwnPosition + PlayerDirection * lineScalar;
             //Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);
 
+            UpdateLineColor();
             DrawLine(OwnPosition, end);
 
             linePercentage = lineScalar / PlayerDistance;
@@ -90,7 +108,6 @@ public class SightDetection
 
     private void DrawLine(Vector3 start, Vector3 target)
     {
-        UpdateLineColor();
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, target);
     }
@@ -108,6 +125,7 @@ public class SightDetection
 
     private void SetLineColor(LineType lc)
     {
+        //TODO: Fix material instancing
         lineRenderer.material = lm.GetMaterial(lc);
     }
 }

@@ -63,6 +63,7 @@ public class Character : MonoBehaviour
     private StateMachine stateMachine;              //new create
     private SightDetection player1SightDetection;   //new create
     private SightDetection player2SightDetection;   //new create
+    private SightDetection testSightDetection;      //new create
     private OffMeshLinkMovement linkMovement;       //new create
 
     #endregion
@@ -86,6 +87,7 @@ public class Character : MonoBehaviour
         stateMachine = new StateMachine(this);
         player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f, classSettings.sightSpeed);
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f, classSettings.sightSpeed);
+        testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.1f, 1000f);
         InitNavMeshAgent();
         linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
         deathScript = GetComponent<DeathScript>();
@@ -216,6 +218,7 @@ public class Character : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// Returns true if player is in sight, fov and can be raycasted. Allows sightline simulation to begin, which dictates actually seeing player.
     /// </summary>
@@ -223,7 +226,7 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CouldDetectPlayer(GameObject player, PlayerController playerController)
     {
-        //if (IsPlayerNotDetectable(playerController))   //Call this first so we dont mark targets
+        //if (IsPlayerAbsent(playerController))   //Call this first so we dont mark targets
         //    return false;
         if (isPosessed)
             return false;
@@ -231,17 +234,15 @@ public class Character : MonoBehaviour
         return TestDetection(player, testRange, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
     }
 
-
-    public bool IsPlayerNotDetectable(PlayerController playerController)
+    public bool IsPlayerAbsent(PlayerController playerController)
     {
         if (playerController == null)
             return true;
-        if (playerController.IsDead || playerController.isInvisible)        
+        if (playerController.IsDead || playerController.isInvisible)
             return true;
 
         return false;
     }
-
 
     public bool CouldDetectDistraction(GameObject testObj)
     {
@@ -299,6 +300,9 @@ public class Character : MonoBehaviour
         if (distractionContainer == null)
             return;
 
+        bool distractionAssigned = false;
+        bool testerAssigned = false;
+
         for (int i = distractionContainer.childCount - 1; i >= 0; i--)
         {
             Transform childTransform = distractionContainer.GetChild(i);
@@ -311,12 +315,31 @@ public class Character : MonoBehaviour
             {
                 if (IsDistractionDetectable(distraction))
                 {
-                    ReceiveDistraction(distraction);
-                    return;
+                    if (distraction.option == AbilityOption.TestSight)
+                    {
+                        if (!testerAssigned)
+                        {
+                            testerAssigned = true;
+                            testSightDetection.DisplaySightTester(true, distraction.transform.position + Vector3.up, LineType.White);
+                        }
+                    }
+                    else
+                    {
+                        if (!distractionAssigned)
+                        {
+                            distractionAssigned = true;
+                            ReceiveDistraction(distraction);
+                        }
+
+                    }
                 }
             }
         }
+
+        if (!testerAssigned && !distractionAssigned)
+            testSightDetection.DisplaySightTester(false, Vector3.zero, LineType.White);
     }
+
     private bool IsDistractionDetectable(Distraction distraction)
     {
         if (distraction.detectionType == DetectionType.hearing)
@@ -325,12 +348,21 @@ public class Character : MonoBehaviour
 
         if (distraction.detectionType == DetectionType.sight)
             if (CouldDetectDistraction(distraction.gameObject))
+            {
                 return true;
+            }
+
         return false;
     }
 
     private void ReceiveDistraction(Distraction distraction)
     {
+        //if (distraction.detectionType == DetectionType.sight)
+       // {
+         //   testSightDetection.DisplaySightTester(true, distraction.transform.position + Vector3.up, LineType.White);
+            // StartCoroutine(testSightDetection.DisableSightTesterTimed());
+        //}
+
         Debug.Log("New distraction: " + distraction.option);
         //Always get blinded
         if (distraction.option == AbilityOption.DistractBlindingLight)

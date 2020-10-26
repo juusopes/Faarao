@@ -3,5 +3,6 @@
     goTo,
     lookAt,
     panic,
-    flash
+    flash,
+    testSight
 }

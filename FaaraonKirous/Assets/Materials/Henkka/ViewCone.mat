@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ViewCone
-  m_Shader: {fileID: 10750, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: -6465566751694194690, guid: dc88627ed4394454191af99833437e0b, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -40,9 +40,18 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+<<<<<<< Updated upstream
+        m_Texture: {fileID: 2800000, guid: 8fa88c768b18dea4ea9d2f97b4cdec4c, type: 3}
+        m_Scale: {x: 3, y: 1}
+=======
         m_Texture: {fileID: 2800000, guid: ff51f1515e4da704a84fc4db23a2355c, type: 3}
         m_Scale: {x: -1.31, y: 0.36}
         m_Offset: {x: 0, y: 1.17}
+    - _MainText:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+>>>>>>> Stashed changes
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -70,9 +79,10 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _Transparency: 0.834
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.8773585, g: 0, b: 0.007858421, a: 1}
+    - _Color: {r: 0.35884383, g: 0.5764706, b: 0.05490196, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

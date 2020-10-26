@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_CirclePolarImageGraph
-  m_Shader: {fileID: -6465566751694194690, guid: 3e530df29c99d6d468cf4743567e70d4, type: 3}
+  m_Name: SightLineRenderer_White
+  m_Shader: {fileID: -6465566751694194690, guid: 213757be289864f42922240f1937ba61, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,20 +20,16 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainText:
-        m_Texture: {fileID: 2800000, guid: 81899d76d5a2b004dac2b9aa941932c4, type: 3}
+        m_Texture: {fileID: 2800000, guid: daecf29906c9ef2418a2f6cce4abbf73, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Contrast: 1
-    - _Polar: 1
-    - _PolarLenghtScale: 2
-    - _PolarRadialScale: 0.1
-    - _Rotation: 351
-    - _RotationSpeed: 0
+    - _DotLenght: 1
+    - _DotScale: 2.5
     - _Scale: 1
-    - _TextureContrast: 1
-    - _Thickness: 0.05
-    - _Transparency: 0.352
+    - _Transparency: 0
     m_Colors:
-    - _Color: {r: 0.6981132, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Tiling: {r: 2, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
