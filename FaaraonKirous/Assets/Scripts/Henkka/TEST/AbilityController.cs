@@ -37,19 +37,21 @@ public class AbilityController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha6))
             abilityOption = AbilityOption.DistractSightToLookAt;
         else if (Input.GetKeyDown(KeyCode.Alpha7))
-            abilityOption = AbilityOption.PosessAI;
+            abilityOption = AbilityOption.PossessAI;
         else if (Input.GetKeyDown(KeyCode.Alpha8))
             abilityOption = AbilityOption.TestSight;
+        else if (Input.GetKeyDown(KeyCode.Alpha9))
+            abilityOption = AbilityOption.ViewPath;
         else
             abilityOption = AbilityOption.NoMoreDistractions;
 
 
         if (abilityOption != AbilityOption.NoMoreDistractions)
         {
-            abilityLayerMask = abilityOption == AbilityOption.PosessAI ? RayCaster.clickSelectorLayerMask : RayCaster.clickSpawnerLayerMask;
+            abilityLayerMask = abilityOption == AbilityOption.PossessAI ? RayCaster.clickSelectorLayerMask : RayCaster.clickSpawnerLayerMask;
 
             RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, abilityLayerMask);
-            Debug.Log("hit " + hit.point); 
+            Debug.Log("hit " + hit.point);
 
             if (RayCaster.HitObject(hit))
             {
@@ -64,39 +66,39 @@ public class AbilityController : MonoBehaviour
         //TODO: Lazy ? no : object pooling...
         Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)
-            Destroy(lastSpawnedAbility);    
+            Destroy(lastSpawnedAbility);
 
-        if (abilityOption != AbilityOption.PosessAI)
-            DeselectAI();
-
-        if (abilityOption == AbilityOption.PosessAI)
+        if (abilityOption == AbilityOption.PossessAI)
         {
             if (selectedAI)
             {
-                //In case timer runs out before reacting
-                if (selectedAI.isPosessed)
-                {
-                    SpawnAutoRemoved(hit.point, abilityOption);
-                    selectedAI.ControlAI(hit.point);
-                }
-
+                PossessEnemy(hit.point);
                 DeselectAI();
             }
             else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
             {
                 SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
-                if (selectedAI)
-                    selectedAI.PosessAI();
+            }
+        }
+        if (abilityOption == AbilityOption.ViewPath)
+        {
+            if (selectedAI)
+            {
+                DeselectAI();
+            }
+            else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
+            {
+                SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
             }
         }
         else if (abilityOption == AbilityOption.TestSight)
         {
+            DeselectAI();
             SpawnRemovable(hit.point, abilityOption);
-            //SpawnAutoRemoved(hit.point, abilityOption);
-            Debug.Log("Test Sight");
         }
         else if (abilityOption < AbilityOption.NoMoreDistractions)
         {
+            DeselectAI();
             SpawnAutoRemoved(hit.point, abilityOption);
         }
     }
@@ -117,8 +119,37 @@ public class AbilityController : MonoBehaviour
         selectedAI = null;
     }
 
+    private void PossessEnemy(Vector3 destinationPoint)
+    {
+        GameObject tester = GameObject.FindGameObjectWithTag("Player"); //TODO: GAME MANAGER REFERENCE
+        if (OnNavMesh.IsReachable(tester.transform, destinationPoint))
+        {
+            SpawnAutoRemoved(destinationPoint, abilityOption);
+            if (NetworkManager._instance.IsHost)
+                selectedAI.PossessAI(destinationPoint);
+            else if (NetworkManager._instance.ShouldSendToServer)
+                ClientSend.EnemyPossessed(selectedAI.Id, destinationPoint);
+        }
+        else
+        {
+            //TODO: Spawn failed marker
+        }
+    }
+
     private void SpawnAutoRemoved(Vector3 pos, AbilityOption option)
     {
+        if (option < AbilityOption.NoMoreDistractions || option == AbilityOption.PossessAI)
+        {
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                ClientSend.AbilityUsed(option, pos);
+            }
+            else if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.AbilityVisualEffectCreated(option, pos);
+            }
+        }
+
         abilitySpawner.SpawnAtPosition(pos, option);
     }
 

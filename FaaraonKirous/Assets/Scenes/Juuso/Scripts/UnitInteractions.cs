@@ -18,7 +18,6 @@ public class UnitInteractions : MonoBehaviour
     private void Start()
     {
         crouching.SetActive(false);
-
     }
 
     private void Update()
