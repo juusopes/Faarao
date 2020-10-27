@@ -80,6 +80,8 @@ public class Character : MonoBehaviour
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
     public bool CanDetectAnyPlayer => couldDetectPlayer1 || couldDetectPlayer2;
     public bool IsDead => deathScript == null ? false : deathScript.isDead;
+    public bool IsHost => NetworkManager._instance.IsHost;
+    public bool ShouldSendToClient => !NetworkManager._instance.IsSingleplayer;
 
     #endregion
 
@@ -87,30 +89,46 @@ public class Character : MonoBehaviour
     void Awake()
     {
         stateMachine = new StateMachine(this);
+        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        deathScript = GetComponent<DeathScript>();
+
+        if (NetworkManager._instance.IsHost)
+        {
+            linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
+            InitNavMeshAgent();
+            Assert.IsNotNull(deathScript, "Me cannut dai!");
+        }
+        else
+        {
+            Destroy(navMeshAgent);
+            Destroy(deathScript);
+        }
+
+
+        Assert.IsNotNull(fieldOfViewGO, "Me cannut fow!");
+        Assert.IsNotNull(clickSelector, "Me cannut klik!");
+
         player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
         testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, 1000f);
-        InitNavMeshAgent();
-        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
-        deathScript = GetComponent<DeathScript>();
-        Assert.IsNotNull(deathScript, "Me cannut dai!");
-        Assert.IsNotNull(fieldOfViewGO, "Me cannut fow!");
-        Assert.IsNotNull(clickSelector, "Me cannut klik!");
     }
 
     private void Start()
     {
+        if (IsHost)
+        {
+            InitNavigator();
+            if (AbilitySpawner.Instance)
+                distractionContainer = AbilitySpawner.Instance.transform;
+            if (!distractionContainer)
+                Debug.LogWarning("Did not find DistractionSpawner");
+        }
+
         RefreshPlayers();
-        InitNavigator();
-        if (AbilitySpawner.Instance)
-            distractionContainer = AbilitySpawner.Instance.transform;
-        if (!distractionContainer)
-            Debug.LogWarning("Did not find DistractionSpawner");
     }
 
     private void InitNavMeshAgent()
     {
-        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
 
         navMeshAgent.speed = classSettings.navSpeed;
@@ -135,10 +153,13 @@ public class Character : MonoBehaviour
             return;
         }
 
-        stateMachine.UpdateSM();
-        DetectDistractions();
-        TestOffLink();
-        RunImpairementCounters();
+        if (IsHost)
+        {
+            stateMachine.UpdateSM();
+            TestOffLink();
+            DetectDistractions();
+            RunImpairementCounters();
+        }
     }
 
     private void LateUpdate()
