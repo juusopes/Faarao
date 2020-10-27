@@ -8,7 +8,7 @@ public class SightDetection
     public LineMaterials lm;
     private LineRenderer lineRenderer;
     public GameObject targetObject;
-    public bool hasCaughtPlayer = false;
+    public bool hasCaughtObject = false;
     private float lineSpeed;
     private float lineLenght = 0;
     private const float lineReScaleOverDistance = 1.1f;     //1 = no scaling, > 1 move faster when object is further away
@@ -69,30 +69,36 @@ public class SightDetection
         this.targetObject = targetObject;
         lineLenght = 0;
         scalingDirection = 1;
-        hasCaughtPlayer = false;
+        hasCaughtObject = false;
         yield return null;
     }
 
     /// <summary>
     /// Simulates sight and draws a sight line. Returns true once the enemy detection line end has reached player. If enemy can see player the line expands, otherwise it shrinks.
     /// </summary>
-    /// <param name="CanSeePlayer">If enemy can see player</param>
+    /// <param name="CanSeeObject">If enemy can see player</param>
     /// <returns></returns>
-    public bool SimulateSightDetection(bool CanSeePlayer)
+    public bool SimulateSightDetection(bool CanSeeObject)
     {
         if (targetObject == null)
             return false;
 
-        if(hasCaughtPlayer)
+        if(hasCaughtObject)
         {
             UpdateLineColor();
             DrawLine(OwnPosition, TargetPosition);
         }
-        else if (CanSeePlayer || linePercentage > 0)        //Only run if we see player or line is out
+        else if (CanSeeObject || linePercentage > 0)        //Only run if we see player or line is out
         {
-            scalingDirection = CanSeePlayer ? 1 : -1;
+            //float maxSpeed = 2.0f;
+            //float difference = maxSpeed - lineSpeed;
+            //float realSpeed = lineSpeed + difference * (currentLength / maxLength);
+            //float newLength = currentLength + realSpeed * Time.deltaTime;
+            //newLength = Mathf.Min(newLength, maxLength);
+
+            scalingDirection = CanSeeObject ? 1 : -1;
             float lineSpeedScale = scalingDirection == 1 ? lineSpeed : lineSpeed * lineShrinkSpeedMultiplier;
-            lineSpeedScale += linePercentage * Time.deltaTime;
+            lineSpeedScale = lineSpeedScale + 10f * linePercentage ;
             //TODO: Fix speed when AI is moving -> solution STOP AI MOVING WOOOOWW
             lineLenght = CurrentLineLenght + scalingDirection * lineSpeedScale * Time.deltaTime;
             lineLenght = Mathf.Min(lineLenght, TargetDistance);
@@ -105,11 +111,11 @@ public class SightDetection
 
             linePercentage = lineLenght / TargetDistance;
 
-            if (CanSeePlayer && linePercentage >= 0.99f)
-                hasCaughtPlayer = true;
+            if (CanSeeObject && linePercentage >= 0.99f)
+                hasCaughtObject = true;
         }
 
-        return hasCaughtPlayer;
+        return hasCaughtObject;
     }
 
     private void DrawLine(Vector3 start, Vector3 target)
@@ -121,7 +127,7 @@ public class SightDetection
 
     private void UpdateLineColor()
     {
-        if (hasCaughtPlayer)
+        if (hasCaughtObject)
             SetLineColor(LineType.Red);
         else if (scalingDirection == 1)
             SetLineColor(LineType.Yellow);
