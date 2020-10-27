@@ -61,12 +61,32 @@ public class AbilityController : MonoBehaviour
         }
     }
 
+    private void PossessEnemy(Vector3 destinationPoint)
+    {
+        GameObject tester = GameObject.FindGameObjectWithTag("Player"); //TODO: GAME MANAGER REFERENCE
+        if (OnNavMesh.IsReachable(tester.transform, destinationPoint))
+        {
+            SpawnAutoRemoved(destinationPoint, abilityOption);
+            if (NetworkManager._instance.IsHost)
+                selectedAI.PossessAI(destinationPoint);
+            else if (NetworkManager._instance.ShouldSendToServer)
+                ClientSend.EnemyPossessed(selectedAI.Id, destinationPoint);
+        }
+        else
+        {
+            //TODO: Spawn failed marker
+        }
+    }
+
     private void UseAbility(RaycastHit hit)
     {
         //TODO: Lazy ? no : object pooling...
         Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)
             Destroy(lastSpawnedAbility);
+
+        if (abilityOption != AbilityOption.PossessAI)
+            DeselectAI();
 
         if (abilityOption == AbilityOption.PossessAI)
         {
@@ -93,12 +113,12 @@ public class AbilityController : MonoBehaviour
         }
         else if (abilityOption == AbilityOption.TestSight)
         {
-            DeselectAI();
             SpawnRemovable(hit.point, abilityOption);
+            //SpawnAutoRemoved(hit.point, abilityOption);
+            Debug.Log("Test Sight");
         }
         else if (abilityOption < AbilityOption.NoMoreDistractions)
         {
-            DeselectAI();
             SpawnAutoRemoved(hit.point, abilityOption);
         }
     }
@@ -117,23 +137,6 @@ public class AbilityController : MonoBehaviour
             selectedAI.selectionIndicator.SetActive(false);
 
         selectedAI = null;
-    }
-
-    private void PossessEnemy(Vector3 destinationPoint)
-    {
-        GameObject tester = GameObject.FindGameObjectWithTag("Player"); //TODO: GAME MANAGER REFERENCE
-        if (OnNavMesh.IsReachable(tester.transform, destinationPoint))
-        {
-            SpawnAutoRemoved(destinationPoint, abilityOption);
-            if (NetworkManager._instance.IsHost)
-                selectedAI.PossessAI(destinationPoint);
-            else if (NetworkManager._instance.ShouldSendToServer)
-                ClientSend.EnemyPossessed(selectedAI.Id, destinationPoint);
-        }
-        else
-        {
-            //TODO: Spawn failed marker
-        }
     }
 
     private void SpawnAutoRemoved(Vector3 pos, AbilityOption option)

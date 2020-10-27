@@ -2,40 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum StateOption
-{
-    PatrolState,
-    AlertState,
-    ChaseState,
-    TrackingState,
-    DistractedState,
-    ControlledState,
-    DetectionState
-}
-
 public class StateMachine
 {
     private State currentState;
 
-    private Dictionary<StateOption, State> _states;
-
+    [HideInInspector]
+    public PatrolState patrolState;
+    [HideInInspector]
+    public AlertState alertState;
+    [HideInInspector]
+    public ChaseState chaseState;
+    [HideInInspector]
+    public TrackingState trackingState;
+    [HideInInspector]
+    public DistractedState distractedState;
+    [HideInInspector]
+    public ControlledState controlledState;
+    [HideInInspector]
+    public DetectionState detectionState;
     Character character;
-
     public StateMachine(Character owner)
     {
         character = owner;
-        _states = new Dictionary<StateOption, State>()
-        {
-            {StateOption.PatrolState,       new PatrolState(owner, this)},
-            { StateOption.AlertState,       new AlertState(owner, this)},
-            { StateOption.ChaseState,       new ChaseState(owner, this)},
-            { StateOption.TrackingState,    new TrackingState(owner, this)},
-            { StateOption.DistractedState,  new DistractedState(owner, this)},
-            { StateOption.ControlledState,  new ControlledState(owner, this)},
-            { StateOption.DetectionState,   new DetectionState(owner, this)},
-        };
+        patrolState = new PatrolState(owner, this);
+        alertState = new AlertState(owner, this);
+        chaseState = new ChaseState(owner, this);
+        trackingState = new TrackingState(owner, this);
+        distractedState = new DistractedState(owner, this);
+        controlledState = new ControlledState(owner, this);
+        detectionState = new DetectionState(owner, this);
 
-        SetState(StateOption.PatrolState);
+        SetState(patrolState);
     }
 
     public void UpdateSM()
@@ -52,13 +49,8 @@ public class StateMachine
         currentState.PlayerTakesControl();
     }
 
-    public void SetState(StateOption stateOption)
+    public void SetState(State state)
     {
-        if (!_states.ContainsKey(stateOption))
-            return;
-
-        State state = _states[stateOption];
-
         if (state == null || currentState == state)
             return;
 
@@ -70,10 +62,28 @@ public class StateMachine
 
         currentState.OnStateEnter();
 
-        character.UpdateIndicator(stateOption);
+#if UNITY_EDITOR
+        SetIndicator();
+#endif
     }
 
-
+    public void SetIndicator()
+    {
+        if (currentState == patrolState)
+            character.UpdateIndicator(Color.green);
+        else if (currentState == chaseState)
+            character.UpdateIndicator(Color.red);
+        else if (currentState == alertState)
+            character.UpdateIndicator(Color.yellow);
+        else if (currentState == trackingState)
+            character.UpdateIndicator(Color.blue);
+        else if (currentState == distractedState)
+            character.UpdateIndicator(Color.black);
+        else if (currentState == controlledState)
+            character.UpdateIndicator(Color.white);
+        else if (currentState == detectionState)
+            character.UpdateIndicator(Color.magenta);
+    }
 
     public string GetStateName()
     {

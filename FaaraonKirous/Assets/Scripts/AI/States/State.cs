@@ -41,33 +41,33 @@ public abstract class State
 
     protected void ToAlertState()
     {
-        stateMachine.SetState(StateOption.AlertState);
+        stateMachine.SetState(stateMachine.alertState);
     }
 
     protected void ToPatrolState()
     {
-        stateMachine.SetState(StateOption.PatrolState);
+        stateMachine.SetState(stateMachine.patrolState);
     }
     protected void ToChaseState()
     {
-        stateMachine.SetState(StateOption.ChaseState);
+        stateMachine.SetState(stateMachine.chaseState);
     }
     protected void ToTrackingState()
     {
-        stateMachine.SetState(StateOption.TrackingState);
+        stateMachine.SetState(stateMachine.trackingState);
     }
 
     protected void ToDistractedState()
     {
-        stateMachine.SetState(StateOption.DistractedState);
+        stateMachine.SetState(stateMachine.distractedState);
     }
     protected void ToControlledState()
     {
-        stateMachine.SetState(StateOption.ControlledState);
+        stateMachine.SetState(stateMachine.controlledState);
     }
 
     protected void ToDetectionState()
     {
-        stateMachine.SetState(StateOption.DetectionState);
+        stateMachine.SetState(stateMachine.detectionState);
     }
 }
