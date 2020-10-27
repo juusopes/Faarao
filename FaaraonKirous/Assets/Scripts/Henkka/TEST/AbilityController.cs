@@ -11,6 +11,7 @@ public class AbilityController : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Confined;
         Assert.IsNotNull(abilitySpawner, "Add ability spawner prefab!");
     }
 
