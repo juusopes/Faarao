@@ -119,8 +119,8 @@ public class Character : MonoBehaviour
 
     private void InitNavigator()
     {
-        if (waypointGroup == null)
-            Debug.Log("Character with no wp group!", this);
+        //if (waypointGroup == null)
+            //Debug.Log("Character with no wp group!", this);
         navigator = new Navigator(this.transform, waypointGroup);
         currentWaypoint = navigator.GetFirstWaypoint();
     }
