@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
@@ -66,7 +65,7 @@ public class Waypoint : MonoBehaviour
     }
 
     #region Editor side only
-
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         Assert.AreNotEqual(transform.root, transform, "Waypoint gameobject must be a child object!");
@@ -124,7 +123,7 @@ public class Waypoint : MonoBehaviour
         int index = transform.GetSiblingIndex();
 
         if(index == 0)
-            Handles.DrawDottedLine(transform.parent.position, transform.position, 4f);
+            UnityEditor.Handles.DrawDottedLine(transform.parent.position, transform.position, 4f);
 
         Transform nextBrotherNode;
         if (transform.parent.childCount >= index + 2)
@@ -135,6 +134,7 @@ public class Waypoint : MonoBehaviour
         Gizmos.color = color;
         Gizmos.DrawLine(transform.position + offset, nextBrotherNode.position);
     }
-    #endregion
+#endif
+#endregion
 }
 

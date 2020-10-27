@@ -11,6 +11,12 @@ public class TrackingState : State
         Track();
         Look();
     }
+
+    public override void PlayerTakesControl()
+    {
+        ToControlledState();
+    }
+
     public override void PlayerDied()
     {
         ToAlertState();

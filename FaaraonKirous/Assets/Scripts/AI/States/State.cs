@@ -9,6 +9,7 @@ public abstract class State
     public virtual void OnStateEnter() { }
     public virtual void OnStateExit() { }
     public virtual void PlayerDied() { }
+    public virtual void PlayerTakesControl() { }
 
     protected bool CanSeePlayer => character.CanDetectAnyPlayer;
     protected bool IsDistracted => character.isDistracted;
@@ -57,5 +58,9 @@ public abstract class State
     protected void ToDistractedState()
     {
         stateMachine.SetState(stateMachine.distractedState);
+    }
+    protected void ToControlledState()
+    {
+        stateMachine.SetState(stateMachine.controlledState);
     }
 }

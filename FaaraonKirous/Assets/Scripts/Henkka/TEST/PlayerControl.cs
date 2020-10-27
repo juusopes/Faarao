@@ -7,8 +7,8 @@ public class PlayerControl : MonoBehaviour
 {
     public float moveSpeed;
     public float rotateSpeed;
-    private DistractionOption dsOption;
-    public DistractionSpawner ds;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,38 +28,5 @@ public class PlayerControl : MonoBehaviour
         float xMouse = Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime;
         Vector3 lookAt = new Vector3(0, xMouse, 0);
         transform.Rotate(lookAt);
-
-        InputDistraction();
-    }
-
-    private void InputDistraction()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            dsOption = DistractionOption.BlindingLight;
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            dsOption = DistractionOption.InsectSwarm;
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            dsOption = DistractionOption.NoiseToGoto;
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            dsOption = DistractionOption.NoiseToLookAt;
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            dsOption = DistractionOption.SightToGoTo;
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-            dsOption = DistractionOption.SightToLookAt;
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
-                SpawnDistraction(hit.point, dsOption);
-        }
-    }
-
-    private void SpawnDistraction(Vector3 pos, DistractionOption option)
-    {
-        if (ds == null)
-            return;
-        ds.SpawnAtPosition(pos, option);
     }
 }

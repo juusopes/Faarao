@@ -13,10 +13,16 @@ public class ChaseState : State
         Chase();
     }
 
+    public override void PlayerTakesControl()
+    {
+        ToControlledState();
+    }
+
     public override void PlayerDied()
     {
         ToAlertState();
     }
+
 
     private void Chase()
     {

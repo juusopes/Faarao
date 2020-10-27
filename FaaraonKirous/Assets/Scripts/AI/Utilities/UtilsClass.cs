@@ -4,6 +4,16 @@ using UnityEngine;
 
 public static class UtilsClass 
 { 
+    public static Vector3 GetMinVector()
+    {
+        return new Vector3(float.MinValue, float.MinValue, float.MinValue);
+    }
+
+    public static bool IsMinimumVector(Vector3 testVector)
+    {
+        return Vector3.Equals(testVector, new Vector3(float.MinValue, float.MinValue, float.MinValue));
+    }
+
     public static Vector3 GetVectorFromAngle(float angle)
     {
         //angle = 0 -> 360
