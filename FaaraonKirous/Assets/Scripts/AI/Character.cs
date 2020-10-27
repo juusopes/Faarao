@@ -59,6 +59,7 @@ public class Character : MonoBehaviour
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
+    private EnemyNetManager enemyNetManager;
 
     //Aid scripts (create with new)
     private Navigator navigator;                    //new create
@@ -80,37 +81,57 @@ public class Character : MonoBehaviour
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
     public bool CanDetectAnyPlayer => couldDetectPlayer1 || couldDetectPlayer2;
     public bool IsDead => deathScript == null ? false : deathScript.isDead;
+    public bool IsHost => NetworkManager._instance.IsHost;
+    public bool ShouldSendToClient => NetworkManager._instance.ShouldSendToClient;
 
     #endregion
 
     #region Start and update
     void Awake()
     {
+        enemyNetManager = GetComponent<EnemyNetManager>();
+        Assert.IsNotNull(enemyNetManager, "Can't touch this.");
         stateMachine = new StateMachine(this);
+        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        deathScript = GetComponent<DeathScript>();
+
+        if (NetworkManager._instance.IsHost)
+        {
+            linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
+            InitNavMeshAgent();
+            Assert.IsNotNull(deathScript, "Me cannut dai!");
+        }
+        else
+        {
+            Destroy(navMeshAgent);
+            Destroy(deathScript);
+        }
+
+
+        Assert.IsNotNull(fieldOfViewGO, "Me cannut fow!");
+        Assert.IsNotNull(clickSelector, "Me cannut klik!");
+
         player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
         testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, 1000f);
-        InitNavMeshAgent();
-        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
-        deathScript = GetComponent<DeathScript>();
-        Assert.IsNotNull(deathScript, "Me cannut dai!");
-        Assert.IsNotNull(fieldOfViewGO, "Me cannut fow!");
-        Assert.IsNotNull(clickSelector, "Me cannut klik!");
     }
 
     private void Start()
     {
+        if (IsHost)
+        {
+            InitNavigator();
+            if (AbilitySpawner.Instance)
+                distractionContainer = AbilitySpawner.Instance.transform;
+            if (!distractionContainer)
+                Debug.LogWarning("Did not find DistractionSpawner");
+        }
+
         RefreshPlayers();
-        InitNavigator();
-        if (AbilitySpawner.Instance)
-            distractionContainer = AbilitySpawner.Instance.transform;
-        if (!distractionContainer)
-            Debug.LogWarning("Did not find DistractionSpawner");
     }
 
     private void InitNavMeshAgent()
     {
-        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
 
         navMeshAgent.speed = classSettings.navSpeed;
@@ -135,10 +156,13 @@ public class Character : MonoBehaviour
             return;
         }
 
-        stateMachine.UpdateSM();
-        DetectDistractions();
-        TestOffLink();
-        RunImpairementCounters();
+        if (IsHost)
+        {
+            stateMachine.UpdateSM();
+            TestOffLink();
+            DetectDistractions();
+            RunImpairementCounters();
+        }
     }
 
     private void LateUpdate()
@@ -390,6 +414,8 @@ public class Character : MonoBehaviour
         isDistracted = false;
 
         navMeshAgent.speed = classSettings.navSpeed;
+
+        SendToClient_SightChanged();
     }
 
     private void RunImpairementCounters()
@@ -414,12 +440,14 @@ public class Character : MonoBehaviour
     {
         impairedSightTimer = time;
         impairedSightRange = true;
+        SendToClient_SightChanged();
     }
 
     public void StartImpairFOV(float time)
     {
         impairedFOVTimer = time;
         impairedFOV = true;
+        SendToClient_SightChanged();
     }
     #endregion
 
@@ -641,6 +669,15 @@ public class Character : MonoBehaviour
             return true;
         return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending;
     }
+    #endregion
+
+    #region Networking
+    private void SendToClient_SightChanged()
+    {
+        if (ShouldSendToClient)
+            ServerSend.SightChanged(enemyNetManager.Id, impairedSightRange, impairedFOV);
+    }
+
     #endregion
 
     #region Editor stuff
