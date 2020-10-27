@@ -38,6 +38,8 @@ public class ClientHandle
         // TODO: Pause game here too
 
         GameManager._instance.ClearAllObjects();
+
+        NetworkManager._instance.IsConnectedToServer = true;
     }
 
     public static void SyncObject(int connection, Packet packet)

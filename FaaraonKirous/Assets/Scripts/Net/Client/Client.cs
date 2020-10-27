@@ -37,6 +37,7 @@ public sealed class Client : NetworkHandler
     public void Disconnect()
     {
         if (CloseSocket()) Debug.Log("Disconnected from server.");
+        NetworkManager._instance.IsConnectedToServer = false;
     }
 
     protected override void OnReceiveException()

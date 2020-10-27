@@ -27,7 +27,8 @@ public abstract class NetworkHandler
     {
         if (_socket != null)
         {
-            _socket.Close();
+            // TODO: Cannot close socket on client
+            //_socket.Close();
             _socket = null;
 
             _internalUpdateCts.Cancel();

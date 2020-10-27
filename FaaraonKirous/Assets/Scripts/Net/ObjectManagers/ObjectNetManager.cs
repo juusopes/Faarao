@@ -26,6 +26,10 @@ public class ObjectNetManager : MonoBehaviour
         if (NetworkManager._instance.IsHost)
         {
             GameManager._instance.ObjectCreatedHost(this);
+        } 
+        else
+        {
+            if (!NetworkManager._instance.IsConnectedToServer) Destroy(gameObject);
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public class NetworkManager : MonoBehaviour
@@ -10,6 +11,8 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager _instance;
 
     public bool IsHost { get; private set; } = true;
+
+    public bool IsConnectedToServer { get; set; } = false;
 
     // For testing
     [SerializeField]
@@ -65,13 +68,12 @@ public class NetworkManager : MonoBehaviour
         }
         else
         {
+            IsHost = false;
             // TODO: Server IP and port should be given through text fields
             string serverIp = "127.0.0.1";
             int serverPort = 26950;
             IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             Client.Instance.ConnectToServer(ipEndPoint);
-            // TODO: This should be only after connection has been accepted
-            IsHost = false;
         }
     }
 
