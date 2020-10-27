@@ -27,7 +27,7 @@ public abstract class NetworkHandler
     {
         if (_socket != null)
         {
-            // TODO: Cannot close socket on client
+            // TODO: Cannot close socket on client. But should close on server
             //_socket.Close();
             _socket = null;
 
@@ -78,9 +78,7 @@ public abstract class NetworkHandler
         }
         catch (Exception ex)
         {
-            Debug.Log($"Error receiving UDP data: {ex}");
-            Debug.Log($"Error receiving UDP data: {ex.Message}");
-            // Cannot close...
+            Debug.Log($"Error receiving UDP data: {ex} with message {ex.Message}");
             //OnReceiveException();
         }
     }

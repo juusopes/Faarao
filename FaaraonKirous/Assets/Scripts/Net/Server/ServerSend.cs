@@ -101,6 +101,17 @@ public class ServerSend
 
     #endregion
 
+    #region DisposableObjects
+    public static void AbilityVisualEffectCreated(AbilityOption ability, Vector3 position)
+    {
+        var packet = new Packet((int)ServerPackets.abilityVisualEffectCreated);
+        packet.Write((byte)ability);
+        packet.Write(position);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+    }
+    #endregion
+
 
 }
 

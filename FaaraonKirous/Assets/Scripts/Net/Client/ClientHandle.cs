@@ -96,7 +96,6 @@ public class ClientHandle
     #endregion
 
     #region Enemy
-
     public static void SightChanged(int connection, Packet packet)
     {
         ObjectList list = (ObjectList)packet.ReadByte();
@@ -111,7 +110,16 @@ public class ClientHandle
             enemyNetManager.Character.impairedFOV = impairedFOV;
         }
     }
+    #endregion
 
+    #region DisposableObjects
+    public static void AbilityVisualEffectCreated(int connection, Packet packet)
+    {
+        AbilityOption ability = (AbilityOption)packet.ReadByte();
+        Vector3 position = packet.ReadVector3();
+
+        AbilitySpawner.Instance.SpawnAtPosition(position, ability);
+    }
     #endregion
 
 }

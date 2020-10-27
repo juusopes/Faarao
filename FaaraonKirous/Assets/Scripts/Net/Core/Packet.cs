@@ -14,7 +14,8 @@ public enum ServerPackets
     disposableObjectCreated,
     startingObjectSync,
     syncObject,
-    sightChanged
+    sightChanged,
+    abilityVisualEffectCreated
 }
 
 /// <summary>Sent from client to server.</summary>
