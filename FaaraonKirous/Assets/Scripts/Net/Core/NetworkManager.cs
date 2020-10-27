@@ -14,6 +14,8 @@ public class NetworkManager : MonoBehaviour
 
     public bool IsConnectedToServer { get; set; } = false;
 
+    public bool IsSingleplayer { get; set; } = true;
+
     // For testing
     [SerializeField]
     private bool _willHostServer;
@@ -41,6 +43,7 @@ public class NetworkManager : MonoBehaviour
             {
                 // Automatically start server if this is the original editor
                 HostServer();
+                IsSingleplayer = false;
             }
         }
     }
