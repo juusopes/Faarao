@@ -7,14 +7,18 @@ public class SightDetection
     GameObject parentObject;
     public LineMaterials lm;
     private LineRenderer lineRenderer;
-    public GameObject player;
+    public GameObject targetObject;
     public bool hasCaughtPlayer = false;
     private float lineSpeed;
-    private float lineScalar = 0;
+    private float lineLenght = 0;
+    private const float lineReScaleOverDistance = 1.1f;     //1 = no scaling, > 1 move faster when object is further away
+    private const float lineShrinkSpeedMultiplier = 0.5f;
     private float linePercentage;
     private int scalingDirection = 1;      //Going towards 1 or away -1
     private GameObject newGameObject;
     private float playerDiedResetTime = 2f;
+    public Vector3 endPoint;
+    public LineType lineType;
 
     public SightDetection(GameObject parent, LineMaterials lm, float lineWidth, float lineSpeed)
     {
@@ -32,11 +36,10 @@ public class SightDetection
         this.lineSpeed = lineSpeed;
     }
 
-
     private Vector3 OwnPosition => parentObject.transform.position;
-    private Vector3 PlayerPosition => player.transform.position;
-    private float PlayerDistance => Vector3.Distance(OwnPosition, PlayerPosition);
-    private Vector3 PlayerDirection => (PlayerPosition - OwnPosition).normalized;
+    private Vector3 TargetPosition => targetObject.transform.position;
+    private float TargetDistance => Vector3.Distance(OwnPosition, TargetPosition);
+    private Vector3 TargetDirection => (TargetPosition - OwnPosition).normalized;
     private float CurrentLineLenght => Vector3.Distance(OwnPosition, lineRenderer.GetPosition(1));
 
     public void DestroyLine()
@@ -60,11 +63,11 @@ public class SightDetection
         lineRenderer.enabled = false;
     }
 
-    public IEnumerator ResetLineRenderer(GameObject player)
+    public IEnumerator ResetLineRenderer(GameObject targetObject)
     {
         yield return new WaitForSeconds(playerDiedResetTime);
-        this.player = player;
-        lineScalar = 0;
+        this.targetObject = targetObject;
+        lineLenght = 0;
         scalingDirection = 1;
         hasCaughtPlayer = false;
         yield return null;
@@ -77,26 +80,30 @@ public class SightDetection
     /// <returns></returns>
     public bool SimulateSightDetection(bool CanSeePlayer)
     {
-        if (player == null)
+        if (targetObject == null)
             return false;
 
         if(hasCaughtPlayer)
         {
             UpdateLineColor();
-            DrawLine(OwnPosition, PlayerPosition);
+            DrawLine(OwnPosition, TargetPosition);
         }
         else if (CanSeePlayer || linePercentage > 0)        //Only run if we see player or line is out
         {
             scalingDirection = CanSeePlayer ? 1 : -1;
-            //TODO: Fix speed when AI is moving
-            lineScalar = Mathf.Min(CurrentLineLenght + scalingDirection * lineSpeed * Time.deltaTime, PlayerDistance);
-            Vector3 end = OwnPosition + PlayerDirection * lineScalar;
+            float lineSpeedScale = scalingDirection == 1 ? lineSpeed : lineSpeed * lineShrinkSpeedMultiplier;
+            lineSpeedScale += linePercentage * Time.deltaTime;
+            //TODO: Fix speed when AI is moving -> solution STOP AI MOVING WOOOOWW
+            lineLenght = CurrentLineLenght + scalingDirection * lineSpeedScale * Time.deltaTime;
+            lineLenght = Mathf.Min(lineLenght, TargetDistance);
+            
+            endPoint = OwnPosition + TargetDirection * lineLenght;
             //Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);
 
             UpdateLineColor();
-            DrawLine(OwnPosition, end);
+            DrawLine(OwnPosition, endPoint);
 
-            linePercentage = lineScalar / PlayerDistance;
+            linePercentage = lineLenght / TargetDistance;
 
             if (CanSeePlayer && linePercentage >= 0.99f)
                 hasCaughtPlayer = true;
@@ -124,6 +131,7 @@ public class SightDetection
 
     private void SetLineColor(LineType lc)
     {
+        lineType = lc;
         //TODO: Fix material instancing
         lineRenderer.material = lm.GetMaterial(lc);
     }
