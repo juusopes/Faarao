@@ -29,10 +29,7 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-    }
 
-    private void Start()
-    {
         if (ClonesManager.IsClone())
         {
             // Automatically connect to local host if this is the clone editor
