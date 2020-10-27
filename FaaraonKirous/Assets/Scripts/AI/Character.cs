@@ -83,6 +83,7 @@ public class Character : MonoBehaviour
     public bool IsDead => deathScript == null ? false : deathScript.isDead;
     public bool IsHost => NetworkManager._instance.IsHost;
     public bool ShouldSendToClient => NetworkManager._instance.ShouldSendToClient;
+    public int Id => enemyNetManager.Id;
 
     #endregion
 

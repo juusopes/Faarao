@@ -24,7 +24,8 @@ public enum ClientPackets
     connectionRequest = 1,
     connectionAcceptedReceived,
     heartbeatReceived,
-    abilityUsed
+    abilityUsed,
+    enemyPossessed
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

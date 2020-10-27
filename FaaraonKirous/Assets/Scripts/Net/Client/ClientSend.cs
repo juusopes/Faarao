@@ -36,5 +36,14 @@ public class ClientSend
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
+
+    public static void EnemyPossessed(int id, Vector3 position)
+    {
+        var packet = new Packet((int)ClientPackets.enemyPossessed);
+        packet.Write(id);
+        packet.Write(position);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
     #endregion
 }

@@ -61,12 +61,21 @@ public class AbilityController : MonoBehaviour
         }
     }
 
-    private void ControlAI(Vector3 destinationPoint)
+    private void PossessEnemy(Vector3 destinationPoint)
     {
-        SpawnAutoRemoved(destinationPoint, abilityOption);
-        selectedAI.PossessAI(destinationPoint);
-
-
+        GameObject tester = GameObject.FindGameObjectWithTag("Player"); //TODO: GAME MANAGER REFERENCE
+        if (OnNavMesh.IsReachable(tester.transform, destinationPoint))
+        {
+            SpawnAutoRemoved(destinationPoint, abilityOption);
+            if (NetworkManager._instance.IsHost)
+                selectedAI.PossessAI(destinationPoint);
+            else if (NetworkManager._instance.ShouldSendToServer)
+                ClientSend.EnemyPossessed(selectedAI.Id, destinationPoint);
+        }
+        else
+        {
+            //TODO: Spawn failed marker
+        }
     }
 
     private void UseAbility(RaycastHit hit)
@@ -83,7 +92,7 @@ public class AbilityController : MonoBehaviour
         {
             if (selectedAI)
             {
-                ControlAI(hit.point);
+                PossessEnemy(hit.point);
                 DeselectAI();
             }
             else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
@@ -132,7 +141,7 @@ public class AbilityController : MonoBehaviour
 
     private void SpawnAutoRemoved(Vector3 pos, AbilityOption option)
     {
-        if (option < AbilityOption.NoMoreDistractions)
+        if (option < AbilityOption.NoMoreDistractions || option == AbilityOption.PossessAI)
         {
             if (NetworkManager._instance.ShouldSendToServer)
             {

@@ -38,6 +38,8 @@ public class ServerHandle
         Server.Instance.Connections[connection].Ping = ping;
     }
 
+    #region Abilities
+
     public static void AbilityUsed(int connection, Packet packet)
     {
         AbilityOption ability = (AbilityOption)packet.ReadByte();
@@ -47,4 +49,17 @@ public class ServerHandle
 
         ServerSend.AbilityVisualEffectCreated(connection, ability, position);
     }
+
+    public static void EnemyPossessed(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+        Vector3 position = packet.ReadVector3();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            enemyNetManager.Character.PossessAI(position);
+        }
+    }
+    #endregion
 }
