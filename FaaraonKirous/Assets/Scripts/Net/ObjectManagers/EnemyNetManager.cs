@@ -16,12 +16,15 @@ public class EnemyNetManager : ObjectNetManager
     public override void SendSync(Packet packet)
     {
         base.SendSync(packet);
+        // TODO: Not implemented
 
+        // Sight impairments
+        // Current state
     }
 
     public override void HandleSync(Packet packet)
     {
         base.HandleSync(packet);
-
+        // TODO: Not implemented
     }
 }

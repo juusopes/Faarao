@@ -71,7 +71,6 @@ public sealed class Server : NetworkHandler
     public void Stop()
     {
         if (CloseSocket()) Debug.Log("Server stopped.");
-        // TODO: Is singleplayer now
     }
 
     protected override void OnReceiveException()
@@ -94,6 +93,7 @@ public sealed class Server : NetworkHandler
 
     public void BeginSendPacketAll(ChannelType channelType, Packet packet)
     {
+        // TODO: Check that connection has connected completely!!
         foreach (Connection connection in Connections.Values)
         {
             if (connection.EndPoint != null) connection.BeginSendPacket(channelType, packet);
