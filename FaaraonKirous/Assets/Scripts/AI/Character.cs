@@ -20,6 +20,8 @@ public class Character : MonoBehaviour
     private GameObject fieldOfViewGO = null;
     public GameObject clickSelector = null;
     public GameObject selectionIndicator = null;
+    [SerializeField]
+    private PathVisualizer pathVisualizer = null;
     #endregion 
 
     #region Regular fields
@@ -48,6 +50,7 @@ public class Character : MonoBehaviour
     private bool couldDetectPlayer1;
     private bool couldDetectPlayer2;
     private DeathScript deathScript;
+    [HideInInspector]
     public bool isPosessed;
 
     private GameObject[] players = new GameObject[2];
@@ -426,9 +429,16 @@ public class Character : MonoBehaviour
     {
         stateMachine.PlayerTakesControl();
     }
+
     public void ControlAI(Vector3 position)
     {
         additionalTarget = position;
+    }
+
+    public void VisualizePath()
+    {
+        if(pathVisualizer)
+            pathVisualizer.Visualize(navigator.GetVisualizedPath());
     }
 
     #endregion
