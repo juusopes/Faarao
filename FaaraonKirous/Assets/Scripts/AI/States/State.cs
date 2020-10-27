@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine;
+
 public abstract class State
 {
     protected Character character;
@@ -13,6 +14,7 @@ public abstract class State
 
     protected bool CanSeePlayer => character.CanDetectAnyPlayer;
     protected bool IsDistracted => character.isDistracted;
+    protected Vector3 ChaseTarget => character.chaseTarget;
 
     public State(Character character, StateMachine stateMachine)
     {
@@ -24,7 +26,7 @@ public abstract class State
     {
         if (CanSeePlayer)
         {
-            ToChaseState();
+            ToDetectionState();
         }
         else if (IsDistracted)
         {
@@ -34,7 +36,7 @@ public abstract class State
 
     protected void LostTrackOfPlayer()
     {
-        character.lastSeenPosition = character.chaseTarget;
+        character.lastSeenPosition = ChaseTarget;
     }
 
     protected void ToAlertState()
@@ -62,5 +64,10 @@ public abstract class State
     protected void ToControlledState()
     {
         stateMachine.SetState(stateMachine.controlledState);
+    }
+
+    protected void ToDetectionState()
+    {
+        stateMachine.SetState(stateMachine.detectionState);
     }
 }

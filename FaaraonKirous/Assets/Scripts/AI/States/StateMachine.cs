@@ -18,6 +18,8 @@ public class StateMachine
     public DistractedState distractedState;
     [HideInInspector]
     public ControlledState controlledState;
+    [HideInInspector]
+    public DetectionState detectionState;
     Character character;
     public StateMachine(Character owner)
     {
@@ -28,6 +30,7 @@ public class StateMachine
         trackingState = new TrackingState(owner, this);
         distractedState = new DistractedState(owner, this);
         controlledState = new ControlledState(owner, this);
+        detectionState = new DetectionState(owner, this);
 
         SetState(patrolState);
     }
@@ -78,6 +81,8 @@ public class StateMachine
             character.UpdateIndicator(Color.black);
         else if (currentState == controlledState)
             character.UpdateIndicator(Color.white);
+        else if (currentState == detectionState)
+            character.UpdateIndicator(Color.magenta);
     }
 
     public string GetStateName()
