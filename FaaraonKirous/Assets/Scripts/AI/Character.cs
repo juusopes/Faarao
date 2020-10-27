@@ -463,7 +463,7 @@ public class Character : MonoBehaviour
 
     #region Other player shenanigans
 
-    public void PosessAI()
+    public void PossessAI()
     {
         stateMachine.PlayerTakesControl();
     }

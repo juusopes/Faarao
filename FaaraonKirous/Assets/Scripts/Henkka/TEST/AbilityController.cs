@@ -77,7 +77,7 @@ public class AbilityController : MonoBehaviour
     {
         SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
         if (selectedAI)
-            selectedAI.PosessAI();
+            selectedAI.PossessAI();
     }
 
     private void UseAbility(RaycastHit hit)
@@ -118,7 +118,7 @@ public class AbilityController : MonoBehaviour
             {
                 SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
                 if (selectedAI)
-                    selectedAI.PosessAI();
+                    selectedAI.PossessAI();
             }
         }
         else if (abilityOption == AbilityOption.TestSight)
