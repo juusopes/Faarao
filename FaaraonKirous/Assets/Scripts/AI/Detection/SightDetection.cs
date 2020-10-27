@@ -11,7 +11,7 @@ public class SightDetection
     public bool hasCaughtObject = false;
     private float lineSpeed;
     private float lineLenght = 0;
-    private const float lineReScaleOverDistance = 1.1f;     //1 = no scaling, > 1 move faster when object is further away
+    private const float lineSpeedRangeMultiplier = 2f;
     private const float lineShrinkSpeedMultiplier = 0.5f;
     private float linePercentage;
     private int scalingDirection = 1;      //Going towards 1 or away -1
@@ -96,12 +96,15 @@ public class SightDetection
             //float newLength = currentLength + realSpeed * Time.deltaTime;
             //newLength = Mathf.Min(newLength, maxLength);
 
+           // 1,1 * lenght 
+
+
+
             scalingDirection = CanSeeObject ? 1 : -1;
             float lineSpeedScale = scalingDirection == 1 ? lineSpeed : lineSpeed * lineShrinkSpeedMultiplier;
-            lineSpeedScale = lineSpeedScale + 10f * linePercentage ;
+            lineSpeedScale = lineSpeedScale + lineSpeedRangeMultiplier * linePercentage;
             //TODO: Fix speed when AI is moving -> solution STOP AI MOVING WOOOOWW
             lineLenght = CurrentLineLenght + scalingDirection * lineSpeedScale * Time.deltaTime;
-            lineLenght = Mathf.Min(lineLenght, TargetDistance);
             
             endPoint = OwnPosition + TargetDirection * lineLenght;
             //Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);

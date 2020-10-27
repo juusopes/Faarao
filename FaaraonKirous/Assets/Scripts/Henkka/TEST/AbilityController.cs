@@ -51,7 +51,7 @@ public class AbilityController : MonoBehaviour
             abilityLayerMask = abilityOption == AbilityOption.PossessAI ? RayCaster.clickSelectorLayerMask : RayCaster.clickSpawnerLayerMask;
 
             RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, abilityLayerMask);
-            Debug.Log("hit " + hit.point); 
+            Debug.Log("hit " + hit.point);
 
             if (RayCaster.HitObject(hit))
             {
@@ -61,23 +61,12 @@ public class AbilityController : MonoBehaviour
         }
     }
 
-    private void ControlAI(RaycastHit hit)
+    private void ControlAI(Vector3 destinationPoint)
     {
-        //In case timer runs out before reacting
-        if (selectedAI.isPosessed)
-        {
-            SpawnAutoRemoved(hit.point, abilityOption);
-            selectedAI.ControlAI(hit.point);
-        }
+        SpawnAutoRemoved(destinationPoint, abilityOption);
+        selectedAI.PossessAI(destinationPoint);
 
-        DeselectAI();
-    }
 
-    private void PossessAI(RaycastHit hit)
-    {
-        SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
-        if (selectedAI)
-            selectedAI.PossessAI();
     }
 
     private void UseAbility(RaycastHit hit)
@@ -85,7 +74,7 @@ public class AbilityController : MonoBehaviour
         //TODO: Lazy ? no : object pooling...
         Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)
-            Destroy(lastSpawnedAbility);    
+            Destroy(lastSpawnedAbility);
 
         if (abilityOption != AbilityOption.PossessAI)
             DeselectAI();
@@ -94,31 +83,23 @@ public class AbilityController : MonoBehaviour
         {
             if (selectedAI)
             {
-                ControlAI(hit);
+                ControlAI(hit.point);
+                DeselectAI();
             }
             else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
             {
-                PossessAI(hit);
+                SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
             }
         }
         if (abilityOption == AbilityOption.ViewPath)
         {
             if (selectedAI)
             {
-                //In case timer runs out before reacting
-                if (selectedAI.isPosessed)
-                {
-                    SpawnAutoRemoved(hit.point, abilityOption);
-                    selectedAI.ControlAI(hit.point);
-                }
-
                 DeselectAI();
             }
             else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
             {
                 SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
-                if (selectedAI)
-                    selectedAI.PossessAI();
             }
         }
         else if (abilityOption == AbilityOption.TestSight)

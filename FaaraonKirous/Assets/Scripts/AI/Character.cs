@@ -223,7 +223,7 @@ public class Character : MonoBehaviour
         if (player1SightDetection.SimulateSightDetection(couldDetectPlayer1))
         {
             DeathScript ds = Player1.GetComponent<DeathScript>();
-            if (ds)
+            if (ds && !ds.isDead)
             {
                 ds.damage = 1;
                 StartCoroutine(player1SightDetection.ResetLineRenderer(Player1));
@@ -234,7 +234,7 @@ public class Character : MonoBehaviour
         if (player2SightDetection.SimulateSightDetection(couldDetectPlayer2))
         {
             DeathScript ds = Player2.GetComponent<DeathScript>();
-            if (ds)
+            if (ds && !ds.isDead)
             {
                 ds.damage = 1;
                 StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
@@ -252,7 +252,7 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CouldDetectPlayer(GameObject player, PlayerController playerController)
     {
-        if (IsPlayerAbsent(playerController))   //Call this first so we dont mark targets
+        if (IsPlayerDeadOrInvisible(playerController))   //Call this first so we dont mark targets
             return false;
         if (isPosessed)
             return false;
@@ -260,7 +260,7 @@ public class Character : MonoBehaviour
         return TestDetection(player, testRange, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
     }
 
-    public bool IsPlayerAbsent(PlayerController playerController)
+    public bool IsPlayerDeadOrInvisible(PlayerController playerController)
     {
         if (playerController == null)
             return true;
@@ -439,7 +439,6 @@ public class Character : MonoBehaviour
             SendToClient_SightChanged();
         }
 
-
         if (distractionTimer > 0)
             distractionTimer -= Time.deltaTime;
         else if (isDistracted)
@@ -463,13 +462,9 @@ public class Character : MonoBehaviour
 
     #region Other player shenanigans
 
-    public void PossessAI()
+    public void PossessAI(Vector3 position)
     {
         stateMachine.PlayerTakesControl();
-    }
-
-    public void ControlAI(Vector3 position)
-    {
         additionalTarget = position;
     }
 
