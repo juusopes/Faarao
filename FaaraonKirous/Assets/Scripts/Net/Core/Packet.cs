@@ -23,7 +23,8 @@ public enum ClientPackets
 {
     connectionRequest = 1,
     connectionAcceptedReceived,
-    heartbeatReceived
+    heartbeatReceived,
+    abilityUsed
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

@@ -165,7 +165,8 @@ public sealed class Server : NetworkHandler
         {
             { (int)ClientPackets.connectionAcceptedReceived, ServerHandle.ConnectionAcceptedReceived },
             { (int)ClientPackets.connectionRequest, ServerHandle.ConnectionRequest },
-            { (int)ClientPackets.heartbeatReceived, ServerHandle.HeartbeatReceived }
+            { (int)ClientPackets.heartbeatReceived, ServerHandle.HeartbeatReceived },
+            { (int)ClientPackets.abilityUsed, ServerHandle.AbilityUsed }
         };
 
         // Initialize connections

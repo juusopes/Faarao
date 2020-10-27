@@ -61,6 +61,25 @@ public class AbilityController : MonoBehaviour
         }
     }
 
+    private void ControlAI(RaycastHit hit)
+    {
+        //In case timer runs out before reacting
+        if (selectedAI.isPosessed)
+        {
+            SpawnAutoRemoved(hit.point, abilityOption);
+            selectedAI.ControlAI(hit.point);
+        }
+
+        DeselectAI();
+    }
+
+    private void PossessAI(RaycastHit hit)
+    {
+        SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
+        if (selectedAI)
+            selectedAI.PosessAI();
+    }
+
     private void UseAbility(RaycastHit hit)
     {
         //TODO: Lazy ? no : object pooling...
@@ -75,20 +94,11 @@ public class AbilityController : MonoBehaviour
         {
             if (selectedAI)
             {
-                //In case timer runs out before reacting
-                if (selectedAI.isPosessed)
-                {
-                    SpawnAutoRemoved(hit.point, abilityOption);
-                    selectedAI.ControlAI(hit.point);
-                }
-
-                DeselectAI();
+                ControlAI(hit);
             }
             else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
             {
-                SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
-                if (selectedAI)
-                    selectedAI.PosessAI();
+                PossessAI(hit);
             }
         }
         if (abilityOption == AbilityOption.ViewPath)
@@ -141,6 +151,18 @@ public class AbilityController : MonoBehaviour
 
     private void SpawnAutoRemoved(Vector3 pos, AbilityOption option)
     {
+        if (option < AbilityOption.NoMoreDistractions)
+        {
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                ClientSend.AbilityUsed(option, pos);
+            }
+            else if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.AbilityVisualEffectCreated(option, pos);
+            }
+        }
+
         abilitySpawner.SpawnAtPosition(pos, option);
     }
 

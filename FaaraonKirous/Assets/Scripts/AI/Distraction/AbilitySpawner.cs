@@ -68,12 +68,6 @@ public class AbilitySpawner : MonoBehaviour
 
         GameObject newGo = Instantiate(go, position, Quaternion.identity, transform);
 
-        if (NetworkManager._instance.ShouldSendToClient 
-            && (option < AbilityOption.NoMoreDistractions || option == AbilityOption.PossessAI))
-        {
-            ServerSend.AbilityVisualEffectCreated(option, position);
-        }
-
         Distraction D = newGo.GetComponent<Distraction>();
         if (D != null)
             D.option = option;

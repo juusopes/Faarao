@@ -110,6 +110,15 @@ public class ServerSend
 
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
+
+    public static void AbilityVisualEffectCreated(int excludeId, AbilityOption ability, Vector3 position)
+    {
+        var packet = new Packet((int)ServerPackets.abilityVisualEffectCreated);
+        packet.Write((byte)ability);
+        packet.Write(position);
+
+        Server.Instance.BeginSendPacketAllExclude(excludeId, ChannelType.Reliable, packet);
+    }
     #endregion
 
 

@@ -37,4 +37,14 @@ public class ServerHandle
         // TODO: Check that connection is not null
         Server.Instance.Connections[connection].Ping = ping;
     }
+
+    public static void AbilityUsed(int connection, Packet packet)
+    {
+        AbilityOption ability = (AbilityOption)packet.ReadByte();
+        Vector3 position = packet.ReadVector3();
+
+        AbilitySpawner.Instance.SpawnAtPosition(position, ability);
+
+        ServerSend.AbilityVisualEffectCreated(connection, ability, position);
+    }
 }
