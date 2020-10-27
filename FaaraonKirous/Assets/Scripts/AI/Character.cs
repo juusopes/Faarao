@@ -423,7 +423,7 @@ public class Character : MonoBehaviour
         {
             impairedSightTimer -= Time.deltaTime;
         }
-        else
+        else if (impairedSightRange)
         {
             impairedSightRange = false;
             SendToClient_SightChanged();
@@ -433,7 +433,7 @@ public class Character : MonoBehaviour
         {
             impairedFOVTimer -= Time.deltaTime;
         }
-        else
+        else if (impairedFOV)
         {
             impairedFOV = false;
             SendToClient_SightChanged();
@@ -442,7 +442,7 @@ public class Character : MonoBehaviour
 
         if (distractionTimer > 0)
             distractionTimer -= Time.deltaTime;
-        else
+        else if (isDistracted)
             isDistracted = false;
     }
 
