@@ -13,7 +13,8 @@ public enum ServerPackets
     updateObjectTransform,
     disposableObjectCreated,
     startingObjectSync,
-    syncObject
+    syncObject,
+    sightChanged
 }
 
 /// <summary>Sent from client to server.</summary>
