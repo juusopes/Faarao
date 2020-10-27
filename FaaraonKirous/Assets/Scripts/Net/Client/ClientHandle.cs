@@ -89,9 +89,29 @@ public class ClientHandle
 
         if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
         {
-            netManager.UpdateTransform(position, rotation);
+            netManager.Transform.position = position;
+            netManager.Transform.rotation = rotation;
         }
     }
+    #endregion
+
+    #region Enemy
+
+    public static void SightChanged(int connection, Packet packet)
+    {
+        ObjectList list = (ObjectList)packet.ReadByte();
+        int id = packet.ReadInt();
+        bool impairedSightRange = packet.ReadBool();
+        bool impairedFOV = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            enemyNetManager.Character.impairedSightRange = impairedSightRange;
+            enemyNetManager.Character.impairedFOV = impairedFOV;
+        }
+    }
+
     #endregion
 
 }

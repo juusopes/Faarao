@@ -75,7 +75,8 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.updateObjectTransform, ClientHandle.UpdateObjectTransform },
             { (int)ServerPackets.disposableObjectCreated, ClientHandle.DisposableObjectCreated },
             { (int)ServerPackets.startingObjectSync, ClientHandle.StartingObjectSync },
-            { (int)ServerPackets.syncObject, ClientHandle.SyncObject }
+            { (int)ServerPackets.syncObject, ClientHandle.SyncObject },
+            { (int)ServerPackets.sightChanged, ClientHandle.SightChanged }
         };
 
         // Initialize connection

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EnemyNetManager : ObjectNetManager
 {
-    private Character _character;
+    public Character Character;
 
 
     protected override void Awake()
     {
         base.Awake();
-        _character = GetComponent<Character>();
+        Character = GetComponent<Character>();
     }
 
     public override void SendSync(Packet packet)

@@ -56,12 +56,6 @@ public class ObjectNetManager : MonoBehaviour
         // ...
     }
 
-    public void UpdateTransform(Vector3 position, Quaternion quaternion)
-    {
-        Transform.position = position;
-        Transform.rotation = quaternion;
-    }
-
     public void Delete()
     {
         Destroy(gameObject);
