@@ -37,7 +37,7 @@ public class AbilityController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha6))
             abilityOption = AbilityOption.DistractSightToLookAt;
         else if (Input.GetKeyDown(KeyCode.Alpha7))
-            abilityOption = AbilityOption.PosessAI;
+            abilityOption = AbilityOption.PossessAI;
         else if (Input.GetKeyDown(KeyCode.Alpha8))
             abilityOption = AbilityOption.TestSight;
         else if (Input.GetKeyDown(KeyCode.Alpha9))
@@ -48,7 +48,7 @@ public class AbilityController : MonoBehaviour
 
         if (abilityOption != AbilityOption.NoMoreDistractions)
         {
-            abilityLayerMask = abilityOption == AbilityOption.PosessAI ? RayCaster.clickSelectorLayerMask : RayCaster.clickSpawnerLayerMask;
+            abilityLayerMask = abilityOption == AbilityOption.PossessAI ? RayCaster.clickSelectorLayerMask : RayCaster.clickSpawnerLayerMask;
 
             RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, abilityLayerMask);
             Debug.Log("hit " + hit.point); 
@@ -68,10 +68,10 @@ public class AbilityController : MonoBehaviour
         if (lastSpawnedAbility != null)
             Destroy(lastSpawnedAbility);    
 
-        if (abilityOption != AbilityOption.PosessAI)
+        if (abilityOption != AbilityOption.PossessAI)
             DeselectAI();
 
-        if (abilityOption == AbilityOption.PosessAI)
+        if (abilityOption == AbilityOption.PossessAI)
         {
             if (selectedAI)
             {

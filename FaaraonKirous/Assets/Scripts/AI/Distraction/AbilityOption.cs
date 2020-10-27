@@ -9,7 +9,7 @@
 
     NoMoreDistractions = 9,    //Any value smaller than this is distraction
 
-    PosessAI,
+    PossessAI,
     TestSight,
     ViewPath
 }

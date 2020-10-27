@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -19,7 +20,7 @@ public class AbilitySpawner : MonoBehaviour
     [SerializeField] private GameObject sightToGoTo = null;
     [SerializeField] private GameObject sightToLookAt = null;
     [SerializeField] private GameObject testSight = null;
-    [SerializeField] private GameObject posessMarker = null;
+    [SerializeField] private GameObject possessMarker = null;
     private GameObject distractionContainerGO;
 
     private void Awake()
@@ -50,8 +51,8 @@ public class AbilitySpawner : MonoBehaviour
                 return sightToGoTo;
             case AbilityOption.DistractSightToLookAt:
                 return sightToLookAt;
-            case AbilityOption.PosessAI:
-                return posessMarker;
+            case AbilityOption.PossessAI:
+                return possessMarker;
             case AbilityOption.TestSight:
                 return testSight;
             default:
@@ -67,7 +68,8 @@ public class AbilitySpawner : MonoBehaviour
 
         GameObject newGo = Instantiate(go, position, Quaternion.identity, transform);
 
-        if (NetworkManager._instance.ShouldSendToClient && option < AbilityOption.NoMoreDistractions)
+        if (NetworkManager._instance.ShouldSendToClient 
+            && (option < AbilityOption.NoMoreDistractions || option == AbilityOption.PossessAI))
         {
             ServerSend.AbilityVisualEffectCreated(option, position);
         }
