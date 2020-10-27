@@ -15,6 +15,10 @@ public class Character : MonoBehaviour
     [SerializeField]
     private WaypointGroup waypointGroup = null;
     [Header("General")]
+    [SerializeField]
+    private StateIndicators stateIndicators;
+    [SerializeField]
+    private SpriteRenderer stateVisualizer = null;
     public Transform sightPosition;
     [SerializeField]
     private GameObject fieldOfViewGO = null;
@@ -91,7 +95,6 @@ public class Character : MonoBehaviour
     void Awake()
     {
         enemyNetManager = GetComponent<EnemyNetManager>();
-        Assert.IsNotNull(enemyNetManager, "Can't touch this.");
         stateMachine = new StateMachine(this);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         deathScript = GetComponent<DeathScript>();
@@ -108,9 +111,11 @@ public class Character : MonoBehaviour
             Destroy(deathScript);
         }
 
-
+        Assert.IsNotNull(enemyNetManager, "Can't touch this.");
         Assert.IsNotNull(fieldOfViewGO, "Me cannut fow!");
         Assert.IsNotNull(clickSelector, "Me cannut klik!");
+        Assert.IsNotNull(stateVisualizer, "Me cannut indi!");
+        Assert.IsNotNull(stateIndicators, "Me cannut indi!");
 
         player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
@@ -210,9 +215,14 @@ public class Character : MonoBehaviour
         StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
     }
 
-    public void UpdateIndicator(Color color)
+    public void UpdateIndicator(StateOption stateOption)
     {
-        GetComponent<MeshRenderer>().material.color = color;
+        if (stateIndicators == null || stateVisualizer == null)
+            return;
+
+        //TODO: NETWÖRK
+
+        stateVisualizer.sprite = stateIndicators.GetIndicator(stateOption);
     }
     #endregion
 
