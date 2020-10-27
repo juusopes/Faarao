@@ -59,6 +59,7 @@ public class Character : MonoBehaviour
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
+    private EnemyNetManager enemyNetManager;
 
     //Aid scripts (create with new)
     private Navigator navigator;                    //new create
@@ -81,13 +82,15 @@ public class Character : MonoBehaviour
     public bool CanDetectAnyPlayer => couldDetectPlayer1 || couldDetectPlayer2;
     public bool IsDead => deathScript == null ? false : deathScript.isDead;
     public bool IsHost => NetworkManager._instance.IsHost;
-    public bool ShouldSendToClient => !NetworkManager._instance.IsSingleplayer;
+    public bool ShouldSendToClient => NetworkManager._instance.ShouldSendToClient;
 
     #endregion
 
     #region Start and update
     void Awake()
     {
+        enemyNetManager = GetComponent<EnemyNetManager>();
+        Assert.IsNotNull(enemyNetManager, "Can't touch this.");
         stateMachine = new StateMachine(this);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         deathScript = GetComponent<DeathScript>();
@@ -411,6 +414,8 @@ public class Character : MonoBehaviour
         isDistracted = false;
 
         navMeshAgent.speed = classSettings.navSpeed;
+
+        SendToClient_SightChanged();
     }
 
     private void RunImpairementCounters()
@@ -435,12 +440,14 @@ public class Character : MonoBehaviour
     {
         impairedSightTimer = time;
         impairedSightRange = true;
+        SendToClient_SightChanged();
     }
 
     public void StartImpairFOV(float time)
     {
         impairedFOVTimer = time;
         impairedFOV = true;
+        SendToClient_SightChanged();
     }
     #endregion
 
@@ -662,6 +669,15 @@ public class Character : MonoBehaviour
             return true;
         return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending;
     }
+    #endregion
+
+    #region Networking
+    private void SendToClient_SightChanged()
+    {
+        if (ShouldSendToClient)
+            ServerSend.SightChanged(enemyNetManager.Id, impairedSightRange, impairedFOV);
+    }
+
     #endregion
 
     #region Editor stuff

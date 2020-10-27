@@ -7,8 +7,6 @@ public class ObjectNetManager : MonoBehaviour
     public int Id { get; set; }
     public ObjectList List { get { return _list; } private set { _list = value; } }
     public ObjectType Type { get { return _type; } private set { _type = value; } }
-    public bool ShouldSendServer { get { return NetworkManager._instance.IsHost && Server.Instance.IsOnline; } }
-    public bool ShouldSendClient { get { return !NetworkManager._instance.IsHost && NetworkManager._instance.IsConnectedToServer; } }
     public Transform Transform { get; private set; }
 
     [SerializeField]
@@ -27,12 +25,9 @@ public class ObjectNetManager : MonoBehaviour
         {
             GameManager._instance.ObjectCreatedHost(this);
         }
-        else
+        else if (!NetworkManager._instance.IsConnectedToServer)
         {
-            if (!NetworkManager._instance.IsConnectedToServer)
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 
@@ -43,7 +38,7 @@ public class ObjectNetManager : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (ShouldSendServer) ServerSend.UpdateObjectTransform(List, Id, Transform.position, Transform.rotation);
+        if (NetworkManager._instance.ShouldSendToClient) ServerSend.UpdateObjectTransform(List, Id, Transform.position, Transform.rotation);
     }
 
     public virtual void SendSync(Packet packet)
