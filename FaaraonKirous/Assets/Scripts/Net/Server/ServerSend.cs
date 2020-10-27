@@ -102,20 +102,23 @@ public class ServerSend
     #endregion
 
     #region DisposableObjects
-    public static void AbilityVisualEffectCreated(AbilityOption ability, Vector3 position)
+    private static void AbilityVisualEffectCreated(out Packet packet, AbilityOption ability, Vector3 position)
     {
-        var packet = new Packet((int)ServerPackets.abilityVisualEffectCreated);
+        packet = new Packet((int)ServerPackets.abilityVisualEffectCreated);
         packet.Write((byte)ability);
         packet.Write(position);
+    }
+
+    public static void AbilityVisualEffectCreated(AbilityOption ability, Vector3 position)
+    {
+        AbilityVisualEffectCreated(out Packet packet, ability, position);
 
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
 
     public static void AbilityVisualEffectCreated(int excludeId, AbilityOption ability, Vector3 position)
     {
-        var packet = new Packet((int)ServerPackets.abilityVisualEffectCreated);
-        packet.Write((byte)ability);
-        packet.Write(position);
+        AbilityVisualEffectCreated(out Packet packet, ability, position);
 
         Server.Instance.BeginSendPacketAllExclude(excludeId, ChannelType.Reliable, packet);
     }
