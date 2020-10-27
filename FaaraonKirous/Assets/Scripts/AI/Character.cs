@@ -385,9 +385,9 @@ public class Character : MonoBehaviour
     private void ReceiveDistraction(Distraction distraction)
     {
         //if (distraction.detectionType == DetectionType.sight)
-       // {
-         //   testSightDetection.DisplaySightTester(true, distraction.transform.position + Vector3.up, LineType.White);
-            // StartCoroutine(testSightDetection.DisableSightTesterTimed());
+        // {
+        //   testSightDetection.DisplaySightTester(true, distraction.transform.position + Vector3.up, LineType.White);
+        // StartCoroutine(testSightDetection.DisableSightTesterTimed());
         //}
 
         Debug.Log("New distraction: " + distraction.option);
@@ -414,21 +414,31 @@ public class Character : MonoBehaviour
         isDistracted = false;
 
         navMeshAgent.speed = classSettings.navSpeed;
-
         SendToClient_SightChanged();
     }
 
     private void RunImpairementCounters()
     {
         if (impairedSightTimer > 0)
+        {
             impairedSightTimer -= Time.deltaTime;
+        }
         else
+        {
             impairedSightRange = false;
+            SendToClient_SightChanged();
+        }
 
         if (impairedFOVTimer > 0)
+        {
             impairedFOVTimer -= Time.deltaTime;
+        }
         else
+        {
             impairedFOV = false;
+            SendToClient_SightChanged();
+        }
+
 
         if (distractionTimer > 0)
             distractionTimer -= Time.deltaTime;
@@ -465,7 +475,7 @@ public class Character : MonoBehaviour
 
     public void VisualizePath()
     {
-        if(pathVisualizer)
+        if (pathVisualizer)
             pathVisualizer.Visualize(navigator.GetVisualizedPath());
     }
 
