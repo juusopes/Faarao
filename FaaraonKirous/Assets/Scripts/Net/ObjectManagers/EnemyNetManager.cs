@@ -19,12 +19,20 @@ public class EnemyNetManager : ObjectNetManager
         // TODO: Not implemented
 
         // Sight impairments
+        packet.Write(Character.impairedSightRange);
+        packet.Write(Character.impairedFOV);
+
         // Current state
+        //...
     }
 
     public override void HandleSync(Packet packet)
     {
         base.HandleSync(packet);
         // TODO: Not implemented
+
+        // Sight impairments
+        Character.impairedSightRange = packet.ReadBool();
+        Character.impairedFOV = packet.ReadBool();
     }
 }
