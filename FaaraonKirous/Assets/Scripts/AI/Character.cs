@@ -76,7 +76,7 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Expression bodies
-    public GameObject Player1 => players[0];
+    public GameObject Player1 => players[0] == null ? RefreshPlayers() : players[0];
     public GameObject Player2 => players[1];
     public PlayerController Player1Controller => playerControllers[0];
     public PlayerController Player2Controller => playerControllers[1];
@@ -99,7 +99,7 @@ public class Character : MonoBehaviour
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         deathScript = GetComponent<DeathScript>();
 
-        if (NetworkManager._instance.IsHost)
+        if (IsHost)
         {
             linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
             InitNavMeshAgent();
@@ -199,10 +199,15 @@ public class Character : MonoBehaviour
             Destroy(c);
         Destroy(this);
     }
-    private void RefreshPlayers()
+    private GameObject RefreshPlayers()
     {
         //TODO: Player container not find game object!
         players = GameObject.FindGameObjectsWithTag("Player");
+        if (players.Length < 2)
+        {
+            players = new GameObject[2];
+        }
+            
         if (Player1)
             playerControllers[0] = Player1.GetComponent<PlayerController>();
         if (Player2)
@@ -213,6 +218,7 @@ public class Character : MonoBehaviour
 
         StartCoroutine(player1SightDetection.ResetLineRenderer(Player1));
         StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
+        return null;
     }
 
     public void UpdateStateIndicator(StateOption stateOption)
