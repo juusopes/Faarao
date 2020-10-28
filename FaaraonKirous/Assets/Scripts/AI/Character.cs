@@ -15,11 +15,17 @@ public class Character : MonoBehaviour
     [SerializeField]
     private WaypointGroup waypointGroup = null;
     [Header("General")]
+    [SerializeField]
+    private StateIndicators stateIndicators;
+    [SerializeField]
+    private SpriteRenderer stateVisualizer = null;
     public Transform sightPosition;
     [SerializeField]
     private GameObject fieldOfViewGO = null;
     public GameObject clickSelector = null;
     public GameObject selectionIndicator = null;
+    [SerializeField]
+    private PathVisualizer pathVisualizer = null;
     #endregion 
 
     #region Regular fields
@@ -48,6 +54,7 @@ public class Character : MonoBehaviour
     private bool couldDetectPlayer1;
     private bool couldDetectPlayer2;
     private DeathScript deathScript;
+    [HideInInspector]
     public bool isPosessed;
 
     private GameObject[] players = new GameObject[2];
@@ -56,6 +63,7 @@ public class Character : MonoBehaviour
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
+    private EnemyNetManager enemyNetManager;
 
     //Aid scripts (create with new)
     private Navigator navigator;                    //new create
@@ -77,37 +85,59 @@ public class Character : MonoBehaviour
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
     public bool CanDetectAnyPlayer => couldDetectPlayer1 || couldDetectPlayer2;
     public bool IsDead => deathScript == null ? false : deathScript.isDead;
+    public bool IsHost => NetworkManager._instance.IsHost;
+    public bool ShouldSendToClient => NetworkManager._instance.ShouldSendToClient;
+    public int Id => enemyNetManager.Id;
 
     #endregion
 
     #region Start and update
     void Awake()
     {
+        enemyNetManager = GetComponent<EnemyNetManager>();
         stateMachine = new StateMachine(this);
+        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        deathScript = GetComponent<DeathScript>();
+
+        if (NetworkManager._instance.IsHost)
+        {
+            linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
+            InitNavMeshAgent();
+            Assert.IsNotNull(deathScript, "Me cannut dai!");
+        }
+        else
+        {
+            Destroy(navMeshAgent);
+            Destroy(deathScript);
+        }
+
+        Assert.IsNotNull(enemyNetManager, "Can't touch this.");
+        Assert.IsNotNull(fieldOfViewGO, "Me cannut fow!");
+        Assert.IsNotNull(clickSelector, "Me cannut klik!");
+        Assert.IsNotNull(stateVisualizer, "Me cannut indi!");
+        Assert.IsNotNull(stateIndicators, "Me cannut indi!");
+
         player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
         player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
         testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, 1000f);
-        InitNavMeshAgent();
-        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
-        deathScript = GetComponent<DeathScript>();
-        Assert.IsNotNull(deathScript, "Me cannut dai!");
-        Assert.IsNotNull(fieldOfViewGO, "Me cannut fow!");
-        Assert.IsNotNull(clickSelector, "Me cannut klik!");
     }
 
     private void Start()
     {
+        if (IsHost)
+        {
+            InitNavigator();
+            if (AbilitySpawner.Instance)
+                distractionContainer = AbilitySpawner.Instance.transform;
+            if (!distractionContainer)
+                Debug.LogWarning("Did not find DistractionSpawner");
+        }
+
         RefreshPlayers();
-        InitNavigator();
-        if (AbilitySpawner.Instance)
-            distractionContainer = AbilitySpawner.Instance.transform;
-        if (!distractionContainer)
-            Debug.LogWarning("Did not find DistractionSpawner");
     }
 
     private void InitNavMeshAgent()
     {
-        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.updateRotation = true;
 
         navMeshAgent.speed = classSettings.navSpeed;
@@ -118,8 +148,8 @@ public class Character : MonoBehaviour
 
     private void InitNavigator()
     {
-        if (waypointGroup == null)
-            Debug.Log("Character with no wp group!", this);
+        //if (waypointGroup == null)
+            //Debug.Log("Character with no wp group!", this);
         navigator = new Navigator(this.transform, waypointGroup);
         currentWaypoint = navigator.GetFirstWaypoint();
     }
@@ -132,10 +162,13 @@ public class Character : MonoBehaviour
             return;
         }
 
-        stateMachine.UpdateSM();
-        DetectDistractions();
-        TestOffLink();
-        RunImpairementCounters();
+        if (IsHost)
+        {
+            stateMachine.UpdateSM();
+            TestOffLink();
+            DetectDistractions();
+            RunImpairementCounters();
+        }
     }
 
     private void LateUpdate()
@@ -182,9 +215,14 @@ public class Character : MonoBehaviour
         StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
     }
 
-    public void UpdateIndicator(Color color)
+    public void UpdateIndicator(StateOption stateOption)
     {
-        GetComponent<MeshRenderer>().material.color = color;
+        if (stateIndicators == null || stateVisualizer == null)
+            return;
+
+        //TODO: NETWÖRK
+
+        stateVisualizer.sprite = stateIndicators.GetIndicator(stateOption);
     }
     #endregion
 
@@ -196,7 +234,7 @@ public class Character : MonoBehaviour
         if (player1SightDetection.SimulateSightDetection(couldDetectPlayer1))
         {
             DeathScript ds = Player1.GetComponent<DeathScript>();
-            if (ds)
+            if (ds && !ds.isDead)
             {
                 ds.damage = 1;
                 StartCoroutine(player1SightDetection.ResetLineRenderer(Player1));
@@ -207,7 +245,7 @@ public class Character : MonoBehaviour
         if (player2SightDetection.SimulateSightDetection(couldDetectPlayer2))
         {
             DeathScript ds = Player2.GetComponent<DeathScript>();
-            if (ds)
+            if (ds && !ds.isDead)
             {
                 ds.damage = 1;
                 StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
@@ -225,7 +263,7 @@ public class Character : MonoBehaviour
     /// <returns></returns>
     public bool CouldDetectPlayer(GameObject player, PlayerController playerController)
     {
-        if (IsPlayerAbsent(playerController))   //Call this first so we dont mark targets
+        if (IsPlayerDeadOrInvisible(playerController))   //Call this first so we dont mark targets
             return false;
         if (isPosessed)
             return false;
@@ -233,7 +271,7 @@ public class Character : MonoBehaviour
         return TestDetection(player, testRange, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
     }
 
-    public bool IsPlayerAbsent(PlayerController playerController)
+    public bool IsPlayerDeadOrInvisible(PlayerController playerController)
     {
         if (playerController == null)
             return true;
@@ -358,9 +396,9 @@ public class Character : MonoBehaviour
     private void ReceiveDistraction(Distraction distraction)
     {
         //if (distraction.detectionType == DetectionType.sight)
-       // {
-         //   testSightDetection.DisplaySightTester(true, distraction.transform.position + Vector3.up, LineType.White);
-            // StartCoroutine(testSightDetection.DisableSightTesterTimed());
+        // {
+        //   testSightDetection.DisplaySightTester(true, distraction.transform.position + Vector3.up, LineType.White);
+        // StartCoroutine(testSightDetection.DisableSightTesterTimed());
         //}
 
         Debug.Log("New distraction: " + distraction.option);
@@ -387,23 +425,34 @@ public class Character : MonoBehaviour
         isDistracted = false;
 
         navMeshAgent.speed = classSettings.navSpeed;
+        SendToClient_SightChanged();
     }
 
     private void RunImpairementCounters()
     {
         if (impairedSightTimer > 0)
+        {
             impairedSightTimer -= Time.deltaTime;
-        else
+        }
+        else if (impairedSightRange)
+        {
             impairedSightRange = false;
+            SendToClient_SightChanged();
+        }
 
         if (impairedFOVTimer > 0)
+        {
             impairedFOVTimer -= Time.deltaTime;
-        else
+        }
+        else if (impairedFOV)
+        {
             impairedFOV = false;
+            SendToClient_SightChanged();
+        }
 
         if (distractionTimer > 0)
             distractionTimer -= Time.deltaTime;
-        else
+        else if (isDistracted)
             isDistracted = false;
     }
 
@@ -411,24 +460,29 @@ public class Character : MonoBehaviour
     {
         impairedSightTimer = time;
         impairedSightRange = true;
+        SendToClient_SightChanged();
     }
 
     public void StartImpairFOV(float time)
     {
         impairedFOVTimer = time;
         impairedFOV = true;
+        SendToClient_SightChanged();
     }
     #endregion
 
     #region Other player shenanigans
 
-    public void PosessAI()
+    public void PossessAI(Vector3 position)
     {
         stateMachine.PlayerTakesControl();
-    }
-    public void ControlAI(Vector3 position)
-    {
         additionalTarget = position;
+    }
+
+    public void VisualizePath()
+    {
+        if (pathVisualizer)
+            pathVisualizer.Visualize(navigator.GetVisualizedPath());
     }
 
     #endregion
@@ -631,6 +685,15 @@ public class Character : MonoBehaviour
             return true;
         return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending;
     }
+    #endregion
+
+    #region Networking
+    private void SendToClient_SightChanged()
+    {
+        if (ShouldSendToClient)
+            ServerSend.SightChanged(enemyNetManager.Id, impairedSightRange, impairedFOV);
+    }
+
     #endregion
 
     #region Editor stuff

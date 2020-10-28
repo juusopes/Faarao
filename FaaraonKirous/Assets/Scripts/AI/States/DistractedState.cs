@@ -21,10 +21,12 @@ public class DistractedState : State
 
         switch (distraction.option)
         {
-            //COMMENTED : Always get blinding light
-            //case DistractionOption.BlindingLight:
-            //    character.StartImpairSightRange(distraction.effectTime);
-            //    break;
+
+            case AbilityOption.DistractBlindingLight:
+                //COMMENTED : Always get blinding light
+                //character.StartImpairSightRange(distraction.effectTime);
+                ToAlertState();
+                break;
             case AbilityOption.DistractInsectSwarm:
                 character.StartImpairFOV(distraction.effectTime);
                 break;
@@ -49,7 +51,7 @@ public class DistractedState : State
             case AbilityOption.DistractInsectSwarm:
                 character.PanicRunAround();
                 break;
-            case AbilityOption.DistractNoiseToLookAt :
+            case AbilityOption.DistractNoiseToLookAt:
             case AbilityOption.DistractSightToLookAt:
                 character.LerpLookAt(character.currentDistractionPos);
                 break;

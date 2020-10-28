@@ -47,7 +47,7 @@ public class FieldOfViewRenderer : MonoBehaviour
     private void UpdateViewCone()
     {
         SetOrigin(transform.position + offset);
-        SetAimDirection(transform.forward);
+        SetAimDirection(transform.forward, FOV);
         UpdateMesh();
     }
 
@@ -106,10 +106,10 @@ public class FieldOfViewRenderer : MonoBehaviour
         this.origin = origin;
     }
 
-    public void SetAimDirection(Vector3 aimDirection)
+    public void SetAimDirection(Vector3 aimDirection, float fovIn)
     {
-        startingAngle = transform.rotation.eulerAngles.y + FOV / 2f - 90f;
-        angleIncrease = FOV / rayCount;
+        startingAngle = transform.rotation.eulerAngles.y + fovIn / 2f - 90f;
+        angleIncrease = fovIn / rayCount;
     }
 }
 
