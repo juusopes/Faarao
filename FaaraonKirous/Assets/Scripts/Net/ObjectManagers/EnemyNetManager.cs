@@ -6,7 +6,6 @@ public class EnemyNetManager : ObjectNetManager
 {
     public Character Character;
 
-
     protected override void Awake()
     {
         base.Awake();
