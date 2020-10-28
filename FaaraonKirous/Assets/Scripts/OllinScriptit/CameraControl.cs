@@ -10,7 +10,7 @@ public class CameraControl : MonoBehaviour
     public bool camFollow;
 
     //Movement Script
-    public float moveAmount = 20f;
+    public float moveAmount;
     public float borderThickness = 10;
     public Vector2 panLimit;
 
@@ -35,6 +35,7 @@ public class CameraControl : MonoBehaviour
         camRot = transform.rotation;
         camHeight = 40;
         camFollow = false;
+        moveAmount = 40f;
     }
 
     private void CamPos()
