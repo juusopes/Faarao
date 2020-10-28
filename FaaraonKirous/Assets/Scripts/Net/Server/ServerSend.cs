@@ -113,7 +113,7 @@ public class ServerSend
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
 
-    public static void DetectionConeUpdated(int id, int percentage, LineType color, bool changeState)
+    public static void DetectionConeUpdated(int id, float percentage, LineType color, bool changeState)
     {
         var packet = new Packet((int)ServerPackets.detectionConeUpdated);
         packet.Write(id);

@@ -136,8 +136,9 @@ public class ClientHandle
     public static void DetectionConeUpdated(int connection, Packet packet)
     {
         int id = packet.ReadInt();
-        int percentage = packet.ReadInt();
+        int percentage = packet.ReadFloat();
         LineType color = (LineType)packet.ReadByte();
+        bool changeState = packet.ReadBool();
 
         if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
         {
