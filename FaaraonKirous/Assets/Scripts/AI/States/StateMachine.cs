@@ -70,7 +70,7 @@ public class StateMachine
 
         currentState.OnStateEnter();
 
-        character.UpdateIndicator(stateOption);
+        character.UpdateStateIndicator(stateOption);
     }
 
 
