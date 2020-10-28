@@ -57,8 +57,10 @@ public class Character : MonoBehaviour
     [HideInInspector]
     public bool isPosessed;
 
-    private GameObject[] players = new GameObject[2];
-    private PlayerController[] playerControllers = new PlayerController[2];
+    private GameObject player1ref;
+    private GameObject player2ref;
+    private PlayerController playerController1ref;
+    private PlayerController playerController2ref;
     private Transform distractionContainer;
 
     [HideInInspector]
@@ -76,10 +78,10 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Expression bodies
-    public GameObject Player1 => players[0] == null ? RefreshPlayers() : players[0];
-    public GameObject Player2 => players[1];
-    public PlayerController Player1Controller => playerControllers[0];
-    public PlayerController Player2Controller => playerControllers[1];
+    public GameObject Player1 => player1ref == null ? RefreshPlayer(1) : player1ref;
+    public GameObject Player2 => player2ref == null ? RefreshPlayer(2) : player2ref;
+    public PlayerController Player1Controller => playerController1ref == null ? Player1.GetComponent<PlayerController>() : playerController1ref;
+    public PlayerController Player2Controller => playerController2ref == null ? Player2.GetComponent<PlayerController>() : playerController2ref;
     public float SightRange => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRange;
     public float SightRangeCrouching => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRangeCrouching;
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
@@ -132,8 +134,6 @@ public class Character : MonoBehaviour
             if (!distractionContainer)
                 Debug.LogWarning("Did not find DistractionSpawner");
         }
-
-        RefreshPlayers();
     }
 
     private void InitNavMeshAgent()
@@ -199,25 +199,20 @@ public class Character : MonoBehaviour
             Destroy(c);
         Destroy(this);
     }
-    private GameObject RefreshPlayers()
+    private GameObject RefreshPlayer(int i)
     {
-        //TODO: Player container not find game object!
-        players = GameObject.FindGameObjectsWithTag("Player");
-        if (players.Length < 2)
+        if (i == 1)
         {
-            players = new GameObject[2];
+            player1ref = GameManager._instance.Pharaoh;
+            StartCoroutine(player1SightDetection.ResetLineRenderer(Player1));
+            return player1ref;
         }
-            
-        if (Player1)
-            playerControllers[0] = Player1.GetComponent<PlayerController>();
-        if (Player2)
-            playerControllers[1] = Player2.GetComponent<PlayerController>();
-
-        if (!Player1Controller || !Player2Controller)
-            Debug.LogWarning("Did not find playercontroller");
-
-        StartCoroutine(player1SightDetection.ResetLineRenderer(Player1));
-        StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
+        else if (i == 2)
+        {
+            player2ref = GameManager._instance.Priest;
+            StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
+            return player2ref;
+        }
         return null;
     }
 
