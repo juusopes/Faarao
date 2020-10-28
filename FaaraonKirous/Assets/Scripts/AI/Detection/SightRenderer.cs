@@ -78,11 +78,13 @@ public class SightRenderer
     /// </summary>
     /// <param name="CanSeeObject">If enemy can see player</param>
     /// <returns></returns>
-    public void DrawSightDetection(float sightPercentage, LineType lineType)
+    public void DrawSightDetection(float sightPercentage, LineType lineType, GameObject target)
     {
         SetLineMaterial(lineType);
 
-        endPoint = OwnPosition + parentObject.transform.forward * maxLenght * sightPercentage;
+        Vector3 targetDirection = (target.transform.position - OwnPosition).normalized; 
+        endPoint = OwnPosition + targetDirection * maxLenght * sightPercentage;
+        //endPoint = OwnPosition + parentObject.transform.forward * maxLenght * sightPercentage;
 
         DrawLine(OwnPosition, endPoint);
     }

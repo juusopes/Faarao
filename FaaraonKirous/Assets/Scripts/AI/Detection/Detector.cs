@@ -13,7 +13,7 @@ public class Detector
 
     #region Expressions
     private GameObject Player1 => character.Player1;
-    private GameObject Player2 => character.Player1;
+    private GameObject Player2 => character.Player2;
     private PlayerController Player1Controller => character.Player1Controller;
     private PlayerController Player2Controller => character.Player2Controller;
     private float HearingRange => character.HearingRange;

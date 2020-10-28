@@ -222,7 +222,8 @@ public class Character : MonoBehaviour
 
     public void UpdateSightVisuals(float percentage, LineType lineType)
     {
-        player1SightRenderer.DrawSightDetection(percentage, lineType);
+        player1SightRenderer.DrawSightDetection(percentage, lineType, Player1);
+        player2SightRenderer.DrawSightDetection(percentage, lineType, Player2);
     }
 
     public void SetSightVisuals(bool enable)
