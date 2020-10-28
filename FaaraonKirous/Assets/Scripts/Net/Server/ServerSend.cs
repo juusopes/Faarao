@@ -113,6 +113,18 @@ public class ServerSend
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
 
+    public static void DetectionConeUpdated(int id, float percentage, LineType color, bool changeState)
+    {
+        var packet = new Packet((int)ServerPackets.detectionConeUpdated);
+        packet.Write(id);
+        packet.Write(percentage);
+        packet.Write((byte)color);
+        packet.Write(changeState);
+
+        // TODO: Send in ignoreOldUnreliable channel or send timeStamp here. OR have a channel pool for unreliables
+        ChannelType channelType = changeState ? ChannelType.Reliable : ChannelType.Unreliable;
+        Server.Instance.BeginSendPacketAll(channelType, packet);
+    }
     #endregion
 
     #region DisposableObjects
