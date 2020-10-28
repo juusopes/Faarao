@@ -136,7 +136,7 @@ public class ClientHandle
     public static void DetectionConeUpdated(int connection, Packet packet)
     {
         int id = packet.ReadInt();
-        int percentage = packet.ReadFloat();
+        float percentage = packet.ReadFloat();
         LineType color = (LineType)packet.ReadByte();
         bool changeState = packet.ReadBool();
 
