@@ -121,8 +121,7 @@ public class AbilityController : MonoBehaviour
 
     private void PossessEnemy(Vector3 destinationPoint)
     {
-        GameObject tester = GameObject.FindGameObjectWithTag("Player"); //TODO: GAME MANAGER REFERENCE
-        if (OnNavMesh.IsReachable(tester.transform, destinationPoint))
+        if (OnNavMesh.IsReachable(selectedAI.transform, destinationPoint))
         {
             SpawnAutoRemoved(destinationPoint, abilityOption);
             if (NetworkManager._instance.IsHost)

@@ -215,7 +215,7 @@ public class Character : MonoBehaviour
         StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
     }
 
-    public void UpdateIndicator(StateOption stateOption)
+    public void UpdateStateIndicator(StateOption stateOption)
     {
         if (stateIndicators == null || stateVisualizer == null)
             return;
@@ -395,6 +395,8 @@ public class Character : MonoBehaviour
 
     private void ReceiveDistraction(Distraction distraction)
     {
+        navMeshAgent.speed = classSettings.navSpeed;
+
         //if (distraction.detectionType == DetectionType.sight)
         // {
         //   testSightDetection.DisplaySightTester(true, distraction.transform.position + Vector3.up, LineType.White);
