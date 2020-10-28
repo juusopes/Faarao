@@ -24,12 +24,13 @@ public class PlayerController : MonoBehaviour
 
     //Abilities
     //Indicator
-    [HideInInspector]
-    public bool ability1Active;
+    //[HideInInspector]
+    public bool abilityActive;
     public GameObject indicator;
     private GameObject line;
     [HideInInspector]
     public GameObject visibleInd;
+    public int abilityNum;
 
     //Invisibility
     public bool isInvisible;
@@ -104,6 +105,7 @@ public class PlayerController : MonoBehaviour
         death = GetComponent<DeathScript>();
         targetV3 = transform.position;
         Stay();
+        abilityActive = false;
     }
     public void Moving()
     {
@@ -244,7 +246,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isActiveCharacter)
         {
-            if (ability1Active)
+            if (abilityActive)
             {
                 if (visibleInd == null)
                 {
@@ -308,33 +310,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    //public void Climb()
-    //{
-    //    if (climbObject != null && climbing)
-    //    {
-    //        Vector3 rot = Vector3.RotateTowards(transform.position, climbObject.transform.position, 360, 360);
-    //        transform.rotation = Quaternion.LookRotation(rot);
-    //        Debug.Log(climbing);
-    //        climbSuccess = true;
-    //        float yAxisValue = 0.01f;
-    //        GetComponent<Rigidbody>().isKinematic = true;
-    //        gameObject.GetComponent<NavMeshAgent>().isStopped = true;
-    //        GetComponent<NavMeshAgent>().enabled = false;
-    //        transform.Translate(new Vector3(0, yAxisValue, 0));
-    //        savedClimbable = climbObject;
-    //    } else if(climbSuccess)
-    //    {
-    //        transform.Translate(new Vector3(0, 0, 0.01f));
-    //        if (grounded)
-    //        {
-    //            climbSuccess = false;
-    //        }
-    //    } else
-    //    {
-    //        GetComponent<NavMeshAgent>().enabled = true;
-    //        gameObject.GetComponent<NavMeshAgent>().isStopped = false;
-    //    }
-    //}
 
     public void Attack()
     {
@@ -345,16 +320,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void UseAbility1()
+    public void UseAbility(int tempAbilityNum)
     {
-        if (!ability1Active)
+        if (!abilityActive)
         {
-            ability1Active = true;
+            abilityActive = true;
+            abilityNum = tempAbilityNum;
+        }
+        else if (abilityNum != tempAbilityNum)
+        {
+            abilityActive = true;
+            abilityNum = tempAbilityNum;
         }
         else
         {
-            ability1Active = false;
+            abilityActive = false;
+            abilityNum = 0;
         }
+
     }
     private void TestOffLink()
     {
@@ -392,10 +375,45 @@ public class PlayerController : MonoBehaviour
         {
             Attack();
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        //Abilities
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            UseAbility1();
+            UseAbility(1);
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            UseAbility(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            UseAbility(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            UseAbility(4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            UseAbility(5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            UseAbility(6);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            UseAbility(7);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            UseAbility(8);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            UseAbility(9);
+        }
+
+        //Camera
         if (Input.GetKeyDown(KeyCode.C))
         {
             CamFollow();

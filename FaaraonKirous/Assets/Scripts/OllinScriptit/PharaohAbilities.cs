@@ -34,7 +34,7 @@ public class PharaohAbilities : MonoBehaviour
         if (GetComponent<PlayerController>().isActiveCharacter)
         {
             //TempSetActive
-            if (GetComponent<PlayerController>().ability1Active)
+            if (GetComponent<PlayerController>().abilityActive)
             {
                 invisibilityActive = true;
                 if (GetComponent<PlayerController>().visibleInd != null)
@@ -60,7 +60,7 @@ public class PharaohAbilities : MonoBehaviour
                         target.GetComponent<PlayerController>().isInvisible = true;
                         invisibilityTimer = 0;
                         useInvisibility = true;
-                        GetComponent<PlayerController>().ability1Active = false;
+                        GetComponent<PlayerController>().abilityActive = false;
                     }
                 }
             }

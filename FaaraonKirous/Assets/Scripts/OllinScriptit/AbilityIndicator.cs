@@ -9,6 +9,7 @@ public class AbilityIndicator : MonoBehaviour
     public GameObject player;
     public GameObject target;
     private LevelController levelControl;
+    public GameObject indicatorArea;
     //[HideInInspector]
     public string targetTag;
     // Start is called before the first frame update
@@ -51,6 +52,9 @@ public class AbilityIndicator : MonoBehaviour
         }
         LineCalculator();
     }
+
+
+
     private void LineCalculator()
     {
         if (target != null)
@@ -79,8 +83,5 @@ public class AbilityIndicator : MonoBehaviour
             //Line End
             line.SetPosition(line.positionCount - 1, transform.position);
         }
-
     }
-
-
 }

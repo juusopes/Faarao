@@ -127,10 +127,10 @@ public class LevelController : MonoBehaviour
     {
         activeCharacter.GetComponent<PlayerController>().Attack();
     }
-    public void ActiveCharacterAbility1()
-    {
-        activeCharacter.GetComponent<PlayerController>().UseAbility1();
-    }
+    //public void ActiveCharacterAbility()
+    //{
+    //    activeCharacter.GetComponent<PlayerController>().UseAbility();
+    //}
     public void ActiveCharacterCrouch()
     {
         activeCharacter.GetComponent<PlayerController>().Crouch();
