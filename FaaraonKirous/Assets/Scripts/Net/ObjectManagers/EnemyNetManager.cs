@@ -22,8 +22,12 @@ public class EnemyNetManager : ObjectNetManager
         packet.Write(Character.impairedSightRange);
         packet.Write(Character.impairedFOV);
 
-        // Current state
-        //...
+        // State
+        packet.Write((byte)Character.CurrentStateIndicator);
+
+        // Detection cone
+
+        // ..
     }
 
     public override void HandleSync(Packet packet)
@@ -34,5 +38,13 @@ public class EnemyNetManager : ObjectNetManager
         // Sight impairments
         Character.impairedSightRange = packet.ReadBool();
         Character.impairedFOV = packet.ReadBool();
+
+        // State
+        Character.UpdateStateIndicator((StateOption)packet.ReadByte());
+
+        // Detection cone
+
+        // ..
+
     }
 }

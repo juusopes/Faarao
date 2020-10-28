@@ -113,6 +113,16 @@ public class ServerSend
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
 
+    public static void DetectionConeUpdated(int id, int percentage, LineType color)
+    {
+        var packet = new Packet((int)ServerPackets.detectionConeUpdated);
+        packet.Write(id);
+        packet.Write(percentage);
+        packet.Write((byte)color);
+
+        ChannelType channelType = percentage == 1 || percentage == 0 ? ChannelType.Reliable : ChannelType.Unreliable;
+        Server.Instance.BeginSendPacketAll(channelType, packet);
+    }
     #endregion
 
     #region DisposableObjects

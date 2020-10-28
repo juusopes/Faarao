@@ -58,6 +58,8 @@ public class Character : MonoBehaviour
     [HideInInspector]
     public bool isPosessed;
 
+    public StateOption CurrentStateIndicator { get; private set; } = StateOption.PatrolState;
+
     private GameObject player1ref;
     private GameObject player2ref;
     private PlayerController playerController1ref;
@@ -231,6 +233,8 @@ public class Character : MonoBehaviour
     {
         if (stateIndicators == null || stateVisualizer == null)
             return;
+
+        CurrentStateIndicator = stateOption;
 
         if (ShouldSendToClient)
             ServerSend.StateChanged(Id, stateOption);

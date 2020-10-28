@@ -132,6 +132,19 @@ public class ClientHandle
             enemyNetManager.Character.Die();
         }
     }
+
+    public static void DetectionConeUpdated(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+        int percentage = packet.ReadInt();
+        LineType color = (LineType)packet.ReadByte();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            // TODO: Update detection cone
+        }
+    }
     #endregion
 
     #region DisposableObjects
