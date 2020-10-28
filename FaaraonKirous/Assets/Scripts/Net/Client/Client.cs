@@ -78,7 +78,8 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.syncObject, ClientHandle.SyncObject },
             { (int)ServerPackets.sightChanged, ClientHandle.SightChanged },
             { (int)ServerPackets.abilityVisualEffectCreated, ClientHandle.AbilityVisualEffectCreated },
-            { (int)ServerPackets.stateChanged, ClientHandle.StateChanged }
+            { (int)ServerPackets.stateChanged, ClientHandle.StateChanged },
+            { (int)ServerPackets.enemyDied, ClientHandle.EnemyDied }
         };
 
         // Initialize connection

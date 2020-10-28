@@ -105,6 +105,13 @@ public class ServerSend
 
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
+    public static void EnemyDied(int id)
+    {
+        var packet = new Packet((int)ServerPackets.enemyDied);
+        packet.Write(id);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+    }
 
     #endregion
 

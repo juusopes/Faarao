@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32.SafeHandles;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -97,12 +98,12 @@ public class Character : MonoBehaviour
     void Awake()
     {
         enemyNetManager = GetComponent<EnemyNetManager>();
-        stateMachine = new StateMachine(this);
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         deathScript = GetComponent<DeathScript>();
 
         if (IsHost)
         {
+            stateMachine = new StateMachine(this);
             linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
             InitNavMeshAgent();
             Assert.IsNotNull(deathScript, "Me cannut dai!");
@@ -156,14 +157,15 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
-        if (IsDead)
-        {
-            Die();
-            return;
-        }
-
         if (IsHost)
         {
+            if (IsDead)
+            {
+                if (ShouldSendToClient)
+                    ServerSend.EnemyDied(Id);
+                Die();
+                return;
+            }
             stateMachine.UpdateSM();
             TestOffLink();
             DetectDistractions();
@@ -173,7 +175,10 @@ public class Character : MonoBehaviour
 
     private void LateUpdate()
     {
-        TryDetectPlayers();
+        if (IsHost)
+        {
+            TryDetectPlayers();
+        }
     }
 
     #endregion
@@ -185,18 +190,24 @@ public class Character : MonoBehaviour
         fieldOfViewGO.SetActive(enable);
     }
 
-    private void Die()
+    public void Die()
     {
-        Debug.Log("Enemy " + gameObject.name + " died");
+        Debug.Log("Enemy " + gameObject.name + " diededed");
+        //Own components
         Destroy(navMeshAgent);
-        Destroy(fieldOfViewGO);
         Destroy(deathScript);
+
+        //Child objects
+        foreach (Transform c in transform)
+            Destroy(c.gameObject);
+
         player1SightDetection.DestroyLine();
         player2SightDetection.DestroyLine();
+        testSightDetection.DestroyLine();
         gameObject.tag = "DeadEnemy";
         Collider[] colliders = GetComponents<Collider>();
         foreach (Collider c in colliders)
-            Destroy(c);
+            c.isTrigger = true;
         Destroy(this);
     }
     private GameObject RefreshPlayer(int i)

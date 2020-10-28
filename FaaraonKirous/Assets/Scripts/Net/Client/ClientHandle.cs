@@ -121,6 +121,17 @@ public class ClientHandle
             enemyNetManager.Character.UpdateStateIndicator(stateOption);
         }
     }
+
+    public static void EnemyDied(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            enemyNetManager.Character.Die();
+        }
+    }
     #endregion
 
     #region DisposableObjects
