@@ -9,6 +9,8 @@ public class ObjectNetManager : MonoBehaviour
     public ObjectType Type { get { return _type; } private set { _type = value; } }
     public Transform Transform { get; private set; }
 
+    public bool IsStatic { get; protected set; } = false;
+
     [SerializeField]
     private ObjectList _list;
     [SerializeField]
@@ -17,9 +19,10 @@ public class ObjectNetManager : MonoBehaviour
     protected virtual void Awake()
     {
         Transform = transform;
+        AddToGameManager();
     }
 
-    protected virtual void Start()
+    protected virtual void AddToGameManager()
     {
         if (NetworkManager._instance.IsHost)
         {
