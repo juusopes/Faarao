@@ -31,7 +31,7 @@ public class AlertState : State
         character.StopNavigation();
         character.SearchRotate();
         searchTimer += Time.deltaTime;
-        if (searchTimer >= character.classSettings.searchingDuration)
+        if (searchTimer >= character.SearchingDuration)
             ToPatrolState();
     }
 

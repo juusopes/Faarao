@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SightDetection
+public class SightRenderer
 {
     GameObject parentObject;
     public LineMaterials lm;
     private LineRenderer lineRenderer;
     public GameObject targetObject;
     public bool hasCaughtObject = false;
-    private float lineSpeed;
     private float lineLenght = 0;
+    private float maxLenght = 0;
     private const float lineSpeedRangeMultiplier = 2f;
     private const float lineShrinkSpeedMultiplier = 0.5f;
     private float linePercentage;
@@ -20,9 +20,10 @@ public class SightDetection
     public Vector3 endPoint;
     public LineType lineType;
 
-    public SightDetection(GameObject parent, LineMaterials lm, float lineWidth, float lineSpeed)
+    public SightRenderer(GameObject parent, LineMaterials lm, float lineWidth, float maxLenght)
     {
         this.lm = lm;
+        this.maxLenght = maxLenght;
         parentObject = parent;
         newGameObject = new GameObject("SightLineRenderer");
         newGameObject.transform.SetParent(parent.transform);
@@ -33,7 +34,6 @@ public class SightDetection
         lineRenderer.textureMode = LineTextureMode.Tile;
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;
-        this.lineSpeed = lineSpeed;
     }
 
     private Vector3 OwnPosition => parentObject.transform.position;
@@ -52,7 +52,7 @@ public class SightDetection
         lineRenderer.enabled = enable;
         if (enable)
         {
-            SetLineColor(lt);
+            SetLineMaterial(lt);
             DrawLine(OwnPosition, position);
         }
     }
@@ -78,37 +78,13 @@ public class SightDetection
     /// </summary>
     /// <param name="CanSeeObject">If enemy can see player</param>
     /// <returns></returns>
-    public bool SimulateSightDetection(bool CanSeeObject)
+    public void DrawSightDetection(float sightPercentage, LineType lineType)
     {
-        if (targetObject == null)
-            return false;
+        SetLineMaterial(lineType);
 
-        if(hasCaughtObject)
-        {
-            UpdateLineColor();
-            DrawLine(OwnPosition, TargetPosition);
-        }
-        else if (CanSeeObject || linePercentage > 0)        //Only run if we see player or line is out
-        {
-            scalingDirection = CanSeeObject ? 1 : -1;
-            float lineSpeedScale = scalingDirection == 1 ? lineSpeed : lineSpeed * lineShrinkSpeedMultiplier;
-            lineSpeedScale = lineSpeedScale + lineSpeedRangeMultiplier * linePercentage;
-            //TODO: Fix speed when AI is moving -> solution STOP AI MOVING WOOOOWW
-            lineLenght = CurrentLineLenght + scalingDirection * lineSpeedScale * Time.deltaTime;
-            
-            endPoint = OwnPosition + TargetDirection * lineLenght;
-            //Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);
+        endPoint = OwnPosition + parentObject.transform.forward * maxLenght * sightPercentage;
 
-            UpdateLineColor();
-            DrawLine(OwnPosition, endPoint);
-
-            linePercentage = lineLenght / TargetDistance;
-
-            if (CanSeeObject && linePercentage >= 0.99f)
-                hasCaughtObject = true;
-        }
-
-        return hasCaughtObject;
+        DrawLine(OwnPosition, endPoint);
     }
 
     private void DrawLine(Vector3 start, Vector3 target)
@@ -117,18 +93,7 @@ public class SightDetection
         lineRenderer.SetPosition(1, target);
     }
 
-
-    private void UpdateLineColor()
-    {
-        if (hasCaughtObject)
-            SetLineColor(LineType.Red);
-        else if (scalingDirection == 1)
-            SetLineColor(LineType.Yellow);
-        else
-            SetLineColor(LineType.Green);
-    }
-
-    private void SetLineColor(LineType lc)
+    private void SetLineMaterial(LineType lc)
     {
         lineType = lc;
         //TODO: Fix material instancing

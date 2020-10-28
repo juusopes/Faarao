@@ -10,7 +10,8 @@ public class Character : MonoBehaviour
 {
     #region User setting fields
     [Header("AI Class")]
-    public AIClass classSettings;
+    [SerializeField]
+    private AIClass classSettings;
     [Header("Patrol route")]
     [Tooltip("All my child gameObjects with component Waypoint and that is nav mesh reachable will be added to a list of patrol route.")]
     [SerializeField]
@@ -21,59 +22,67 @@ public class Character : MonoBehaviour
     [SerializeField]
     private SpriteRenderer stateVisualizer = null;
     public Transform sightPosition;
-    [SerializeField]
-    private GameObject fieldOfViewGO = null;
+    public GameObject fieldOfViewGO = null;
     public GameObject clickSelector = null;
     public GameObject selectionIndicator = null;
     [SerializeField]
     private PathVisualizer pathVisualizer = null;
-    #endregion 
+    #endregion
 
-    #region Regular fields
+    #region Distraction fields
     [HideInInspector]
-    public Vector3 chaseTarget;
-    [HideInInspector]
-    public Vector3 lastSeenPosition;
-    [HideInInspector]
-    public Vector3 additionalTarget;
-    [HideInInspector]
-    public Distraction currentDistraction;
-    [HideInInspector]
-    public Vector3 currentDistractionPos;
-    private Waypoint currentWaypoint;
-    private bool waypointFinished = false;
-    private bool waypointTimer = false;
-    private float impairedSightTimer;
-    private float impairedFOVTimer;
-    private float distractionTimer;
+    public bool isPosessed;
     [HideInInspector]
     public bool impairedSightRange;
     [HideInInspector]
     public bool impairedFOV;
     [HideInInspector]
     public bool isDistracted;
-    private bool couldDetectPlayer1;
-    private bool couldDetectPlayer2;
-    private DeathScript deathScript;
+
+    private float impairedSightTimer;
+    private float impairedFOVTimer;
+    private float distractionTimer;
+
     [HideInInspector]
-    public bool isPosessed;
+    public Vector3 additionalTarget;
+    [HideInInspector]
+    public Vector3 currentDistractionPos;
+    [HideInInspector]
+    public Distraction currentDistraction;
+    #endregion
+
+    #region Regular fields
+    [HideInInspector]
+    public Vector3 chaseTarget;
+    [HideInInspector]
+    public Vector3 lastSeenPosition;
+    private Waypoint currentWaypoint;
+    private bool waypointFinished = false;
+    private bool waypointTimer = false;
+
+    public bool couldDetectPlayer1;
+    public bool couldDetectPlayer2;
 
     private GameObject player1ref;
     private GameObject player2ref;
     private PlayerController playerController1ref;
     private PlayerController playerController2ref;
-    private Transform distractionContainer;
+
+    //Components
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
     private EnemyNetManager enemyNetManager;
+    private DeathScript deathScript;
 
     //Aid scripts (create with new)
     private Navigator navigator;                    //new create
     private StateMachine stateMachine;              //new create
-    private SightDetection player1SightDetection;   //new create
+    private SightRenderer player1SightRenderer;   //new create
+    private SightRenderer player2SightRenderer;   //new create
     private SightDetection player2SightDetection;   //new create
-    private SightDetection testSightDetection;      //new create
+    public SightDetection testSightDetection;      //new create
+    public Detector detector;                       //new create
     private OffMeshLinkMovement linkMovement;       //new create
 
     #endregion
@@ -81,20 +90,27 @@ public class Character : MonoBehaviour
     #region Expression bodies
     public GameObject Player1 => player1ref == null ? RefreshPlayer(1) : player1ref;
     public GameObject Player2 => player2ref == null ? RefreshPlayer(2) : player2ref;
-    public PlayerController Player1Controller => playerController1ref == null ? Player1.GetComponent<PlayerController>() : playerController1ref;
-    public PlayerController Player2Controller => playerController2ref == null ? Player2.GetComponent<PlayerController>() : playerController2ref;
+    public PlayerController Player1Controller => playerController1ref == null ? playerController1ref = Player1.GetComponent<PlayerController>() : playerController1ref;
+    public PlayerController Player2Controller => playerController2ref == null ? playerController2ref = Player2.GetComponent<PlayerController>() : playerController2ref;
+
+    public float HearingRange => classSettings.hearingRange;
+    public float MaxSightRange => classSettings.sightRange;
     public float SightRange => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRange;
     public float SightRangeCrouching => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRangeCrouching;
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
-    public bool CanDetectAnyPlayer => couldDetectPlayer1 || couldDetectPlayer2;
+    public float SearchingDuration => classSettings.searchingDuration;
+    public float ControlledDuration => classSettings.controlledDuration;
+    public float SightSpeed => classSettings.sightSpeed;
     public bool IsDead => deathScript == null ? false : deathScript.isDead;
     public bool IsHost => NetworkManager._instance.IsHost;
     public bool ShouldSendToClient => NetworkManager._instance.ShouldSendToClient;
     public int Id => enemyNetManager.Id;
+    public bool CouldDetectAnyPlayer => couldDetectPlayer1 || couldDetectPlayer2;
+    public float DetectionPercentage => detector.detectionPercentage;
 
     #endregion
 
-    #region Start and update
+    #region Start and run
     void Awake()
     {
         enemyNetManager = GetComponent<EnemyNetManager>();
@@ -107,6 +123,7 @@ public class Character : MonoBehaviour
             linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
             InitNavMeshAgent();
             Assert.IsNotNull(deathScript, "Me cannut dai!");
+
         }
         else
         {
@@ -120,8 +137,11 @@ public class Character : MonoBehaviour
         Assert.IsNotNull(stateVisualizer, "Me cannut indi!");
         Assert.IsNotNull(stateIndicators, "Me cannut indi!");
 
-        player1SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
-        player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, classSettings.sightSpeed);
+        player1SightRenderer = new SightRenderer(gameObject, classSettings.lm, 0.2f, MaxSightRange);
+        player1SightRenderer.ResetLineRenderer(Player1);
+        player2SightRenderer = new SightRenderer(gameObject, classSettings.lm, 0.2f, MaxSightRange);
+        player2SightRenderer.ResetLineRenderer(Player2);
+       //player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, SightSpeed);
         testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, 1000f);
     }
 
@@ -129,11 +149,8 @@ public class Character : MonoBehaviour
     {
         if (IsHost)
         {
+            detector = new Detector(this);
             InitNavigator();
-            if (AbilitySpawner.Instance)
-                distractionContainer = AbilitySpawner.Instance.transform;
-            if (!distractionContainer)
-                Debug.LogWarning("Did not find DistractionSpawner");
         }
     }
 
@@ -168,7 +185,6 @@ public class Character : MonoBehaviour
             }
             stateMachine.UpdateSM();
             TestOffLink();
-            DetectDistractions();
             RunImpairementCounters();
         }
     }
@@ -177,13 +193,35 @@ public class Character : MonoBehaviour
     {
         if (IsHost)
         {
-            TryDetectPlayers();
+            detector.RunDetection();
         }
     }
 
     #endregion
 
     #region Generic
+
+    private GameObject RefreshPlayer(int i)
+    {
+        if (i == 1)
+        {
+            player1ref = GameManager._instance.Pharaoh;
+            //StartCoroutine(player1SightDetection.ResetLineRenderer(Player1));
+            return player1ref;
+        }
+        else if (i == 2)
+        {
+            player2ref = GameManager._instance.Priest;
+            //StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
+            return player2ref;
+        }
+        return null;
+    }
+
+    public void UpdateSightVisuals(float percentage, LineType lineType)
+    {
+        player1SightRenderer.DrawSightDetection(percentage, lineType);
+    }
 
     public void SetSightVisuals(bool enable)
     {
@@ -201,7 +239,7 @@ public class Character : MonoBehaviour
         foreach (Transform c in transform)
             Destroy(c.gameObject);
 
-        player1SightDetection.DestroyLine();
+        player1SightRenderer.DestroyLine();
         player2SightDetection.DestroyLine();
         testSightDetection.DestroyLine();
         gameObject.tag = "DeadEnemy";
@@ -210,22 +248,18 @@ public class Character : MonoBehaviour
             c.isTrigger = true;
         Destroy(this);
     }
-    private GameObject RefreshPlayer(int i)
+    public void KillPlayer(GameObject player)
     {
-        if (i == 1)
+        DeathScript ds = player.GetComponent<DeathScript>();
+        if (ds && !ds.isDead)
         {
-            player1ref = GameManager._instance.Pharaoh;
-            StartCoroutine(player1SightDetection.ResetLineRenderer(Player1));
-            return player1ref;
+            ds.damage = 1;
+            //StartCoroutine(player2SightDetection.ResetLineRenderer(Player2)); //TODO: CHECK
+            stateMachine.PlayerDied();      //TODO: CHECK
+            Debug.Log("Killed player " + player.name);
         }
-        else if (i == 2)
-        {
-            player2ref = GameManager._instance.Priest;
-            StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
-            return player2ref;
-        }
-        return null;
     }
+
 
     public void UpdateStateIndicator(StateOption stateOption)
     {
@@ -239,174 +273,10 @@ public class Character : MonoBehaviour
     }
     #endregion
 
-    #region Detection
-    private void TryDetectPlayers()
-    {
-        couldDetectPlayer1 = CouldDetectPlayer(Player1, Player1Controller);
-        couldDetectPlayer2 = CouldDetectPlayer(Player2, Player2Controller);
-        if (player1SightDetection.SimulateSightDetection(couldDetectPlayer1))
-        {
-            DeathScript ds = Player1.GetComponent<DeathScript>();
-            if (ds && !ds.isDead)
-            {
-                ds.damage = 1;
-                StartCoroutine(player1SightDetection.ResetLineRenderer(Player1));
-                stateMachine.PlayerDied();
-                Debug.Log("Killed player 1");
-            }
-        }
-        if (player2SightDetection.SimulateSightDetection(couldDetectPlayer2))
-        {
-            DeathScript ds = Player2.GetComponent<DeathScript>();
-            if (ds && !ds.isDead)
-            {
-                ds.damage = 1;
-                StartCoroutine(player2SightDetection.ResetLineRenderer(Player2));
-                stateMachine.PlayerDied();
-                Debug.Log("Killed player 2");
-            }
-        }
-    }
-
-
-    /// <summary>
-    /// Returns true if player is in sight, fov and can be raycasted. Allows sightline simulation to begin, which dictates actually seeing player.
-    /// </summary>
-    /// <param name="player"></param>
-    /// <returns></returns>
-    public bool CouldDetectPlayer(GameObject player, PlayerController playerController)
-    {
-        if (IsPlayerDeadOrInvisible(playerController))   //Call this first so we dont mark targets
-            return false;
-        if (isPosessed)
-            return false;
-        float testRange = playerController != null && playerController.isCrouching ? SightRangeCrouching : SightRange;
-        return TestDetection(player, testRange, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
-    }
-
-    public bool IsPlayerDeadOrInvisible(PlayerController playerController)
-    {
-        if (playerController == null)
-            return true;
-        if (playerController.IsDead || playerController.isInvisible)
-            return true;
-
-        return false;
-    }
-
-    public bool CouldDetectDistraction(GameObject testObj)
-    {
-        return TestDetection(testObj, SightRange, RayCaster.distractionLayerMask, RayCaster.DISTRACTION_TAG);
-    }
-
-    /// <summary>
-    /// Returns true if object is in sight, fov and can be raycasted.
-    /// </summary>
-    /// <param name="testObj"></param>
-    /// <returns></returns>
-    private bool TestDetection(GameObject testObj, float range, LayerMask layermask, string tag)
-    {
-        return ObjectIsInRange(testObj, range) && ObjectIsInFov(testObj) && CanRayCastObject(testObj, layermask, tag);
-    }
-
-    private bool ObjectIsInRange(GameObject testObj, float range)
-    {
-        return Vector3.Distance(testObj.transform.position, transform.position) <= range;
-    }
-
-    private bool ObjectIsInFov(GameObject testObj)
-    {
-        Vector3 dirToObj = (testObj.transform.position - fieldOfViewGO.transform.position).normalized;
-        if (Vector3.Angle(fieldOfViewGO.transform.forward, dirToObj) < FOV / 2f)
-        {
-            return true;
-        }
-        return false;
-    }
-    private bool ObjectIsInHearingRange(GameObject testObj)
-    {
-        return Vector3.Distance(testObj.transform.position, transform.position) <= classSettings.hearingRange;
-    }
-
-    public bool CanRayCastObject(GameObject testObj, LayerMask layerMask, string tag = "")
-    {
-        RaycastHit hit = RayCaster.ToTarget(gameObject, testObj, SightRange, layerMask);
-        if (RayCaster.HitObject(hit, tag))
-        {
-            if (tag == RayCaster.PLAYER_TAG)
-                chaseTarget = hit.transform.position;
-            return true;
-        }
-
-        return false;
-    }
-
-    #endregion
 
     #region Distractions
 
-    private void DetectDistractions()
-    {
-        //TODO: fix raycast position
-        if (distractionContainer == null)
-            return;
-
-        bool distractionAssigned = false;
-        bool testerAssigned = false;
-
-        for (int i = distractionContainer.childCount - 1; i >= 0; i--)
-        {
-            Transform childTransform = distractionContainer.GetChild(i);
-            if (currentDistraction != null)
-                if (childTransform == currentDistraction.transform)
-                    return;
-
-            Distraction distraction = childTransform.GetComponent<Distraction>();
-            if (distraction)
-            {
-                if (IsDistractionDetectable(distraction))
-                {
-                    if (distraction.option == AbilityOption.TestSight)
-                    {
-                        if (!testerAssigned)
-                        {
-                            testerAssigned = true;
-                            testSightDetection.DisplaySightTester(true, distraction.transform.position + Vector3.up, LineType.White);
-                        }
-                    }
-                    else
-                    {
-                        if (!distractionAssigned)
-                        {
-                            distractionAssigned = true;
-                            ReceiveDistraction(distraction);
-                        }
-
-                    }
-                }
-            }
-        }
-
-        if (!testerAssigned && !distractionAssigned)
-            testSightDetection.DisplaySightTester(false, Vector3.zero, LineType.White);
-    }
-
-    private bool IsDistractionDetectable(Distraction distraction)
-    {
-        if (distraction.detectionType == DetectionType.hearing)
-            if (ObjectIsInHearingRange(distraction.gameObject))
-                return true;
-
-        if (distraction.detectionType == DetectionType.sight)
-            if (CouldDetectDistraction(distraction.gameObject))
-            {
-                return true;
-            }
-
-        return false;
-    }
-
-    private void ReceiveDistraction(Distraction distraction)
+    public void ReceiveDistraction(Distraction distraction)
     {
         navMeshAgent.speed = classSettings.navSpeed;
 
@@ -425,22 +295,6 @@ public class Character : MonoBehaviour
         waypointFinished = true;
         currentDistraction = distraction;
         distractionTimer = distraction.effectTime;
-    }
-
-    public void ResetDistraction()
-    {
-        //Commented -- Sight should be impaired even if new distraction appear
-        //impairedSightTimer = 0;
-        //impairedSightRange = false;
-
-        impairedFOVTimer = 0;
-        impairedFOV = false;
-
-        distractionTimer = 0;
-        isDistracted = false;
-
-        navMeshAgent.speed = classSettings.navSpeed;
-        SendToClient_SightChanged();
     }
 
     private void RunImpairementCounters()
@@ -484,6 +338,23 @@ public class Character : MonoBehaviour
         impairedFOV = true;
         SendToClient_SightChanged();
     }
+
+    public void ResetDistraction()
+    {
+        //Commented -- Sight should be impaired even if new distraction appear
+        //impairedSightTimer = 0;
+        //impairedSightRange = false;
+
+        impairedFOVTimer = 0;
+        impairedFOV = false;
+
+        distractionTimer = 0;
+        isDistracted = false;
+
+        navMeshAgent.speed = classSettings.navSpeed;
+        SendToClient_SightChanged();
+    }
+
     #endregion
 
     #region Other player shenanigans
@@ -703,7 +574,7 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Networking
-    private void SendToClient_SightChanged()
+    public void SendToClient_SightChanged()
     {
         if (ShouldSendToClient)
             ServerSend.SightChanged(enemyNetManager.Id, impairedSightRange, impairedFOV);

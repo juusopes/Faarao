@@ -30,7 +30,7 @@ public class DetectionState : State
         else
         {
             searchTimer += Time.deltaTime;
-            if (searchTimer >= character.classSettings.searchingDuration)
+            if (searchTimer >= character.SearchingDuration)
                 ToAlertState();
         }
     }
