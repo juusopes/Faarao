@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -36,11 +37,9 @@ public class InGameMenu : MonoBehaviour
         gameplayPanel.SetActive(false);
 
         startTime = Time.time;
-        //TODO: fix below
-        if(player)
-            player.transform.position = new Vector3(lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ);
-        if(player2)
-            player2.transform.position = new Vector3(lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2);
+
+        player.transform.position = new Vector3(lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ);
+        player2.transform.position = new Vector3(lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2);
     }
 
     // Update is called once per frame

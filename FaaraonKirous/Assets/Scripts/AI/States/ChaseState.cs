@@ -28,8 +28,8 @@ public class ChaseState : State
     {
         if (CanSeePlayer)
         {
-            character.LerpLookAt(ChaseTarget, 150f);
-            character.SetDestination(ChaseTarget);
+            character.LerpLookAt(character.chaseTarget, 150f);
+            character.SetDestination(character.chaseTarget);
         }
         else
         {

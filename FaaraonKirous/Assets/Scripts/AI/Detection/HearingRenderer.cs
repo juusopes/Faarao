@@ -25,6 +25,7 @@ public class HearingRenderer : MonoBehaviour
     private Material OuterMaterial;
     private Material InnerMaterial;
     private float animationSpeed = 1.5f;
+    private float outerCircleRotationSpeed = 50;
 
     private float innerScale;
     private float innerThickness;

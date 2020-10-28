@@ -10,7 +10,6 @@ public class Navigator
     private int direction = 1; // -1 or 1
     private Transform startTrans;
 
-
     private PatrolType patrolType => wpGroup == null ? 0 : wpGroup.GetPatrolType();
     private int waypointCount => wpGroup == null ? 0 : wpGroup.GetWaypointCount();
 
@@ -113,23 +112,5 @@ public class Navigator
     private bool IsValidIndex()
     {
         return currentWaypoint >= 0 && currentWaypoint < waypointCount;
-    }
-
-    public int[] CopyValues()
-    {
-        return new int[] { currentWaypoint, direction };
-    }
-    public void PasteValues(int[] values)
-    {
-        if (values.Length != 2)
-            return;
-        currentWaypoint = values[0];
-        direction = values[1];
-    }
-
-    public Vector3[] GetVisualizedPath()
-    {
-        //TODO:
-        return null;
     }
 }

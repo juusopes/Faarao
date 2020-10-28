@@ -12,7 +12,7 @@ public class PlayerControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     // Update is called once per frame
@@ -24,13 +24,9 @@ public class PlayerControl : MonoBehaviour
         transform.Translate(xMovement, 0, zMovement);
 
         //Player rotate
-        if (CamUtility.IsMouseOverGameWindow())
-        {
-            float xMouse = Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime;
-            Vector3 lookAt = new Vector3(0, xMouse, 0);
-            transform.Rotate(lookAt);
-        }
-    }
 
-   
+        float xMouse = Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime;
+        Vector3 lookAt = new Vector3(0, xMouse, 0);
+        transform.Rotate(lookAt);
+    }
 }
