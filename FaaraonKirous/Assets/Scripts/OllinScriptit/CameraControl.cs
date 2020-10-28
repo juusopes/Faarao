@@ -19,6 +19,8 @@ public class CameraControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Confined;
+
         Initialize();
     }
 
@@ -55,7 +57,8 @@ public class CameraControl : MonoBehaviour
                 float zAxisValue = Input.GetAxis("Vertical");
                 this.gameObject.transform.Translate(new Vector3(xAxisValue, zAxisValue, 0.0f));
             }
-        } else
+        }
+        else
         {
             camRot.z = 0;
             transform.rotation = camRot;
@@ -63,7 +66,10 @@ public class CameraControl : MonoBehaviour
             {
                 transform.parent = null;
             }
-            MoveCamera();
+#if UNITY_EDITOR
+            if(CamUtility.IsMouseOverGameWindow())       //If unity editor only move the camera if it is insde the screen
+#endif
+                MoveCamera();
         }
     }
 
