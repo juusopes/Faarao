@@ -90,11 +90,18 @@ public class ServerSend
     public static void SightChanged(int id, bool impairedSightRange, bool impairedFOV)
     {
         var packet = new Packet((int)ServerPackets.sightChanged);
-        // TODO: Don't really need to send the list
-        packet.Write((byte)ObjectList.enemy);
         packet.Write(id);
         packet.Write(impairedSightRange);
         packet.Write(impairedFOV);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+    }
+
+    public static void StateChanged(int id, StateOption stateOption)
+    {
+        var packet = new Packet((int)ServerPackets.stateChanged);
+        packet.Write(id);
+        packet.Write((byte)stateOption);
 
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }

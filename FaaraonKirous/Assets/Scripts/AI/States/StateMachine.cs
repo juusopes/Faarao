@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum StateOption
+public enum StateOption : byte
 {
     PatrolState,
     AlertState,

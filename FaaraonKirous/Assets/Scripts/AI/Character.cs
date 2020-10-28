@@ -221,7 +221,8 @@ public class Character : MonoBehaviour
         if (stateIndicators == null || stateVisualizer == null)
             return;
 
-        //TODO: NETWÖRK
+        if (ShouldSendToClient)
+            ServerSend.StateChanged(Id, stateOption);
 
         stateVisualizer.sprite = stateIndicators.GetIndicator(stateOption);
     }
