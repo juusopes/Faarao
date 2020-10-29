@@ -10,6 +10,7 @@ public class AbilityController : MonoBehaviour
     private LayerMask abilityLayerMask;
 
     private LevelController levelCtrl;
+    private int click = 0;
 
     private void Start()
     {
@@ -31,7 +32,7 @@ public class AbilityController : MonoBehaviour
         if (!levelCtrl.activeCharacter.GetComponent<PlayerController>().abilityActive)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             PlayerController caster = levelCtrl.activeCharacter.GetComponent<PlayerController>();
             if (caster.abilityNum == 1)
@@ -66,6 +67,17 @@ public class AbilityController : MonoBehaviour
                 {
                     UseAbility(hit);
                 }
+            }
+
+            //Ability Ender
+            if (caster.abilityNum != 7 || (caster.abilityNum == 7 && click == 1))
+            {
+                caster.abilityNum = 0;
+                caster.abilityActive = false;
+                click = 0;
+            } else
+            {
+                click++;
             }
         }
         else

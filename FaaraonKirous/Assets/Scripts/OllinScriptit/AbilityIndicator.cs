@@ -12,6 +12,10 @@ public class AbilityIndicator : MonoBehaviour
     public GameObject indicatorArea;
     //[HideInInspector]
     public string targetTag;
+
+    //AbilityTargets
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +26,7 @@ public class AbilityIndicator : MonoBehaviour
     void Update()
     {
         MoveInd();
+        TargetTags();
     }
     private void Initialize()
     {
@@ -45,6 +50,7 @@ public class AbilityIndicator : MonoBehaviour
             else if (hit.collider.tag != "Indicator")
             {
                 Vector3 targetV3 = hit.point;
+                targetV3.y += 0.3f;
                 transform.position = targetV3;
                 target = null;
                 levelControl.targetObject = null;
@@ -52,9 +58,6 @@ public class AbilityIndicator : MonoBehaviour
         }
         LineCalculator();
     }
-
-
-
     private void LineCalculator()
     {
         if (target != null)
@@ -82,6 +85,13 @@ public class AbilityIndicator : MonoBehaviour
 
             //Line End
             line.SetPosition(line.positionCount - 1, transform.position);
+        }
+    }
+    private void TargetTags()
+    {
+        if (player.GetComponent<PlayerController>().abilityNum == 7)
+        {
+            targetTag = "Enemy";
         }
     }
 }

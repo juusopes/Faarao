@@ -84,9 +84,11 @@ public class PlayerController : MonoBehaviour
             SetIndicator();
             TestOffLink();
             //Climb();
+        } else
+        {
+            Stay();
         }
     }
-
     private void Initialize()
     {
         navMeshAgent = this.GetComponent<NavMeshAgent>();
@@ -109,67 +111,62 @@ public class PlayerController : MonoBehaviour
     }
     public void Moving()
     {
-        if (menu.menuActive)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit = new RaycastHit();
+        //DoubleClick Check
+        if (isActiveCharacter)
         {
-            Stay();
-        } else { 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit = new RaycastHit();
-            //DoubleClick Check
-            if (isActiveCharacter)
+            if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
+
+                if (Physics.Raycast(ray, out hit))
                 {
-              
-                    if (Physics.Raycast(ray, out hit))
-                    {
-                        targetV3 = hit.point;
-                    }
-                    if (isRunning)
-                    {
-                        isRunning = false;
-                    }
-                    if (doubleClickTimer < 0.5f)
-                    {
-                        isRunning = true;
-                    }
-                    if (doubleClickTimer >= 0.5f)
-                    {
-                        doubleClickTimer = 0;
-                    }
+                    targetV3 = hit.point;
                 }
-            }
-            if (doubleClickTimer < 0.5f)
-            {
-                doubleClickTimer += Time.deltaTime;
-            }
-            //Moving
-            if ((!playerOne && !GetComponent<PriestAbilities>().useTeleknesis) || playerOne)
-            {
                 if (isRunning)
-                {
-                    navMeshAgent.speed = movementSpeed * 1.5f;
-                }
-                else if (isCrouching)
-                {
-                    navMeshAgent.speed = movementSpeed * 0.5f;
-                }
-                else
-                {
-                    navMeshAgent.speed = movementSpeed;
-                }
-                //if (!climbing)
-                //{
-                    navMeshAgent.SetDestination(targetV3);
-                //}
-                if (position == transform.position)
                 {
                     isRunning = false;
                 }
-                else
+                if (doubleClickTimer < 0.5f)
                 {
-                    position = transform.position;
+                    isRunning = true;
                 }
+                if (doubleClickTimer >= 0.5f)
+                {
+                    doubleClickTimer = 0;
+                }
+            }
+        }
+        if (doubleClickTimer < 0.5f)
+        {
+            doubleClickTimer += Time.deltaTime;
+        }
+        //Moving
+        if ((!playerOne && !GetComponent<PriestAbilities>().useTeleknesis) || playerOne)
+        {
+            if (isRunning)
+            {
+                navMeshAgent.speed = movementSpeed * 1.5f;
+            }
+            else if (isCrouching)
+            {
+                navMeshAgent.speed = movementSpeed * 0.5f;
+            }
+            else
+            {
+                navMeshAgent.speed = movementSpeed;
+            }
+            //if (!climbing)
+            //{
+            navMeshAgent.SetDestination(targetV3);
+            //}
+            if (position == transform.position)
+            {
+                isRunning = false;
+            }
+            else
+            {
+                position = transform.position;
             }
         }
     }
