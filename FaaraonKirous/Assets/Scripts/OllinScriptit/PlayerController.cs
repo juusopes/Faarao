@@ -81,17 +81,15 @@ public class PlayerController : MonoBehaviour
             LineOfSight();
             KeyControls();
             Invisibility();
-            SetIndicator();
             TestOffLink();
             //Climb();
-        } else
-        {
-            Stay();
         }
         else
         {
             StopNavigation();
+            abilityActive = false;
         }
+        SetIndicator();
     }
     private void Initialize()
     {

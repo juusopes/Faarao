@@ -9,6 +9,7 @@ public class PharaohAbilities : MonoBehaviour
     private bool invisibilityActive;
     private bool useInvisibility;
     private float invisibilityTimer;
+    public GameObject[] indicatorList;
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +35,7 @@ public class PharaohAbilities : MonoBehaviour
         if (GetComponent<PlayerController>().isActiveCharacter)
         {
             //TempSetActive
-            if (GetComponent<PlayerController>().abilityActive)
+            if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)
             {
                 invisibilityActive = true;
                 if (GetComponent<PlayerController>().visibleInd != null)
@@ -53,7 +54,7 @@ public class PharaohAbilities : MonoBehaviour
             }
             if (target != null)
             {
-                if (invisibilityActive)
+                if (invisibilityActive && GetComponent<PlayerController>().abilityNum == 1)
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse1))
                     {
@@ -61,6 +62,8 @@ public class PharaohAbilities : MonoBehaviour
                         invisibilityTimer = 0;
                         useInvisibility = true;
                         GetComponent<PlayerController>().abilityActive = false;
+                        GetComponent<PlayerController>().abilityNum = 0;
+                        GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
                     }
                 }
             }

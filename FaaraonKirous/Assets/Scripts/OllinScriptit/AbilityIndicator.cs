@@ -27,6 +27,7 @@ public class AbilityIndicator : MonoBehaviour
     {
         MoveInd();
         TargetTags();
+        IndicatorChange();
     }
     private void Initialize()
     {
@@ -93,5 +94,32 @@ public class AbilityIndicator : MonoBehaviour
         {
             targetTag = "Enemy";
         }
+    }
+
+    private void IndicatorChange()
+    {
+        if ((player.GetComponent<PlayerController>().playerOne)) {
+            if (player.GetComponent<PlayerController>().abilityNum == 1)
+            {
+                SwitchIndicator(0);
+            }
+            if (player.GetComponent<PlayerController>().abilityNum == 2)
+            {
+                SwitchIndicator(1);
+            }
+        }
+    }
+
+    private void SwitchIndicator(int num)
+    {
+        //Switch Background
+        indicatorArea.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
+            = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
+        //Switch Icon
+        indicatorArea.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite
+            = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite;
+        //Switch Aim
+        indicatorArea.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite
+            = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
     }
 }

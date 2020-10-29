@@ -347,9 +347,10 @@ MonoBehaviour:
   isRunning: 0
   isActiveCharacter: 0
   isCrouching: 0
-  ability1Active: 0
+  abilityActive: 0
   indicator: {fileID: 5642665167690723842, guid: 608c7c670fc8a4347b2c9cdb6f954bde, type: 3}
   visibleInd: {fileID: 0}
+  abilityNum: 0
   isInvisible: 0
   interactObject: {fileID: 0}
   targetEnemy: {fileID: 0}
@@ -383,6 +384,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad1d92bf22e48d46a1047790c941412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  indicatorList:
+  - {fileID: 8918156775177373792, guid: c5763673190fe86418ecf53914ae7087, type: 3}
+  - {fileID: 8918156775177373792, guid: 21f3cc41bbff80f439f2692a5a917f23, type: 3}
+  - {fileID: 8918156775177373792, guid: d29bb626727dedb478f022258e6ec73c, type: 3}
 --- !u!114 &-2370286539409642136
 MonoBehaviour:
   m_ObjectHideFlags: 0

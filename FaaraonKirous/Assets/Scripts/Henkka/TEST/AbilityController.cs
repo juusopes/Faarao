@@ -35,23 +35,23 @@ public class AbilityController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             PlayerController caster = levelCtrl.activeCharacter.GetComponent<PlayerController>();
-            if (caster.abilityNum == 1)
+            if (caster.abilityNum == 2 && !caster.playerOne)
                 abilityOption = AbilityOption.DistractBlindingLight;
-            else if (caster.abilityNum == 2)
+            else if (caster.abilityNum == 2 && caster.playerOne)
                 abilityOption = AbilityOption.DistractInsectSwarm;
-            else if (caster.abilityNum == 3)
+            else if (caster.abilityNum == 3 && !caster.playerOne)
                 abilityOption = AbilityOption.DistractNoiseToGoto;
-            else if (caster.abilityNum == 4)
+            else if (caster.abilityNum == 3 && caster.playerOne)
                 abilityOption = AbilityOption.DistractNoiseToLookAt;
-            else if (caster.abilityNum == 5)
+            else if (caster.abilityNum == 4 && caster.playerOne)
                 abilityOption = AbilityOption.DistractSightToGoTo;
-            else if (caster.abilityNum == 6)
+            else if (caster.abilityNum == 4 && !caster.playerOne)
                 abilityOption = AbilityOption.DistractSightToLookAt;
-            else if (caster.abilityNum == 7)
+            else if (caster.abilityNum == 5 && caster.playerOne)
                 abilityOption = AbilityOption.PossessAI;
-            else if (caster.abilityNum == 8)
+            else if (caster.abilityNum == 5 && !caster.playerOne)
                 abilityOption = AbilityOption.TestSight;
-            else if (caster.abilityNum == 9)
+            else if (caster.abilityNum == 6 && !caster.playerOne)
                 abilityOption = AbilityOption.ViewPath;
             else
                 abilityOption = AbilityOption.NoMoreDistractions;

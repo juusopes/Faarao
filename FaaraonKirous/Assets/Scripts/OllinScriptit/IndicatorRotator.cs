@@ -18,8 +18,11 @@ public class IndicatorRotator : MonoBehaviour
 
     private void Rotate()
     {
-        transform.GetChild(0).transform.Rotate(0, 0, 25f * Time.deltaTime);
-        transform.GetChild(1).transform.Rotate(0, 0, -25f * Time.deltaTime);
-        transform.GetChild(2).transform.Rotate(0, 0, 25 * Time.deltaTime);
+        if (transform.childCount > 1)
+        {
+            transform.GetChild(0).transform.Rotate(0, 0, 25f * Time.deltaTime);
+            transform.GetChild(1).transform.Rotate(0, 0, -25f * Time.deltaTime);
+            transform.GetChild(2).transform.Rotate(0, 0, 25 * Time.deltaTime);
+        }
     }
 }

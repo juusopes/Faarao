@@ -12,6 +12,7 @@ public class PriestAbilities : MonoBehaviour
     private Vector3 telekinesisHeight;
     private Vector3 playerSavePos;
     private Vector3 targetSavePos;
+    public GameObject[] indicatorList;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +38,7 @@ public class PriestAbilities : MonoBehaviour
         if (GetComponent<PlayerController>().isActiveCharacter)
         {
             //TempSetActive
-            if (GetComponent<PlayerController>().abilityActive)
+            if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)
             {
                 telekinesisActive = true;
                 if (GetComponent<PlayerController>().visibleInd != null)
@@ -56,7 +57,7 @@ public class PriestAbilities : MonoBehaviour
             }
             if (target != null)
             {
-                if (telekinesisActive)
+                if (telekinesisActive && GetComponent<PlayerController>().abilityNum == 1)
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse1))
                     {
@@ -67,6 +68,8 @@ public class PriestAbilities : MonoBehaviour
 
                             target.GetComponent<Rigidbody>().isKinematic = true;
                             GetComponent<PlayerController>().abilityActive = false;
+                            GetComponent<PlayerController>().abilityNum = 0;
+                            GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
                         }
                     }
                 }
