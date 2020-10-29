@@ -68,9 +68,9 @@ public class StateMachine
         currentState = state;
         character.gameObject.name = "Enemy State - " + GetStateName();
 
-        currentState.OnStateEnter();
-
         character.UpdateStateIndicator(stateOption);
+
+        currentState.OnStateEnter();
     }
 
 

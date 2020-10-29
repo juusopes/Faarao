@@ -12,6 +12,18 @@ public class TrackingState : State
         Look();
     }
 
+    public override void OnStateEnter()
+    {
+        character.SetTrackingMovementSpeed(true);
+    }
+
+    public override void OnStateExit()
+    {
+        character.SetTrackingMovementSpeed(false);
+    }
+
+
+
     public override void PlayerTakesControl()
     {
         ToControlledState();
@@ -24,7 +36,7 @@ public class TrackingState : State
 
     void Track()
     {
-        character.SetDestination(character.lastSeenPosition);
+        character.SearchLastSeenPosition();
 
         if (character.HasReachedDestination())
         {
@@ -33,6 +45,13 @@ public class TrackingState : State
     }
     void Look()
     {
-        DefaultLook();
+        if (CanSeePlayer)
+        {
+            ToDetectionState();
+        }
+        else if (IsDistracted)
+        {
+            ToDistractedState();
+        }
     }
 }

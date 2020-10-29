@@ -15,7 +15,6 @@ public class AlertState : State
         Look();
     }
 
-
     public override void OnStateEnter()
     {
         searchTimer = 0;

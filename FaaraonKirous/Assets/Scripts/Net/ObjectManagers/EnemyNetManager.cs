@@ -22,7 +22,7 @@ public class EnemyNetManager : ObjectNetManager
         packet.Write(Character.impairedFOV);
 
         // State
-        packet.Write((byte)Character.CurrentStateIndicator);
+        packet.Write((byte)Character.CurrentStateOption);
 
         // Detection cone
 

@@ -34,9 +34,9 @@ public abstract class State
         }
     }
 
-    protected void LostTrackOfPlayer()
+    protected bool IsCautious()
     {
-        character.lastSeenPosition = ChaseTarget;
+        return !(character.PreviousStateOption == StateOption.PatrolState || character.CurrentStateOption == StateOption.PatrolState);
     }
 
     protected void ToAlertState()
