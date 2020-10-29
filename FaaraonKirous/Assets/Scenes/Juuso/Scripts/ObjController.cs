@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ObjController : MonoBehaviour
 {
@@ -55,9 +56,13 @@ public class ObjController : MonoBehaviour
         inEndPoint = endPointer.inEndPoint;
         playersInside = endPointer.playersInside;
 
+        //Jos kaikki objectivet tehty ja molemmat pelaajat ovat loppukohdassa
         if (objective1Done && objective2Done && objective3Done && inEndPoint && playersInside == 2)
         {
             print(playersInside + " loppu lähellä");
+
+            //nyt toistaiseksi kovakoodattuna.
+            SceneManager.LoadScene("Level 2");
         }
     }
 

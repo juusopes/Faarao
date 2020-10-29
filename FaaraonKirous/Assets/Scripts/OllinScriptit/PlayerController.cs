@@ -88,6 +88,10 @@ public class PlayerController : MonoBehaviour
         {
             Stay();
         }
+        else
+        {
+            StopNavigation();
+        }
     }
     private void Initialize()
     {
@@ -356,6 +360,15 @@ public class PlayerController : MonoBehaviour
         navMeshAgent.destination = position;
         navMeshAgent.isStopped = false;
         navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : 0.5f;
+    }
+
+    public void StopNavigation()
+    {
+        if (!navMeshAgent.enabled)
+            return;
+
+        navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
     }
 
     private void KeyControls()

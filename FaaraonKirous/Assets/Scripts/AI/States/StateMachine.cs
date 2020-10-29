@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum StateOption
+public enum StateOption : byte
 {
     PatrolState,
     AlertState,
@@ -70,7 +70,7 @@ public class StateMachine
 
         currentState.OnStateEnter();
 
-        character.UpdateIndicator(stateOption);
+        character.UpdateStateIndicator(stateOption);
     }
 
 

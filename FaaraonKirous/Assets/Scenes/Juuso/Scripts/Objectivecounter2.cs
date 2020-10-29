@@ -67,14 +67,17 @@ public class Objectivecounter2 : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        playersInside--;
-
-        if (playersInside < 0)
+        if (other.gameObject.tag == "Player")
         {
-            playersInside = 0;
-        }
+            playersInside--;
 
-        inEndPoint = false;
+            if (playersInside < 0)
+            {
+                playersInside = 0;
+            }
+
+            inEndPoint = false;
+        }
     }
 
     public void addObjectiveDone()
