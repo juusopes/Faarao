@@ -4,24 +4,46 @@ using UnityEngine;
 
 public class EnemyNetManager : ObjectNetManager
 {
-    private Character _character;
-
+    public Character Character;
 
     protected override void Awake()
     {
         base.Awake();
-        _character = GetComponent<Character>();
+        Character = GetComponent<Character>();
     }
 
     public override void SendSync(Packet packet)
     {
         base.SendSync(packet);
+        // TODO: Not implemented
 
+        // Sight impairments
+        packet.Write(Character.impairedSightRange);
+        packet.Write(Character.impairedFOV);
+
+        // State
+        packet.Write((byte)Character.CurrentStateIndicator);
+
+        // Detection cone
+
+        // ..
     }
 
     public override void HandleSync(Packet packet)
     {
         base.HandleSync(packet);
+        // TODO: Not implemented
+
+        // Sight impairments
+        Character.impairedSightRange = packet.ReadBool();
+        Character.impairedFOV = packet.ReadBool();
+
+        // State
+        Character.UpdateStateIndicator((StateOption)packet.ReadByte());
+
+        // Detection cone
+
+        // ..
 
     }
 }

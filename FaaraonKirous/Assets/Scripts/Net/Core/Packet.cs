@@ -13,7 +13,12 @@ public enum ServerPackets
     updateObjectTransform,
     disposableObjectCreated,
     startingObjectSync,
-    syncObject
+    syncObject,
+    sightChanged,
+    abilityVisualEffectCreated,
+    stateChanged,
+    enemyDied,
+    detectionConeUpdated
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -21,7 +26,9 @@ public enum ClientPackets
 {
     connectionRequest = 1,
     connectionAcceptedReceived,
-    heartbeatReceived
+    heartbeatReceived,
+    abilityUsed,
+    enemyPossessed
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

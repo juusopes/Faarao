@@ -89,8 +89,72 @@ public class ClientHandle
 
         if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
         {
-            netManager.UpdateTransform(position, rotation);
+            netManager.Transform.position = position;
+            netManager.Transform.rotation = rotation;
         }
+    }
+    #endregion
+
+    #region Enemy
+    public static void SightChanged(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+        bool impairedSightRange = packet.ReadBool();
+        bool impairedFOV = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            enemyNetManager.Character.impairedSightRange = impairedSightRange;
+            enemyNetManager.Character.impairedFOV = impairedFOV;
+        }
+    }
+
+    public static void StateChanged(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+        StateOption stateOption = (StateOption)packet.ReadByte();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            enemyNetManager.Character.UpdateStateIndicator(stateOption);
+        }
+    }
+
+    public static void EnemyDied(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            enemyNetManager.Character.Die();
+        }
+    }
+
+    public static void DetectionConeUpdated(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+        float percentage = packet.ReadFloat();
+        LineType color = (LineType)packet.ReadByte();
+        bool changeState = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            // TODO: Update detection cone
+        }
+    }
+    #endregion
+
+    #region DisposableObjects
+    public static void AbilityVisualEffectCreated(int connection, Packet packet)
+    {
+        AbilityOption ability = (AbilityOption)packet.ReadByte();
+        Vector3 position = packet.ReadVector3();
+
+        AbilitySpawner.Instance.SpawnAtPosition(position, ability);
     }
     #endregion
 

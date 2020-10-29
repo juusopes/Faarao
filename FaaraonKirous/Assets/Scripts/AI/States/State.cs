@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine;
+
 public abstract class State
 {
     protected Character character;
@@ -11,8 +12,9 @@ public abstract class State
     public virtual void PlayerDied() { }
     public virtual void PlayerTakesControl() { }
 
-    protected bool CanSeePlayer => character.CanDetectAnyPlayer;
+    protected bool CanSeePlayer => character.CouldDetectAnyPlayer;
     protected bool IsDistracted => character.isDistracted;
+    protected Vector3 ChaseTarget => character.chaseTarget;
 
     public State(Character character, StateMachine stateMachine)
     {
@@ -24,7 +26,7 @@ public abstract class State
     {
         if (CanSeePlayer)
         {
-            ToChaseState();
+            ToDetectionState();
         }
         else if (IsDistracted)
         {
@@ -34,33 +36,38 @@ public abstract class State
 
     protected void LostTrackOfPlayer()
     {
-        character.lastSeenPosition = character.chaseTarget;
+        character.lastSeenPosition = ChaseTarget;
     }
 
     protected void ToAlertState()
     {
-        stateMachine.SetState(stateMachine.alertState);
+        stateMachine.SetState(StateOption.AlertState);
     }
 
     protected void ToPatrolState()
     {
-        stateMachine.SetState(stateMachine.patrolState);
+        stateMachine.SetState(StateOption.PatrolState);
     }
     protected void ToChaseState()
     {
-        stateMachine.SetState(stateMachine.chaseState);
+        stateMachine.SetState(StateOption.ChaseState);
     }
     protected void ToTrackingState()
     {
-        stateMachine.SetState(stateMachine.trackingState);
+        stateMachine.SetState(StateOption.TrackingState);
     }
 
     protected void ToDistractedState()
     {
-        stateMachine.SetState(stateMachine.distractedState);
+        stateMachine.SetState(StateOption.DistractedState);
     }
     protected void ToControlledState()
     {
-        stateMachine.SetState(stateMachine.controlledState);
+        stateMachine.SetState(StateOption.ControlledState);
+    }
+
+    protected void ToDetectionState()
+    {
+        stateMachine.SetState(StateOption.DetectionState);
     }
 }

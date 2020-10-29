@@ -93,6 +93,7 @@ public sealed class Server : NetworkHandler
 
     public void BeginSendPacketAll(ChannelType channelType, Packet packet)
     {
+        // TODO: Check that connection has connected completely!!
         foreach (Connection connection in Connections.Values)
         {
             if (connection.EndPoint != null) connection.BeginSendPacket(channelType, packet);
@@ -164,7 +165,9 @@ public sealed class Server : NetworkHandler
         {
             { (int)ClientPackets.connectionAcceptedReceived, ServerHandle.ConnectionAcceptedReceived },
             { (int)ClientPackets.connectionRequest, ServerHandle.ConnectionRequest },
-            { (int)ClientPackets.heartbeatReceived, ServerHandle.HeartbeatReceived }
+            { (int)ClientPackets.heartbeatReceived, ServerHandle.HeartbeatReceived },
+            { (int)ClientPackets.abilityUsed, ServerHandle.AbilityUsed },
+            { (int)ClientPackets.enemyPossessed, ServerHandle.EnemyPossessed }
         };
 
         // Initialize connections

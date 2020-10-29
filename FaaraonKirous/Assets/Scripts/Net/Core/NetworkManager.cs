@@ -14,6 +14,11 @@ public class NetworkManager : MonoBehaviour
 
     public bool IsConnectedToServer { get; set; } = false;
 
+    public bool IsSingleplayer { get; set; } = true;
+
+    public bool ShouldSendToClient => Server.Instance.IsOnline;
+    public bool ShouldSendToServer => !IsHost && IsConnectedToServer; 
+
     // For testing
     [SerializeField]
     private bool _willHostServer;
@@ -29,10 +34,7 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-    }
 
-    private void Start()
-    {
         if (ClonesManager.IsClone())
         {
             // Automatically connect to local host if this is the clone editor
@@ -44,6 +46,7 @@ public class NetworkManager : MonoBehaviour
             {
                 // Automatically start server if this is the original editor
                 HostServer();
+                IsSingleplayer = false;
             }
         }
     }
