@@ -60,7 +60,14 @@ public class WaypointGroup : MonoBehaviour
     {
         if (waypoints.Count == 0)
             return null;
+        if (!IsValidIndex(index))
+            return null;
         return waypoints[index];
+    }
+
+    public bool IsValidIndex(int index)
+    {
+        return index >= 0 && index < waypoints.Count;
     }
 
     public int GetWaypointCount()

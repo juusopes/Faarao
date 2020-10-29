@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,24 +9,25 @@ public class Navigator
     private WaypointGroup wpGroup;
     private int currentWaypoint = 0;
     private int direction = 1; // -1 or 1
-    private Transform startTrans;
+    private Transform parentTrans;
 
 
     private PatrolType patrolType => wpGroup == null ? 0 : wpGroup.GetPatrolType();
     private int waypointCount => wpGroup == null ? 0 : wpGroup.GetWaypointCount();
+    private bool IsValidIndex(int index) => wpGroup.IsValidIndex(index);
 
-    public Navigator(Transform startPos, WaypointGroup wpGroup)
+    public Navigator(Transform parentTrans, WaypointGroup wpGroup)
     {
         this.wpGroup = wpGroup;
-        this.startTrans = startPos;
+        this.parentTrans = parentTrans;
     }
 
     public Waypoint GetFirstWaypoint()
     {
         if (waypointCount == 0)
             return null;
-        if (patrolType == PatrolType.ShorterBackAndForth || patrolType == PatrolType.ShorterOnce)
-            return wpGroup.GetWaypoint(GetClosestWaypoint(startTrans));
+        //if (patrolType == PatrolType.ShorterBackAndForth || patrolType == PatrolType.ShorterOnce)
+        //    return wpGroup.GetWaypoint(GetClosestWaypoint(parentTrans));
         return wpGroup.GetWaypoint(0);
     }
 
@@ -33,11 +35,14 @@ public class Navigator
     {
         if (waypointCount == 0)
            return null;
-
-        if (wpGroup.GetWaypoint(currentWaypoint).type == WaypointType.GuardForEver)
-            return wpGroup.GetWaypoint(currentWaypoint);
-
         //Debug.Log("Before:" + currentWaypoint);
+
+
+        if (IsValidIndex(currentWaypoint))
+        {
+            if (wpGroup.GetWaypoint(currentWaypoint).type == WaypointType.GuardForEver)
+                return wpGroup.GetWaypoint(currentWaypoint);
+        }
 
         switch (patrolType)
         {
@@ -55,11 +60,12 @@ public class Navigator
                 currentWaypoint += direction;
                 break;
             case PatrolType.ShorterOnce:
-                currentWaypoint = GetClosestWaypoint(wpGroup.GetWaypoint(currentWaypoint).transform);
+                if (currentWaypoint < waypointCount - 1)
+                    currentWaypoint = GetClosestWaypoint(parentTrans);
                 break;
             case PatrolType.ShorterBackAndForth:
                 CheckDirection();
-                currentWaypoint = GetClosestWaypoint(wpGroup.GetWaypoint(currentWaypoint).transform);
+                currentWaypoint = GetClosestWaypoint(parentTrans);
                 break;
             case PatrolType.Random:
                 currentWaypoint = Random.Range(0, waypointCount);
@@ -67,20 +73,23 @@ public class Navigator
             default:
                 break;
         }
-
         //Debug.Log("After:" + currentWaypoint);
+
 
         Waypoint result = null;
 
-        if (IsValidIndex())
+        if (IsValidIndex(currentWaypoint))
+        {
             result = wpGroup.GetWaypoint(currentWaypoint);
+        }
+
 
         return result;
     }
 
     private int GetClosestWaypoint(Transform testSubject)
     {
-        if (!IsValidIndex())
+        if (!IsValidIndex(currentWaypoint))
         {
             return -1;
         }
@@ -91,6 +100,7 @@ public class Navigator
 
         for(int i = currentWaypoint + direction; i >= 0 && i < waypointCount ; i  += direction)
         {
+            //Debug.Log(i);
             Vector3 diff = wpGroup.GetWaypoint(i).transform.position - currentPosition;
             float curDistance = diff.sqrMagnitude;
             if (curDistance < distance)
@@ -99,6 +109,7 @@ public class Navigator
                 distance = curDistance;
             }
         }
+        //Debug.Log("Closest" + closest);
         return closest;
     }
 
@@ -108,11 +119,6 @@ public class Navigator
             direction = -1;
         else if (currentWaypoint == 0 && direction == -1)
             direction = 1;
-    }
-
-    private bool IsValidIndex()
-    {
-        return currentWaypoint >= 0 && currentWaypoint < waypointCount;
     }
 
     public int[] CopyValues()
