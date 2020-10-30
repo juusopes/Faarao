@@ -17,11 +17,11 @@ public class NetworkManager : MonoBehaviour
     public bool IsSingleplayer { get; set; } = true;
 
     public bool ShouldSendToClient => Server.Instance.IsOnline;
-    public bool ShouldSendToServer => !IsHost && IsConnectedToServer; 
+    public bool ShouldSendToServer => !IsHost && IsConnectedToServer;
 
     // For testing
     [SerializeField]
-    private bool _willHostServer;
+    private bool _willHostServer = false;
 
     private void Awake()
     {

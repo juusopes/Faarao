@@ -8,11 +8,31 @@ using UnityEngine.Assertions;
 
 public class FieldOfViewRenderer : MonoBehaviour
 {
+    #region Const strings
+    private const string TEXTURE = "_MainText";
+    private const string TEXTURE_CONTRAST = "_TextureContrast";
+    private const string TEXTURE_COLOR = "_TextureColor";
+    private const string BACKGROUND_COLOR = "_MainBackgroundColor";
+    private const string FILL_COLOR = "_FillColor";
+    private const string FILL_SCALE = "_FillScale";
+    private const string INNER_SUBSTRACTION_SCALE = "_InnerSubstractionScale";
+    private const string INNER_IMAGE_SUBSTRACTION_SCALE = "_InnerImageSubstractionScale";
+    private const string IMAGE_ALPHA = "_ImageAlpha";
+    private const string BACKGROUND_ALPHA = "_BackGroundAlpha";
+    private const string BLEND_OPACITY = "_BlendOpacity";
+    private const string ALPHA_CUTOFF = "_AlphaCutoff";
+    private const string POLAR = "_Polar";
+    private const string POLAR_RADIALSCALE = "_PolarRadialScale";
+    private const string POLAR_LENGHTSCALE = "_PolarLenghtScale";
+    private const string MOVEMENT_SPEED = "_MovementSpeed";
+    #endregion
+
     Mesh mesh;
+    Material material;
     public Character character;
     private Vector3 origin;
     private float startingAngle = 0;
-    private int rayCount = 10;
+    private int rayCount = 50;
     float angleIncrease;
     Vector3[] vertices;
     Vector2[] uv;
@@ -33,6 +53,7 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        material = GetComponent<Renderer>().material;
         origin = Vector3.zero;
         vertices = new Vector3[rayCount + 1 + 1];
         vertices[0] = origin;
@@ -125,6 +146,11 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         startingAngle = transform.rotation.eulerAngles.y + fovIn / 2f - 90f;
         angleIncrease = fovIn / rayCount;
+    }
+
+    public void UpdateMaterialProperties(LineType background, LineType fill, float percentage)
+    {
+        //material.SetFloat(THICKNESS, outerThickness);
     }
 
 

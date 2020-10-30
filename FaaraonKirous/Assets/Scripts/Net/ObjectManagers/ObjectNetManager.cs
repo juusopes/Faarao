@@ -18,8 +18,13 @@ public class ObjectNetManager : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Transform = transform;
+        InitComponents();
         AddToGameManager();
+    }
+
+    protected virtual void InitComponents()
+    {
+        Transform = transform;
     }
 
     protected virtual void AddToGameManager()
@@ -41,7 +46,7 @@ public class ObjectNetManager : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (NetworkManager._instance.ShouldSendToClient) ServerSend.UpdateObjectTransform(List, Id, Transform.position, Transform.rotation);
+        // ...
     }
 
     public virtual void SendSync(Packet packet)

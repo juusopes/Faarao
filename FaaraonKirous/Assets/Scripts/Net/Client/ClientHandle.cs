@@ -86,11 +86,20 @@ public class ClientHandle
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
         Quaternion rotation = packet.ReadQuaternion();
+        long timestamp = packet.ReadLong();
 
         if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
         {
-            netManager.Transform.position = position;
-            netManager.Transform.rotation = rotation;
+            DynamicNetManager dynamic = (DynamicNetManager)netManager;
+
+            if (dynamic.LatestTransformTimestamp < timestamp)
+            {
+                dynamic.Transform.position = position;
+                dynamic.Transform.rotation = rotation;
+
+                // Update timestamp
+                dynamic.LatestTransformTimestamp = timestamp;
+            }
         }
     }
     #endregion
@@ -138,12 +147,24 @@ public class ClientHandle
         int id = packet.ReadInt();
         float percentage = packet.ReadFloat();
         LineType color = (LineType)packet.ReadByte();
-        bool changeState = packet.ReadBool();
+        bool changeAcceptionState = packet.ReadBool();
+        long timestamp = packet.ReadLong();
 
         if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
         {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
-            // TODO: Update detection cone
+            EnemyNetManager enemy = (EnemyNetManager)netManager;
+
+            if (changeAcceptionState)
+            {
+                enemy.AcceptingDetectionConeUpdates = !enemy.AcceptingDetectionConeUpdates;
+                enemy.Character.UpdateSightVisuals(percentage, color);
+                enemy.LatestDetectionConeTimestamp = 0;
+            }
+            else if (enemy.AcceptingDetectionConeUpdates && enemy.LatestDetectionConeTimestamp < timestamp)
+            {
+                enemy.Character.UpdateSightVisuals(percentage, color);
+                enemy.LatestDetectionConeTimestamp = timestamp;
+            }
         }
     }
     #endregion

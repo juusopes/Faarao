@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerNetManager : ObjectNetManager
+public class PlayerNetManager : DynamicNetManager
 {
     protected override void Awake()
     {
