@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyNetManager : ObjectNetManager
+public class EnemyNetManager : DynamicNetManager
 {
     public Character Character { get; private set; }
     public long LatestDetectionConeTimestamp { get; set; } = 0;
     public bool AcceptingDetectionConeUpdates { get; set; } = false;
 
-    protected override void Awake()
+    protected override void InitComponents()
     {
-        base.Awake();
+        base.InitComponents();
         Character = GetComponent<Character>();
     }
 

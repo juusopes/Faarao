@@ -90,13 +90,15 @@ public class ClientHandle
 
         if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
         {
-            if (netManager.LatestTransformTimestamp < timestamp)
+            DynamicNetManager dynamic = (DynamicNetManager)netManager;
+
+            if (dynamic.LatestTransformTimestamp < timestamp)
             {
-                netManager.Transform.position = position;
-                netManager.Transform.rotation = rotation;
+                dynamic.Transform.position = position;
+                dynamic.Transform.rotation = rotation;
 
                 // Update timestamp
-                netManager.LatestTransformTimestamp = timestamp;
+                dynamic.LatestTransformTimestamp = timestamp;
             }
         }
     }
