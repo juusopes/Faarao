@@ -8,7 +8,6 @@ public class ObjectNetManager : MonoBehaviour
     public ObjectList List { get { return _list; } private set { _list = value; } }
     public ObjectType Type { get { return _type; } private set { _type = value; } }
     public Transform Transform { get; private set; }
-    public long LatestTransformTimestamp { get; set; } = 0;
 
     public bool IsStatic { get; protected set; } = false;
 
@@ -19,8 +18,13 @@ public class ObjectNetManager : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Transform = transform;
+        InitComponents();
         AddToGameManager();
+    }
+
+    protected virtual void InitComponents()
+    {
+        Transform = transform;
     }
 
     protected virtual void AddToGameManager()
@@ -42,7 +46,7 @@ public class ObjectNetManager : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (NetworkManager._instance.ShouldSendToClient) ServerSend.UpdateObjectTransform(List, Id, Transform.position, Transform.rotation);
+        // ...
     }
 
     public virtual void SendSync(Packet packet)
