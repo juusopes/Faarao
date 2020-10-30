@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum StateOption
+public enum StateOption : byte
 {
     PatrolState,
     AlertState,
@@ -68,9 +68,9 @@ public class StateMachine
         currentState = state;
         character.gameObject.name = "Enemy State - " + GetStateName();
 
-        currentState.OnStateEnter();
-
         character.UpdateStateIndicator(stateOption);
+
+        currentState.OnStateEnter();
     }
 
 

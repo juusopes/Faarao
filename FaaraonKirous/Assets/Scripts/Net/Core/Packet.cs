@@ -15,7 +15,10 @@ public enum ServerPackets
     startingObjectSync,
     syncObject,
     sightChanged,
-    abilityVisualEffectCreated
+    abilityVisualEffectCreated,
+    stateChanged,
+    enemyDied,
+    detectionConeUpdated
 }
 
 /// <summary>Sent from client to server.</summary>
