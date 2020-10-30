@@ -156,10 +156,12 @@ public class ClientHandle
             {
                 enemy.AcceptingDetectionConeUpdates = !enemy.AcceptingDetectionConeUpdates;
                 enemy.Character.UpdateSightVisuals(percentage, color);
+                enemy.LatestDetectionConeTimestamp = 0;
             }
             else if (enemy.AcceptingDetectionConeUpdates && enemy.LatestDetectionConeTimestamp < timestamp)
             {
                 enemy.Character.UpdateSightVisuals(percentage, color);
+                enemy.LatestDetectionConeTimestamp = timestamp;
             }
         }
     }
