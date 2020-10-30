@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class EnemyNetManager : ObjectNetManager
 {
-    public Character Character;
+    public Character Character { get; private set; }
+    public long LatestDetectionConeTimestamp { get; set; } = 0;
+    public bool AcceptingDetectionConeUpdates { get; set; } = false;
 
     protected override void Awake()
     {
@@ -25,6 +27,7 @@ public class EnemyNetManager : ObjectNetManager
         packet.Write((byte)Character.CurrentStateOption);
 
         // Detection cone
+        
 
         // ..
     }

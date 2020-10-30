@@ -8,6 +8,7 @@ public class ObjectNetManager : MonoBehaviour
     public ObjectList List { get { return _list; } private set { _list = value; } }
     public ObjectType Type { get { return _type; } private set { _type = value; } }
     public Transform Transform { get; private set; }
+    public long LatestTransformTimestamp { get; set; } = 0;
 
     public bool IsStatic { get; protected set; } = false;
 

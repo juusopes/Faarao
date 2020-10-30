@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -80,6 +81,7 @@ public class ServerSend
         packet.Write(id);
         packet.Write(position);
         packet.Write(rotation);
+        packet.Write(DateTime.Now.Ticks);
 
         Server.Instance.BeginSendPacketAll(ChannelType.Unreliable, packet);
     }
@@ -113,16 +115,17 @@ public class ServerSend
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
 
-    public static void DetectionConeUpdated(int id, float percentage, LineType color, bool changeState)
+    public static void DetectionConeUpdated(int id, float percentage, LineType color, bool atExtreme)
     {
         var packet = new Packet((int)ServerPackets.detectionConeUpdated);
         packet.Write(id);
         packet.Write(percentage);
         packet.Write((byte)color);
-        packet.Write(changeState);
+        packet.Write(atExtreme);
+        packet.Write(DateTime.Now.Ticks);
 
         // TODO: Send in ignoreOldUnreliable channel or send timeStamp here. OR have a channel pool for unreliables
-        ChannelType channelType = changeState ? ChannelType.Reliable : ChannelType.Unreliable;
+        ChannelType channelType = atExtreme ? ChannelType.Reliable : ChannelType.Unreliable;
         Server.Instance.BeginSendPacketAll(channelType, packet);
     }
     #endregion
