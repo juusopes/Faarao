@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DynamicNetManager : ObjectNetManager
 {
-    public long LatestTransformTimestamp { get; set; } = 0;
+    public float LatestTransformTimestamp { get; set; } = 0;
 
     protected override void FixedUpdate()
     {
