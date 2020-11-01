@@ -81,7 +81,7 @@ public class ServerSend
         packet.Write(id);
         packet.Write(position);
         packet.Write(rotation);
-        packet.Write(DateTime.Now.Ticks);
+        packet.Write(Time.fixedTime);
 
         Server.Instance.BeginSendPacketAll(ChannelType.Unreliable, packet);
     }
@@ -122,7 +122,7 @@ public class ServerSend
         packet.Write(percentage);
         packet.Write((byte)color);
         packet.Write(atExtreme);
-        packet.Write(DateTime.Now.Ticks);
+        packet.Write(Time.fixedTime);
 
         // TODO: Send in ignoreOldUnreliable channel or send timeStamp here. OR have a channel pool for unreliables
         ChannelType channelType = atExtreme ? ChannelType.Reliable : ChannelType.Unreliable;

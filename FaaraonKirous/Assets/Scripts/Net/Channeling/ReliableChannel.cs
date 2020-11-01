@@ -110,6 +110,9 @@ public class ReliableChannel : IChannel
             if (_sendSequencer.ContainsKey(sequence))
             {
                 _timeoutHeap.Remove(sequence);
+
+                // TODO: Dispose packet maybe
+
                 _sendSequencer.Remove(sequence);
                 int nextToHandle = (_outgoingLowestAckedSequence + 1) % Constants.maxSequenceNumber;
                 if (sequence == nextToHandle)

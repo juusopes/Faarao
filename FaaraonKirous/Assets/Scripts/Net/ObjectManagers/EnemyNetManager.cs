@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyNetManager : DynamicNetManager
 {
     public Character Character { get; private set; }
-    public long LatestDetectionConeTimestamp { get; set; } = 0;
+    public float LatestDetectionConeTimestamp { get; set; } = 0;
     public bool AcceptingDetectionConeUpdates { get; set; } = false;
 
     protected override void InitComponents()

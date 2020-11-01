@@ -86,7 +86,7 @@ public class ClientHandle
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
         Quaternion rotation = packet.ReadQuaternion();
-        long timestamp = packet.ReadLong();
+        float timestamp = packet.ReadFloat();
 
         if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
         {
@@ -148,7 +148,7 @@ public class ClientHandle
         float percentage = packet.ReadFloat();
         LineType color = (LineType)packet.ReadByte();
         bool changeAcceptionState = packet.ReadBool();
-        long timestamp = packet.ReadLong();
+        float timestamp = packet.ReadFloat();
 
         if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
         {
