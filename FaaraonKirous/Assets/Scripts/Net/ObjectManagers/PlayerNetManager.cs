@@ -12,7 +12,7 @@ public class PlayerNetManager : DynamicNetManager
 
     protected override void AddToGameManager()
     {
-        // Use type as id
+        base.AddToGameManager();
         GameManager._instance.AddPlayerCharacter(this);
     }
 
