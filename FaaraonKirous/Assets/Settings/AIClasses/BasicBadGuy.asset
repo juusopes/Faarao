@@ -20,11 +20,13 @@ MonoBehaviour:
   fov: 75
   impairedFov: 30
   searchingDuration: 4
+  detectionLostReactionDelay: 3
   controlledDuration: 10
   searchTurnSpeed: 80
   alertHorizontalArc: 45
   navSpeed: 4
-  navAngularSpeed: 100
+  navTrackSpeed: 2.5
+  navAngularSpeed: 150
   navAcceleration: 16
   navStoppingDistance: 0.5
   navJumpHeight: 1.5
