@@ -93,11 +93,7 @@ public class GameManager : MonoBehaviour
             foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
             {
                 ObjectNetManager netManager = objectEntry.Value;
-                if (!netManager.IsStatic)
-                {
-                    netManager.Delete();
-                    listEntry.Value.Remove(objectEntry.Key);
-                }
+                if (netManager.Delete()) listEntry.Value.Remove(objectEntry.Key);
             }
         }
 
@@ -114,11 +110,7 @@ public class GameManager : MonoBehaviour
             foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
             {
                 ObjectNetManager netManager = objectEntry.Value;
-                if (!netManager.IsStatic)
-                {
-                    ServerSend.ObjectCreated(netManager.Type, netManager.Id,
-                        netManager.Transform.position, netManager.Transform.rotation);
-                }
+                netManager.ObjectCreated();
             }
         }
 
@@ -128,7 +120,7 @@ public class GameManager : MonoBehaviour
             foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
             {
                 ObjectNetManager netManager = objectEntry.Value;
-                ServerSend.SyncObject(listEntry.Key, objectEntry.Key, netManager);
+                netManager.SyncObject();
             }
         }
     }
@@ -146,8 +138,6 @@ public class GameManager : MonoBehaviour
                 Priest = netManager.gameObject;
                 break;
         }
-
-        ObjectCreatedHost(netManager, true);
     }
 
     public void ObjectCreatedHost(ObjectNetManager netManager, bool useTypeForId = false)
@@ -157,11 +147,7 @@ public class GameManager : MonoBehaviour
         int id = useTypeForId ? (int)netManager.Type : CreateNextId(list);
         AddObject(id, netManager);
 
-        if (NetworkManager._instance.ShouldSendToClient && !netManager.IsStatic)
-        {
-            ServerSend.ObjectCreated(netManager.Type, id,
-                netManager.Transform.position, netManager.Transform.rotation);
-        }
+        netManager.ObjectCreated();
     }
     #endregion
 

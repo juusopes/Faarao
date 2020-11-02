@@ -40,11 +40,11 @@ public class ServerSend
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
 
-    public static void SyncObject(ObjectList list, int id, ObjectNetManager netManager)
+    public static void SyncObject(ObjectNetManager netManager)
     {
         var packet = new Packet((int)ServerPackets.syncObject);
-        packet.Write((byte)list);
-        packet.Write(id);
+        packet.Write((byte)netManager.List);
+        packet.Write(netManager.Id);
         netManager.SendSync(packet);
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
