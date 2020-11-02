@@ -39,7 +39,8 @@ public class AbilityIndicator : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
-        if (Physics.Raycast(ray, out hit))
+        //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
         {
             Debug.Log(hit.collider.tag);
             if (hit.collider.tag == targetTag)
@@ -90,7 +91,7 @@ public class AbilityIndicator : MonoBehaviour
     }
     private void TargetTags()
     {
-        if (player.GetComponent<PlayerController>().abilityNum == 7)
+        if (player.GetComponent<PlayerController>().abilityNum == 7 || player.GetComponent<PlayerController>().abilityNum == 9)
         {
             targetTag = "Enemy";
         }

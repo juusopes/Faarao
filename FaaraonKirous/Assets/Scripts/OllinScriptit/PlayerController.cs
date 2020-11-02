@@ -314,6 +314,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
+        Debug.Log("Target enemy is: " + targetEnemy + ". Target Enemy Should Be: " + target);
         if (abilityNum == 9)
         {
             if (lC.targetObject != null)
@@ -326,24 +327,23 @@ public class PlayerController : MonoBehaviour
             }
             if (target != null)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1))
+                if (Input.GetKeyDown(KeyCode.Mouse1) && isActiveCharacter)
                 {
                     targetV3 = target.transform.position;
                     navMeshAgent.SetDestination(targetV3);
 
+                    useAttack = true;
                     abilityActive = false;
-                    abilityNum = 0;
-                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
-                }
-                if (Input.GetKeyDown(KeyCode.Mouse1))
-                {
                     GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Enemy";
-                    if (targetEnemy == target)
-                    {
-                        targetEnemy.GetComponent<DeathScript>().damage = 1;
-                        targetEnemy = null;
-                        useAttack = false;
-                    }
+                }
+                if (targetEnemy == target)
+                {
+                    targetEnemy.GetComponent<DeathScript>().damage = 1;
+                    targetEnemy = null;
+                    target = null;
+                    useAttack = false;
+                    abilityNum = 0;
+                    Stay();
                 }
             }
         }
