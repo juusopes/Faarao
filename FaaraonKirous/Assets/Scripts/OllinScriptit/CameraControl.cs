@@ -13,6 +13,7 @@ public class CameraControl : MonoBehaviour
     public float moveAmount;
     public float borderThickness = 10;
     public Vector2 panLimit;
+    public float camScrollSpeed;
 
     public GameObject cameraAnchor;
 
@@ -32,7 +33,6 @@ public class CameraControl : MonoBehaviour
 
     private void Initialize()
     {
-        camRot = transform.rotation;
         camHeight = 40;
         camFollow = false;
         moveAmount = 40f;
@@ -40,11 +40,29 @@ public class CameraControl : MonoBehaviour
 
     private void CamPos()
     {
+        if (cameraAnchor.transform.position.z < -30f)
+        {
+            // scrolling up (zoom in)
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y - camScrollSpeed, transform.position.z + camScrollSpeed);
+            }
+        }
+
+        if (cameraAnchor.transform.position.z > -45f)
+        {
+            //scrolling down (zoom out)
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y + camScrollSpeed, transform.position.z - camScrollSpeed);
+            }
+        }
+
+
         if (camFollow)
         {
             if (transform.parent != null)
             {
-                transform.rotation = camRot;
                 transform.position = new Vector3(transform.parent.transform.position.x, camHeight, transform.parent.transform.position.z);
 
                 Vector3 v3 = cameraAnchor.transform.position;
@@ -61,8 +79,6 @@ public class CameraControl : MonoBehaviour
         }
         else
         {
-            camRot.z = 0;
-            transform.rotation = camRot;
             if (transform.parent != null)
             {
                 transform.parent = null;
@@ -79,23 +95,24 @@ public class CameraControl : MonoBehaviour
         Vector3 pos = transform.position;
         if (Input.mousePosition.x >= Screen.width - borderThickness)
         {
-            pos.x += moveAmount * Time.deltaTime;
+            cameraAnchor.transform.Translate(transform.right * 50 * Time.deltaTime, Space.World);
         }
 
         else if (Input.mousePosition.x <= borderThickness)
         {
-            pos.x -= moveAmount * Time.deltaTime;
+            cameraAnchor.transform.Translate(transform.right * -50 * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y >= Screen.height - borderThickness)
         {
-            pos.z += moveAmount * Time.deltaTime;
+            cameraAnchor.transform.Translate(transform.forward * 50 * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y <= borderThickness)
         {
-            pos.z -= moveAmount * Time.deltaTime;
+            cameraAnchor.transform.Translate(transform.forward * -50 * Time.deltaTime, Space.World);
         }
+
         pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
         pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
         transform.position = pos;
