@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class CameraControl : MonoBehaviour
@@ -15,7 +16,9 @@ public class CameraControl : MonoBehaviour
     public Vector2 panLimit;
     public float camScrollSpeed;
 
-    public GameObject cameraAnchor;
+    public Transform cameraAnchor;
+    public Transform cameraPos;
+    public Transform cameraStabilizer;
 
     // Start is called before the first frame update
     void Start()
@@ -40,21 +43,30 @@ public class CameraControl : MonoBehaviour
 
     private void CamPos()
     {
-        if (cameraAnchor.transform.position.z < -30f)
+        if (Input.GetMouseButtonDown(2))
+        {
+            cameraAnchor.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
+            cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
+            cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y, cameraAnchor.position.z - 39.76f);
+        }
+
+        if (cameraPos.transform.position.y > 25f)
         {
             // scrolling up (zoom in)
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
-                GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y - camScrollSpeed, transform.position.z + camScrollSpeed);
+                cameraPos.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
+                cameraPos.transform.Translate(transform.up * -moveAmount * Time.deltaTime, Space.World);
             }
         }
 
-        if (cameraAnchor.transform.position.z > -45f)
+        if (cameraPos.transform.position.y < 35f)
         {
             //scrolling down (zoom out)
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
-                GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y + camScrollSpeed, transform.position.z - camScrollSpeed);
+                cameraPos.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
+                cameraPos.transform.Translate(transform.up * moveAmount * Time.deltaTime, Space.World);
             }
         }
 
@@ -95,22 +107,23 @@ public class CameraControl : MonoBehaviour
         Vector3 pos = transform.position;
         if (Input.mousePosition.x >= Screen.width - borderThickness)
         {
-            cameraAnchor.transform.Translate(transform.right * 50 * Time.deltaTime, Space.World);
+
+            cameraPos.transform.Translate(transform.right * moveAmount * Time.deltaTime, Space.World);
         }
 
         else if (Input.mousePosition.x <= borderThickness)
         {
-            cameraAnchor.transform.Translate(transform.right * -50 * Time.deltaTime, Space.World);
+            cameraPos.transform.Translate(transform.right * -moveAmount * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y >= Screen.height - borderThickness)
         {
-            cameraAnchor.transform.Translate(transform.forward * 50 * Time.deltaTime, Space.World);
+            cameraPos.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y <= borderThickness)
         {
-            cameraAnchor.transform.Translate(transform.forward * -50 * Time.deltaTime, Space.World);
+            cameraPos.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
         }
 
         pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
