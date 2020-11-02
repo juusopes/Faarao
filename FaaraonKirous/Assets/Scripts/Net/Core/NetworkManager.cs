@@ -60,6 +60,14 @@ public class NetworkManager : MonoBehaviour
         else
         {
             Server.Instance.Start(26950);
+
+            // TESTING
+            Server.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+            {
+                DropPercentage = 0.5f,
+                MinLatency = 300,
+                MaxLatency = 500
+            });
         }
     }
 
@@ -77,6 +85,14 @@ public class NetworkManager : MonoBehaviour
             int serverPort = 26950;
             IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             Client.Instance.ConnectToServer(ipEndPoint);
+
+            // TESTING
+            Client.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+            {
+                DropPercentage = 0.5f,
+                MinLatency = 300,
+                MaxLatency = 500
+            });
         }
     }
 
