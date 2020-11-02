@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour
 
     //Attack
     public GameObject targetEnemy;
+    private GameObject target;
+    private bool useAttack;
 
     //Menu
     public LevelController lC;
@@ -82,6 +84,7 @@ public class PlayerController : MonoBehaviour
             KeyControls();
             Invisibility();
             TestOffLink();
+            Attack();
             //Climb();
         }
         else
@@ -120,7 +123,6 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
             {
-
                 if (Physics.Raycast(ray, out hit))
                 {
                     targetV3 = hit.point;
@@ -312,10 +314,38 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        if (targetEnemy != null)
+        if (abilityNum == 9)
         {
-            targetEnemy.GetComponent<DeathScript>().damage = 1;
-            targetEnemy = null;
+            if (lC.targetObject != null)
+            {
+                target = lC.targetObject;
+            }
+            else if (!useAttack)
+            {
+                target = null;
+            }
+            if (target != null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1))
+                {
+                    targetV3 = target.transform.position;
+                    navMeshAgent.SetDestination(targetV3);
+
+                    abilityActive = false;
+                    abilityNum = 0;
+                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
+                }
+                if (Input.GetKeyDown(KeyCode.Mouse1))
+                {
+                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Enemy";
+                    if (targetEnemy == target)
+                    {
+                        targetEnemy.GetComponent<DeathScript>().damage = 1;
+                        targetEnemy = null;
+                        useAttack = false;
+                    }
+                }
+            }
         }
     }
 
@@ -381,7 +411,7 @@ public class PlayerController : MonoBehaviour
         //}
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Attack();
+            UseAbility(9);
         }
         //Abilities
         if (Input.GetKeyDown(KeyCode.Alpha1))

@@ -98,28 +98,62 @@ public class AbilityIndicator : MonoBehaviour
 
     private void IndicatorChange()
     {
-        if ((player.GetComponent<PlayerController>().playerOne)) {
-            if (player.GetComponent<PlayerController>().abilityNum == 1)
-            {
-                SwitchIndicator(0);
-            }
-            if (player.GetComponent<PlayerController>().abilityNum == 2)
-            {
-                SwitchIndicator(1);
-            }
+        if (player.GetComponent<PlayerController>().abilityNum == 1)
+        {
+            SwitchIndicator(0);
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 2)
+        {
+            SwitchIndicator(1);
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 3)
+        {
+            SwitchIndicator(2);
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 4)
+        {
+            SwitchIndicator(3);
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 5)
+        {
+            SwitchIndicator(4);
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 9)
+        {
+            SwitchIndicator(5);
         }
     }
 
     private void SwitchIndicator(int num)
     {
-        //Switch Background
-        indicatorArea.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
-            = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
-        //Switch Icon
-        indicatorArea.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite
-            = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite;
-        //Switch Aim
-        indicatorArea.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite
-            = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
+        indicatorArea.transform.localScale = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.localScale;
+        if (player.GetComponent<PlayerController>().playerOne)
+        {
+            //Switch Background
+            indicatorArea.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
+                = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
+            //Switch Icon
+            indicatorArea.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite
+                = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite;
+            //Switch Aim
+            indicatorArea.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite
+                = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
+            indicatorArea.transform.GetChild(2).gameObject.transform.rotation = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.rotation;
+            indicatorArea.transform.GetChild(2).gameObject.transform.localScale = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.localScale;
+
+        } else
+        {
+            //Switch Background
+            indicatorArea.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
+                = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
+            //Switch Icon
+            indicatorArea.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite
+                = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite;
+            //Switch Aim
+            indicatorArea.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite
+                = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
+            indicatorArea.transform.GetChild(2).gameObject.transform.rotation = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.rotation;
+            indicatorArea.transform.GetChild(2).gameObject.transform.localScale = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.localScale;
+        }
     }
 }
