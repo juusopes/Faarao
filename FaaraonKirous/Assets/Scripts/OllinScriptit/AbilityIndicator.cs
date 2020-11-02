@@ -126,9 +126,9 @@ public class AbilityIndicator : MonoBehaviour
 
     private void SwitchIndicator(int num)
     {
-        indicatorArea.transform.localScale = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.localScale;
         if (player.GetComponent<PlayerController>().playerOne)
         {
+            indicatorArea.transform.localScale = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.localScale;
             //Switch Background
             indicatorArea.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
                 = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
@@ -143,6 +143,7 @@ public class AbilityIndicator : MonoBehaviour
 
         } else
         {
+            indicatorArea.transform.localScale = player.GetComponent<PriestAbilities>().indicatorList[num].transform.localScale;
             //Switch Background
             indicatorArea.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite
                 = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
@@ -152,8 +153,8 @@ public class AbilityIndicator : MonoBehaviour
             //Switch Aim
             indicatorArea.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite
                 = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
-            indicatorArea.transform.GetChild(2).gameObject.transform.rotation = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.rotation;
-            indicatorArea.transform.GetChild(2).gameObject.transform.localScale = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.localScale;
+            indicatorArea.transform.GetChild(2).gameObject.transform.rotation = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.rotation;
+            indicatorArea.transform.GetChild(2).gameObject.transform.localScale = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.localScale;
         }
     }
 }
