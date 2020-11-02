@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerNetManager : ObjectNetManager
+public class PlayerNetManager : DynamicNetManager
 {
     protected override void Awake()
     {
@@ -12,7 +12,7 @@ public class PlayerNetManager : ObjectNetManager
 
     protected override void AddToGameManager()
     {
-        // Use type as id
+        base.AddToGameManager();
         GameManager._instance.AddPlayerCharacter(this);
     }
 

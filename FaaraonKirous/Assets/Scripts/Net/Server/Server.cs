@@ -21,8 +21,6 @@ public sealed class Server : NetworkHandler
         }
     }
 
-    
-
     public int MaxPlayers { get; private set; } = Constants.maxPlayers;
     public int Port { get; private set; }
 
