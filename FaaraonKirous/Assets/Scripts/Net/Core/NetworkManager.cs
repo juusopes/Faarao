@@ -22,6 +22,14 @@ public class NetworkManager : MonoBehaviour
     // For testing
     [SerializeField]
     private bool _willHostServer = false;
+    [SerializeField]
+    private bool _simulateNetwork = false;
+    [SerializeField]
+    private float _simulationDropPercentage = 0;
+    [SerializeField]
+    private int _simulationMinLatency = 0;
+    [SerializeField]
+    private int _simulationMaxLatency = 0;
 
     private void Awake()
     {
@@ -62,12 +70,15 @@ public class NetworkManager : MonoBehaviour
             Server.Instance.Start(26950);
 
             // TESTING
-            Server.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+            if (_simulateNetwork)
             {
-                DropPercentage = 0.5f,
-                MinLatency = 300,
-                MaxLatency = 500
-            });
+                Server.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+                {
+                    DropPercentage = _simulationDropPercentage,
+                    MinLatency = _simulationMinLatency,
+                    MaxLatency = _simulationMaxLatency
+                });
+            }
         }
     }
 
@@ -87,12 +98,15 @@ public class NetworkManager : MonoBehaviour
             Client.Instance.ConnectToServer(ipEndPoint);
 
             // TESTING
-            Client.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+            if (_simulateNetwork)
             {
-                DropPercentage = 0.5f,
-                MinLatency = 300,
-                MaxLatency = 500
-            });
+                Client.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+                {
+                    DropPercentage = _simulationDropPercentage,
+                    MinLatency = _simulationMinLatency,
+                    MaxLatency = _simulationMaxLatency
+                });
+            }
         }
     }
 

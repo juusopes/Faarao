@@ -22,12 +22,6 @@ public class NetworkSimulator
     private readonly SendDelegate _sendDelegate;
     private readonly object _lock = new object();
 
-    // TODO: NetTime class with precise time
-    // TODO: Refactor connecting and heartbeats away from client/server send/handle. New message types
-    // TODO: Refactor the networking structure
-    // TODO: NetworkSimulator should maybe be connection based
-    // TODO: Disconnect on timeout!!!
-
     public NetworkSimulator(NetworkSimulatorConfig config, SendDelegate sendDelegate)
     {
         _config = config;
@@ -38,7 +32,7 @@ public class NetworkSimulator
     {
         Packet newPacket = new Packet(packet.ReadBytes(packet.Length(), false));
 
-        if (_rand.NextDouble() <= (double)_config.DropPercentage)
+        if (_rand.NextDouble() < (double)_config.DropPercentage)
         {
             // Packet dropped
             return;
