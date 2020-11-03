@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public GameObject visibleInd;
     public int abilityNum;
-
     //Invisibility
     public bool isInvisible;
 

@@ -33,7 +33,7 @@ public class AbilityController : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
+        {   
             PlayerController caster = levelCtrl.activeCharacter.GetComponent<PlayerController>();
             if (caster.abilityNum == 2 && !caster.playerOne)
                 abilityOption = AbilityOption.DistractBlindingLight;
