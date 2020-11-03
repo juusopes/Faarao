@@ -45,6 +45,7 @@ public class CameraControl : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(2))
         {
+            ///Tässä vissiin jotain vikaa?
             cameraAnchor.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
             cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
             cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y, cameraAnchor.position.z - 39.76f);
