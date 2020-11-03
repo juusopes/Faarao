@@ -71,7 +71,6 @@ public class CameraControl : MonoBehaviour
             }
         }
 
-
         if (camFollow)
         {
             if (transform.parent != null)
@@ -81,7 +80,6 @@ public class CameraControl : MonoBehaviour
                 Vector3 v3 = cameraAnchor.transform.position;
                 v3.x = transform.parent.transform.position.x;
                 cameraAnchor.transform.position = v3;
-
             }
             if (transform.parent == null)
             {
