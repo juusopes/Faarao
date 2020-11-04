@@ -314,7 +314,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        Debug.Log("Target enemy is: " + targetEnemy + ". Target Enemy Should Be: " + target);
+        //Debug.Log("Target enemy is: " + targetEnemy + ". Target Enemy Should Be: " + target);
         if (abilityNum == 9)
         {
             if (lC.targetObject != null)
