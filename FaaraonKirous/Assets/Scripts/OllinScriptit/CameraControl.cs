@@ -20,6 +20,8 @@ public class CameraControl : MonoBehaviour
     public Transform cameraPos;
     public Transform cameraStabilizer;
 
+    public Transform objective1, moveCamera;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,9 +45,8 @@ public class CameraControl : MonoBehaviour
 
     private void CamPos()
     {
-        if (Input.GetMouseButtonDown(2))
+        if (Input.GetMouseButton(2))
         {
-            ///Tässä vissiin jotain vikaa?
             cameraAnchor.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
             cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
             cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y, cameraAnchor.position.z - 39.76f);
@@ -71,7 +72,6 @@ public class CameraControl : MonoBehaviour
             }
         }
 
-
         if (camFollow)
         {
             if (transform.parent != null)
@@ -81,7 +81,6 @@ public class CameraControl : MonoBehaviour
                 Vector3 v3 = cameraAnchor.transform.position;
                 v3.x = transform.parent.transform.position.x;
                 cameraAnchor.transform.position = v3;
-
             }
             if (transform.parent == null)
             {
@@ -130,5 +129,10 @@ public class CameraControl : MonoBehaviour
         pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
         pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
         transform.position = pos;
+    }
+
+    public void FindObjective()
+    {
+        moveCamera.transform.position = objective1.transform.position;
     }
 }
