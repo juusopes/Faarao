@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Objectivecounter2 : MonoBehaviour
 {
-    public bool objective1Done, objective2Done, objective3Done;
+    public bool objective1Done, objective2Done, objective3Done, objective4Done, objective5Done;
     public bool inEndPoint;
 
-    public GameObject objective1DoneMark, objective2DoneMark, objective3DoneMark;
+    public GameObject objective1DoneMark, objective2DoneMark, objective3DoneMark, objective4DoneMark, objective5DoneMark;
     public GameObject endPoint;
 
     public int playersInside;
@@ -18,10 +18,14 @@ public class Objectivecounter2 : MonoBehaviour
         objective1Done = false;
         objective2Done = false;
         objective3Done = false;
+        objective4Done = false;
+        objective5Done = false;
 
         objective1DoneMark.SetActive(false);
         objective2DoneMark.SetActive(false);
         objective3DoneMark.SetActive(false);
+        objective4DoneMark.SetActive(false);
+        objective5DoneMark.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
