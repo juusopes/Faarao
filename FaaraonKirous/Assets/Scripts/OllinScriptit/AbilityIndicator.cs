@@ -14,6 +14,8 @@ public class AbilityIndicator : MonoBehaviour
     //[HideInInspector]
     public string targetTag;
 
+    private Vector3 targetHitPos;
+    private float range;
     //AbilityTargets
 
 
@@ -29,7 +31,7 @@ public class AbilityIndicator : MonoBehaviour
         MoveInd();
         TargetTags();
         ChangeAll();
-        RangeCalculator();
+        DistanceCalculator();
 
         //Position
         circle.transform.position = player.transform.position;
@@ -47,7 +49,6 @@ public class AbilityIndicator : MonoBehaviour
         //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
         {
-            Debug.Log(hit.collider.tag);
             if (hit.collider.tag == targetTag)
             {
                 target = hit.collider.gameObject;
@@ -101,21 +102,6 @@ public class AbilityIndicator : MonoBehaviour
             targetTag = "Enemy";
         }
     }
-    private void SetCircleRange(int num)
-    {
-        //Scale
-        Vector3 scaleVector = circle.transform.localScale;
-        if (player.GetComponent<PlayerController>().playerOne)
-        {
-            scaleVector.x = player.GetComponent<PharaohAbilities>().rangeList[num];
-            scaleVector.z = player.GetComponent<PharaohAbilities>().rangeList[num];
-        } else
-        {
-            scaleVector.x = player.GetComponent<PriestAbilities>().rangeList[num];
-            scaleVector.z = player.GetComponent<PriestAbilities>().rangeList[num];
-        }
-        circle.transform.localScale = scaleVector;
-    }
 
     private void ChangeAll()
     {
@@ -150,25 +136,24 @@ public class AbilityIndicator : MonoBehaviour
             SetCircleRange(5);
         }
     }
-
-    private void RangeCalculator()
+    private void SetCircleRange(int num)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit = new RaycastHit();
-        //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
+        //Scale
+        Vector3 scaleVector = circle.transform.localScale;
+        if (player.GetComponent<PlayerController>().playerOne)
         {
-            Vector3 playerPos = player.transform.position;
-            Vector3 hitPos = hit.transform.position;
-            float vectorLength = Mathf.Sqrt(((playerPos.x - hitPos.x)* (playerPos.x - hitPos.x)) + ((playerPos.z - hitPos.z)* (playerPos.z - hitPos.z)));
-            //vectorLength = vectorLength / 6.6f;
-            if (vectorLength > 1)
-            {
-                Debug.Log(vectorLength);
-            }
+            range = player.GetComponent<PharaohAbilities>().rangeList[num];
+            scaleVector.x = range;
+            scaleVector.z = range;
         }
+        else
+        {
+            range = player.GetComponent<PriestAbilities>().rangeList[num];
+            scaleVector.x = range;
+            scaleVector.z = range;
+        }
+        circle.transform.localScale = scaleVector;
     }
-
     private void SwitchIndicator(int num)
     {
         if (player.GetComponent<PlayerController>().playerOne)
@@ -200,6 +185,28 @@ public class AbilityIndicator : MonoBehaviour
                 = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().sprite;
             indicatorArea.transform.GetChild(2).gameObject.transform.rotation = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.rotation;
             indicatorArea.transform.GetChild(2).gameObject.transform.localScale = player.GetComponent<PriestAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.localScale;
+        }
+    }
+    private void DistanceCalculator()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit = new RaycastHit();
+        //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
+        {
+            Vector3 playerPos = transform.position;
+            Vector3 hitPos = hit.transform.position;
+            hitPos.y = playerPos.y;
+            float distance = Vector3.Distance(playerPos, hitPos);
+            //vectorLength = vectorLength / 6.6f;
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                Debug.Log(distance);
+                if (distance > range)
+                {
+                    player.GetComponent<PlayerController>().GiveDestination(hitPos);
+                }
+            }
         }
     }
 }

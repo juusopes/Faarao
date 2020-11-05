@@ -178,7 +178,12 @@ public class PlayerController : MonoBehaviour
         navMeshAgent.SetDestination(transform.position);
         targetV3 = transform.position;
     }
-
+    
+    public void GiveDestination(Vector3 v3)
+    {
+        targetV3 = v3;
+        navMeshAgent.SetDestination(targetV3);
+    }
     private void LineOfSight()
     {
         RaycastHit hit;
@@ -313,7 +318,6 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        Debug.Log("Target enemy is: " + targetEnemy + ". Target Enemy Should Be: " + target);
         if (abilityNum == 9)
         {
             if (lC.targetObject != null)
