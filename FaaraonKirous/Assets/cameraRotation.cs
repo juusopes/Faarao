@@ -7,8 +7,6 @@ public class cameraRotation : MonoBehaviour
     public float rotateSpeed;
     public Transform anchorPointTransform;
 
-    public float smoothFactor = 0.5f;
-
     public float xspeed;
 
     // Start is called before the first frame update

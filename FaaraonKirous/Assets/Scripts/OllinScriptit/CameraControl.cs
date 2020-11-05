@@ -45,7 +45,7 @@ public class CameraControl : MonoBehaviour
 
     private void CamPos()
     {
-        if (Input.GetMouseButton(2))
+        if (Input.GetMouseButtonDown(2))
         {
             cameraAnchor.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
             cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
@@ -133,6 +133,11 @@ public class CameraControl : MonoBehaviour
 
     public void FindObjective()
     {
-        moveCamera.transform.position = objective1.transform.position;
+        cameraAnchor.transform.position = objective1.transform.position;
+        cameraStabilizer.transform.position = objective1.transform.position;
+
+        //cameraAnchor.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
+        cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
+        cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y, cameraAnchor.position.z - 39.76f);
     }
 }
