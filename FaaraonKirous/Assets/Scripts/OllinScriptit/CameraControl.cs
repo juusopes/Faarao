@@ -20,7 +20,7 @@ public class CameraControl : MonoBehaviour
     public Transform cameraPos;
     public Transform cameraStabilizer;
 
-    public Transform objective1, moveCamera;
+    public Transform objective1, objective2, objective3, objective4, objective5;
 
     // Start is called before the first frame update
     void Start()
@@ -131,7 +131,7 @@ public class CameraControl : MonoBehaviour
         transform.position = pos;
     }
 
-    public void FindObjective()
+    public void FindObjective1()
     {
         cameraAnchor.transform.position = objective1.transform.position;
         cameraStabilizer.transform.position = objective1.transform.position;
@@ -139,5 +139,25 @@ public class CameraControl : MonoBehaviour
         //cameraAnchor.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
         cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
         cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y, cameraAnchor.position.z - 39.76f);
+    }
+    public void FindObjective2()
+    {
+        cameraAnchor.transform.position = objective2.transform.position;
+        cameraStabilizer.transform.position = objective1.transform.position;
+    }
+    public void FindObjective3()
+    {
+        cameraAnchor.transform.position = objective3.transform.position;
+        cameraStabilizer.transform.position = objective1.transform.position;
+    }
+    public void FindObjective4()
+    {
+        cameraAnchor.transform.position = objective4.transform.position;
+        cameraStabilizer.transform.position = objective1.transform.position;
+    }
+    public void FindObjective5()
+    {
+        cameraAnchor.transform.position = objective5.transform.position;
+        cameraStabilizer.transform.position = objective1.transform.position;
     }
 }

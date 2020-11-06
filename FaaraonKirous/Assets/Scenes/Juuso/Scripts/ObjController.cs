@@ -36,7 +36,6 @@ public class ObjController : MonoBehaviour
         {
             AddObjectives(4);
         }
-
     }
 
     public void Update()
