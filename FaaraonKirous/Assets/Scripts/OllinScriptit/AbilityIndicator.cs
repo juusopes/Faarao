@@ -14,8 +14,10 @@ public class AbilityIndicator : MonoBehaviour
     //[HideInInspector]
     public string targetTag;
 
-    private Vector3 targetHitPos;
+    public Vector3 playerPos;
+    public Vector3 endPoint;
     private float range;
+    private bool abilityClicked;
     //AbilityTargets
 
 
@@ -194,18 +196,28 @@ public class AbilityIndicator : MonoBehaviour
         //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
         {
-            Vector3 playerPos = transform.position;
-            Vector3 hitPos = hit.transform.position;
-            hitPos.y = playerPos.y;
-            float distance = Vector3.Distance(playerPos, hitPos);
             //vectorLength = vectorLength / 6.6f;
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
+                playerPos = player.GetComponent<PlayerController>().GetPosition();
+                Vector3 hitPos = hit.transform.position;
+                hitPos.y = playerPos.y;
+                float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
                 Debug.Log(distance);
                 if (distance > range)
                 {
-                    player.GetComponent<PlayerController>().GiveDestination(hitPos);
+                    endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance-range)*4));
+                    player.GetComponent<PlayerController>().GiveDestination(endPoint);
                 }
+                abilityClicked = true;
+            }
+        }
+        if (abilityClicked)
+        {
+            if (endPoint.x == player.GetComponent<PlayerController>().GetPosition().x && endPoint.z == player.GetComponent<PlayerController>().GetPosition().z)
+            {
+                player.GetComponent<PlayerController>().inRange = true;
+                abilityClicked = false;
             }
         }
     }

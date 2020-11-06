@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public GameObject visibleInd;
     public int abilityNum;
+    public bool inRange;
     //Invisibility
     public bool isInvisible;
 
@@ -183,6 +184,11 @@ public class PlayerController : MonoBehaviour
     {
         targetV3 = v3;
         navMeshAgent.SetDestination(targetV3);
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
     }
     private void LineOfSight()
     {
