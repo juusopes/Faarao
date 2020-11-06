@@ -11,6 +11,7 @@ public class AbilityController : MonoBehaviour
 
     private LevelController levelCtrl;
     private int click = 0;
+    private bool abilityActivated;
 
     private void Start()
     {
@@ -33,6 +34,11 @@ public class AbilityController : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            abilityActivated = true;
+        }
+        Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
+        if (levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange && abilityActivated)
         {
             PlayerController caster = levelCtrl.activeCharacter.GetComponent<PlayerController>();
             if (caster.abilityNum == 2 && !caster.playerOne)
@@ -74,8 +80,11 @@ public class AbilityController : MonoBehaviour
             {
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
+                caster.inRange = false;
+                abilityActivated = false;
                 click = 0;
-            } else
+            }
+            else
             {
                 click++;
             }

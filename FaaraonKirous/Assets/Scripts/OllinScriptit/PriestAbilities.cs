@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PriestAbilities : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PriestAbilities : MonoBehaviour
     private Vector3 playerSavePos;
     private Vector3 targetSavePos;
     public GameObject[] indicatorList;
+    public float[] rangeList;
 
     // Start is called before the first frame update
     void Start()
