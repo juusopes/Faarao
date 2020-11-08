@@ -6,9 +6,9 @@ public class Sun : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
-        Shader.SetGlobalVector(“_SunDirection”, transform.forward);
+
     {
-        
+        //Shader.SetGlobalVector(“_SunDirection”, transform.forward);
     }
 
     // Update is called once per frame
