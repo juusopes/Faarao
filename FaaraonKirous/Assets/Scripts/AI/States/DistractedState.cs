@@ -66,7 +66,7 @@ public class DistractedState : State
     {
         if (CanSeePlayer)
         {
-            ToChaseState();
+            ToDetectionState();
         }
         else if (!IsDistracted)
         {

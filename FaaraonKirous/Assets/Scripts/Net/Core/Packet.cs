@@ -17,7 +17,8 @@ public enum ServerPackets
     sightChanged,
     abilityVisualEffectCreated,
     stateChanged,
-    enemyDied
+    enemyDied,
+    detectionConeUpdated
 }
 
 /// <summary>Sent from client to server.</summary>

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ObjectNetManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class ObjectNetManager : MonoBehaviour
     public Transform Transform { get; private set; }
 
     public bool IsStatic { get; protected set; } = false;
+    public bool IsSyncable { get; protected set; } = true;
 
     [SerializeField]
     private ObjectList _list;
@@ -18,20 +20,33 @@ public class ObjectNetManager : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Transform = transform;
+        InitComponents();
         AddToGameManager();
+    }
+
+    protected virtual void InitComponents()
+    {
+        Transform = transform;
     }
 
     protected virtual void AddToGameManager()
     {
-        if (NetworkManager._instance.IsHost)
+        if (IsStatic)
         {
-            GameManager._instance.ObjectCreatedHost(this);
+            GameManager._instance.ObjectCreatedHost(this, true);
         }
-        else if (!NetworkManager._instance.IsConnectedToServer)
+        else
         {
-            Destroy(gameObject);
+            if (NetworkManager._instance.IsHost)
+            {
+                GameManager._instance.ObjectCreatedHost(this);
+            }
+            else if (!NetworkManager._instance.IsConnectedToServer)
+            {
+                Destroy(gameObject);
+            }
         }
+        
     }
 
     protected virtual void Update()
@@ -41,7 +56,7 @@ public class ObjectNetManager : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (NetworkManager._instance.ShouldSendToClient) ServerSend.UpdateObjectTransform(List, Id, Transform.position, Transform.rotation);
+        // ...
     }
 
     public virtual void SendSync(Packet packet)
@@ -54,8 +69,35 @@ public class ObjectNetManager : MonoBehaviour
         // ...
     }
 
-    public void Delete()
+    public bool SyncObject()
     {
+        if (!IsSyncable) return false;
+
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.SyncObject(this);
+        }
+
+        return true;
+    }
+
+    public bool ObjectCreated()
+    {
+        if (IsStatic) return false;
+
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.ObjectCreated(Type, Id, Transform.position, Transform.rotation);
+        }
+
+        return true;
+    }
+
+    public bool Delete()
+    {
+        if (IsStatic) return false;
+
         Destroy(gameObject);
+        return true;
     }
 }

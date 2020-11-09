@@ -12,7 +12,7 @@ public abstract class State
     public virtual void PlayerDied() { }
     public virtual void PlayerTakesControl() { }
 
-    protected bool CanSeePlayer => character.CanDetectAnyPlayer;
+    protected bool CanSeePlayer => character.CouldDetectAnyPlayer;
     protected bool IsDistracted => character.isDistracted;
     protected Vector3 ChaseTarget => character.chaseTarget;
 
@@ -34,9 +34,9 @@ public abstract class State
         }
     }
 
-    protected void LostTrackOfPlayer()
+    protected bool IsCautious()
     {
-        character.lastSeenPosition = ChaseTarget;
+        return !(character.PreviousStateOption == StateOption.PatrolState || character.CurrentStateOption == StateOption.PatrolState);
     }
 
     protected void ToAlertState()

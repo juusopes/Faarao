@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyNetManager : ObjectNetManager
+public class EnemyNetManager : DynamicNetManager
 {
-    public Character Character;
+    public Character Character { get; private set; }
+    public float LatestDetectionConeTimestamp { get; set; } = 0;
+    public bool AcceptingDetectionConeUpdates { get; set; } = false;
 
-
-    protected override void Awake()
+    protected override void InitComponents()
     {
-        base.Awake();
+        base.InitComponents();
         Character = GetComponent<Character>();
     }
 
@@ -22,8 +23,13 @@ public class EnemyNetManager : ObjectNetManager
         packet.Write(Character.impairedSightRange);
         packet.Write(Character.impairedFOV);
 
-        // Current state
-        //...
+        // State
+        packet.Write((byte)Character.CurrentStateOption);
+
+        // Detection cone
+        
+
+        // ..
     }
 
     public override void HandleSync(Packet packet)
@@ -34,5 +40,13 @@ public class EnemyNetManager : ObjectNetManager
         // Sight impairments
         Character.impairedSightRange = packet.ReadBool();
         Character.impairedFOV = packet.ReadBool();
+
+        // State
+        Character.UpdateStateIndicator((StateOption)packet.ReadByte());
+
+        // Detection cone
+
+        // ..
+
     }
 }

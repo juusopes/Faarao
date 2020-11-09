@@ -90,16 +90,6 @@ public class SightDetection
         }
         else if (CanSeeObject || linePercentage > 0)        //Only run if we see player or line is out
         {
-            //float maxSpeed = 2.0f;
-            //float difference = maxSpeed - lineSpeed;
-            //float realSpeed = lineSpeed + difference * (currentLength / maxLength);
-            //float newLength = currentLength + realSpeed * Time.deltaTime;
-            //newLength = Mathf.Min(newLength, maxLength);
-
-           // 1,1 * lenght 
-
-
-
             scalingDirection = CanSeeObject ? 1 : -1;
             float lineSpeedScale = scalingDirection == 1 ? lineSpeed : lineSpeed * lineShrinkSpeedMultiplier;
             lineSpeedScale = lineSpeedScale + lineSpeedRangeMultiplier * linePercentage;

@@ -1,4 +1,4 @@
-﻿public enum LineType
+﻿public enum LineType : byte
 {
     Red,
     Green,
