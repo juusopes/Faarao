@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PharaohAbilities : MonoBehaviour
 {
@@ -11,6 +9,8 @@ public class PharaohAbilities : MonoBehaviour
     private bool invisibilityActive;
     private bool useInvisibility;
     private float invisibilityTimer;
+    public GameObject[] indicatorList;
+    public float[] rangeList;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +36,7 @@ public class PharaohAbilities : MonoBehaviour
         if (GetComponent<PlayerController>().isActiveCharacter)
         {
             //TempSetActive
-            if (GetComponent<PlayerController>().ability1Active)
+            if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)
             {
                 invisibilityActive = true;
                 if (GetComponent<PlayerController>().visibleInd != null)
@@ -55,14 +55,16 @@ public class PharaohAbilities : MonoBehaviour
             }
             if (target != null)
             {
-                if (invisibilityActive)
+                if (invisibilityActive && GetComponent<PlayerController>().abilityNum == 1)
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse1))
                     {
                         target.GetComponent<PlayerController>().isInvisible = true;
                         invisibilityTimer = 0;
                         useInvisibility = true;
-                        GetComponent<PlayerController>().ability1Active = false;
+                        GetComponent<PlayerController>().abilityActive = false;
+                        GetComponent<PlayerController>().abilityNum = 0;
+                        GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
                     }
                 }
             }

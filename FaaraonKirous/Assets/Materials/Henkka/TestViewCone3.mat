@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TestViewCone3
+  m_Shader: {fileID: -6465566751694194690, guid: 617cbdbdbb3c7444bbd42466a42aedaa, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainText:
+        m_Texture: {fileID: 2800000, guid: d2c80e9a5dab6b74a89df96f66661ac0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_188746EF: 0
+    - Vector1_703271B: 0
+    - Vector1_78E2740F: 0.33
+    - Vector1_DAAFA1F1: 0.089
+    - _AlphaCutoff: 0
+    - _BackGroundAlpha: 0.164
+    - _BlendOpacity: 0.215
+    - _FillScale: 0.282
+    - _ImageAlpha: 0.217
+    - _InnerImageSubstractionScale: 0.278
+    - _InnerSubstractionScale: 0.057
+    - _MovementSpeed: 4
+    - _Polar: 1
+    - _PolarLenghtScale: 2.41
+    - _PolarRadialScale: 0.29
+    - _RotationSpeed: 4
+    - _Scale: 0.21
+    - _Scale_1: 0.09
+    - _Scale_2: 0.39
+    - _TextureContrast: 5
+    - _Thickness: 0.05
+    - _Transparency: 0.11
+    - _Transparency_1: 0.08
+    m_Colors:
+    - _Color: {r: 0, g: 1, b: 0.1325705, a: 0}
+    - _Color_1: {r: 1, g: 0, b: 0.14383316, a: 0}
+    - _Color_2: {r: 1, g: 1, b: 1, a: 0}
+    - _FillColor: {r: 1, g: 0, b: 0, a: 0}
+    - _MainBackgroundColor: {r: 0, g: 1, b: 0.02278566, a: 0}
+    - _TextureColor: {r: 0.7329423, g: 0.8018868, b: 0.5325739, a: 0}
+  m_BuildTextureStacks: []

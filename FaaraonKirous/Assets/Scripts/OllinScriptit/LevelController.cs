@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
     //Switch Character
     private GameObject[] characters;
     public GameObject activeCharacter;
-    private int current;
+    private int currentCharacter;
     public GameObject playerOneImage, playerTwoImage;
 
     //CameraControl
@@ -45,7 +46,7 @@ public class LevelController : MonoBehaviour
         canvas.gameObject.SetActive(true);
         playerOneImage.SetActive(true);
         //SetACtiveCharacter
-        current = 0;
+        currentCharacter = 0;
         foreach (GameObject character in characters)
         {
             character.GetComponent<PlayerController>().isActiveCharacter = false;
@@ -56,17 +57,17 @@ public class LevelController : MonoBehaviour
             }
             if (activeCharacter == null)
             {
-                current++;
+                currentCharacter++;
             }
         }
         if (activeCharacter == null)
         {
-            current = 0;
-            characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
-            activeCharacter = characters[current];
+            currentCharacter = 0;
+            characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = true;
+            activeCharacter = characters[currentCharacter];
         }
         //SetCameraPos
-            mainCam.transform.parent = activeCharacter.transform;
+        mainCam.transform.parent = activeCharacter.transform;
 
 
     }
@@ -91,14 +92,14 @@ public class LevelController : MonoBehaviour
     public void SwitchCharacter()
     {
         //Switch Player
-        characters[current].GetComponent<PlayerController>().isActiveCharacter = false;
-        current++;
-        if (current > characters.Length - 1)
+        characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = false;
+        currentCharacter++;
+        if (currentCharacter > characters.Length - 1)
         {
-            current = 0;
+            currentCharacter = 0;
         }
-        activeCharacter = characters[current];
-        characters[current].GetComponent<PlayerController>().isActiveCharacter = true;
+        activeCharacter = characters[currentCharacter];
+        characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = true;
         mainCam.GetComponent<CameraControl>().activeCharacter = activeCharacter;
         if (mainCam.GetComponent<CameraControl>().camFollow)
         {
@@ -106,7 +107,7 @@ public class LevelController : MonoBehaviour
         }
 
         //Set UI elements
-        if (current == 1)
+        if (currentCharacter == 1)
         {
             playerOneImage.SetActive(false);
             playerTwoImage.SetActive(true);
@@ -124,10 +125,10 @@ public class LevelController : MonoBehaviour
     {
         activeCharacter.GetComponent<PlayerController>().Attack();
     }
-    public void ActiveCharacterAbility1()
-    {
-        activeCharacter.GetComponent<PlayerController>().UseAbility1();
-    }
+    //public void ActiveCharacterAbility()
+    //{
+    //    activeCharacter.GetComponent<PlayerController>().UseAbility();
+    //}
     public void ActiveCharacterCrouch()
     {
         activeCharacter.GetComponent<PlayerController>().Crouch();

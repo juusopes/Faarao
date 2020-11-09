@@ -15,7 +15,6 @@ public class AlertState : State
         Look();
     }
 
-
     public override void OnStateEnter()
     {
         searchTimer = 0;
@@ -31,7 +30,7 @@ public class AlertState : State
         character.StopNavigation();
         character.SearchRotate();
         searchTimer += Time.deltaTime;
-        if (searchTimer >= character.classSettings.searchingDuration)
+        if (searchTimer >= character.SearchingDuration)
             ToPatrolState();
     }
 

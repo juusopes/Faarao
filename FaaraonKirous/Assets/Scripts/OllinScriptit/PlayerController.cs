@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,13 +24,14 @@ public class PlayerController : MonoBehaviour
 
     //Abilities
     //Indicator
-    [HideInInspector]
-    public bool ability1Active;
+    //[HideInInspector]
+    public bool abilityActive;
     public GameObject indicator;
     private GameObject line;
     [HideInInspector]
     public GameObject visibleInd;
-
+    public int abilityNum;
+    public bool inRange;
     //Invisibility
     public bool isInvisible;
 
@@ -59,6 +56,8 @@ public class PlayerController : MonoBehaviour
 
     //Attack
     public GameObject targetEnemy;
+    private GameObject target;
+    private bool useAttack;
 
     //Menu
     public LevelController lC;
@@ -84,12 +83,17 @@ public class PlayerController : MonoBehaviour
             LineOfSight();
             KeyControls();
             Invisibility();
-            SetIndicator();
             TestOffLink();
+            Attack();
             //Climb();
         }
+        else
+        {
+            StopNavigation();
+            abilityActive = false;
+        }
+        SetIndicator();
     }
-
     private void Initialize()
     {
         navMeshAgent = this.GetComponent<NavMeshAgent>();
@@ -108,70 +112,65 @@ public class PlayerController : MonoBehaviour
         death = GetComponent<DeathScript>();
         targetV3 = transform.position;
         Stay();
+        abilityActive = false;
     }
     public void Moving()
     {
-        if (menu.menuActive)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit = new RaycastHit();
+        //DoubleClick Check
+        if (isActiveCharacter)
         {
-            Stay();
-        } else { 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit = new RaycastHit();
-            //DoubleClick Check
-            if (isActiveCharacter)
+            if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
+                if (Physics.Raycast(ray, out hit))
                 {
-              
-                    if (Physics.Raycast(ray, out hit))
-                    {
-                        targetV3 = hit.point;
-                    }
-                    if (isRunning)
-                    {
-                        isRunning = false;
-                    }
-                    if (doubleClickTimer < 0.5f)
-                    {
-                        isRunning = true;
-                    }
-                    if (doubleClickTimer >= 0.5f)
-                    {
-                        doubleClickTimer = 0;
-                    }
+                    targetV3 = hit.point;
                 }
-            }
-            if (doubleClickTimer < 0.5f)
-            {
-                doubleClickTimer += Time.deltaTime;
-            }
-            //Moving
-            if ((!playerOne && !GetComponent<PriestAbilities>().useTeleknesis) || playerOne)
-            {
                 if (isRunning)
-                {
-                    navMeshAgent.speed = movementSpeed * 1.5f;
-                }
-                else if (isCrouching)
-                {
-                    navMeshAgent.speed = movementSpeed * 0.5f;
-                }
-                else
-                {
-                    navMeshAgent.speed = movementSpeed;
-                }
-                //if (!climbing)
-                //{
-                    navMeshAgent.SetDestination(targetV3);
-                //}
-                if (position == transform.position)
                 {
                     isRunning = false;
                 }
-                else
+                if (doubleClickTimer < 0.5f)
                 {
-                    position = transform.position;
+                    isRunning = true;
                 }
+                if (doubleClickTimer >= 0.5f)
+                {
+                    doubleClickTimer = 0;
+                }
+            }
+        }
+        if (doubleClickTimer < 0.5f)
+        {
+            doubleClickTimer += Time.deltaTime;
+        }
+        //Moving
+        if ((!playerOne && !GetComponent<PriestAbilities>().useTeleknesis) || playerOne)
+        {
+            if (isRunning)
+            {
+                navMeshAgent.speed = movementSpeed * 1.5f;
+            }
+            else if (isCrouching)
+            {
+                navMeshAgent.speed = movementSpeed * 0.5f;
+            }
+            else
+            {
+                navMeshAgent.speed = movementSpeed;
+            }
+            //if (!climbing)
+            //{
+            navMeshAgent.SetDestination(targetV3);
+            //}
+            if (position == transform.position)
+            {
+                isRunning = false;
+            }
+            else
+            {
+                position = transform.position;
             }
         }
     }
@@ -180,7 +179,17 @@ public class PlayerController : MonoBehaviour
         navMeshAgent.SetDestination(transform.position);
         targetV3 = transform.position;
     }
+    
+    public void GiveDestination(Vector3 v3)
+    {
+        targetV3 = v3;
+        navMeshAgent.SetDestination(targetV3);
+    }
 
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
     private void LineOfSight()
     {
         RaycastHit hit;
@@ -248,7 +257,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isActiveCharacter)
         {
-            if (ability1Active)
+            if (abilityActive)
             {
                 if (visibleInd == null)
                 {
@@ -312,53 +321,61 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    //public void Climb()
-    //{
-    //    if (climbObject != null && climbing)
-    //    {
-    //        Vector3 rot = Vector3.RotateTowards(transform.position, climbObject.transform.position, 360, 360);
-    //        transform.rotation = Quaternion.LookRotation(rot);
-    //        Debug.Log(climbing);
-    //        climbSuccess = true;
-    //        float yAxisValue = 0.01f;
-    //        GetComponent<Rigidbody>().isKinematic = true;
-    //        gameObject.GetComponent<NavMeshAgent>().isStopped = true;
-    //        GetComponent<NavMeshAgent>().enabled = false;
-    //        transform.Translate(new Vector3(0, yAxisValue, 0));
-    //        savedClimbable = climbObject;
-    //    } else if(climbSuccess)
-    //    {
-    //        transform.Translate(new Vector3(0, 0, 0.01f));
-    //        if (grounded)
-    //        {
-    //            climbSuccess = false;
-    //        }
-    //    } else
-    //    {
-    //        GetComponent<NavMeshAgent>().enabled = true;
-    //        gameObject.GetComponent<NavMeshAgent>().isStopped = false;
-    //    }
-    //}
 
     public void Attack()
     {
-        if (targetEnemy != null)
+        if (abilityNum == 9)
         {
-            targetEnemy.GetComponent<DeathScript>().damage = 1;
-            targetEnemy = null;
+            if (lC.targetObject != null)
+            {
+                target = lC.targetObject;
+            }
+            else if (!useAttack)
+            {
+                target = null;
+            }
+            if (target != null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) && isActiveCharacter)
+                {
+                    targetV3 = target.transform.position;
+                    navMeshAgent.SetDestination(targetV3);
+
+                    useAttack = true;
+                    abilityActive = false;
+                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Enemy";
+                }
+                if (targetEnemy == target)
+                {
+                    targetEnemy.GetComponent<DeathScript>().damage = 1;
+                    targetEnemy = null;
+                    target = null;
+                    useAttack = false;
+                    abilityNum = 0;
+                    Stay();
+                }
+            }
         }
     }
 
-    public void UseAbility1()
+    public void UseAbility(int tempAbilityNum)
     {
-        if (!ability1Active)
+        if (!abilityActive)
         {
-            ability1Active = true;
+            abilityActive = true;
+            abilityNum = tempAbilityNum;
+        }
+        else if (abilityNum != tempAbilityNum)
+        {
+            abilityActive = true;
+            abilityNum = tempAbilityNum;
         }
         else
         {
-            ability1Active = false;
+            abilityActive = false;
+            abilityNum = 0;
         }
+
     }
     private void TestOffLink()
     {
@@ -382,6 +399,15 @@ public class PlayerController : MonoBehaviour
         navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : 0.5f;
     }
 
+    public void StopNavigation()
+    {
+        if (!navMeshAgent.enabled)
+            return;
+
+        navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
+    }
+
     private void KeyControls()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -394,12 +420,47 @@ public class PlayerController : MonoBehaviour
         //}
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Attack();
+            UseAbility(9);
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        //Abilities
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            UseAbility1();
+            UseAbility(1);
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            UseAbility(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            UseAbility(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            UseAbility(4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            UseAbility(5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            UseAbility(6);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            UseAbility(7);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            UseAbility(8);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            UseAbility(9);
+        }
+
+        //Camera
         if (Input.GetKeyDown(KeyCode.C))
         {
             CamFollow();

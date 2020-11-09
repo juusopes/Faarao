@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,11 +40,11 @@ public class ServerSend
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
 
-    public static void SyncObject(ObjectList list, int id, ObjectNetManager netManager)
+    public static void SyncObject(ObjectNetManager netManager)
     {
         var packet = new Packet((int)ServerPackets.syncObject);
-        packet.Write((byte)list);
-        packet.Write(id);
+        packet.Write((byte)netManager.List);
+        packet.Write(netManager.Id);
         netManager.SendSync(packet);
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
     }
@@ -80,12 +81,77 @@ public class ServerSend
         packet.Write(id);
         packet.Write(position);
         packet.Write(rotation);
+        packet.Write(Time.fixedTime);
 
         Server.Instance.BeginSendPacketAll(ChannelType.Unreliable, packet);
     }
     #endregion
 
+    #region Enemy
 
+    public static void SightChanged(int id, bool impairedSightRange, bool impairedFOV)
+    {
+        var packet = new Packet((int)ServerPackets.sightChanged);
+        packet.Write(id);
+        packet.Write(impairedSightRange);
+        packet.Write(impairedFOV);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+    }
+
+    public static void StateChanged(int id, StateOption stateOption)
+    {
+        var packet = new Packet((int)ServerPackets.stateChanged);
+        packet.Write(id);
+        packet.Write((byte)stateOption);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+    }
+    public static void EnemyDied(int id)
+    {
+        var packet = new Packet((int)ServerPackets.enemyDied);
+        packet.Write(id);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+    }
+
+    public static void DetectionConeUpdated(int id, float percentage, LineType color, bool atExtreme)
+    {
+        var packet = new Packet((int)ServerPackets.detectionConeUpdated);
+        packet.Write(id);
+        packet.Write(percentage);
+        packet.Write((byte)color);
+        packet.Write(atExtreme);
+        packet.Write(Time.fixedTime);
+
+        // TODO: Send in ignoreOldUnreliable channel or send timeStamp here. OR have a channel pool for unreliables
+        ChannelType channelType = atExtreme ? ChannelType.Reliable : ChannelType.Unreliable;
+        Server.Instance.BeginSendPacketAll(channelType, packet);
+    }
+    #endregion
+
+    #region DisposableObjects
+    private static void AbilityVisualEffectCreated(out Packet packet, AbilityOption ability, Vector3 position)
+    {
+        packet = new Packet((int)ServerPackets.abilityVisualEffectCreated);
+        packet.Write((byte)ability);
+        packet.Write(position);
+    }
+
+    public static void AbilityVisualEffectCreated(AbilityOption ability, Vector3 position)
+    {
+        AbilityVisualEffectCreated(out Packet packet, ability, position);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+    }
+
+    public static void AbilityVisualEffectCreated(int excludeId, AbilityOption ability, Vector3 position)
+    {
+        AbilityVisualEffectCreated(out Packet packet, ability, position);
+
+        Server.Instance.BeginSendPacketAllExclude(excludeId, ChannelType.Reliable, packet);
+    }
+    #endregion
 
 
 }

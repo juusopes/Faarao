@@ -14,9 +14,22 @@ public class NetworkManager : MonoBehaviour
 
     public bool IsConnectedToServer { get; set; } = false;
 
+    public bool IsSingleplayer { get; set; } = true;
+
+    public bool ShouldSendToClient => Server.Instance.IsOnline;
+    public bool ShouldSendToServer => !IsHost && IsConnectedToServer;
+
     // For testing
     [SerializeField]
-    private bool _willHostServer;
+    private bool _willHostServer = false;
+    [SerializeField]
+    private bool _simulateNetwork = false;
+    [SerializeField]
+    private float _simulationDropPercentage = 0;
+    [SerializeField]
+    private int _simulationMinLatency = 0;
+    [SerializeField]
+    private int _simulationMaxLatency = 0;
 
     private void Awake()
     {
@@ -29,10 +42,7 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-    }
 
-    private void Start()
-    {
         if (ClonesManager.IsClone())
         {
             // Automatically connect to local host if this is the clone editor
@@ -44,6 +54,7 @@ public class NetworkManager : MonoBehaviour
             {
                 // Automatically start server if this is the original editor
                 HostServer();
+                IsSingleplayer = false;
             }
         }
     }
@@ -57,6 +68,17 @@ public class NetworkManager : MonoBehaviour
         else
         {
             Server.Instance.Start(26950);
+
+            // TESTING
+            if (_simulateNetwork)
+            {
+                Server.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+                {
+                    DropPercentage = _simulationDropPercentage,
+                    MinLatency = _simulationMinLatency,
+                    MaxLatency = _simulationMaxLatency
+                });
+            }
         }
     }
 
@@ -74,6 +96,17 @@ public class NetworkManager : MonoBehaviour
             int serverPort = 26950;
             IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             Client.Instance.ConnectToServer(ipEndPoint);
+
+            // TESTING
+            if (_simulateNetwork)
+            {
+                Client.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+                {
+                    DropPercentage = _simulationDropPercentage,
+                    MinLatency = _simulationMinLatency,
+                    MaxLatency = _simulationMaxLatency
+                });
+            }
         }
     }
 

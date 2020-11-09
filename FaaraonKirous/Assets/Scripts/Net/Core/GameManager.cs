@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public enum ObjectList : byte
 {
-    enemy
+    enemy,
+    player
 }
 
 public enum ObjectType : short
 {
-    enemy
+    enemy,
+    pharaoh,
+    priest
 }
 
 public class GameManager : MonoBehaviour
@@ -17,13 +21,16 @@ public class GameManager : MonoBehaviour
     public static GameManager _instance;
 
     private readonly Dictionary<ObjectList, Dictionary<int, ObjectNetManager>> _objectLists = new Dictionary<ObjectList, Dictionary<int, ObjectNetManager>>();
-    private readonly Dictionary<int, ObjectNetManager> _enemies = new Dictionary<int, ObjectNetManager>();
     private readonly Dictionary<ObjectList, int> _counters = new Dictionary<ObjectList, int>();
 
     // Prefabs
     private readonly Dictionary<ObjectType, GameObject> _objectPrefabs = new Dictionary<ObjectType, GameObject>();
     [SerializeField]
     private GameObject _enemyClientPrefab = null;
+
+    // Player Characters
+    public GameObject Priest { get; private set; } = null;
+    public GameObject Pharaoh { get; private set; } = null;
 
     private void Awake()
     {
@@ -38,7 +45,8 @@ public class GameManager : MonoBehaviour
         }
 
         // Add lists
-        _objectLists.Add(ObjectList.enemy, _enemies);
+        _objectLists.Add(ObjectList.enemy, new Dictionary<int, ObjectNetManager>());
+        _objectLists.Add(ObjectList.player, new Dictionary<int, ObjectNetManager>());
         _objectPrefabs.Add(ObjectType.enemy, _enemyClientPrefab);
     }
 
@@ -62,29 +70,18 @@ public class GameManager : MonoBehaviour
         netManager.Id = id;
     }
 
-    private int GetCounter(ObjectList list)
+    private int CreateNextId(ObjectList list)
     {
-        if (_counters.TryGetValue(list, out int value))
-        {
-            return value;
+        int nextAvailableId;
+        if (!_counters.TryGetValue(list, out nextAvailableId)) {
+            _counters.Add(list, 0);  // Create counter
+            nextAvailableId = 0;
         }
-        else {
-            // Create counter
-            _counters.Add(list, 0);
-            return 0;
-        }
-    }
 
-    private void IncrementCounter(ObjectList list)
-    {
-        if (_counters.ContainsKey(list))
-        {
-            _counters[list]++;
-        }
-        else
-        {
-            Debug.Log("List not found! Cannot increment.");
-        }
+        // Increment id for next creation
+        _counters[list]++;
+
+        return nextAvailableId;
     }
     #endregion
 
@@ -95,10 +92,9 @@ public class GameManager : MonoBehaviour
         {
             foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
             {
-                objectEntry.Value.Delete();
+                ObjectNetManager netManager = objectEntry.Value;
+                if (netManager.Delete()) listEntry.Value.Remove(objectEntry.Key);
             }
-            // Clear dictionary ones objects have been destroyed
-            listEntry.Value.Clear();
         }
 
         // TODO: Reset counters. Though we don't care about them as client should not create objects
@@ -114,8 +110,7 @@ public class GameManager : MonoBehaviour
             foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
             {
                 ObjectNetManager netManager = objectEntry.Value;
-                ServerSend.ObjectCreated(netManager.Type, netManager.Id,
-                    netManager.Transform.position, netManager.Transform.rotation);
+                netManager.ObjectCreated();
             }
         }
 
@@ -125,29 +120,34 @@ public class GameManager : MonoBehaviour
             foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
             {
                 ObjectNetManager netManager = objectEntry.Value;
-
-                ServerSend.SyncObject(listEntry.Key, objectEntry.Key, netManager);
+                netManager.SyncObject();
             }
         }
     }
     #endregion
 
     #region Adders
-    public void ObjectCreatedHost(ObjectNetManager netManager)
+    public void AddPlayerCharacter(ObjectNetManager netManager)
+    {
+        switch (netManager.Type)
+        {
+            case ObjectType.pharaoh:
+                Pharaoh = netManager.gameObject;
+                break;
+            case ObjectType.priest:
+                Priest = netManager.gameObject;
+                break;
+        }
+    }
+
+    public void ObjectCreatedHost(ObjectNetManager netManager, bool useTypeForId = false)
     {
         ObjectList list = netManager.List;
 
-        int idCounter = GetCounter(list);
-        AddObject(idCounter, netManager);
+        int id = useTypeForId ? (int)netManager.Type : CreateNextId(list);
+        AddObject(id, netManager);
 
-        // TODO: Check if host or not
-        if (Server.Instance.IsOnline)
-        {
-            ServerSend.ObjectCreated(netManager.Type, idCounter,
-                netManager.Transform.position, netManager.Transform.rotation);
-        }
-
-        IncrementCounter(list);
+        netManager.ObjectCreated();
     }
     #endregion
 
@@ -164,7 +164,19 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    
+    #region Helpers
+    public GameObject GetPlayerCharacter(ObjectType type)
+    {
+        if (TryGetObject(ObjectList.player, (int)type, out ObjectNetManager netManager))
+        {
+            return netManager.gameObject;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    #endregion
 
 
 

@@ -37,7 +37,7 @@ public class ControlledState : State
             character.SetDestination(character.additionalTarget);
 
         controlledTimer += Time.deltaTime;
-        if (controlledTimer >= character.classSettings.controlledDuration)
+        if (controlledTimer >= character.ControlledDuration)
         {
             character.StopNavigation();
             ToAlertState();

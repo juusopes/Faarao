@@ -9,9 +9,15 @@ public class AbilityController : MonoBehaviour
     private GameObject lastSpawnedAbility;
     private LayerMask abilityLayerMask;
 
+    private LevelController levelCtrl;
+    private int click = 0;
+    private bool abilityActivated;
+
     private void Start()
     {
         Assert.IsNotNull(abilitySpawner, "Add ability spawner prefab!");
+
+        levelCtrl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
     }
 
     private void Update()
@@ -24,38 +30,68 @@ public class AbilityController : MonoBehaviour
         if (abilitySpawner == null)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            abilityOption = AbilityOption.DistractBlindingLight;
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-            abilityOption = AbilityOption.DistractInsectSwarm;
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-            abilityOption = AbilityOption.DistractNoiseToGoto;
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-            abilityOption = AbilityOption.DistractNoiseToLookAt;
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-            abilityOption = AbilityOption.DistractSightToGoTo;
-        else if (Input.GetKeyDown(KeyCode.Alpha6))
-            abilityOption = AbilityOption.DistractSightToLookAt;
-        else if (Input.GetKeyDown(KeyCode.Alpha7))
-            abilityOption = AbilityOption.PosessAI;
-        else if (Input.GetKeyDown(KeyCode.Alpha8))
-            abilityOption = AbilityOption.TestSight;
-        else
-            abilityOption = AbilityOption.NoMoreDistractions;
+        if (!levelCtrl.activeCharacter.GetComponent<PlayerController>().abilityActive)
+            return;
 
-
-        if (abilityOption != AbilityOption.NoMoreDistractions)
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            abilityLayerMask = abilityOption == AbilityOption.PosessAI ? RayCaster.clickSelectorLayerMask : RayCaster.clickSpawnerLayerMask;
+            abilityActivated = true;
+        }
+        Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
+        if (levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange && abilityActivated)
+        {
+            PlayerController caster = levelCtrl.activeCharacter.GetComponent<PlayerController>();
+            if (caster.abilityNum == 2 && !caster.playerOne)
+                abilityOption = AbilityOption.DistractBlindingLight;
+            else if (caster.abilityNum == 2 && caster.playerOne)
+                abilityOption = AbilityOption.DistractInsectSwarm;
+            else if (caster.abilityNum == 3 && !caster.playerOne)
+                abilityOption = AbilityOption.DistractNoiseToGoto;
+            else if (caster.abilityNum == 3 && caster.playerOne)
+                abilityOption = AbilityOption.DistractNoiseToLookAt;
+            else if (caster.abilityNum == 4 && caster.playerOne)
+                abilityOption = AbilityOption.DistractSightToGoTo;
+            else if (caster.abilityNum == 4 && !caster.playerOne)
+                abilityOption = AbilityOption.DistractSightToLookAt;
+            else if (caster.abilityNum == 5 && caster.playerOne)
+                abilityOption = AbilityOption.PossessAI;
+            else if (caster.abilityNum == 5 && !caster.playerOne)
+                abilityOption = AbilityOption.TestSight;
+            else if (caster.abilityNum == 6 && !caster.playerOne)
+                abilityOption = AbilityOption.ViewPath;
+            else
+                abilityOption = AbilityOption.NoMoreDistractions;
 
-            RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, abilityLayerMask);
-            Debug.Log("hit " + hit.point); 
-
-            if (RayCaster.HitObject(hit))
+            if (abilityOption != AbilityOption.NoMoreDistractions)
             {
-                UseAbility(hit);
+                abilityLayerMask = abilityOption == AbilityOption.PossessAI ? RayCaster.clickSelectorLayerMask : RayCaster.clickSpawnerLayerMask;
+
+                RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, abilityLayerMask);
+                //Debug.Log("hit " + hit.point);
+
+                if (RayCaster.HitObject(hit))
+                {
+                    UseAbility(hit);
+                }
             }
 
+            //Ability Ender
+            if (caster.abilityNum != 7 || (caster.abilityNum == 7 && click == 1))
+            {
+                caster.abilityNum = 0;
+                caster.abilityActive = false;
+                caster.inRange = false;
+                abilityActivated = false;
+                click = 0;
+            }
+            else
+            {
+                click++;
+            }
+        }
+        else
+        {
+            return;
         }
     }
 
@@ -64,39 +100,39 @@ public class AbilityController : MonoBehaviour
         //TODO: Lazy ? no : object pooling...
         Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)
-            Destroy(lastSpawnedAbility);    
+            Destroy(lastSpawnedAbility);
 
-        if (abilityOption != AbilityOption.PosessAI)
-            DeselectAI();
-
-        if (abilityOption == AbilityOption.PosessAI)
+        if (abilityOption == AbilityOption.PossessAI)
         {
             if (selectedAI)
             {
-                //In case timer runs out before reacting
-                if (selectedAI.isPosessed)
-                {
-                    SpawnAutoRemoved(hit.point, abilityOption);
-                    selectedAI.ControlAI(hit.point);
-                }
-
+                PossessEnemy(hit.point);
                 DeselectAI();
             }
             else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
             {
                 SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
-                if (selectedAI)
-                    selectedAI.PosessAI();
+            }
+        }
+        if (abilityOption == AbilityOption.ViewPath)
+        {
+            if (selectedAI)
+            {
+                DeselectAI();
+            }
+            else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
+            {
+                SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
             }
         }
         else if (abilityOption == AbilityOption.TestSight)
         {
+            DeselectAI();
             SpawnRemovable(hit.point, abilityOption);
-            //SpawnAutoRemoved(hit.point, abilityOption);
-            Debug.Log("Test Sight");
         }
         else if (abilityOption < AbilityOption.NoMoreDistractions)
         {
+            DeselectAI();
             SpawnAutoRemoved(hit.point, abilityOption);
         }
     }
@@ -117,8 +153,36 @@ public class AbilityController : MonoBehaviour
         selectedAI = null;
     }
 
+    private void PossessEnemy(Vector3 destinationPoint)
+    {
+        if (OnNavMesh.IsReachable(selectedAI.transform, destinationPoint))
+        {
+            SpawnAutoRemoved(destinationPoint, abilityOption);
+            if (NetworkManager._instance.IsHost)
+                selectedAI.PossessAI(destinationPoint);
+            else if (NetworkManager._instance.ShouldSendToServer)
+                ClientSend.EnemyPossessed(selectedAI.Id, destinationPoint);
+        }
+        else
+        {
+            //TODO: Spawn failed marker
+        }
+    }
+
     private void SpawnAutoRemoved(Vector3 pos, AbilityOption option)
     {
+        if (option < AbilityOption.NoMoreDistractions || option == AbilityOption.PossessAI)
+        {
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                ClientSend.AbilityUsed(option, pos);
+            }
+            else if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.AbilityVisualEffectCreated(option, pos);
+            }
+        }
+
         abilitySpawner.SpawnAtPosition(pos, option);
     }
 

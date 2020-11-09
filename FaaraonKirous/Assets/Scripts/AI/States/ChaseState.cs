@@ -28,14 +28,14 @@ public class ChaseState : State
     {
         if (CanSeePlayer)
         {
-            character.LerpLookAt(character.chaseTarget, 150f);
-            character.SetDestination(character.chaseTarget);
+            character.LerpLookAt(ChaseTarget, 150f);
+            character.SetDestination(ChaseTarget);
         }
         else
         {
             if (!CanSeePlayer)
             {
-                LostTrackOfPlayer();
+                character.LostTrackOfPlayer();
                 ToTrackingState();
             }
         }

@@ -36,6 +36,7 @@ public static class RayCaster
     public static readonly LayerMask playerDetectLayerMask = LayerListStructures | layerPlayer;
     public static readonly LayerMask clickSelectorLayerMask = LayerListStructures | layerClickSelector;
     public static readonly LayerMask clickSpawnerLayerMask = ~(LayerListDefaultIgnore | LayerListObjects);
+    public static readonly LayerMask attackLayerMask = ~(LayerListDefaultIgnore | LayerListRaycastable);
 
     public static RaycastHit ToTarget(GameObject start, GameObject target, float range, LayerMask layerMask)
     {
