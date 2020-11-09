@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 1494360049754498623}
   - component: {fileID: 2527314447285479834}
   - component: {fileID: 357513148858178896}
-  - component: {fileID: 974349093241107138}
+  - component: {fileID: 6690710660545652748}
   m_Layer: 0
   m_Name: pathway_unity 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1494360049754498623
 Transform:
@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2303265894192036997}
-  m_LocalRotation: {x: -0.028160451, y: 0.74947107, z: 0.024835186, w: 0.6609716}
-  m_LocalPosition: {x: -1439.6494, y: -217.80827, z: 1691.3167}
-  m_LocalScale: {x: 0.5976281, y: 0.47546163, z: 0.5976281}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -4.27, y: 97.201, z: -0.539}
+  m_LocalEulerAnglesHint: {x: 90, y: 1, z: 1}
 --- !u!33 &2527314447285479834
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -83,8 +83,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!61 &974349093241107138
-BoxCollider2D:
+--- !u!58 &6690710660545652748
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -96,16 +96,6 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0.14100647, y: -4657328}
   serializedVersion: 2
-  m_Size: {x: 47.26167, y: 4.517712}
-  m_EdgeRadius: 0
+  m_Radius: 19.849545

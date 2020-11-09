@@ -7,13 +7,16 @@ public class cameraRotation : MonoBehaviour
     public float rotateSpeed;
     public Transform anchorPointTransform;
 
-    public float xspeed;
+    public float rotation;
+
+    public bool rotating;
 
     // Start is called before the first frame update
     void Start()
     {
-        xspeed = 0;
+        rotation = 0;
         rotateSpeed = 2f;
+        rotating = false;
     }
 
     // Update is called once per frame
@@ -21,9 +24,15 @@ public class cameraRotation : MonoBehaviour
     {
         if (Input.GetMouseButton(2))
         {
-            xspeed += rotateSpeed * Input.GetAxis("Mouse X");
+            rotating = true;
 
-            anchorPointTransform.transform.eulerAngles = new Vector3(0, xspeed, 0);
+            rotation += rotateSpeed * Input.GetAxis("Mouse X");
+            anchorPointTransform.transform.eulerAngles = new Vector3(0, rotation, 0);
+        }
+
+        else
+        {
+            rotating = false;
         }
     }
 }
