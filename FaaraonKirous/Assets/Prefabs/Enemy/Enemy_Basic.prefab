@@ -135,15 +135,16 @@ MonoBehaviour:
   clickSelector: {fileID: 8190698897075809280}
   selectionIndicator: {fileID: 8290095054074434853}
   pathVisualizer: {fileID: 5971332270254427679}
-  chaseTarget: {x: 0, y: 0, z: 0}
-  lastSeenPosition: {x: 0, y: 0, z: 0}
-  additionalTarget: {x: 0, y: 0, z: 0}
-  currentDistraction: {fileID: 0}
-  currentDistractionPos: {x: 0, y: 0, z: 0}
+  isPosessed: 0
   impairedSightRange: 0
   impairedFOV: 0
   isDistracted: 0
-  isPosessed: 0
+  additionalTarget: {x: 0, y: 0, z: 0}
+  currentDistractionPos: {x: 0, y: 0, z: 0}
+  currentDistraction: {fileID: 0}
+  chaseTarget: {x: 0, y: 0, z: 0}
+  couldDetectPlayer1: 0
+  couldDetectPlayer2: 0
   navMeshAgent: {fileID: 0}
 --- !u!114 &8987653627433140945
 MonoBehaviour:
@@ -520,11 +521,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6024281465610095457}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-<<<<<<< Updated upstream
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-=======
   m_LocalPosition: {x: 0, y: 2.785, z: 0.397}
->>>>>>> Stashed changes
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1295752339492584483}
@@ -574,7 +571,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6ee905082fbf5ed4e8ff97e451f89fc1, type: 2}
+  - {fileID: 2100000, guid: 35607b1fbffa9184984b152cda1807c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

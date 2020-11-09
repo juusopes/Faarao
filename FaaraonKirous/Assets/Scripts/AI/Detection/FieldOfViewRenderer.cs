@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Rendering.VirtualTexturing;
 
 public class FieldOfViewRenderer : MonoBehaviour
 {
-<<<<<<< Updated upstream
-=======
     #region Const strings
     private const string TEXTURE = "_MainText";
     private const string TEXTURE_CONTRAST = "_TextureContrast";
@@ -29,8 +28,8 @@ public class FieldOfViewRenderer : MonoBehaviour
     #endregion
 
     #region Fields and expressions
->>>>>>> Stashed changes
     Mesh mesh;
+    Material material;
     public Character character;
     private Vector3 origin;
     private float yStartingAngle = 0;
@@ -100,13 +99,8 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        material = GetComponent<Renderer>().material;
         origin = Vector3.zero;
-<<<<<<< Updated upstream
-        vertices = new Vector3[rayCount + 1 + 1];
-        vertices[0] = origin;
-        uv = new Vector2[vertices.Length];
-        triangles = new int[rayCount * 3];
-=======
         lastColumnSamplePoints = new Vector3[xRayCount];
         lastColumnSampleRays = new RaycastHit[xRayCount];
 #if UNITY_EDITOR
@@ -119,7 +113,6 @@ public class FieldOfViewRenderer : MonoBehaviour
 
         UpdateViewCone();
         //SaveAsset();
->>>>>>> Stashed changes
     }
 
     private void LateUpdate()
@@ -198,7 +191,7 @@ public class FieldOfViewRenderer : MonoBehaviour
             RaycastHit raycastHit;
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
 
-            if(!hasResampled)
+            if (!hasResampled)
                 hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yAngleIn, raycastHit, ref yAngleSample, ref sample);
 
             //Iterate down facing
@@ -264,7 +257,7 @@ public class FieldOfViewRenderer : MonoBehaviour
         {
 
 
-            TODO sample whole new sample in "missing spot", then add closest point as bonus to the second one
+            //TODO sample whole new sample in "missing spot", then add closest point as bonus to the second one
 
             Vector3 preColumnSample = lastColumnSamplePoints[x];
             int retargeting = ShouldRetargetY(preColumnSample, sampleOut);
@@ -752,13 +745,10 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         yAngle = yStartingAngle;
         vertices[0] = Vector3.zero;
-<<<<<<< Updated upstream
-=======
         uv[0] = Vector2.zero;
 
 
 
->>>>>>> Stashed changes
         int vertexIndex = 1;
         int triangleIndex = 0;
         for (int i = 0; i <= yRayCount; i++)
@@ -767,17 +757,18 @@ public class FieldOfViewRenderer : MonoBehaviour
             Vector3 direction = Quaternion.Euler(0, yAngle, 0) * Vector2.right;
             //Debug.DrawRay(origin, direction * viewDistance, Color.green, 10f);
             RaycastHit raycastHit;
+            float uvLenght;
+
             if (Physics.Raycast(origin, direction, out raycastHit, SightRange, RayCaster.viewConeLayerMask))
             {
                 vertex = transform.InverseTransformPoint(origin + direction * raycastHit.distance);
+                uvLenght = raycastHit.distance / SightRange;
             }
             else
             {
                 vertex = transform.InverseTransformPoint(origin + direction * SightRange);
+                uvLenght = 1;
             }
-<<<<<<< Updated upstream
-                
-=======
 
 
             //Create Cone shaped uvs
@@ -785,14 +776,13 @@ public class FieldOfViewRenderer : MonoBehaviour
             float rad = uvAngle * Mathf.Deg2Rad;
             uv[vertexIndex] = new Vector2(Mathf.Sin(rad) * uvLenght, Mathf.Cos(rad) * uvLenght);
 
->>>>>>> Stashed changes
 
             vertices[vertexIndex] = vertex;
 
             if (i > 0)
             {
-                triangles[triangleIndex + 0] = vertexIndex - 1;
-                triangles[triangleIndex + 1] = 0;
+                triangles[triangleIndex + 0] = 0;
+                triangles[triangleIndex + 1] = vertexIndex - 1;
                 triangles[triangleIndex + 2] = vertexIndex;
 
                 triangleIndex += 3;
@@ -802,25 +792,17 @@ public class FieldOfViewRenderer : MonoBehaviour
             yAngle -= yAngleIncrease;
         }
 
-<<<<<<< Updated upstream
-        /*foreach (Vector3 vert in vertices)
-        {
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.transform.position = vert + transform.position;
-        }*/
-=======
         //foreach (Vector3 vert in vertices)
         //{
         //   GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         //   sphere.transform.position = vert + transform.position;
         //}
->>>>>>> Stashed changes
 
         mesh.Clear();
 
         mesh.vertices = vertices;
-        mesh.uv = uv;
         mesh.triangles = triangles;
+        mesh.uv = uv;
     }
     */
 
@@ -859,8 +841,6 @@ public class FieldOfViewRenderer : MonoBehaviour
             yield return new WaitForSeconds(1f / arr.Length);
         }
     }
-<<<<<<< Updated upstream
-=======
 
     IEnumerator Boxes(Vector3[] arr)
     {
@@ -900,7 +880,6 @@ public class FieldOfViewRenderer : MonoBehaviour
     }
 #endif
     #endregion
->>>>>>> Stashed changes
 }
 
 
