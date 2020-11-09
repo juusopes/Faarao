@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor;
@@ -47,18 +48,16 @@ public class FieldOfViewRenderer : MonoBehaviour
     SampleType lastSampleType = 0;
 
     //Tweakable values
-    private const int yRayCount = (10) + 1;    // ODD NUMBER 
+    private const int yRayCount = (20) + 1;    // ODD NUMBER 
     private const int xRayCount = (10) + 1;    // ODD NUMBER 
-    private const float verticalThreshold = 0.1f;
-    private const float horizontalThreshold = 0.1f;
-    private const float stepThreshold = 0.1f;
+    private const float maxXAngle = -90.0000001f;
     private const float ledgeStep = 0.2f;
     private const float ledgeSightBlockingHeight = 0.3f;
     private const float enemySightHeight = 2.785f;
     private const float playerHeight = 2.785f;
     private const float yTolerance = 0.2f;                  //Difference between sampled corner and raycasted corner with added tolerance in case floor is not evenly shaped
-    private const float floorSlopeTolerance = 0.8f;         //Dotproduct for hitnormal
     private const float cornerCheckAngle = 80f;             //In what x angle is corner check operated (the rounder ledge edges the smaller value)
+
 
     private enum Looking
     {
@@ -71,8 +70,11 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         None,
         Floor,
-        WallToFloorCorner,
+        FloorToDownFloor,
+        FloorToUpFloor,
         FloorToWallCorner,
+        WallToWall,
+        WallToFloorCorner,
         EndOfSightRange,
         LedgeAtUpAngle
     }
@@ -161,7 +163,7 @@ public class FieldOfViewRenderer : MonoBehaviour
     private void InitMesh()
     {
         vertexPoints = new List<Vector3>();
-        vertexPoints.Add(MeshOrigin);
+        AddVertexPoint(MeshOrigin, SampleType.None);
     }
 
     private void IterateY()
@@ -179,60 +181,28 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         float xAngleSample = xStartingAngle;
         float yAngleSample = yAngleIn;
-        Vector3 previousSample = vertexPoints[0];
-        Vector3 secondPreviousSample = Vector3.negativeInfinity;
+        Vector3 previousSample = Vector3.positiveInfinity;
+        Vector3 secondPreviousSample = Vector3.positiveInfinity;
         bool hasResampled = false;
 
         for (int x = 0; x < xRayCount; x++)
         {
+            if (xAngleSample < maxXAngle)       //Negatives are up angle
+                return;
+
             Vector3 direction = Quaternion.Euler(xAngleSample, yAngleSample, 0) * Vector3.forward;
             //Debug.Log(xAngle + " " + Quaternion.LookRotation(direction, Vector3.up).eulerAngles.x);
 
             RaycastHit raycastHit;
+            RaycastHit previousRayCastHit;
+            //if(x > 0)
+            previousRayCastHit = x > 0 ? lastColumnSampleRays[x - 1] : new RaycastHit();
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
 
             if (!hasResampled)
                 hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yAngleIn, raycastHit, ref yAngleSample, ref sample);
 
-            //Iterate down facing
-            if (GetVerticalDirection(xAngleSample) == Looking.Down)      //Is looking DOWN (YES negatives are up)
-            {
-                if (!AreAboveEachother(previousSample, sample))        //Ignore any hits that are on the same floor as previous
-                {
-                    //Debug.Log(IsClearlyLower(previousSample, sample));
-                    if (IsClearlyLower(previousSample, sample))             //When dropping to lower level 
-                    {
-                        TryCreateFloorVertex(raycastHit, sample);
-                    }
-                    else if (IsClearlyHigher(previousSample, sample))       //Floor turns into wall, calculate corner
-                    {
-                        if (HitPointIsUpFacing(raycastHit))
-                            TryCreateWallToFloorCornerVertex(previousSample, sample);
-                        else
-                            TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample);
-                        //else if (lastSampleType != SampleType.FloorToWallCorner)
-                        //   TryCreateDownLedgeVertices(yAngle, previousSample, sample);
-
-                    }
-                }
-            }
-            //Iterate flat facing
-            else if (GetVerticalDirection(xAngleSample) == Looking.Flat)    //Is looking straight eye level
-            {
-                if (AreSimilarLenght(sample, SightRange))
-                {
-                    TryCreateVertexToEndOfSightRange(sample);
-                }
-            }
-            //Iterate up facing
-            else if (GetVerticalDirection(xAngleSample) == Looking.Up)     //Is looking UP
-            {
-                if (!AreAboveEachother(previousSample, sample))
-                {
-                    if (IsClearlyLonger(previousSample, sample))
-                        TryCreateUpLedgeVertices(yAngleSample, previousSample, sample);
-                }
-            }
+            InspectSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, sample);
 
             //uv[vertexIndex] = GetVertexUV(y, sample);
 #if UNITY_EDITOR
@@ -248,6 +218,71 @@ public class FieldOfViewRenderer : MonoBehaviour
             vertexIndex++;
             xAngleSample -= xAngleIncrease;
 
+        }
+    }
+
+    private void InspectSample(int x, int y, float xAngleSample, float yAngleSample, Vector3 previousSample, RaycastHit raycastHit, RaycastHit previousRayCastHit, Vector3 sample)
+    {
+        switch (GetVerticalDirection(xAngleSample))
+        {
+            case Looking.Down:
+                InspectDownSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, sample);
+                break;
+            case Looking.Flat:
+                InspectFlatSample(sample);
+                break;
+            case Looking.Up:
+                InspectUpSample(yAngleSample, previousSample, sample);
+                break;
+        }
+    }
+
+
+    private void InspectDownSample(int x, int y, float xAngleSample, float yAngleSample, Vector3 previousSample, RaycastHit raycastHit, RaycastHit previousRayCastHit, Vector3 sample)
+    {
+        if (!FOVUtil.AreVerticallyAligned(previousSample, sample))        //Ignore any hits that are above previous
+        {
+            //Debug.Log(IsClearlyLower(previousSample, sample));
+            //if (FOVUtil.IsFloorToFloor(previousRayCastHit, raycastHit))             //When dropping to lower level 
+            if (FOVUtil.IsClearlyLower(previousSample, sample))             //When dropping to lower level 
+            {
+                TryCreateFloorVertex(raycastHit, sample);
+                if (x > 0)
+                    TryCreateFloorDropVertex(previousRayCastHit, previousSample, sample, xAngleSample);
+            }
+            else if (FOVUtil.IsFloorToWall(previousRayCastHit, raycastHit))
+            {
+                // TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample);
+            }
+            else if (FOVUtil.IsWallToFloor(previousRayCastHit, raycastHit))
+            {
+                //  TryCreateWallToFloorCornerVertex(previousSample, sample);
+            }
+
+
+
+            //else if (lastSampleType != SampleType.FloorToWallCorner)
+            //   TryCreateDownLedgeVertices(yAngle, previousSample, sample);
+
+        }
+    }
+
+
+
+    private void InspectFlatSample(Vector3 sample)
+    {
+        if (FOVUtil.AreSimilarLenght(sample, SightRange))
+        {
+            TryCreateVertexToEndOfSightRange(sample);
+        }
+    }
+
+    private void InspectUpSample(float yAngleSample, Vector3 previousSample, Vector3 sample)
+    {
+        if (!FOVUtil.AreVerticallyAligned(previousSample, sample))
+        {
+            if (FOVUtil.IsClearlyLonger(previousSample, sample))
+                TryCreateUpLedgeVertices(yAngleSample, previousSample, sample);
         }
     }
 
@@ -273,6 +308,7 @@ public class FieldOfViewRenderer : MonoBehaviour
                 if (testRayHit.collider != null)
                 {
                     Vector3 closestPoint = testRayHit.collider.ClosestPoint(transform.TransformPoint(reSampleTest));
+                    //Vector3 closestPoint = GetClosestPoint(testRayHit, reSampleTest);
                     ACylinder(transform.InverseTransformPoint(closestPoint), Color.magenta);
                     Quaternion newY = Quaternion.LookRotation(closestPoint, Vector3.up);
                     CheckColliderExists(raySamplePoints[0], closestPoint, SightRange);
@@ -348,10 +384,21 @@ public class FieldOfViewRenderer : MonoBehaviour
         return false;
     }
 
+    private Vector3 GetClosestPoint(RaycastHit testRayHit, Vector3 reSampleTest)
+    {
+        if (testRayHit.collider == null || reSampleTest == Vector3.zero)
+        {
+            Debug.LogWarning("No can do closest!");
+            return Vector3.zero;
+        }
+
+        return testRayHit.collider.ClosestPoint(transform.TransformPoint(reSampleTest));
+    }
+
     private int ShouldRetargetY(Vector3 preColumnSample, Vector3 sample)
     {
-        bool shouldRetarget = AreSimilarLenght(preColumnSample, SightRange) && !AreSimilarLenght(sample, SightRange)       //If one of them is full and other not
-                            || !AreSimilarLenght(preColumnSample, SightRange) && AreSimilarLenght(sample, SightRange);       //If one of them is full and other not
+        bool shouldRetarget = FOVUtil.AreSimilarLenght(preColumnSample, SightRange) && !FOVUtil.AreSimilarLenght(sample, SightRange)       //If one of them is full and other not
+                            || !FOVUtil.AreSimilarLenght(preColumnSample, SightRange) && FOVUtil.AreSimilarLenght(sample, SightRange);       //If one of them is full and other not
         // || !AreSimilarOnX(preColumnSample, sample) && !AreSimilarOnZ(preColumnSample, sample);
 
         //TODO: MORE CASES
@@ -370,30 +417,66 @@ public class FieldOfViewRenderer : MonoBehaviour
         return ret;
     }
 
+
+
     private void TryCreateVertexToEndOfSightRange(Vector3 sample)
     {
         Vector3 downSample = GetSamplePoint(transform.TransformPoint(sample), Vector3.down, playerHeight * 2f);
         if (sample.y - downSample.y < playerHeight + yTolerance)
         {
-            lastSampleType = SampleType.EndOfSightRange;
-            vertexPoints.Add(downSample);
+            AddVertexPoint(downSample, SampleType.EndOfSightRange);
         }
+    }
+
+
+    private void AddVertexPoint(Vector3 sample, SampleType sampleType)
+    {
+        lastSampleType = sampleType;
+        vertexPoints.Add(sample);
     }
 
     private void TryCreateFloorVertex(RaycastHit raycastHit, Vector3 sample)
     {
-        if (HitPointIsUpFacing(raycastHit))          //Hit ground-like flatish position
+        //if (FOVUtil.HitPointIsUpFacing(raycastHit))          //Hit ground-like flatish position
+        //{
+        AddVertexPoint(sample, SampleType.Floor);
+        //}
+    }
+
+
+    private Vector3 ExtraPolateVector(SampleType type, Vector3 previousSample, Vector3 sample, float xAngle)
+    {
+        if (sample == Vector3.zero || previousSample == Vector3.zero)
+            return Vector3.zero;
+
+        switch (type)
         {
-            lastSampleType = SampleType.Floor;
-            vertexPoints.Add(sample);
+            case SampleType.FloorToDownFloor:
+                float heightFromSight = 0 - previousSample.y;
+                float angleRad = (90f - xAngle) * Mathf.Deg2Rad;
+                float hypotenuse = heightFromSight / Mathf.Cos(angleRad);
+                Debug.Log("Le" + heightFromSight + " " + angleRad);
+                return sample.normalized * hypotenuse;
         }
+
+        return Vector3.zero;
+    }
+
+    private void TryCreateFloorDropVertex(RaycastHit previousRaycastHit, Vector3 previousSample, Vector3 sample, float xAngle)
+    {
+        Vector3 extraPolatedVec = ExtraPolateVector(SampleType.FloorToDownFloor, previousSample, sample, xAngle);
+        Debug.Log(extraPolatedVec);
+        Debug.Log(extraPolatedVec.magnitude + " " + previousSample.magnitude);
+        //ACylinder(extraPolatedVec, Color.white);
+        Vector3 closestPoint = GetClosestPoint(previousRaycastHit, extraPolatedVec);
+        Debug.Log(closestPoint);
+        AddVertexPoint(closestPoint, SampleType.FloorToDownFloor);
     }
 
     private void TryCreateWallToFloorCornerVertex(Vector3 previousSample, Vector3 sample)
     {
         Vector3 wallCorner = new Vector3(previousSample.x, sample.y, previousSample.z);     //Simulate position of corner
-        lastSampleType = SampleType.WallToFloorCorner;
-        vertexPoints.Add(wallCorner);
+        AddVertexPoint(wallCorner, SampleType.WallToFloorCorner);
     }
 
     private void TryCreateFloorToWallCornerVertex(float yAngleIn, Vector3 previousSample, Vector3 sample)
@@ -402,8 +485,7 @@ public class FieldOfViewRenderer : MonoBehaviour
         Vector3 cornerDirectionCheck = Quaternion.Euler(100, yAngleIn, 0) * Vector3.forward;
         if (CheckColliderExists(wallCorner + Vector3.up * 0.2f, cornerDirectionCheck, 0.5f))
         {
-            lastSampleType = SampleType.FloorToWallCorner;
-            vertexPoints.Add(wallCorner);
+            AddVertexPoint(wallCorner, SampleType.FloorToWallCorner);
         }
     }
 
@@ -424,9 +506,8 @@ public class FieldOfViewRenderer : MonoBehaviour
 
         if (!ledgeEnd.Equals(Vector3.zero))
         {
-            vertexPoints.Add(corner);
-            vertexPoints.Add(ledgeEnd);
-            lastSampleType = SampleType.LedgeAtUpAngle;
+            AddVertexPoint(corner, SampleType.LedgeAtUpAngle);
+            AddVertexPoint(ledgeEnd, SampleType.LedgeAtUpAngle);
         }
         else
             Debug.Log("nope");
@@ -447,9 +528,9 @@ public class FieldOfViewRenderer : MonoBehaviour
 
         if (!ledgeEnd.Equals(Vector3.zero))
         {
-            vertexPoints.Add(corner);
-            vertexPoints.Add(ledgeEnd);
-            lastSampleType = SampleType.LedgeAtUpAngle;
+            AddVertexPoint(corner, SampleType.LedgeAtUpAngle);
+            AddVertexPoint(ledgeEnd, SampleType.LedgeAtUpAngle);
+
         }
         else
             Debug.Log("nope");
@@ -596,7 +677,11 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
 #if UNITY_EDITOR
         if (DebugRayCasts)
-            Debug.DrawRay(globalStart, direction * range, Color.green, 1000f);
+        {
+            Color color = direction.y == 0 ? Color.yellow : Color.green;
+            Debug.DrawRay(globalStart, direction * range, color, 1000f);
+        }
+
 #endif
 
         RaycastHit raycastHit;
@@ -677,55 +762,7 @@ public class FieldOfViewRenderer : MonoBehaviour
         return Looking.Down;
     }
 
-    private bool HitPointIsUpFacing(RaycastHit raycastHit)
-    {
-        return Vector3.Dot(raycastHit.normal, Vector3.up) > floorSlopeTolerance;
-    }
 
-    private bool IsClearlyLonger(Vector3 start, Vector3 end)
-    {
-        return end.magnitude - start.magnitude > stepThreshold;
-    }
-
-    private bool IsClearlyHigher(Vector3 start, Vector3 end)
-    {
-        return end.y - start.y > verticalThreshold;
-    }
-
-    private bool IsClearlyLower(Vector3 start, Vector3 end)
-    {
-        //Debug.Log((end.y - start.y < -verticalThreshold) +" " +start.y + "-" + end.y + "=" + (end.y - start.y));
-        return end.y - start.y < -verticalThreshold;
-    }
-
-    private bool AreAboveEachother(Vector3 sample1, Vector3 sample2)
-    {
-        return Mathf.Abs(sample1.x - sample2.x) < horizontalThreshold
-        && Mathf.Abs(sample1.z - sample2.z) < horizontalThreshold;
-    }
-    private bool AreSimilarOnX(Vector3 sample1, Vector3 sample2)
-    {
-        return Mathf.Abs(sample1.x - sample2.x) < horizontalThreshold;
-    }
-    private bool AreSimilarOnZ(Vector3 sample1, Vector3 sample2)
-    {
-        return Mathf.Abs(sample1.z - sample2.z) < horizontalThreshold;
-    }
-
-    private bool AreSimilarHeight(Vector3 sample1, Vector3 sample2)
-    {
-        return Mathf.Abs(sample1.y - sample2.y) < verticalThreshold;
-    }
-
-    private bool AreSimilarLenght(Vector3 sample1, Vector3 sample2)
-    {
-        return Mathf.Abs(sample1.magnitude - sample2.magnitude) < horizontalThreshold;
-    }
-
-    private bool AreSimilarLenght(Vector3 sample1, float comparison)
-    {
-        return Mathf.Abs(sample1.magnitude - comparison) < horizontalThreshold;
-    }
 
     #endregion
 
@@ -833,10 +870,7 @@ public class FieldOfViewRenderer : MonoBehaviour
         yield return new WaitForSeconds(0f);
         foreach (Vector3 vert in arr)
         {
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.transform.position = transform.TransformPoint(vert);
-            sphere.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-            sphere.layer = 2;
+            GameObject sphere = CreatePrimitive(vert, PrimitiveType.Sphere, new Vector3(0.4f, 0.4f, 0.4f));
             sphere.GetComponent<Renderer>().material = ballMat;
             yield return new WaitForSeconds(1f / arr.Length);
         }
@@ -847,11 +881,8 @@ public class FieldOfViewRenderer : MonoBehaviour
         yield return new WaitForSeconds(0f);
         foreach (Vector3 vert in arr)
         {
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            sphere.transform.position = transform.TransformPoint(vert);
-            sphere.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-            sphere.layer = 2;
-            sphere.GetComponent<Renderer>().material.color = Color.red;
+            GameObject cube = CreatePrimitive(vert, PrimitiveType.Cube, new Vector3(0.35f, 0.35f, 0.35f));
+            cube.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0.5f);// Color.red;
             yield return new WaitForSeconds(1f / arr.Length);
         }
     }
@@ -860,27 +891,21 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         if (DebugRaypointShapes)
         {
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            sphere.transform.position = transform.TransformPoint(localPos);
-            sphere.transform.localScale = new Vector3(0.5f, 0.25f, 0.5f);
-            sphere.layer = 2;
+            GameObject sphere = CreatePrimitive(transform.TransformPoint(localPos), PrimitiveType.Cylinder, new Vector3(0.5f, 0.25f, 0.5f));
             sphere.GetComponent<Renderer>().material.color = color;
         }
     }
 
-    void SaveAsset()
+    private GameObject CreatePrimitive(Vector3 vert, PrimitiveType type, Vector3 scale)
     {
-        var mf = GetComponent<MeshFilter>();
-        if (mf)
-        {
-            var savePath = "Assets/" + "viewConeMesh.asset";
-            Debug.Log("Saved Mesh to:" + savePath);
-            AssetDatabase.CreateAsset(mf.mesh, savePath);
-        }
+        GameObject primitive = GameObject.CreatePrimitive(type);
+        primitive.transform.position = transform.TransformPoint(vert);
+        primitive.transform.localScale = scale;
+        primitive.layer = 2;
+        return primitive;
     }
+
+
 #endif
     #endregion
 }
-
-
-
