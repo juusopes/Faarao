@@ -48,6 +48,14 @@ public static class RayCaster
         return hit;
     }
 
+    public static RaycastHit ToDirection(Vector3 origin, Vector3 direction, float range, LayerMask layerMask)
+    {
+        RaycastHit hit;
+        Physics.Raycast(origin, direction, out hit, range, layerMask);
+
+        return hit;
+    }
+
     public static RaycastHit Forward(GameObject start, float range)
     {
         //Debug.DrawRay(start.transform.position, start.transform.forward * range, Color.green, 1f);
