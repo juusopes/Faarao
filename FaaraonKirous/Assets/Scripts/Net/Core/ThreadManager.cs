@@ -5,10 +5,32 @@ using UnityEngine;
 
 public class ThreadManager : MonoBehaviour
 {
+    public static ThreadManager _instance;
+
     private static readonly List<Action> _executeOnMainThread = new List<Action>();
     private static readonly List<Action> _executeCopiedOnMainThread = new List<Action>();
     private static bool _actionToExecuteOnMainThread = false;
 
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else if (_instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+            return;
+        }
+    }
+
+    
+    private void Update()
+    {
+        // Makes sure update is called if timeScale is 0
+        UpdateMain();
+    }
 
     private void FixedUpdate()
     {
@@ -17,7 +39,7 @@ public class ThreadManager : MonoBehaviour
 
     /// <summary>Sets an action to be executed on the main thread.</summary>
     /// <param name="action">The action to be executed on the main thread.</param>
-    public static void ExecuteOnMainThread(Action action)
+    public void ExecuteOnMainThread(Action action)
     {
         if (action == null)
         {
@@ -33,7 +55,7 @@ public class ThreadManager : MonoBehaviour
     }
 
     /// <summary>Executes all code meant to run on the main thread. NOTE: Call this ONLY from the main thread.</summary>
-    public static void UpdateMain()
+    private void UpdateMain()
     {
         if (_actionToExecuteOnMainThread)
         {

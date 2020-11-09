@@ -203,7 +203,7 @@ public class AbilityIndicator : MonoBehaviour
                 Vector3 hitPos = hit.transform.position;
                 hitPos.y = playerPos.y;
                 float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
-                Debug.Log(distance);
+                //Debug.Log(distance);
                 if (distance > range)
                 {
                     endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance-range)*4));

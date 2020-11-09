@@ -9,9 +9,14 @@ public class LevelController : MonoBehaviour
 {
     //Switch Character
     private GameObject[] characters;
-    public GameObject activeCharacter;
-    private int currentCharacter;
+    public GameObject currentCharacter;
+    private int currentCharacterIndex;
     public GameObject playerOneImage, playerTwoImage;
+
+    [SerializeField]
+    private GameObject pharaoh;
+    [SerializeField]
+    private GameObject priest;
 
     //CameraControl
     private GameObject mainCam;
@@ -34,7 +39,8 @@ public class LevelController : MonoBehaviour
     void Update()
     {
         KeyBoardControls();
-        InivsibilityView();
+        // TODO: Doesn't work if no activeCharacter
+        //InivsibilityView();
     }
 
     private void Initialize()
@@ -45,36 +51,41 @@ public class LevelController : MonoBehaviour
 
         canvas.gameObject.SetActive(true);
         playerOneImage.SetActive(true);
-        //SetACtiveCharacter
-        currentCharacter = 0;
-        foreach (GameObject character in characters)
+
+        if (NetworkManager._instance.IsHost)
         {
-            character.GetComponent<PlayerController>().isActiveCharacter = false;
-            if (character.GetComponent<PlayerController>().playerOne)
+            //SetACtiveCharacter
+            currentCharacterIndex = 0;
+            foreach (GameObject character in characters)
             {
-                activeCharacter = character;
-                character.GetComponent<PlayerController>().isActiveCharacter = true;
+                character.GetComponent<PlayerController>().IsCurrentPlayer = false;
+                if (character.GetComponent<PlayerController>().playerOne)
+                {
+                    currentCharacter = character;
+                    character.GetComponent<PlayerController>().IsCurrentPlayer = true;
+                    character.GetComponent<PlayerController>().IsActivePlayer = true;
+                }
+                if (currentCharacter == null)
+                {
+                    currentCharacterIndex++;
+                }
             }
-            if (activeCharacter == null)
+            if (currentCharacter == null)
             {
-                currentCharacter++;
+                currentCharacterIndex = 0;
+                characters[currentCharacterIndex].GetComponent<PlayerController>().IsCurrentPlayer = true;
+                characters[currentCharacterIndex].GetComponent<PlayerController>().IsActivePlayer = true;
+                currentCharacter = characters[currentCharacterIndex];
             }
         }
-        if (activeCharacter == null)
-        {
-            currentCharacter = 0;
-            characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = true;
-            activeCharacter = characters[currentCharacter];
-        }
+
         //SetCameraPos
-        mainCam.transform.parent = activeCharacter.transform;
-
-
+        //mainCam.transform.parent = activeCharacter.transform;
     }
 
     private void InivsibilityView()
     {
-        if (activeCharacter.GetComponent<PlayerController>().isInvisible)
+        if (currentCharacter.GetComponent<PlayerController>().isInvisible)
         {
             if (postProcessWeight <= 1)
             {
@@ -89,25 +100,129 @@ public class LevelController : MonoBehaviour
         }
         mainCam.transform.GetChild(0).GetComponent<PostProcessVolume>().weight = postProcessWeight;
     }
+    
+
+    //ButtonInterface
+    public void ActiveCharacterAttack()
+    {
+        currentCharacter.GetComponent<PlayerController>().Attack();
+    }
+    //public void ActiveCharacterAbility()
+    //{
+    //    activeCharacter.GetComponent<PlayerController>().UseAbility();
+    //}
+    public void ActiveCharacterCrouch()
+    {
+        currentCharacter.GetComponent<PlayerController>().Crouch();
+    }
+    public void ActiveCharacterInteract()
+    {
+        currentCharacter.GetComponent<PlayerController>().Interact();
+    }
+    public void ActiveCharacterStay()
+    {
+        currentCharacter.GetComponent<PlayerController>().Stay();
+    }
+
+
+    private void KeyBoardControls()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SelectCharacter(ObjectType.priest);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            SelectCharacter(ObjectType.pharaoh);
+        }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            UnselectCharacter();
+        }
+    }
+
+    public void UnselectCharacter()
+    {
+        if (currentCharacter == null) return;
+
+        currentCharacter.GetComponent<PlayerController>().IsCurrentPlayer = false;
+
+        if (NetworkManager._instance.IsHost)
+        {
+            currentCharacter.GetComponent<PlayerController>().IsActivePlayer = false;
+        }
+        else
+        {
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                // TODO: Send unselect packet (pass id)
+            }
+        }
+
+        currentCharacter = null;
+    }
+
+    public void SelectCharacter(ObjectType character)
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            GameObject obj;
+            switch (character)
+            {
+                case ObjectType.pharaoh:
+                    obj = pharaoh;
+                    break;
+                case ObjectType.priest:
+                    obj = priest;
+                    break;
+                default:
+                    return;
+            }
+
+            PlayerController playerController = obj.GetComponent<PlayerController>();
+            if (!playerController.IsActivePlayer)
+            {
+                if (currentCharacter != null)
+                {
+                    currentCharacter.GetComponent<PlayerController>().IsActivePlayer = false;
+                    currentCharacter.GetComponent<PlayerController>().IsCurrentPlayer = false;
+                }
+
+                playerController.IsActivePlayer = true;
+                playerController.IsCurrentPlayer = true;
+                currentCharacter = obj;
+            }
+        }
+        else
+        {
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                // TODO: Send select character request
+            }
+        }
+    }
+
     public void SwitchCharacter()
     {
         //Switch Player
-        characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = false;
-        currentCharacter++;
-        if (currentCharacter > characters.Length - 1)
+        characters[currentCharacterIndex].GetComponent<PlayerController>().IsCurrentPlayer = false;
+        currentCharacterIndex++;
+        if (currentCharacterIndex > characters.Length - 1)
         {
-            currentCharacter = 0;
+            currentCharacterIndex = 0;
         }
-        activeCharacter = characters[currentCharacter];
-        characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = true;
-        mainCam.GetComponent<CameraControl>().activeCharacter = activeCharacter;
+        currentCharacter = characters[currentCharacterIndex];
+        characters[currentCharacterIndex].GetComponent<PlayerController>().IsCurrentPlayer = true;
+        mainCam.GetComponent<CameraControl>().activeCharacter = currentCharacter;
         if (mainCam.GetComponent<CameraControl>().camFollow)
         {
-            mainCam.transform.parent = activeCharacter.transform;
+            mainCam.transform.parent = currentCharacter.transform;
         }
 
         //Set UI elements
-        if (currentCharacter == 1)
+        if (currentCharacterIndex == 1)
         {
             playerOneImage.SetActive(false);
             playerTwoImage.SetActive(true);
@@ -118,36 +233,5 @@ public class LevelController : MonoBehaviour
             playerTwoImage.SetActive(false);
         }
 
-    }
-
-    //ButtonInterface
-    public void ActiveCharacterAttack()
-    {
-        activeCharacter.GetComponent<PlayerController>().Attack();
-    }
-    //public void ActiveCharacterAbility()
-    //{
-    //    activeCharacter.GetComponent<PlayerController>().UseAbility();
-    //}
-    public void ActiveCharacterCrouch()
-    {
-        activeCharacter.GetComponent<PlayerController>().Crouch();
-    }
-    public void ActiveCharacterInteract()
-    {
-        activeCharacter.GetComponent<PlayerController>().Interact();
-    }
-    public void ActiveCharacterStay()
-    {
-        activeCharacter.GetComponent<PlayerController>().Stay();
-    }
-
-
-    private void KeyBoardControls()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            SwitchCharacter();
-        }
     }
 }

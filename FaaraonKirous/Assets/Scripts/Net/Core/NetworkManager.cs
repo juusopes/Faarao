@@ -14,14 +14,16 @@ public class NetworkManager : MonoBehaviour
 
     public bool IsConnectedToServer { get; set; } = false;
 
-    public bool IsSingleplayer { get; set; } = true;
-
     public bool ShouldSendToClient => Server.Instance.IsOnline;
-    public bool ShouldSendToServer => !IsHost && IsConnectedToServer;
+
+    // TODO: Add is connected bool to should send to server
+    public bool ShouldSendToServer => !IsHost;
 
     // For testing
+    public bool Testing => _testing;
+
     [SerializeField]
-    private bool _willHostServer = false;
+    private bool _testing = false;
     [SerializeField]
     private bool _simulateNetwork = false;
     [SerializeField]
@@ -41,35 +43,36 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
+            return;
         }
 
-        if (ClonesManager.IsClone())
+        if (Testing)
         {
-            // Automatically connect to local host if this is the clone editor
-            JoinServer();
-        }
-        else
-        {
-            if (_willHostServer)
+            if (ClonesManager.IsClone())
+            {
+                // Automatically connect to local host if this is the clone editor
+                JoinServer();
+            }
+            else
             {
                 // Automatically start server if this is the original editor
                 HostServer();
-                IsSingleplayer = false;
             }
         }
     }
 
-    public void HostServer()
+    public bool HostServer()
     {
         if (Client.Instance.IsOnline || Server.Instance.IsOnline)
         {
             Debug.Log("Cannot create server if server or client is online!");
+            return false;
         }
         else
         {
-            Server.Instance.Start(26950);
+            Server.Instance.Start(Constants.port);
 
-            // TESTING
+            // For testing
             if (_simulateNetwork)
             {
                 Server.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
@@ -79,25 +82,32 @@ public class NetworkManager : MonoBehaviour
                     MaxLatency = _simulationMaxLatency
                 });
             }
+
+            return true;
         }
     }
 
-    public void JoinServer()
+    public bool JoinServer(IPEndPoint endPoint = null)
     {
         if (Client.Instance.IsOnline || Server.Instance.IsOnline)
         {
             Debug.Log("Cannot join server if server or client is online!");
+            return false;
         }
         else
         {
             IsHost = false;
-            // TODO: Server IP and port should be given through text fields
-            string serverIp = "127.0.0.1";
-            int serverPort = 26950;
-            IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
-            Client.Instance.ConnectToServer(ipEndPoint);
 
-            // TESTING
+            if (endPoint == null)
+            {
+                string serverIp = Constants.ip;
+                int serverPort = Constants.port;
+                endPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
+            }
+            
+            Client.Instance.ConnectToServer(endPoint);
+
+            // For testing
             if (_simulateNetwork)
             {
                 Client.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
@@ -107,6 +117,8 @@ public class NetworkManager : MonoBehaviour
                     MaxLatency = _simulationMaxLatency
                 });
             }
+
+            return true;
         }
     }
 

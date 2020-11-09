@@ -42,6 +42,7 @@ public class Connection
 
     public void Disconnect()
     {
+        // TODO: Call connection closed on network handler
         EndPoint = null;
         _channels.Clear();
     }

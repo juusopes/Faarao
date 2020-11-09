@@ -108,6 +108,7 @@ public abstract class NetworkHandler
     {
         try
         {
+            // TODO: check that connection is not null
             _socket.BeginSend(packet.ToArray(), packet.Length(), endPoint, null, null);
         }
         catch (Exception ex)
@@ -125,7 +126,7 @@ public abstract class NetworkHandler
         // Packet can be disposed now
         packet.Dispose();
 
-        ThreadManager.ExecuteOnMainThread(() =>
+        ThreadManager._instance.ExecuteOnMainThread(() =>
         {
             using (var newPacket = new Packet(packetBytes))
             {

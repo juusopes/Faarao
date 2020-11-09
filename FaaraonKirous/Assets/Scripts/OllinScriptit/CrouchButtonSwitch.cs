@@ -14,7 +14,7 @@ public class CrouchButtonSwitch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (lC.activeCharacter.GetComponent<PlayerController>().isCrouching)
+        if (lC.currentCharacter.GetComponent<PlayerController>().IsCrouching)
         {
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(false);

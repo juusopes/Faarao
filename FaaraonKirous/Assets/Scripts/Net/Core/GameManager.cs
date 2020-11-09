@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Permissions;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public enum ObjectList : byte
 {
@@ -23,6 +26,10 @@ public class GameManager : MonoBehaviour
     private readonly Dictionary<ObjectList, Dictionary<int, ObjectNetManager>> _objectLists = new Dictionary<ObjectList, Dictionary<int, ObjectNetManager>>();
     private readonly Dictionary<ObjectList, int> _counters = new Dictionary<ObjectList, int>();
 
+    // Scene
+    public int CurrentSceneIndex => SceneManager.GetActiveScene().buildIndex;
+    public bool IsSceneLoaded { get; private set; } = false;
+
     // Prefabs
     private readonly Dictionary<ObjectType, GameObject> _objectPrefabs = new Dictionary<ObjectType, GameObject>();
     [SerializeField]
@@ -42,17 +49,129 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
+            return;
         }
 
         // Add lists
         _objectLists.Add(ObjectList.enemy, new Dictionary<int, ObjectNetManager>());
         _objectLists.Add(ObjectList.player, new Dictionary<int, ObjectNetManager>());
         _objectPrefabs.Add(ObjectType.enemy, _enemyClientPrefab);
+
+        // For testing
+        if (NetworkManager._instance.Testing && NetworkManager._instance.IsHost)
+        {
+            IsSceneLoaded = true;
+        }
     }
+
+    #region Loading
+    public void StartLoading()
+    {
+        Time.timeScale = 0;
+
+        IsSceneLoaded = false;
+
+        // TODO: Start loading screen
+
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            Server.Instance.ResetConnectionFlags(ConnectionState.LevelLoaded 
+                | ConnectionState.Synced);
+        }
+
+        ClearAllObjects();
+    }
+
+    public void LoadSave(string saveFile)
+    {
+        StartLoading();
+
+        // TODO: Get save file
+
+        // TODO: If scene is different load it.
+
+        // TODO: Else just load save
+    }
+
+    public void LoadLevel(int index)
+    {
+        StartLoading();
+
+        LoadScene(index, true);
+    }
+
+    public void LoadScene(int index, bool restartLevel = false)
+    {
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.LoadScene(index);
+        }
+
+        Debug.Log("Loading scene");
+
+        if (restartLevel || CurrentSceneIndex != index)
+        {
+            Debug.Log("Need to load or restarting");
+
+            // Reset everything if level is changed. Otherwise we can keep static objects
+            ResetAll();
+
+            SceneManager.sceneLoaded += OnSceneLoad;
+            SceneManager.LoadSceneAsync(index, LoadSceneMode.Single);
+        }
+        else
+        {
+            Debug.Log("Dont need to load");
+
+            // Scene is loaded if it is the current scene
+            SceneLoaded();
+        }
+    }
+    
+    public void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        SceneManager.sceneLoaded -= OnSceneLoad;
+        SceneLoaded();
+    }
+
+    public void SceneLoaded()
+    {
+        Debug.Log("Scene loaded");
+        IsSceneLoaded = true;
+
+        if (NetworkManager._instance.IsHost)
+        {
+            if (NetworkManager._instance.ShouldSendToClient)
+            {
+                // This makes sure that clients who are waiting for syncing can sync
+                SyncAllObjects();
+            }
+
+            EndLoading();
+        }
+        else
+        {
+            Debug.Log("I am not host");
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                Debug.Log("Scene loaded: Sending sync request");
+                ClientSend.SyncRequest();
+            }
+        }
+    }
+
+    public void EndLoading()
+    {
+        // TODO: Exit loading screen
+
+        Time.timeScale = 1;
+    }
+    #endregion
 
     #region Core
     public bool TryGetObject(ObjectList list, int id, out ObjectNetManager netManager)
     {
+        // TODO: Check if scene is loaded. Maybe not necessary even?
         return _objectLists[list].TryGetValue(id, out netManager);
     }
 
@@ -86,6 +205,22 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Syncing
+    public void ResetAll()
+    {
+        // Object lists
+        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectNetManager>> listEntry in _objectLists)
+        {
+            listEntry.Value.Clear();
+        }
+
+        // Counters
+        _counters.Clear();
+
+        // Static object references
+        Priest = null;
+        Pharaoh = null;
+    }
+
     public void ClearAllObjects()
     {
         foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectNetManager>> listEntry in _objectLists)
@@ -97,12 +232,15 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // TODO: Reset counters. Though we don't care about them as client should not create objects
+        _counters.Clear();
     }
 
     public void SyncAllObjects()
     {
-        ServerSend.StartingObjectSync();
+        // Do not sync if scene is not loaded
+        if (!IsSceneLoaded) return;
+
+        ServerSend.StartObjectSync();
 
         // First create objects
         foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectNetManager>> listEntry in _objectLists)
@@ -110,7 +248,7 @@ public class GameManager : MonoBehaviour
             foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
             {
                 ObjectNetManager netManager = objectEntry.Value;
-                netManager.ObjectCreated();
+                netManager.ObjectCreated(true);
             }
         }
 
@@ -123,6 +261,15 @@ public class GameManager : MonoBehaviour
                 netManager.SyncObject();
             }
         }
+
+        // After syncing the client has loaded
+        ServerSend.EndLoading();
+
+        // All of the clients whose level was loaded should now be synced
+        // This means we can start sending packets that require syncing to be complete
+        Server.Instance.SetConnectionFlags(ConnectionState.Synced,
+            ConnectionState.LevelLoaded,
+            ConnectionState.Synced);
     }
     #endregion
 
@@ -163,21 +310,4 @@ public class GameManager : MonoBehaviour
         AddObject(id, newObject.GetComponent<ObjectNetManager>());
     }
     #endregion
-
-    #region Helpers
-    public GameObject GetPlayerCharacter(ObjectType type)
-    {
-        if (TryGetObject(ObjectList.player, (int)type, out ObjectNetManager netManager))
-        {
-            return netManager.gameObject;
-        }
-        else
-        {
-            return null;
-        }
-    }
-    #endregion
-
-
-
 }

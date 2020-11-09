@@ -27,6 +27,17 @@ public class ClientSend
     }
     #endregion
 
+    #region Load
+
+    public static void SyncRequest()
+    {
+        var packet = new Packet((int)ClientPackets.syncRequest);
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
+
+    #endregion
+
+
     #region Abilities
     public static void AbilityUsed(AbilityOption ability, Vector3 position)
     {

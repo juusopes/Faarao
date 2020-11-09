@@ -58,8 +58,8 @@ public class CameraControl : MonoBehaviour
     {
         var zoomAmountY = 35 - cameraPos.position.y;
         var zoomAmountZ = 43.76379f + cameraPos.position.z;
-        print("y pos: " + cameraPos.position.y);
-        print("Zoom: " + zoomAmountY);
+        //print("y pos: " + cameraPos.position.y);
+        //print("Zoom: " + zoomAmountY);
 
         if (Input.GetMouseButtonDown(2))
         {

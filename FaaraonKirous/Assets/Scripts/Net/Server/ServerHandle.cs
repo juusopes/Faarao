@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ServerHandle
 {
+    #region Core
     public static void ConnectionRequest(int connection, Packet packet)
     {
         ServerSend.ConnectionAccepted(connection);
@@ -25,7 +26,15 @@ public class ServerHandle
         // TODO: Pause game here. And wait that all clients are paused too
 
         // TODO: This should propably be done by the network manager
-        GameManager._instance.SyncAllObjects();
+
+        Server.Instance.SetConnectionFlags(connection, ConnectionState.Connected);
+
+        Debug.Log("Sending load scene request");
+
+        if (GameManager._instance.IsSceneLoaded)
+        {
+            ServerSend.LoadScene(GameManager._instance.CurrentSceneIndex);
+        }
     }
 
     public static void HeartbeatReceived(int connection, Packet packet)
@@ -37,9 +46,20 @@ public class ServerHandle
         // TODO: Check that connection is not null
         Server.Instance.Connections[connection].Ping = ping;
     }
+    #endregion
+
+    #region Load
+    public static void SyncRequest(int connection, Packet packet)
+    {
+        // Clients level has loaded and is ready to sync
+        Server.Instance.SetConnectionFlags(connection, ConnectionState.LevelLoaded);
+
+        // Sync if possible
+        GameManager._instance.SyncAllObjects();
+    }
+    #endregion
 
     #region Abilities
-
     public static void AbilityUsed(int connection, Packet packet)
     {
         AbilityOption ability = (AbilityOption)packet.ReadByte();

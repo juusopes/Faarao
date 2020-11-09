@@ -18,7 +18,9 @@ public enum ServerPackets
     abilityVisualEffectCreated,
     stateChanged,
     enemyDied,
-    detectionConeUpdated
+    detectionConeUpdated,
+    loadScene,
+    endLoading
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -28,7 +30,8 @@ public enum ClientPackets
     connectionAcceptedReceived,
     heartbeatReceived,
     abilityUsed,
-    enemyPossessed
+    enemyPossessed,
+    syncRequest
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

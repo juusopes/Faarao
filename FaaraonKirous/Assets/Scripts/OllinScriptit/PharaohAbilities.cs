@@ -33,7 +33,7 @@ public class PharaohAbilities : MonoBehaviour
 
     public void Invisibility()
     {
-        if (GetComponent<PlayerController>().isActiveCharacter)
+        if (GetComponent<PlayerController>().IsCurrentPlayer)
         {
             //TempSetActive
             if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)
