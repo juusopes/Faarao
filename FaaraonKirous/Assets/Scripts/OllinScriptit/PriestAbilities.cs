@@ -15,6 +15,7 @@ public class PriestAbilities : MonoBehaviour
     private Vector3 targetSavePos;
     public GameObject[] indicatorList;
     public float[] rangeList;
+    public bool[] lineActive;
 
     // Start is called before the first frame update
     void Start()

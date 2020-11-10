@@ -352,7 +352,8 @@ MonoBehaviour:
   visibleInd: {fileID: 0}
   abilityNum: 0
   inRange: 0
-  isInvisible: 0
+  abilityAllowed: 0101010101010101010101
+  isInvisible: 1
   interactObject: {fileID: 0}
   targetEnemy: {fileID: 0}
   lC: {fileID: 0}
@@ -405,6 +406,7 @@ MonoBehaviour:
   - 3
   - 3
   - 3
+  lineActive: 
 --- !u!114 &-2370286539409642136
 MonoBehaviour:
   m_ObjectHideFlags: 0

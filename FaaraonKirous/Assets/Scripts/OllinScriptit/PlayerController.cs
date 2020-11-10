@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     public GameObject visibleInd;
     public int abilityNum;
     public bool inRange;
+    public bool[] abilityAllowed;
+
     //Invisibility
     public bool isInvisible;
 
@@ -113,6 +115,20 @@ public class PlayerController : MonoBehaviour
         targetV3 = transform.position;
         Stay();
         abilityActive = false;
+        bool noAbilities = true;
+        int i = 0;
+        foreach(bool x in abilityAllowed)
+        {
+            if (abilityAllowed[i])
+            {
+                noAbilities = false;
+            }
+            i++;
+        }
+        if (noAbilities)
+        {
+            death.damage = 10;
+        }
     }
     public void Moving()
     {
@@ -360,20 +376,26 @@ public class PlayerController : MonoBehaviour
 
     public void UseAbility(int tempAbilityNum)
     {
-        if (!abilityActive)
+        if (abilityAllowed[tempAbilityNum])
         {
-            abilityActive = true;
-            abilityNum = tempAbilityNum;
-        }
-        else if (abilityNum != tempAbilityNum)
+            if (!abilityActive)
+            {
+                abilityActive = true;
+                abilityNum = tempAbilityNum;
+            }
+            else if (abilityNum != tempAbilityNum)
+            {
+                abilityActive = true;
+                abilityNum = tempAbilityNum;
+            }
+            else
+            {
+                abilityActive = false;
+                abilityNum = 0;
+            }
+        } else
         {
-            abilityActive = true;
-            abilityNum = tempAbilityNum;
-        }
-        else
-        {
-            abilityActive = false;
-            abilityNum = 0;
+            Debug.Log(tempAbilityNum);
         }
 
     }
