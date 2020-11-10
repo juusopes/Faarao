@@ -7,6 +7,22 @@ using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
+    public static LevelController _instance;
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else if (_instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+            return;
+        }
+    }
+
     //Switch Character
     private GameObject[] characters;
     public GameObject currentCharacter;
@@ -139,11 +155,11 @@ public class LevelController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.U))
         {
-            UnselectCharacter();
+            UnselectCurrentCharacter();
         }
     }
 
-    public void UnselectCharacter()
+    public void UnselectCurrentCharacter()
     {
         if (currentCharacter == null) return;
 
@@ -157,50 +173,103 @@ public class LevelController : MonoBehaviour
         {
             if (NetworkManager._instance.ShouldSendToServer)
             {
-                // TODO: Send unselect packet (pass id)
+                ObjectType character = currentCharacter.GetComponent<PlayerNetManager>().Type;
+                ClientSend.UnselectCharacter(character);
             }
         }
 
         currentCharacter = null;
     }
 
+    public void UnselectCharacter(ObjectType character)
+    {
+        GameObject obj;
+        switch (character)
+        {
+            case ObjectType.pharaoh:
+                obj = pharaoh;
+                break;
+            case ObjectType.priest:
+                obj = priest;
+                break;
+            default:
+                return;
+        }
+
+        obj.GetComponent<PlayerController>().IsActivePlayer = false;
+    }
+
     public void SelectCharacter(ObjectType character)
     {
         if (NetworkManager._instance.IsHost)
         {
-            GameObject obj;
-            switch (character)
+            if (CanChangeToCharacter(character))
             {
-                case ObjectType.pharaoh:
-                    obj = pharaoh;
-                    break;
-                case ObjectType.priest:
-                    obj = priest;
-                    break;
-                default:
-                    return;
-            }
-
-            PlayerController playerController = obj.GetComponent<PlayerController>();
-            if (!playerController.IsActivePlayer)
-            {
-                if (currentCharacter != null)
-                {
-                    currentCharacter.GetComponent<PlayerController>().IsActivePlayer = false;
-                    currentCharacter.GetComponent<PlayerController>().IsCurrentPlayer = false;
-                }
-
-                playerController.IsActivePlayer = true;
-                playerController.IsCurrentPlayer = true;
-                currentCharacter = obj;
+                ChangeToCharacter(character);
             }
         }
         else
         {
             if (NetworkManager._instance.ShouldSendToServer)
             {
-                // TODO: Send select character request
+                ClientSend.ChangeToCharacterRequest(character);
             }
+        }
+    }
+
+    public bool CanChangeToCharacter(ObjectType character)
+    {
+        GameObject obj;
+        switch (character)
+        {
+            case ObjectType.pharaoh:
+                obj = pharaoh;
+                break;
+            case ObjectType.priest:
+                obj = priest;
+                break;
+            default:
+                return false;
+        }
+
+        if (!obj.GetComponent<PlayerController>().IsActivePlayer)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void ChangeToCharacter(ObjectType character, bool isMe = true)
+    {
+        GameObject obj;
+        switch (character)
+        {
+            case ObjectType.pharaoh:
+                obj = pharaoh;
+                break;
+            case ObjectType.priest:
+                obj = priest;
+                break;
+            default:
+                return;
+        }
+
+        PlayerController playerController = obj.GetComponent<PlayerController>();
+
+        if (isMe)
+        {
+            Debug.Log($"Changed to {character}");
+            if (currentCharacter != null) UnselectCurrentCharacter();
+            playerController.IsCurrentPlayer = true;
+            currentCharacter = obj;
+        }
+        
+        if (NetworkManager._instance.IsHost)
+        {
+            playerController.IsActivePlayer = true;
         }
     }
 

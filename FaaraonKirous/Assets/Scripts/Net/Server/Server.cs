@@ -178,7 +178,10 @@ public sealed class Server : NetworkHandler
             { (int)ClientPackets.heartbeatReceived, ServerHandle.HeartbeatReceived },
             { (int)ClientPackets.abilityUsed, ServerHandle.AbilityUsed },
             { (int)ClientPackets.enemyPossessed, ServerHandle.EnemyPossessed },
-            { (int)ClientPackets.syncRequest, ServerHandle.SyncRequest }
+            { (int)ClientPackets.syncRequest, ServerHandle.SyncRequest },
+            { (int)ClientPackets.changeToCharacterRequest, ServerHandle.ChangeCharacterRequest },
+            { (int)ClientPackets.unselectCharacter, ServerHandle.UnselectCharacter },
+            { (int)ClientPackets.setDestinationRequest, ServerHandle.SetDestinationRequest }
         };
 
         // Initialize connections

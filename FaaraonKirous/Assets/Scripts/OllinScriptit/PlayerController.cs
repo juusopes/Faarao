@@ -3,6 +3,10 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
+    // Managers
+    private PlayerNetManager PlayerNetManager { get; set; }
+
+
     //Which Player
     public bool playerOne;
 
@@ -139,13 +143,17 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            StopNavigation();
+            if (NetworkManager._instance.IsHost)
+            {
+                StopNavigation();
+            }
             abilityActive = false;
         }
         SetIndicator();
     }
     private void Initialize()
     {
+        PlayerNetManager = GetComponent<PlayerNetManager>();
         death = GetComponent<DeathScript>();
         navMeshAgent = this.GetComponent<NavMeshAgent>();
         camControl = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
@@ -477,7 +485,9 @@ public class PlayerController : MonoBehaviour
         {
             if (NetworkManager._instance.ShouldSendToServer)
             {
-                // TODO: I want to move here packet
+                Debug.Log($"Set destination request sent");
+                ClientSend.SetDestinationRequest(PlayerNetManager.Type, position);
+                
             }
         }
     }

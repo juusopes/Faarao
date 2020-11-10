@@ -82,4 +82,37 @@ public class ServerHandle
         }
     }
     #endregion
+
+    #region
+
+    public static void ChangeCharacterRequest(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        if (LevelController._instance.CanChangeToCharacter(character))
+        {
+            LevelController._instance.ChangeToCharacter(character, false);
+            ServerSend.ChangeToCharacter(connection, character);
+        }
+    }
+
+    public static void UnselectCharacter(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        LevelController._instance.UnselectCharacter(character);
+    }
+
+    public static void SetDestinationRequest(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        Vector3 destination = packet.ReadVector3();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
+        {
+            PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
+            playerNetManager.PlayerController.SetDestination(destination);
+        }
+    }
+    #endregion
 }

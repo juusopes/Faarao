@@ -181,6 +181,16 @@ public class ServerSend
     }
     #endregion
 
+    #region Player
 
+    public static void ChangeToCharacter(int connection, ObjectType character)
+    {
+        var packet = new Packet((int)ServerPackets.changeToCharacter);
+        packet.Write((short)character);
+
+        Server.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet, ConnectionState.Synced);
+    }
+
+    #endregion
 }
 

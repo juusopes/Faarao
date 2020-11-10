@@ -195,5 +195,16 @@ public class ClientHandle
     }
     #endregion
 
+    #region Player
+
+    public static void ChangeToCharacter(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        LevelController._instance.ChangeToCharacter(character);
+    }
+
+    #endregion
+
 }
 
