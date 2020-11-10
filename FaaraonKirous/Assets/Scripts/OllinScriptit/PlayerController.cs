@@ -208,7 +208,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
             {
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                 {
                     targetV3 = hit.point;
                 }
