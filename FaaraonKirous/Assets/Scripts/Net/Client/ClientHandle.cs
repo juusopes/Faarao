@@ -120,6 +120,20 @@ public class ClientHandle
     }
     #endregion
 
+    #region Character
+    public static void CharacterDied(int connection, Packet packet)
+    {
+        ObjectList list = (ObjectList)packet.ReadByte();
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
+        {
+            CharacterNetManager characterNetManager = (CharacterNetManager)netManager;
+            characterNetManager.DeathScript.isDead = true;
+        }
+    }
+    #endregion
+
     #region Enemy
     public static void SightChanged(int connection, Packet packet)
     {
@@ -144,17 +158,6 @@ public class ClientHandle
         {
             EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
             enemyNetManager.Character.UpdateStateIndicator(stateOption);
-        }
-    }
-
-    public static void EnemyDied(int connection, Packet packet)
-    {
-        int id = packet.ReadInt();
-
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
-        {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
-            enemyNetManager.Character.Die();
         }
     }
 

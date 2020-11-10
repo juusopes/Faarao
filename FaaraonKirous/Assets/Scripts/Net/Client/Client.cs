@@ -79,7 +79,7 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.sightChanged, ClientHandle.SightChanged },
             { (int)ServerPackets.abilityVisualEffectCreated, ClientHandle.AbilityVisualEffectCreated },
             { (int)ServerPackets.stateChanged, ClientHandle.StateChanged },
-            { (int)ServerPackets.enemyDied, ClientHandle.EnemyDied },
+            { (int)ServerPackets.characterDied, ClientHandle.CharacterDied },
             { (int)ServerPackets.detectionConeUpdated, ClientHandle.DetectionConeUpdated },
             { (int)ServerPackets.loadScene, ClientHandle.LoadScene },
             { (int)ServerPackets.endLoading, ClientHandle.EndLoading },

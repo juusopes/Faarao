@@ -17,7 +17,7 @@ public enum ServerPackets
     sightChanged,
     abilityVisualEffectCreated,
     stateChanged,
-    enemyDied,
+    characterDied,
     detectionConeUpdated,
     loadScene,
     endLoading,

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyNetManager : DynamicNetManager
+public class EnemyNetManager : CharacterNetManager
 {
     public Character Character { get; private set; }
     public float LatestDetectionConeTimestamp { get; set; } = 0;

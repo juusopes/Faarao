@@ -171,7 +171,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             Destroy(navMeshAgent);
-            Destroy(death);
         }
 
         GameObject[] tempCharacters = GameObject.FindGameObjectsWithTag("Player");

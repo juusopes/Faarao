@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerNetManager : DynamicNetManager
+public class PlayerNetManager : CharacterNetManager
 {
     public PlayerController PlayerController { get; private set; }
 
