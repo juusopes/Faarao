@@ -110,8 +110,9 @@ public class ServerHandle
 
         if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
         {
+            
             PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
-            playerNetManager.PlayerController.SetDestination(destination);
+            playerNetManager.PlayerController.SetDestination(destination, true);
         }
     }
     #endregion

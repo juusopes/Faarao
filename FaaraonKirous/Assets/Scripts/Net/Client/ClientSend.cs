@@ -78,7 +78,7 @@ public class ClientSend
 
     public static void SetDestinationRequest(ObjectType character, Vector3 destination)
     {
-        var packet = new Packet((int)ClientPackets.unselectCharacter);
+        var packet = new Packet((int)ClientPackets.setDestinationRequest);
         packet.Write((short)character);
         packet.Write(destination);
 

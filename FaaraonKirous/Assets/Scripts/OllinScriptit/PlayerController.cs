@@ -208,6 +208,11 @@ public class PlayerController : MonoBehaviour
                 {
                     doubleClickTimer = 0;
                 }
+
+                if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.SetDestinationRequest(PlayerNetManager.Type, targetV3);
+                }
             }
         }
         if (doubleClickTimer < 0.5f)
@@ -232,14 +237,11 @@ public class PlayerController : MonoBehaviour
                 {
                     navMeshAgent.speed = movementSpeed;
                 }
-            }
-            //if (!climbing)
-            //{
-            SetDestination(targetV3);
-            //}
+                //if (!climbing)
+                //{
+                SetDestination(targetV3);
+                //}
 
-            if (NetworkManager._instance.IsHost)
-            {
                 if (position == transform.position)
                 {
                     IsRunning = false;
@@ -260,7 +262,17 @@ public class PlayerController : MonoBehaviour
     public void GiveDestination(Vector3 v3)
     {
         targetV3 = v3;
-        SetDestination(targetV3);
+        if (NetworkManager._instance.IsHost)
+        {
+            SetDestination(targetV3);
+        }
+        else
+        {
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                ClientSend.SetDestinationRequest(PlayerNetManager.Type, targetV3);
+            }
+        }
     }
 
     public Vector3 GetPosition()
@@ -467,10 +479,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void SetDestination(Vector3 position)
+    public void SetDestination(Vector3 position, bool changeTarget = false)
     {
         if (NetworkManager._instance.IsHost)
         {
+            if (changeTarget) targetV3 = position;
+
             if (position == null || navMeshAgent.destination == position || !navMeshAgent.enabled)
                 return;
 
@@ -480,15 +494,6 @@ public class PlayerController : MonoBehaviour
             navMeshAgent.destination = position;
             navMeshAgent.isStopped = false;
             navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : 0.5f;
-        }
-        else
-        {
-            if (NetworkManager._instance.ShouldSendToServer)
-            {
-                Debug.Log($"Set destination request sent");
-                ClientSend.SetDestinationRequest(PlayerNetManager.Type, position);
-                
-            }
         }
     }
 
