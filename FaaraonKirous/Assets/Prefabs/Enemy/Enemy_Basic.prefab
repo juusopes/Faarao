@@ -509,7 +509,7 @@ GameObject:
   m_Layer: 2
   m_Name: FieldOfView
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -540,10 +540,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 1295752339492584506}
-  rayPoints: []
+  raySamplePoints: []
   vertexPoints: []
   uv: []
   triangles: 
+  debugMode: 5
+  ballMat: {fileID: 0}
 --- !u!33 &6024281465610095463
 MeshFilter:
   m_ObjectHideFlags: 0

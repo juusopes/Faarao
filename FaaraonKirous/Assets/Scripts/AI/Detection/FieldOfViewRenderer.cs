@@ -48,9 +48,9 @@ public class FieldOfViewRenderer : MonoBehaviour
     SampleType lastSampleType = 0;
 
     //Tweakable values
-    private const int yRayCount = (20) + 1;    // ODD NUMBER 
+    private const int yRayCount = (0) + 1;    // ODD NUMBER 
     private const int xRayCount = (10) + 1;    // ODD NUMBER 
-    private const float maxXAngle = -90.0000001f;
+    private const float maxXAngle = -10.0000001f;
     private const float ledgeStep = 0.2f;
     private const float ledgeSightBlockingHeight = 0.3f;
     private const float enemySightHeight = 2.785f;
@@ -168,19 +168,19 @@ public class FieldOfViewRenderer : MonoBehaviour
 
     private void IterateY()
     {
-        float yAngle = yStartingAngle;
+        float yGlobalAngle = yStartingAngle;
         for (int y = 0; y < yRayCount; y++)
         {
-            IterateX(y, yAngle);
-            //Debug.Log(y + " " + yAngle);
-            yAngle += yAngleIncrease;
+            IterateX(y, yGlobalAngle);
+            //Debug.Log(y + " global y " + yGlobalAngle + " " + yStartingAngle + " " + yFOV);
+            yGlobalAngle += yAngleIncrease;
         }
     }
 
-    private void IterateX(int y, float yAngleIn)
+    private void IterateX(int y, float yGlobalAngleIn)
     {
         float xAngleSample = xStartingAngle;
-        float yAngleSample = yAngleIn;
+        float yAngleSample = yGlobalAngleIn;
         Vector3 previousSample = Vector3.positiveInfinity;
         Vector3 secondPreviousSample = Vector3.positiveInfinity;
         bool hasResampled = false;
@@ -200,7 +200,7 @@ public class FieldOfViewRenderer : MonoBehaviour
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
 
             if (!hasResampled)
-                hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yAngleIn, raycastHit, ref yAngleSample, ref sample);
+                hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yGlobalAngleIn, raycastHit, ref yAngleSample, ref sample);
 
             InspectSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, sample);
 
@@ -243,20 +243,20 @@ public class FieldOfViewRenderer : MonoBehaviour
         if (!FOVUtil.AreVerticallyAligned(previousSample, sample))        //Ignore any hits that are above previous
         {
             //Debug.Log(IsClearlyLower(previousSample, sample));
-            //if (FOVUtil.IsFloorToFloor(previousRayCastHit, raycastHit))             //When dropping to lower level 
+
             if (FOVUtil.IsClearlyLower(previousSample, sample))             //When dropping to lower level 
             {
                 TryCreateFloorVertex(raycastHit, sample);
                 if (x > 0)
-                    TryCreateFloorDropVertex(previousRayCastHit, previousSample, sample, xAngleSample);
+                    TryCreateFloorDropVertex(previousRayCastHit, previousSample, sample, xAngleSample, yAngleSample);
             }
             else if (FOVUtil.IsFloorToWall(previousRayCastHit, raycastHit))
             {
-                // TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample);
+                //TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample);
             }
             else if (FOVUtil.IsWallToFloor(previousRayCastHit, raycastHit))
             {
-                //  TryCreateWallToFloorCornerVertex(previousSample, sample);
+                //TryCreateWallToFloorCornerVertex(previousSample, sample);
             }
 
 
@@ -307,9 +307,9 @@ public class FieldOfViewRenderer : MonoBehaviour
                 RaycastHit testRayHit = retargeting == 1 ? raycastHit : lastColumnSampleRays[x];
                 if (testRayHit.collider != null)
                 {
-                    Vector3 closestPoint = testRayHit.collider.ClosestPoint(transform.TransformPoint(reSampleTest));
-                    //Vector3 closestPoint = GetClosestPoint(testRayHit, reSampleTest);
-                    ACylinder(transform.InverseTransformPoint(closestPoint), Color.magenta);
+                    //Vector3 closestPoint = testRayHit.collider.ClosestPoint(transform.TransformPoint(reSampleTest));
+                    Vector3 closestPoint = GetClosestPointOnCollider(testRayHit, reSampleTest);
+                    ACylinder(closestPoint, Color.magenta);
                     Quaternion newY = Quaternion.LookRotation(closestPoint, Vector3.up);
                     CheckColliderExists(raySamplePoints[0], closestPoint, SightRange);
                     float testYAngle = newY.eulerAngles.y;
@@ -384,7 +384,7 @@ public class FieldOfViewRenderer : MonoBehaviour
         return false;
     }
 
-    private Vector3 GetClosestPoint(RaycastHit testRayHit, Vector3 reSampleTest)
+    private Vector3 GetClosestPointOnCollider(RaycastHit testRayHit, Vector3 reSampleTest)
     {
         if (testRayHit.collider == null || reSampleTest == Vector3.zero)
         {
@@ -392,7 +392,7 @@ public class FieldOfViewRenderer : MonoBehaviour
             return Vector3.zero;
         }
 
-        return testRayHit.collider.ClosestPoint(transform.TransformPoint(reSampleTest));
+        return transform.InverseTransformPoint(testRayHit.collider.ClosestPoint(transform.TransformPoint(reSampleTest)));
     }
 
     private int ShouldRetargetY(Vector3 preColumnSample, Vector3 sample)
@@ -453,24 +453,68 @@ public class FieldOfViewRenderer : MonoBehaviour
         {
             case SampleType.FloorToDownFloor:
                 float heightFromSight = 0 - previousSample.y;
-                float angleRad = (90f - xAngle) * Mathf.Deg2Rad;
-                float hypotenuse = heightFromSight / Mathf.Cos(angleRad);
-                Debug.Log("Le" + heightFromSight + " " + angleRad);
+                float xAngleRad = (90f - xAngle) * Mathf.Deg2Rad;
+                float hypotenuse = heightFromSight / Mathf.Cos(xAngleRad);
+                Debug.Log("Le" + heightFromSight + " " + xAngleRad);
                 return sample.normalized * hypotenuse;
         }
 
         return Vector3.zero;
     }
 
-    private void TryCreateFloorDropVertex(RaycastHit previousRaycastHit, Vector3 previousSample, Vector3 sample, float xAngle)
+    private void TryCreateFloorDropVertex(RaycastHit previousRaycastHit, Vector3 previousSample, Vector3 sample, float xAngle, float yAngle)
     {
         Vector3 extraPolatedVec = ExtraPolateVector(SampleType.FloorToDownFloor, previousSample, sample, xAngle);
-        Debug.Log(extraPolatedVec);
+        AddVertexPoint(extraPolatedVec, SampleType.None);
         Debug.Log(extraPolatedVec.magnitude + " " + previousSample.magnitude);
         //ACylinder(extraPolatedVec, Color.white);
-        Vector3 closestPoint = GetClosestPoint(previousRaycastHit, extraPolatedVec);
-        Debug.Log(closestPoint);
+        Vector3 closestPoint = GetClosestPointOnCollider(previousRaycastHit, extraPolatedVec);
+        Vector3 extraToClosest = extraPolatedVec - closestPoint;
+        //ACylinder(extraToClosest, Color.white);
+        bool adjacent = true;
+        //float yAngleRad = Vector3.Angle(extraToClosest, extraPolatedVec * -1) * Mathf.Deg2Rad;       //xAngle works directly, because the two lines are parallel when comparing angle
+        float yAngleRad = yAngle * Mathf.Deg2Rad;       //xAngle works directly, because the two lines are parallel when comparing angle
+        float offSetLenght;
+        float otherLenght;
+        bool isRightSide = Quaternion.LookRotation(closestPoint, Vector3.up).eulerAngles.y > Quaternion.LookRotation(extraPolatedVec, Vector3.up).eulerAngles.y;
+
+        if (!adjacent)
+        {
+            float oppCathetus = extraToClosest.magnitude;
+            float adjCathetus = oppCathetus / Mathf.Tan(yAngleRad);    //This is the offset lenght that closest point gets from collider (90 angle).
+            otherLenght = oppCathetus;
+            offSetLenght = adjCathetus;
+        }
+        else
+        {
+            float adjCathetus = extraToClosest.magnitude;
+            float oppCathetus = Mathf.Tan(yAngleRad) * adjCathetus;    //This is the offset lenght that closest point gets from collider (90 angle).
+            otherLenght = adjCathetus;
+            offSetLenght = oppCathetus;
+        }
+
+
+
+        Debug.Log("Adjacent: " + otherLenght + " OffSetLenght : " + offSetLenght + " Angle: "  + " " + yAngleRad * Mathf.Rad2Deg  + " Angle Rad: " + yAngleRad + " Tan Angle: "+ Mathf.Tan(yAngleRad));
+        this.name = (Quaternion.LookRotation(closestPoint, Vector3.up).eulerAngles.y - transform.rotation.eulerAngles.y).ToString() + " " + (Quaternion.LookRotation(extraPolatedVec, Vector3.up).eulerAngles.y - transform.rotation.eulerAngles.y).ToString();// + " " + yAngle.ToString();
+        this.name = isRightSide.ToString();
+        float rotAngle1 = isRightSide ? 90f : -90f;
+        float rotAngle2 = isRightSide ? -90f : 90f;
+        Vector3 offSet1 = Quaternion.Euler(0, rotAngle1, 0)  * extraToClosest.normalized * offSetLenght;
+        Vector3 offSet2 = Quaternion.Euler(0, rotAngle2, 0)  * extraToClosest.normalized * offSetLenght;
+        Vector3 absoluteClosestPoint1 = closestPoint - offSet1;
+        Vector3 absoluteClosestPoint2 = closestPoint - offSet2;
+
+
+
+
+        ///Vector3 closestPointReAligned = sample.normalized * closestPoint.magnitude;
+        //closestPointReAligned = Quaternion.Euler(extraPolatedVec) * closestPointReAligned;
+        //Vector3 closestPointReTargeted = GetClosestPointOnCollider(previousRaycastHit, closestPointReAligned);
+
         AddVertexPoint(closestPoint, SampleType.FloorToDownFloor);
+       AddVertexPoint(absoluteClosestPoint1, SampleType.FloorToDownFloor);
+       AddVertexPoint(absoluteClosestPoint2, SampleType.FloorToDownFloor);
     }
 
     private void TryCreateWallToFloorCornerVertex(Vector3 previousSample, Vector3 sample)
@@ -891,7 +935,7 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         if (DebugRaypointShapes)
         {
-            GameObject sphere = CreatePrimitive(transform.TransformPoint(localPos), PrimitiveType.Cylinder, new Vector3(0.5f, 0.25f, 0.5f));
+            GameObject sphere = CreatePrimitive(localPos, PrimitiveType.Cylinder, new Vector3(0.5f, 0.25f, 0.5f));
             sphere.GetComponent<Renderer>().material.color = color;
         }
     }
