@@ -161,7 +161,11 @@ public class FieldOfViewRenderer : MonoBehaviour
         {
             var savePath = "Assets/" + "viewConeMesh.asset";
             Debug.Log("Saved Mesh to:" + savePath);
+
+#if UNITY_EDITOR
             AssetDatabase.CreateAsset(mf.mesh, savePath);
+
+#endif
         }
     }
 }

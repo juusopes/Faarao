@@ -1,4 +1,6 @@
-﻿using ParrelSync;
+﻿#if UNITY_EDITOR
+using ParrelSync;
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -46,8 +48,10 @@ public class NetworkManager : MonoBehaviour
             return;
         }
 
+#if UNITY_EDITOR
         if (Testing)
         {
+
             if (ClonesManager.IsClone())
             {
                 // Automatically connect to local host if this is the clone editor
@@ -59,6 +63,7 @@ public class NetworkManager : MonoBehaviour
                 HostServer();
             }
         }
+#endif
     }
 
     public bool HostServer()
