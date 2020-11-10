@@ -27,6 +27,17 @@ public class ClientSend
     }
     #endregion
 
+    #region Load
+
+    public static void SyncRequest()
+    {
+        var packet = new Packet((int)ClientPackets.syncRequest);
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
+
+    #endregion
+
+
     #region Abilities
     public static void AbilityUsed(AbilityOption ability, Vector3 position)
     {
@@ -45,5 +56,34 @@ public class ClientSend
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
+    #endregion
+
+    #region Player
+
+    public static void ChangeToCharacterRequest(ObjectType character)
+    {
+        var packet = new Packet((int)ClientPackets.changeToCharacterRequest);
+        packet.Write((short)character);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
+
+    public static void UnselectCharacter(ObjectType character)
+    {
+        var packet = new Packet((int)ClientPackets.unselectCharacter);
+        packet.Write((short)character);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
+
+    public static void SetDestinationRequest(ObjectType character, Vector3 destination)
+    {
+        var packet = new Packet((int)ClientPackets.setDestinationRequest);
+        packet.Write((short)character);
+        packet.Write(destination);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
+
     #endregion
 }

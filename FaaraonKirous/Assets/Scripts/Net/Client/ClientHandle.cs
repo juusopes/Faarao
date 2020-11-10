@@ -32,11 +32,27 @@ public class ClientHandle
     }
     #endregion
 
+    #region LoadAndSave
+    public static void LoadScene(int connection, Packet packet)
+    {
+        int sceneIndex = packet.ReadInt();
+
+        Debug.Log("Load scene request received");
+
+        GameManager._instance.StartLoading();
+        GameManager._instance.LoadScene(sceneIndex);
+    }
+
+    public static void EndLoading(int connection, Packet packet)
+    {
+        Debug.Log("End loading message received");
+        GameManager._instance.EndLoading();
+    }
+    #endregion
+
     #region ObjectSyncing
     public static void StartingObjectSync(int connection, Packet packet)
     {
-        // TODO: Pause game here too
-
         GameManager._instance.ClearAllObjects();
 
         NetworkManager._instance.IsConnectedToServer = true;
@@ -177,6 +193,17 @@ public class ClientHandle
 
         AbilitySpawner.Instance.SpawnAtPosition(position, ability);
     }
+    #endregion
+
+    #region Player
+
+    public static void ChangeToCharacter(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        LevelController._instance.ChangeToCharacter(character);
+    }
+
     #endregion
 
 }

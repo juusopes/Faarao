@@ -38,7 +38,7 @@ public class PriestAbilities : MonoBehaviour
 
     public void Telekinesis()
     {
-        if (GetComponent<PlayerController>().isActiveCharacter)
+        if (GetComponent<PlayerController>().IsCurrentPlayer)
         {
             //TempSetActive
             if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)

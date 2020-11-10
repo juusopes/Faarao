@@ -125,7 +125,6 @@ public class Character : MonoBehaviour
             linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
             InitNavMeshAgent();
             Assert.IsNotNull(deathScript, "Me cannut dai!");
-
         }
         else
         {

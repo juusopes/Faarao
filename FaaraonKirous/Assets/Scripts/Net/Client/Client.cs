@@ -80,7 +80,10 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.abilityVisualEffectCreated, ClientHandle.AbilityVisualEffectCreated },
             { (int)ServerPackets.stateChanged, ClientHandle.StateChanged },
             { (int)ServerPackets.enemyDied, ClientHandle.EnemyDied },
-            { (int)ServerPackets.detectionConeUpdated, ClientHandle.DetectionConeUpdated }
+            { (int)ServerPackets.detectionConeUpdated, ClientHandle.DetectionConeUpdated },
+            { (int)ServerPackets.loadScene, ClientHandle.LoadScene },
+            { (int)ServerPackets.endLoading, ClientHandle.EndLoading },
+            { (int)ServerPackets.changeToCharacter, ClientHandle.ChangeToCharacter }
         };
 
         // Initialize connection

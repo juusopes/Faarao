@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class PlayerNetManager : DynamicNetManager
 {
+    public PlayerController PlayerController { get; private set; }
+
     protected override void Awake()
     {
         IsStatic = true;
         base.Awake();
+    }
+
+    protected override void InitComponents()
+    {
+        base.InitComponents();
+        PlayerController = GetComponent<PlayerController>();
     }
 
     protected override void AddToGameManager()

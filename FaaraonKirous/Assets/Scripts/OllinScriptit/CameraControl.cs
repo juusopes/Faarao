@@ -9,6 +9,7 @@ public class CameraControl : MonoBehaviour
     private float camHeight;
     private Quaternion camRot;
     public bool camFollow;
+    //public bool cameraRotating;
 
     //Movement Script
     public float moveAmount;
@@ -20,7 +21,11 @@ public class CameraControl : MonoBehaviour
     public Transform cameraPos;
     public Transform cameraStabilizer;
 
-    public Transform objective1, moveCamera;
+    public GameObject testCube;
+
+    public float zoomSpeed;
+
+    public Transform objective1, objective2, objective3, objective4, objective5;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +39,11 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         CamPos();
+
+        cameraRotation rotating = gameObject.GetComponent<cameraRotation>();
+
+
+
     }
 
     private void Initialize()
@@ -41,15 +51,24 @@ public class CameraControl : MonoBehaviour
         camHeight = 40;
         camFollow = false;
         moveAmount = 40f;
+        zoomSpeed = 40f;
     }
 
     private void CamPos()
     {
+        var zoomAmountY = 35 - cameraPos.position.y;
+        var zoomAmountZ = 43.76379f + cameraPos.position.z;
+        //print("y pos: " + cameraPos.position.y);
+        //print("Zoom: " + zoomAmountY);
+
         if (Input.GetMouseButtonDown(2))
         {
-            cameraAnchor.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
-            cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
-            cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y, cameraAnchor.position.z - 39.76f);
+            cameraAnchor.transform.eulerAngles = new Vector3(0, cameraPos.rotation.y, 0);
+            cameraAnchor.transform.position = testCube.transform.position;
+
+            //kesken
+
+            cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y + zoomAmountY, cameraAnchor.position.z - 43.76379f - zoomAmountZ);
         }
 
         if (cameraPos.transform.position.y > 25f)
@@ -57,8 +76,8 @@ public class CameraControl : MonoBehaviour
             // scrolling up (zoom in)
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
-                cameraPos.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
-                cameraPos.transform.Translate(transform.up * -moveAmount * Time.deltaTime, Space.World);
+                cameraPos.transform.Translate(transform.forward * zoomSpeed * Time.deltaTime, Space.World);
+                cameraPos.transform.Translate(transform.up * -zoomSpeed * Time.deltaTime, Space.World);
             }
         }
 
@@ -67,8 +86,8 @@ public class CameraControl : MonoBehaviour
             //scrolling down (zoom out)
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
-                cameraPos.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
-                cameraPos.transform.Translate(transform.up * moveAmount * Time.deltaTime, Space.World);
+                cameraPos.transform.Translate(transform.forward * -zoomSpeed * Time.deltaTime, Space.World);
+                cameraPos.transform.Translate(transform.up * zoomSpeed * Time.deltaTime, Space.World);
             }
         }
 
@@ -102,12 +121,18 @@ public class CameraControl : MonoBehaviour
         }
     }
 
-    private void MoveCamera()
+    public void MoveCamera()
     {
+        bool rotating = GetComponent<cameraRotation>().rotating;
+
+        if (rotating)
+        {
+            return;
+        }
+
         Vector3 pos = transform.position;
         if (Input.mousePosition.x >= Screen.width - borderThickness)
         {
-
             cameraPos.transform.Translate(transform.right * moveAmount * Time.deltaTime, Space.World);
         }
 
@@ -131,13 +156,33 @@ public class CameraControl : MonoBehaviour
         transform.position = pos;
     }
 
-    public void FindObjective()
+    public void FindObjective1()
     {
         cameraAnchor.transform.position = objective1.transform.position;
         cameraStabilizer.transform.position = objective1.transform.position;
 
         //cameraAnchor.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
-        cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
-        cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y, cameraAnchor.position.z - 39.76f);
+        //cameraAnchor.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
+        //cameraPos.transform.position = new Vector3(cameraAnchor.position.x, cameraPos.position.y, cameraAnchor.position.z - 39.76f);
+    }
+    public void FindObjective2()
+    {
+        cameraAnchor.transform.position = objective2.transform.position;
+        cameraStabilizer.transform.position = objective2.transform.position;
+    }
+    public void FindObjective3()
+    {
+        cameraAnchor.transform.position = objective3.transform.position;
+        cameraStabilizer.transform.position = objective3.transform.position;
+    }
+    public void FindObjective4()
+    {
+        cameraAnchor.transform.position = objective4.transform.position;
+        cameraStabilizer.transform.position = objective4.transform.position;
+    }
+    public void FindObjective5()
+    {
+        cameraAnchor.transform.position = objective5.transform.position;
+        cameraStabilizer.transform.position = objective5.transform.position;
     }
 }

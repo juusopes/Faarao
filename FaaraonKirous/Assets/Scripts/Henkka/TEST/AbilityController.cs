@@ -30,17 +30,20 @@ public class AbilityController : MonoBehaviour
         if (abilitySpawner == null)
             return;
 
-        if (!levelCtrl.activeCharacter.GetComponent<PlayerController>().abilityActive)
+        if (levelCtrl.currentCharacter == null)
+            return;
+
+        if (!levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityActive)
             return;
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             abilityActivated = true;
         }
-        Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
-        if (levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange && abilityActivated)
+        //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
+        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange && abilityActivated)
         {
-            PlayerController caster = levelCtrl.activeCharacter.GetComponent<PlayerController>();
+            PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
             if (caster.abilityNum == 2 && !caster.playerOne)
                 abilityOption = AbilityOption.DistractBlindingLight;
             else if (caster.abilityNum == 2 && caster.playerOne)

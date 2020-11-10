@@ -22,4 +22,7 @@ public class Constants
     //public const int resendDelay = 30;  // ms
     public const double resendMultiplier = 1.2;
     public const int maxResends = 30;
+
+    public const int port = 26950;
+    public const string ip = "127.0.0.1";
 }
