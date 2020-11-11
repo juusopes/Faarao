@@ -114,8 +114,11 @@ public class InGameMenu : MonoBehaviour
 
     public void RestartLevel()
     {
-        string restartLevel = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(restartLevel);
+        if (NetworkManager._instance.IsHost)
+        {
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            GameManager._instance.LoadScene(sceneIndex, true);
+        }
     }
 
     public void GoToMainMenu()

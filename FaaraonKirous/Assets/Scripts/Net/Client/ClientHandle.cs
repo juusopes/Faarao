@@ -39,7 +39,6 @@ public class ClientHandle
 
         Debug.Log("Load scene request received");
 
-        GameManager._instance.StartLoading();
         GameManager._instance.LoadScene(sceneIndex);
     }
 
