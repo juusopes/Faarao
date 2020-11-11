@@ -16,11 +16,13 @@ public class CharacterNetManager : DynamicNetManager
     {
         base.SendSync(packet);
         packet.Write(DeathScript.isDead);
+        packet.Write(DeathScript.hp);
     }
 
     public override void HandleSync(Packet packet)
     {
         base.HandleSync(packet);
         DeathScript.isDead = packet.ReadBool();
+        DeathScript.hp = packet.ReadFloat();
     }
 }
