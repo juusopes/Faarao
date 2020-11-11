@@ -7,19 +7,26 @@ public class DeathScript : MonoBehaviour
     private float hp;
     public float damage;
     public bool isDead;
-    // Start is called before the first frame update
-    void Start()
+
+    private CharacterNetManager CharacterNetManager { get; set; }
+
+    void Awake()
     {
         Initialize();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        DeathCheck();
+        if (NetworkManager._instance.IsHost)
+        {
+            DeathCheck();
+        }
     }
 
-    private void Initialize() {
+    private void Initialize() 
+    {
+        CharacterNetManager = GetComponent<CharacterNetManager>();
+
         if (hp == 0)
         {
             hp = 1;
@@ -41,6 +48,11 @@ public class DeathScript : MonoBehaviour
         if (hp == 0)
         {
             isDead = true;
+
+            if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.CharacterDied(CharacterNetManager.List, CharacterNetManager.Id);
+            }
         }
         //if (isDead)
         //{
