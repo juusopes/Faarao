@@ -195,6 +195,38 @@ public class ServerSend
         Server.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet, ConnectionState.Synced);
     }
 
+    public static void Crouching(ObjectType character, bool state, int? excludeId = null)
+    {
+        var packet = new Packet((int)ServerPackets.crouching);
+        packet.Write((short)character);
+        packet.Write(state);
+
+        if (excludeId.HasValue)
+        {
+            Server.Instance.BeginSendPacketAllExclude(excludeId.Value, ChannelType.Reliable, packet);
+        }
+        else
+        {
+            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+        }
+        
+    }
+
+    public static void Running(ObjectType character, bool state, int? excludeId = null)
+    {
+        var packet = new Packet((int)ServerPackets.running);
+        packet.Write((short)character);
+        packet.Write(state);
+
+        if (excludeId.HasValue)
+        {
+            Server.Instance.BeginSendPacketAllExclude(excludeId.Value, ChannelType.Reliable, packet);
+        }
+        else
+        {
+            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+        }
+    }
     #endregion
 }
 

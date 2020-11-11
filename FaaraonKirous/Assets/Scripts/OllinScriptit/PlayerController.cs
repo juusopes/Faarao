@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     //Running
     [HideInInspector]
-    public bool _isRunning;
+    private bool _isRunning;
     public bool IsRunning 
     { 
         get
@@ -31,13 +31,16 @@ public class PlayerController : MonoBehaviour
         set
         {
             _isRunning = value;
-            if (NetworkManager._instance.ShouldSendToServer)
+            if (IsCurrentPlayer)
             {
-                // TODO: Is running packet to client
-            }
-            else if (NetworkManager._instance.ShouldSendToClient)
-            {
-                // TODO: Is running packet to server
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.Running(PlayerNetManager.Type, _isRunning);
+                }
+                else if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.Running(PlayerNetManager.Type, _isRunning);
+                }
             }
         }
     }
@@ -48,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
     //Crouch
     [HideInInspector]
-    public bool _isCrouching;
+    private bool _isCrouching;
     public bool IsCrouching
     {
         get
@@ -58,13 +61,16 @@ public class PlayerController : MonoBehaviour
         set
         {
             _isCrouching = value;
-            if (NetworkManager._instance.ShouldSendToServer)
+            if (IsCurrentPlayer)
             {
-                // TODO: Is crouching packet to client
-            }
-            else if (NetworkManager._instance.ShouldSendToClient)
-            {
-                // TODO: Is crouching packet to server
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.Crouching(PlayerNetManager.Type, _isCrouching);
+                }
+                else if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.Crouching(PlayerNetManager.Type, _isCrouching);
+                }
             }
         }
     }

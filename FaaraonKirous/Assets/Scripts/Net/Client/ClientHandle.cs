@@ -207,6 +207,29 @@ public class ClientHandle
         LevelController._instance.ChangeToCharacter(character);
     }
 
+    public static void Crouching(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
+        {
+            PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
+            playerNetManager.PlayerController.IsCrouching = state;
+        }
+    }
+
+    public static void Running(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
+        {
+            PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
+            playerNetManager.PlayerController.IsRunning = state;
+        }
+    }
     #endregion
 
 }

@@ -182,7 +182,9 @@ public sealed class Server : NetworkHandler
             { (int)ClientPackets.changeToCharacterRequest, ServerHandle.ChangeCharacterRequest },
             { (int)ClientPackets.unselectCharacter, ServerHandle.UnselectCharacter },
             { (int)ClientPackets.setDestinationRequest, ServerHandle.SetDestinationRequest },
-            { (int)ClientPackets.killEnemy, ServerHandle.KillEnemy }
+            { (int)ClientPackets.killEnemy, ServerHandle.KillEnemy },
+            { (int)ClientPackets.crouching, ServerHandle.Crouching },
+            { (int)ClientPackets.running, ServerHandle.Running }
         };
 
         // Initialize connections
