@@ -27,12 +27,14 @@ public class PlayerNetManager : CharacterNetManager
     public override void SendSync(Packet packet)
     {
         base.SendSync(packet);
-        // TODO: Not implemented
+        packet.Write(PlayerController.IsRunning);
+        packet.Write(PlayerController.IsCrouching);
     }
 
     public override void HandleSync(Packet packet)
     {
         base.HandleSync(packet);
-        // TODO: Not implemented
+        PlayerController.IsRunning = packet.ReadBool();
+        PlayerController.IsCrouching = packet.ReadBool();
     }
 }
