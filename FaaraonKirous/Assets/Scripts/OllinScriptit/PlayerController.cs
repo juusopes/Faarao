@@ -131,7 +131,6 @@ public class PlayerController : MonoBehaviour
             Moving();
             LineOfSight();
             KeyControls();
-
             
             Invisibility();  // TODO: Does not work in multiplayer
 
@@ -211,6 +210,7 @@ public class PlayerController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                 {
                     targetV3 = hit.point;
+                    SetDestination(targetV3);
                 }
                 if (IsRunning)
                 {
@@ -224,7 +224,6 @@ public class PlayerController : MonoBehaviour
                 {
                     doubleClickTimer = 0;
                 }
-
                 if (NetworkManager._instance.ShouldSendToServer)
                 {
                     ClientSend.SetDestinationRequest(PlayerNetManager.Type, targetV3);
@@ -253,11 +252,6 @@ public class PlayerController : MonoBehaviour
                 {
                     navMeshAgent.speed = movementSpeed;
                 }
-                //if (!climbing)
-                //{
-                SetDestination(targetV3);
-                //}
-
                 if (position == transform.position)
                 {
                     IsRunning = false;
