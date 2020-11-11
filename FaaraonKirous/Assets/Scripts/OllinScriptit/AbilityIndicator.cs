@@ -89,9 +89,9 @@ public class AbilityIndicator : MonoBehaviour
             line.SetPosition(0, player.transform.position);
 
             //Vector Top point
-            Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
-            topPoint.y = 10;
-            line.SetPosition(line.positionCount / 2, topPoint);
+            //Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
+            //topPoint.y = 10;
+            //line.SetPosition(line.positionCount / 2, topPoint);
 
             //Line End
             line.SetPosition(line.positionCount - 1, transform.position);
@@ -208,6 +208,9 @@ public class AbilityIndicator : MonoBehaviour
                 {
                     endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance-range)*4));
                     player.GetComponent<PlayerController>().GiveDestination(endPoint);
+                } else
+                {
+                    player.GetComponent<PlayerController>().inRange = true;
                 }
                 abilityClicked = true;
             }

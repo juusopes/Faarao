@@ -115,6 +115,17 @@ public class ServerSend
     }
     #endregion
 
+    #region Character
+    public static void CharacterDied(ObjectList list, int id)
+    {
+        var packet = new Packet((int)ServerPackets.characterDied);
+        packet.Write((byte)list);
+        packet.Write(id);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
+    }
+    #endregion
+
     #region Enemy
 
     public static void SightChanged(int id, bool impairedSightRange, bool impairedFOV)
@@ -132,13 +143,6 @@ public class ServerSend
         var packet = new Packet((int)ServerPackets.stateChanged);
         packet.Write(id);
         packet.Write((byte)stateOption);
-
-        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
-    }
-    public static void EnemyDied(int id)
-    {
-        var packet = new Packet((int)ServerPackets.enemyDied);
-        packet.Write(id);
 
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
     }
