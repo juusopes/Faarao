@@ -85,5 +85,13 @@ public class ClientSend
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
 
+
+    public static void KillEnemy(int id)
+    {
+        var packet = new Packet((int)ClientPackets.killEnemy);
+        packet.Write(id);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
     #endregion
 }

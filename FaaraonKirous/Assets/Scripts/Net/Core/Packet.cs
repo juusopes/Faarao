@@ -35,7 +35,8 @@ public enum ClientPackets
     syncRequest,
     changeToCharacterRequest,
     unselectCharacter,
-    setDestinationRequest
+    setDestinationRequest,
+    killEnemy
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

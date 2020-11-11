@@ -83,7 +83,7 @@ public class ServerHandle
     }
     #endregion
 
-    #region
+    #region Player
 
     public static void ChangeCharacterRequest(int connection, Packet packet)
     {
@@ -112,7 +112,19 @@ public class ServerHandle
         {
             
             PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
-            playerNetManager.PlayerController.SetDestination(destination, true);
+            playerNetManager.PlayerController.SetDestination(destination);
+        }
+    }
+
+    public static void KillEnemy(int connection, Packet packet)
+    {
+        
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        {
+            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            enemyNetManager.DeathScript.damage = 1;
         }
     }
     #endregion
