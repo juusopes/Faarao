@@ -97,12 +97,35 @@ public partial class FOVRenderer
                 AddVertexPoint(closestCorner, SampleType.WallToFloorCorner);
             }
 
-
             SampleType sampleType = isAboveZeroAngle ? SampleType.LedgeAtUpAngle : SampleType.LedgeAtDownAngle;
             AddVertexPoint(ledgeEnd, sampleType);
         }
         else
             Debug.Log("Nope could not understand ledges! ");
+    }
+
+    #endregion
+
+    #region Vertex Calculation helpers =======================================================================================================
+
+
+    /// <summary>
+    /// Get the closest corner on the ledge edge comparing to sample vector.
+    /// </summary>
+    /// <param name="previousSample"></param>
+    /// <param name="sample"></param>
+    /// <returns></returns>
+    private Vector3 GetLedgeCorner(float yAngleIn, Vector3 previousSample, Vector3 sample)
+    {
+        float approximateY = (sample.normalized * previousSample.magnitude).y;
+        Vector3 approximateCorner = new Vector3(previousSample.x, approximateY, previousSample.z);                                   //Corner position that is on same x and z as real corner but y is on sample vector (raycast vector)
+        //Vector3 direction = Vector3.down + sample.normalized * 0.2f;                                                //Get direction of ledge
+        Vector3 direction = Quaternion.Euler(cornerCheckAngle, yAngleIn, 0) * Vector3.forward;
+        float cornerY = GetSamplePoint(ConvertGlobal(approximateCorner), direction, approximateY - previousSample.y + 0.5f).y;       //Raycast almost straight down towards ledge to determine y height
+        if (cornerY < previousSample.y)                                                                          //If ray failed, use approximate corner
+            return approximateCorner;
+
+        return new Vector3(approximateCorner.x, cornerY, approximateCorner.z);
     }
 
     private Vector3 GetLedgeEnd(bool isAboveZeroAngle, float yAngleIn, Vector3 sample, RaycastHit previousRayCastHit, Vector3 previousVertex)
@@ -117,45 +140,65 @@ public partial class FOVRenderer
         if (isAboveZeroAngle)
         {
             maxSightRangeOverLedge = GetMaxSightRangeOverLedge(xRadCornerAngle, yAngleIn, sample, previousVertex);
-            ledgeEnd = TryGetEndOfLedgeIterative(previousVertex, xRadCornerAngle, maxSightRangeOverLedge);
+            // ledgeEnd = TryGetEndOfLedgeIterativeRaycasts(previousVertex, xRadCornerAngle, maxSightRangeOverLedge);
         }
         else
         {
             maxSightRangeOverLedge = sample.magnitude;
-            ledgeEnd = TryBackTrackingLedgeEnd(previousVertex, sample, previousRayCastHit, xRadCornerAngle, maxSightRangeOverLedge);
+            //ledgeEnd = TryBackTrackingLedgeEnd(previousVertex, sample, previousRayCastHit, xRadCornerAngle, maxSightRangeOverLedge);
         }
-
+        ledgeEnd = BackTrackLedgeEnd(previousVertex, sample, previousRayCastHit, xRadCornerAngle, maxSightRangeOverLedge);
         return ledgeEnd;
     }
 
-    /// <summary>
-    /// Get the closest corner on the ledge edge comparing to sample vector.
-    /// </summary>
-    /// <param name="previousSample"></param>
-    /// <param name="sample"></param>
-    /// <returns></returns>
-    private Vector3 GetLedgeCorner(float yAngleIn, Vector3 previousSample, Vector3 sample)
-    {
-        float approximateY = (sample.normalized * previousSample.magnitude).y;
-        Vector3 approximateCorner = new Vector3(previousSample.x, approximateY, previousSample.z);                                   //Corner position that is on same x and z as real corner but y is on sample vector (raycast vector)
-        //Vector3 direction = Vector3.down + sample.normalized * 0.2f;                                                //Get direction of ledge
-        Vector3 direction = Quaternion.Euler(cornerCheckAngle, yAngleIn, 0) * Vector3.forward;
-        float cornerY = GetSamplePoint(ConvertGlobal(approximateCorner), direction, SightRange).y;       //Raycast almost straight down towards ledge to determine y height
-        if (cornerY < previousSample.y)                                                                          //If ray failed, use approximate corner
-            return approximateCorner;
 
-        return new Vector3(approximateCorner.x, cornerY, approximateCorner.z);
-    }
-
-    private Vector3 TryBackTrackingLedgeEnd(Vector3 previousVertex, Vector3 sample, RaycastHit previousRayCastHit, float xRadCornerAngle, float maxSightRangeOverLedge)
+    private Vector3 BackTrackLedgeEnd(Vector3 previousVertex, Vector3 sample, RaycastHit previousRayCastHit, float xRadCornerAngle, float maxSightRangeOnLedge)
     {
         Vector3 closestOnCollider = GetClosestPointOnColliderWithinYDirection(previousRayCastHit, previousVertex, sample);
+        if (closestOnCollider == Vector3.zero)
+            return Vector3.zero;
+        RaycastHit lastHit = previousRayCastHit;
+        Vector3 vertOffset = new Vector3(0, 0.2f, 0);
+        Vector3 firstSample = closestOnCollider + vertOffset;
+        Vector3 step = firstSample;
+        step.y = 0;
+        step = step.normalized * ledgeStep;
+
+        float maxDistance = maxSightRangeOnLedge - closestOnCollider.magnitude;
+
+        //Start tracking if we have other floor colliders that are closer to sample
+        for (int i = 1; i < 3; i++)
+        {
+            //float iterationBonus = i * ledgeStep;
+            //float startDistance = Mathf.Min(closestOnCollider.magnitude + iterationBonus, maxDistance);
+            Vector3 sampleStart = firstSample + step * i;
+
+            if (sampleStart.magnitude >= maxSightRangeOnLedge)
+                break;
+
+            RaycastHit hit;
+            if (CheckColliderExists(sampleStart, Vector3.down, vertOffset.y * 2, out hit))
+            {
+                if (hit.collider != null)
+                    if (hit.collider != lastHit.collider && HitPointIsUpFacing(hit))
+                    {
+                        lastHit = hit;
+                        closestOnCollider = GetClosestPointOnColliderWithinYDirection(hit, previousVertex, sample);
+                        if (closestOnCollider == Vector3.zero)
+                            break;
+
+                        firstSample = closestOnCollider + vertOffset;
+                        i = 0;
+                    }
+            }
+        }
 
         return closestOnCollider;
     }
 
     private Vector3 GetClosestPointOnColliderWithinYDirection(RaycastHit raycastHit, Vector3 previousVertex, Vector3 sample)
     {
+        sample.y = previousVertex.y;
         Vector3 closestOnCollider = GetClosestPointOnCollider(raycastHit, sample);
 
         //if the first approximation was good enough, just let it be let it be let it be
@@ -163,59 +206,25 @@ public partial class FOVRenderer
             && AreSimilarHeight(closestOnCollider, previousVertex))
             return closestOnCollider;
 
-        //ACylinder(closestOnCollider, Color.white);
-
         //Did not find good enough let's use old closest point to get new closest point, then create line from it
         Vector3 sampleRecalculated = sample.normalized * closestOnCollider.magnitude;
+
         Vector3 closestOnColliderReCalculated = GetClosestPointOnCollider(raycastHit, sampleRecalculated);
-        Vector3 zombies, closestPointOnLine2;
-
-        //ACylinder(closestOnColliderReCalculated, Color.blue);
-
-        //Compare to closest points on collider to original direction vector and find the crossing x and z coordinates
-        if (Math3d.ClosestPointsOnTwoLines(out zombies, out closestPointOnLine2, closestOnCollider, closestOnColliderReCalculated - closestOnCollider, Vector3.zero, sampleRecalculated))
+        Vector3 intersection;
+        Vector3 testVec1 = (closestOnColliderReCalculated - closestOnCollider) * 10f;
+        Vector3 testVec2 = sample;
+        testVec1.y = 0;     //2d
+        testVec2.y = 0;     //2d
+        //Get the 2D flattened intersection of sample and out two last closest points
+        if (Math3d.LineLineIntersection(out intersection, new Vector3(closestOnCollider.x, 0, closestOnCollider.z), testVec1, Vector3.zero, testVec2))
         {
-            return new Vector3(closestPointOnLine2.x, previousVertex.y, closestPointOnLine2.z);
+            return new Vector3(intersection.x, previousVertex.y, intersection.z);
         }
+
+        Debug.Log("Could not find intersection");
 
         return Vector3.zero;
     }
-
-
-    private Vector3 TryGetEndOfLedgeIterative(Vector3 corner, float xRadCornerAngle, float maxSightRangeOverLedge)
-    {
-        Vector3 ledgeEnd = Vector3.zero;
-        int emptyRaysInRow = 0;
-        Debug.Log("Try to get ledge end with range : " + maxSightRangeOverLedge);
-        //Iterate from 0 to max looking down to see if we actually have a ledge
-        int iterations = Mathf.CeilToInt((maxSightRangeOverLedge - corner.magnitude) / ledgeStep);
-        for (int i = 1; i <= iterations; i++)
-        {
-            float iterationBonus = i * ledgeStep;
-            float startDistance = Mathf.Min(corner.magnitude + iterationBonus, maxSightRangeOverLedge);
-            float downRange = Mathf.Abs(Mathf.Sin(xRadCornerAngle) * iterationBonus) + yTolerance;
-            if (i < 3)
-                downRange += 0.2f;      //Compensate rounded corners
-            Vector3 sampleStart = corner.normalized * startDistance;
-            //Debug.Log(i + " " + startDistance + " " + downRange + "  " + sampleStart);
-            if (CheckColliderExists(sampleStart, Vector3.down, 10f))
-            {
-                emptyRaysInRow = 0;
-                ledgeEnd = new Vector3(sampleStart.x, corner.y, sampleStart.z);
-            }
-            else
-            {
-                emptyRaysInRow++;
-                if (emptyRaysInRow > 2)
-                    break;
-            }
-        }
-        return ledgeEnd;
-    }
-
-    #endregion
-
-    #region Vertex Calculation helpers =======================================================================================================
 
     private Vector3 ExtraPolateVector(SampleType type, Vector3 previousSample, Vector3 sample, float xAngle)
     {
@@ -289,6 +298,38 @@ public partial class FOVRenderer
     #endregion
 
     #region Zombie code
+
+    private Vector3 TryGetEndOfLedgeIterativeRaycasts(Vector3 corner, float xRadCornerAngle, float maxSightRangeOverLedge)
+    {
+        Vector3 ledgeEnd = Vector3.zero;
+        int emptyRaysInRow = 0;
+        Debug.Log("Try to get ledge end with range : " + maxSightRangeOverLedge);
+        //Iterate from 0 to max looking down to see if we actually have a ledge
+        int iterations = Mathf.CeilToInt((maxSightRangeOverLedge - corner.magnitude) / ledgeStep);
+        for (int i = 1; i <= iterations; i++)
+        {
+            float iterationBonus = i * ledgeStep;
+            float startDistance = Mathf.Min(corner.magnitude + iterationBonus, maxSightRangeOverLedge);
+            float downRange = Mathf.Abs(Mathf.Sin(xRadCornerAngle) * iterationBonus) + yTolerance;
+            if (i < 3)
+                downRange += 0.2f;      //Compensate rounded corners
+            Vector3 sampleStart = corner.normalized * startDistance;
+            //Debug.Log(i + " " + startDistance + " " + downRange + "  " + sampleStart);
+            if (CheckColliderExists(sampleStart, Vector3.down, downRange))
+            {
+                emptyRaysInRow = 0;
+                ledgeEnd = new Vector3(sampleStart.x, corner.y, sampleStart.z);
+            }
+            else
+            {
+                emptyRaysInRow++;
+                if (emptyRaysInRow > 2)
+                    break;
+            }
+        }
+        return ledgeEnd;
+    }
+
     /*
      * 
      * 

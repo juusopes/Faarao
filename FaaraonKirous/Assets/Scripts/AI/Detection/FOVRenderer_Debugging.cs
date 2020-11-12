@@ -52,12 +52,12 @@ public partial class FOVRenderer
         }
     }
 
-    void ACylinder(Vector3 localPos, Color color)
+    void ACylinder(Vector3 localPos, Color? color = null)
     {
         if (DebugRaypointShapes)
         {
             GameObject sphere = CreatePrimitive(localPos, PrimitiveType.Cylinder, new Vector3(0.3f, 0.25f, 0.3f));
-            sphere.GetComponent<Renderer>().material.color = color;
+            sphere.GetComponent<Renderer>().material.color = color ?? Color.magenta;
         }
     }
 

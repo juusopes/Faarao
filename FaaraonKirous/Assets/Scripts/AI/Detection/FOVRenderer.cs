@@ -49,9 +49,9 @@ public partial class FOVRenderer : MonoBehaviour
 
     //Tweakable values
     private const int yRayCount = (0) + 1;    // ODD NUMBER 
-    private const int xRayCount = (4) + 1;    // ODD NUMBER 
+    private const int xRayCount = (12) + 1;    // ODD NUMBER 
     private const float maxXAngle = -90.0000001f;   //Negative number is up!
-    private const float ledgeStep = 0.2f;
+    private const float ledgeStep = 0.25f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;
     private const float enemySightHeight = 2.785f;
     private const float playerHeight = 2.785f;

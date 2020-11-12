@@ -91,18 +91,30 @@ public partial class FOVRenderer
     }
 
     /// <summary>
-    /// Input local space sample and check if ground exists in downRange
+    /// Input local space sample and check if ground exists in range
     /// </summary>
     /// <param name="localSampleStart"></param>
     /// <param name="range"></param>
     /// <returns></returns>
     private bool CheckColliderExists(Vector3 localSampleStart, Vector3 direction, float range)
     {
+        RaycastHit rayCastHit = new RaycastHit();
+        return CheckColliderExists(localSampleStart, direction, range, out rayCastHit);
+    }
+
+    /// <summary>
+    /// Input local space sample and check if ground exists in range
+    /// </summary>
+    /// <param name="localSampleStart"></param>
+    /// <param name="range"></param>
+    /// <returns></returns>
+    private bool CheckColliderExists(Vector3 localSampleStart, Vector3 direction, float range, out RaycastHit rayCastHitReturn)
+    {
 #if UNITY_EDITOR
         if (DebugRayCasts)
             Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.blue, 1000f);
 #endif
-        return Physics.Raycast(ConvertGlobal(localSampleStart), direction, range, RayCaster.viewConeLayerMask);
+        return Physics.Raycast(ConvertGlobal(localSampleStart), direction, out rayCastHitReturn, range, RayCaster.viewConeLayerMask);
     }
 
     private Looking GetVerticalDirection(float xAngle)

@@ -80,7 +80,7 @@ public partial class FOVRenderer
                 InspectFlatSample(yAngleSample, sample, previousRayCastHit);
                 break;
             case Looking.Up:
-                InspectUpSample(yAngleSample, previousSample, sample, raycastHit);
+                InspectUpSample(yAngleSample, previousSample, sample, previousRayCastHit);
                 break;
         }
     }
@@ -139,12 +139,12 @@ public partial class FOVRenderer
         }
     }
 
-    private void InspectUpSample(float yAngleSample, Vector3 previousSample, Vector3 sample, RaycastHit raycastHit)
+    private void InspectUpSample(float yAngleSample, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit)
     {
         if (!AreVerticallyAligned(previousSample, sample))
         {
             if (IsClearlyLonger(previousSample, sample))
-                TryCreateLedgeVertices(lastSampleType, true, yAngleSample, previousSample, sample, raycastHit);
+                TryCreateLedgeVertices(lastSampleType, true, yAngleSample, previousSample, sample, previousRayCastHit);
         }
     }
 
