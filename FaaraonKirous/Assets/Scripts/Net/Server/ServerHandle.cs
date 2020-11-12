@@ -62,6 +62,8 @@ public class ServerHandle
     #region Abilities
     public static void AbilityUsed(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         AbilityOption ability = (AbilityOption)packet.ReadByte();
         Vector3 position = packet.ReadVector3();
 
@@ -72,6 +74,8 @@ public class ServerHandle
 
     public static void EnemyPossessed(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
 
@@ -87,6 +91,8 @@ public class ServerHandle
 
     public static void ChangeCharacterRequest(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         ObjectType character = (ObjectType)packet.ReadShort();
 
         if (LevelController._instance.CanChangeToCharacter(character))
@@ -98,6 +104,8 @@ public class ServerHandle
 
     public static void UnselectCharacter(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         ObjectType character = (ObjectType)packet.ReadShort();
 
         LevelController._instance.UnselectCharacter(character);
@@ -105,6 +113,8 @@ public class ServerHandle
 
     public static void SetDestinationRequest(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         ObjectType character = (ObjectType)packet.ReadShort();
         Vector3 destination = packet.ReadVector3();
 
@@ -118,7 +128,8 @@ public class ServerHandle
 
     public static void KillEnemy(int connection, Packet packet)
     {
-        
+        if (!Server.Instance.IsSynced(connection)) return;
+
         int id = packet.ReadInt();
 
         if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
@@ -130,6 +141,8 @@ public class ServerHandle
 
     public static void Crouching(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         ObjectType character = (ObjectType)packet.ReadShort();
         bool state = packet.ReadBool();
 
@@ -144,6 +157,8 @@ public class ServerHandle
 
     public static void Running(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         ObjectType character = (ObjectType)packet.ReadShort();
         bool state = packet.ReadBool();
 

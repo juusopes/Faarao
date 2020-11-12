@@ -104,12 +104,10 @@ public class GameManager : MonoBehaviour
         {
             ServerSend.LoadScene(index);
         }
-        
-        Debug.Log("Loading scene");
 
         if (restartScene || CurrentSceneIndex != index)
         {
-            Debug.Log("Need to load or restarting");
+            Debug.Log("Scene not loaded or restarting. Loading scene.");
 
             // Reset everything if level is changed
             ResetAll();
@@ -119,7 +117,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Dont need to load");
+            Debug.Log("Scene already loaded. Don't need to load.");
 
             // Scene is loaded if it is the current scene
             SceneLoaded();
@@ -149,7 +147,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("I am not host");
             if (NetworkManager._instance.ShouldSendToServer)
             {
                 Debug.Log("Scene loaded: Sending sync request");

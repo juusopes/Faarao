@@ -198,6 +198,10 @@ public sealed class Server : NetworkHandler
     }
 
     #region ConnectionStates
+    public bool IsSynced(int id)
+    {
+        return HasConnectionFlags(id, ConnectionState.Synced);
+    }
 
     public bool HasConnectionFlags(int id, ConnectionState flags)
     {
