@@ -126,19 +126,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138f6f5282773ba4d965b3415bd5d85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objective1Done: 0
-  objective2Done: 0
-  objective3Done: 0
-  objective4Done: 0
-  objective5Done: 0
+  objectiveDone: 
   inEndPoint: 0
-  objective1DoneMark: {fileID: 0}
-  objective2DoneMark: {fileID: 0}
-  objective3DoneMark: {fileID: 0}
-  objective4DoneMark: {fileID: 0}
-  objective5DoneMark: {fileID: 0}
+  objNum: 5
+  objectiveDoneMark: []
   endPoint: {fileID: 0}
   playersInside: 0
+  rewards: {fileID: 0}
 --- !u!1 &7349144005569786519
 GameObject:
   m_ObjectHideFlags: 0
@@ -9889,19 +9883,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138f6f5282773ba4d965b3415bd5d85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objective1Done: 0
-  objective2Done: 0
-  objective3Done: 0
-  objective4Done: 0
-  objective5Done: 0
+  objectiveDone: 
   inEndPoint: 0
-  objective1DoneMark: {fileID: 0}
-  objective2DoneMark: {fileID: 0}
-  objective3DoneMark: {fileID: 0}
-  objective4DoneMark: {fileID: 0}
-  objective5DoneMark: {fileID: 0}
+  objNum: 1
+  objectiveDoneMark: []
   endPoint: {fileID: 0}
   playersInside: 0
+  rewards: {fileID: 0}
 --- !u!1 &8487983796034150739
 GameObject:
   m_ObjectHideFlags: 0
@@ -10028,19 +10016,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138f6f5282773ba4d965b3415bd5d85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objective1Done: 0
-  objective2Done: 0
-  objective3Done: 0
-  objective4Done: 0
-  objective5Done: 0
-  inEndPoint: 0
-  objective1DoneMark: {fileID: 0}
-  objective2DoneMark: {fileID: 0}
-  objective3DoneMark: {fileID: 0}
-  objective4DoneMark: {fileID: 0}
-  objective5DoneMark: {fileID: 0}
+  objectiveDone: 
+  inEndPoint: 1
+  objNum: 0
+  objectiveDoneMark: []
   endPoint: {fileID: 0}
   playersInside: 0
+  rewards: {fileID: 0}
 --- !u!1 &8487983796110470532
 GameObject:
   m_ObjectHideFlags: 0
@@ -14979,19 +14961,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138f6f5282773ba4d965b3415bd5d85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objective1Done: 0
-  objective2Done: 0
-  objective3Done: 0
-  objective4Done: 0
-  objective5Done: 0
+  objectiveDone: 
   inEndPoint: 0
-  objective1DoneMark: {fileID: 0}
-  objective2DoneMark: {fileID: 0}
-  objective3DoneMark: {fileID: 0}
-  objective4DoneMark: {fileID: 0}
-  objective5DoneMark: {fileID: 0}
+  objNum: 2
+  objectiveDoneMark: []
   endPoint: {fileID: 0}
   playersInside: 0
+  rewards: {fileID: 0}
 --- !u!1 &8487983796546669078
 GameObject:
   m_ObjectHideFlags: 0
@@ -24665,23 +24641,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62bfbfbf81f87414a8fca47be24d0e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objective1: {fileID: 0}
-  objective2: {fileID: 0}
-  objective3: {fileID: 0}
-  objective4: {fileID: 0}
-  objective5: {fileID: 0}
+  objectivesNeeded: 0
+  objectives: []
   playersInside: 0
-  objectivecounter1: {fileID: 8487983796017585794}
-  objectivecounter2: {fileID: 8487983796543155864}
-  objectivecounter3: {fileID: 8487983797928614303}
-  objectivecounter4: {fileID: 639837990455357998}
-  objectivecounter5: {fileID: 1874013125250795940}
+  objectiveCounters: []
   endPointer: {fileID: 8487983796034150745}
-  objective1Done: 0
-  objective2Done: 0
-  objective3Done: 0
-  objective4Done: 0
-  objective5Done: 0
+  objectiveDone: 
   inEndPoint: 0
 --- !u!1 &8487983797639404740
 GameObject:
@@ -29621,19 +29586,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138f6f5282773ba4d965b3415bd5d85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objective1Done: 0
-  objective2Done: 0
-  objective3Done: 0
-  objective4Done: 0
-  objective5Done: 0
+  objectiveDone: 
   inEndPoint: 0
-  objective1DoneMark: {fileID: 0}
-  objective2DoneMark: {fileID: 0}
-  objective3DoneMark: {fileID: 0}
-  objective4DoneMark: {fileID: 0}
-  objective5DoneMark: {fileID: 0}
+  objNum: 3
+  objectiveDoneMark: []
   endPoint: {fileID: 0}
   playersInside: 0
+  rewards: {fileID: 0}
 --- !u!1 &8524011809994692202
 GameObject:
   m_ObjectHideFlags: 0
@@ -29760,16 +29719,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138f6f5282773ba4d965b3415bd5d85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objective1Done: 0
-  objective2Done: 0
-  objective3Done: 0
-  objective4Done: 0
-  objective5Done: 0
+  objectiveDone: 
   inEndPoint: 0
-  objective1DoneMark: {fileID: 0}
-  objective2DoneMark: {fileID: 0}
-  objective3DoneMark: {fileID: 0}
-  objective4DoneMark: {fileID: 0}
-  objective5DoneMark: {fileID: 0}
+  objNum: 4
+  objectiveDoneMark: []
   endPoint: {fileID: 0}
   playersInside: 0
+  rewards: {fileID: 0}

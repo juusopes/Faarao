@@ -130,8 +130,7 @@ public class PlayerController : MonoBehaviour
         {
             Moving();
             LineOfSight();
-            KeyControls();
-            
+            KeyControls();          
             Invisibility();  // TODO: Does not work in multiplayer
 
             if (NetworkManager._instance.IsHost)
@@ -328,16 +327,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    //private void InvisiblitySpell()
-    //{
-    //    if (isActiveCharacter)
-    //    {
-    //        if (lineOfSight)
-    //        {
-    //            anotherCharacter.GetComponent<PlayerController>().isInvisible = true;
-    //        }
-    //    }
-    //}
 
     private void Invisibility()
     {
