@@ -11,7 +11,7 @@ public static class UtilsClass
 
     public static bool IsMinimumVector(Vector3 testVector)
     {
-        return Vector3.Equals(testVector, new Vector3(float.MinValue, float.MinValue, float.MinValue));
+        return testVector == new Vector3(float.MinValue, float.MinValue, float.MinValue);
     }
 
     public static Vector3 GetVectorFromAngle(float angle)

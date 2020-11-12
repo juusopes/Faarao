@@ -35,7 +35,7 @@ public partial class FOVRenderer
         yield return new WaitForSeconds(0f);
         foreach (Vector3 vert in arr)
         {
-            GameObject sphere = CreatePrimitive(vert, PrimitiveType.Sphere, new Vector3(0.4f, 0.4f, 0.4f));
+            GameObject sphere = CreatePrimitive(vert, PrimitiveType.Sphere, new Vector3(0.3f, 0.3f, 0.3f));
             sphere.GetComponent<Renderer>().material = ballMat;
             yield return new WaitForSeconds(1f / arr.Length);
         }
@@ -46,7 +46,7 @@ public partial class FOVRenderer
         yield return new WaitForSeconds(0f);
         foreach (Vector3 vert in arr)
         {
-            GameObject cube = CreatePrimitive(vert, PrimitiveType.Cube, new Vector3(0.35f, 0.35f, 0.35f));
+            GameObject cube = CreatePrimitive(vert, PrimitiveType.Cube, new Vector3(0.2f, 0.2f, 0.2f));
             cube.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0.5f);// Color.red;
             yield return new WaitForSeconds(1f / arr.Length);
         }
@@ -56,7 +56,7 @@ public partial class FOVRenderer
     {
         if (DebugRaypointShapes)
         {
-            GameObject sphere = CreatePrimitive(localPos, PrimitiveType.Cylinder, new Vector3(0.5f, 0.25f, 0.5f));
+            GameObject sphere = CreatePrimitive(localPos, PrimitiveType.Cylinder, new Vector3(0.3f, 0.25f, 0.3f));
             sphere.GetComponent<Renderer>().material.color = color;
         }
     }

@@ -139,11 +139,15 @@ public partial class FOVRenderer
 
     public bool HitPointIsUpFacing(RaycastHit raycastHit)
     {
+        if (raycastHit.collider == null)
+            return false;
         return Vector3.Dot(raycastHit.normal, Vector3.up) > SlopeTolerance;
     }
 
     public bool HitPointIsSideFacing(RaycastHit raycastHit)
     {
+        if (raycastHit.collider == null)
+            return false;
         float dot = Vector3.Dot(raycastHit.normal, Vector3.up);
         return dot > -SlopeTolerance && dot < SlopeTolerance;
     }
@@ -191,6 +195,16 @@ public partial class FOVRenderer
     public bool AreSimilarLenght(Vector3 sample1, float comparison)
     {
         return Mathf.Abs(sample1.magnitude - comparison) < horizontalThreshold;
+    }
+
+    public bool AreSimilarYDirection(Vector3 sample1, Vector3 sample2)
+    {
+        sample1 = sample1.normalized;
+        sample2 = sample2.normalized;
+        Vector2 test1 = new Vector2(sample1.x, sample1.z);
+        Vector2 test2 = new Vector2(sample2.x, sample2.z);
+        Debug.Log("Similarity is " + Vector2.Dot(test1, test2));
+        return Vector2.Dot(test1, test2) > directionTolerance;
     }
     #endregion
 }

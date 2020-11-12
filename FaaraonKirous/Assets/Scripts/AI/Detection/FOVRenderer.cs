@@ -48,15 +48,16 @@ public partial class FOVRenderer : MonoBehaviour
     SampleType lastSampleType = 0;
 
     //Tweakable values
-    private const int yRayCount = (2) + 1;    // ODD NUMBER 
-    private const int xRayCount = (10) + 1;    // ODD NUMBER 
-    private const float maxXAngle = -10.0000001f;
+    private const int yRayCount = (0) + 1;    // ODD NUMBER 
+    private const int xRayCount = (4) + 1;    // ODD NUMBER 
+    private const float maxXAngle = -90.0000001f;   //Negative number is up!
     private const float ledgeStep = 0.2f;
     private const float ledgeSightBlockingHeight = 0.3f;
     private const float enemySightHeight = 2.785f;
     private const float playerHeight = 2.785f;
     private const float yTolerance = 0.2f;                  //Difference between sampled corner and raycasted corner with added tolerance in case floor is not evenly shaped
     private const float cornerCheckAngle = 80f;             //In what x angle is corner check operated (the rounder ledge edges the smaller value)
+    private const float directionTolerance = 0.995f;
 
     private const float verticalThreshold = 0.1f;
     private const float horizontalThreshold = 0.1f;
@@ -80,6 +81,7 @@ public partial class FOVRenderer : MonoBehaviour
         WallToWall,
         WallToFloorCorner,
         EndOfSightRange,
+        LedgeAtDownAngle,
         LedgeAtUpAngle
     }
 
@@ -90,7 +92,7 @@ public partial class FOVRenderer : MonoBehaviour
     private float SightRangeCrouching => character.SightRangeCrouching;
     private Vector3 ConvertGlobal(Vector3 inVec) => transform.TransformPoint(inVec);
     private Vector3 ConvertLocal(Vector3 inVec) => transform.InverseTransformPoint(inVec);
-
+    private Vector3 LastAddedVertex => vertexPoints[vertexPoints.Count - 1];
 
     private Vector3 MeshOrigin => Vector3.zero - Vector3.up * playerHeight;
     #endregion
@@ -115,7 +117,7 @@ public partial class FOVRenderer : MonoBehaviour
 #if UNITY_EDITOR
         if (DebugRaypointShapes)
         {
-            raySamplePoints = new Vector3[yRayCount * xRayCount + 1000];
+            raySamplePoints = new Vector3[yRayCount * xRayCount + 1];
             raySamplePoints[0] = Vector3.zero;
         }
 #endif
@@ -175,6 +177,7 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void AddVertexPoint(Vector3 sample, SampleType sampleType)
     {
+        Debug.Log("Added vertex: " + sample + " with type: " + sampleType);
         lastSampleType = sampleType;
         vertexPoints.Add(sample);
     }

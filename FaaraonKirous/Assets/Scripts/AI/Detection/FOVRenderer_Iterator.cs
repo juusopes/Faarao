@@ -77,10 +77,10 @@ public partial class FOVRenderer
                 break;
             case Looking.ZeroAngle:
                 InspectDownSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, sample);
-                InspectFlatSample(sample);
+                InspectFlatSample(yAngleSample, sample, previousRayCastHit);
                 break;
             case Looking.Up:
-                InspectUpSample(yAngleSample, previousSample, sample);
+                InspectUpSample(yAngleSample, previousSample, sample, raycastHit);
                 break;
         }
     }
@@ -92,47 +92,59 @@ public partial class FOVRenderer
         {
             //Debug.Log(IsClearlyLower(previousSample, sample));
 
+            //Debug.Log("Last sampled vertex was of type: " + lastSampleType);
+
             //When dropping to lower level 
-            if (IsClearlyLower(previousSample, sample))
+            if (IsClearlyLower(previousSample, sample) && HitPointIsUpFacing(raycastHit))
             {
                 TryCreateFloorVertex(raycastHit, sample);
+                Debug.Log("Floor calculation");
                 if (x > 0)
+                {
+                    Debug.Log("Floor to down floor calculation");
                     TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSample, yAngleSample);
+                }
             }
             //When going forward from wall to floor 
             else if (IsWallToFloor(previousRayCastHit, raycastHit))
             {
+                Debug.Log("Wall to floor calculation");
                 TryCreateWallToFloorCornerVertex(previousSample, sample);
             }
             //When going up from floor to wall
             else if (IsFloorToWall(previousRayCastHit, raycastHit))
             {
+                Debug.Log("Floor to wall calculation");
                 //Todo: consider back tracking
                 TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample);
             }
-            //When ray did not hit floor after climbing a wall, but hit a new wall instead
-            else if (IsWallToWall(previousRayCastHit, raycastHit) && IsClearlyLonger(previousSample, sample))
+            //When ray did not hit floor after climbing a wall
+            else if (IsWallToWall(previousRayCastHit, raycastHit) && IsClearlyLonger(previousSample, sample)
+                || lastSampleType == SampleType.FloorToWallCorner
+                || lastSampleType == SampleType.WallToFloorCorner)
             {
-                TryCreateLedgeVertices(false, yAngleSample, previousSample, sample);
+                Debug.Log("Ledge calculation");
+                TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
             }
         }
     }
 
 
-    private void InspectFlatSample(Vector3 sample)
+    private void InspectFlatSample(float yAngleSample, Vector3 sample, RaycastHit previousRayCastHit)
     {
         if (AreSimilarLenght(sample, SightRange))
         {
-            TryCreateVertexToEndOfSightRange(sample);
+            Debug.Log("End of sight calculation");
+            TryCreateVertexToEndOfSightRange(lastSampleType, yAngleSample, sample, previousRayCastHit);
         }
     }
 
-    private void InspectUpSample(float yAngleSample, Vector3 previousSample, Vector3 sample)
+    private void InspectUpSample(float yAngleSample, Vector3 previousSample, Vector3 sample, RaycastHit raycastHit)
     {
         if (!AreVerticallyAligned(previousSample, sample))
         {
             if (IsClearlyLonger(previousSample, sample))
-                TryCreateLedgeVertices(true, yAngleSample, previousSample, sample);
+                TryCreateLedgeVertices(lastSampleType, true, yAngleSample, previousSample, sample, raycastHit);
         }
     }
 

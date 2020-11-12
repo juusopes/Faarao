@@ -30,55 +30,6 @@ public partial class FOVRenderer
             Vector3 corner = new Vector3(cornerSample.x, previousSample.y, cornerSample.z);
             AddVertexPoint(corner, SampleType.FloorToDownFloor);
         }
-
-
-        /*
-        Debug.Log(extraPolatedVec.magnitude + " " + previousSample.magnitude);
-        //ACylinder(extraPolatedVec, Color.white);
-        Vector3 closestPoint = GetClosestPointOnCollider(previousRaycastHit, extraPolatedVec);
-        Vector3 extraToClosest = extraPolatedVec - closestPoint;
-
-        //ACylinder(extraToClosest, Color.white);
-        bool adjacent = true;
-        //float yAngleRad = Vector3.Angle(extraToClosest, extraPolatedVec * -1) * Mathf.Deg2Rad;       //xAngle works directly, because the two lines are parallel when comparing angle
-        float yAngleRad = yAngle * Mathf.Deg2Rad;       //xAngle works directly, because the two lines are parallel when comparing angle
-        float offSetLenght;
-        float otherLenght;
-        bool isRightSide = Quaternion.LookRotation(closestPoint, Vector3.up).eulerAngles.y > Quaternion.LookRotation(extraPolatedVec, Vector3.up).eulerAngles.y;
-
-        if (!adjacent)
-        {
-            float oppCathetus = extraToClosest.magnitude;
-            float adjCathetus = oppCathetus / Mathf.Tan(yAngleRad);    //This is the offset lenght that closest point gets from collider (90 angle).
-            otherLenght = oppCathetus;
-            offSetLenght = adjCathetus;
-        }
-        else
-        {
-            float adjCathetus = extraToClosest.magnitude;
-            float oppCathetus = Mathf.Tan(yAngleRad) * adjCathetus;    //This is the offset lenght that closest point gets from collider (90 angle).
-            otherLenght = adjCathetus;
-            offSetLenght = oppCathetus;
-        }
-
-        Debug.Log("Adjacent: " + otherLenght + " OffSetLenght : " + offSetLenght + " Angle: "  + " " + yAngleRad * Mathf.Rad2Deg  + " Angle Rad: " + yAngleRad + " Tan Angle: "+ Mathf.Tan(yAngleRad));
-        this.name = (Quaternion.LookRotation(closestPoint, Vector3.up).eulerAngles.y - transform.rotation.eulerAngles.y).ToString() + " " + (Quaternion.LookRotation(extraPolatedVec, Vector3.up).eulerAngles.y - transform.rotation.eulerAngles.y).ToString();// + " " + yAngle.ToString();
-        this.name = isRightSide.ToString();
-        float rotAngle1 = isRightSide ? 90f : -90f;
-        float rotAngle2 = isRightSide ? -90f : 90f;
-        Vector3 offSet1 = Quaternion.Euler(0, rotAngle1, 0)  * extraToClosest.normalized * offSetLenght;
-        Vector3 offSet2 = Quaternion.Euler(0, rotAngle2, 0)  * extraToClosest.normalized * offSetLenght;
-        Vector3 absoluteClosestPoint1 = closestPoint - offSet1;
-        Vector3 absoluteClosestPoint2 = closestPoint - offSet2;
-
-        ///Vector3 closestPointReAligned = sample.normalized * closestPoint.magnitude;
-        //closestPointReAligned = Quaternion.Euler(extraPolatedVec) * closestPointReAligned;
-        //Vector3 closestPointReTargeted = GetClosestPointOnCollider(previousRaycastHit, closestPointReAligned);
-
-        AddVertexPoint(closestPoint, SampleType.FloorToDownFloor);
-       AddVertexPoint(absoluteClosestPoint1, SampleType.FloorToDownFloor);
-       AddVertexPoint(absoluteClosestPoint2, SampleType.FloorToDownFloor);
-        */
     }
 
     private void TryCreateFloorToWallCornerVertex(float yAngleIn, Vector3 previousSample, Vector3 sample)
@@ -97,42 +48,84 @@ public partial class FOVRenderer
         AddVertexPoint(wallCorner, SampleType.WallToFloorCorner);
     }
 
-    private void TryCreateVertexToEndOfSightRange(Vector3 sample)
+    private void TryCreateVertexToEndOfSightRange(SampleType lastType, float yAngleIn, Vector3 sample, RaycastHit previousRayCastHit)
     {
         Vector3 downSample = GetSamplePoint(ConvertGlobal(sample), Vector3.down, playerHeight * 2f);
-        if (sample.y - downSample.y < playerHeight + yTolerance)
+
+        if (sample.y - downSample.y < playerHeight + yTolerance
+            && AreSimilarHeight(LastAddedVertex, downSample))
         {
             AddVertexPoint(downSample, SampleType.EndOfSightRange);
         }
+        else if (lastType == SampleType.Floor || lastType == SampleType.FloorToDownFloor) // || lastType == SampleType.WallToFloorCorner)
+        {
+            Vector3 ledgeEnd = GetLedgeEnd(false, yAngleIn, sample, previousRayCastHit, LastAddedVertex);
+            if (ledgeEnd != Vector3.zero)
+                AddVertexPoint(ledgeEnd, SampleType.EndOfSightRange);
+        }
     }
 
-    private void TryCreateLedgeVertices(bool isAboveZeroAngle, float yAngleIn, Vector3 previousSample, Vector3 sample)
+    private void TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit)
     {
-        //Debug.Log("try app vert");
-        Vector3 corner = GetLedgeCorner(yAngleIn, previousSample, sample);
-        float cornerRotX = Quaternion.LookRotation(corner, Vector3.up).eulerAngles.x;
+        Debug.Log("Try create ledge vertices");
+        //Get corner or use last corner
+        bool needNewCorner = lastType != SampleType.WallToFloorCorner;
+        Vector3 closestCorner = Vector3.zero;
+        if (needNewCorner)
+        {
+            closestCorner = GetLedgeCorner(yAngleIn, previousSample, sample);
+            if (closestCorner == Vector3.zero)
+            {
+                Debug.LogWarning("Closest corner is zero");
+                return;
+            }
+        }
+        else
+        {
+            closestCorner = LastAddedVertex;
+        }
+
+        Vector3 ledgeEnd = GetLedgeEnd(isAboveZeroAngle, yAngleIn, sample, previousRayCastHit, closestCorner);
+
+        //If we found ledge end, add vertices
+        if (ledgeEnd != Vector3.zero)
+        {
+            //Add corner if we need to
+            if (needNewCorner)
+            {
+                Debug.Log("Added new corner");
+                AddVertexPoint(closestCorner, SampleType.WallToFloorCorner);
+            }
+
+
+            SampleType sampleType = isAboveZeroAngle ? SampleType.LedgeAtUpAngle : SampleType.LedgeAtDownAngle;
+            AddVertexPoint(ledgeEnd, sampleType);
+        }
+        else
+            Debug.Log("Nope could not understand ledges! ");
+    }
+
+    private Vector3 GetLedgeEnd(bool isAboveZeroAngle, float yAngleIn, Vector3 sample, RaycastHit previousRayCastHit, Vector3 previousVertex)
+    {
+        Vector3 ledgeEnd;
+        //Get ledge vertice
+        float cornerRotX = Quaternion.LookRotation(previousVertex, Vector3.up).eulerAngles.x;
         float xRadCornerAngle = cornerRotX * Mathf.Deg2Rad;     //Calculate x Angle of character looking at corner in radians
         float maxSightRangeOverLedge;
 
+
         if (isAboveZeroAngle)
         {
-            maxSightRangeOverLedge = GetMaxSightRangeOverLedge(xRadCornerAngle, yAngleIn, sample, corner);
+            maxSightRangeOverLedge = GetMaxSightRangeOverLedge(xRadCornerAngle, yAngleIn, sample, previousVertex);
+            ledgeEnd = TryGetEndOfLedgeIterative(previousVertex, xRadCornerAngle, maxSightRangeOverLedge);
         }
         else
         {
             maxSightRangeOverLedge = sample.magnitude;
+            ledgeEnd = TryBackTrackingLedgeEnd(previousVertex, sample, previousRayCastHit, xRadCornerAngle, maxSightRangeOverLedge);
         }
 
-        Vector3 ledgeEnd = TryGetEndOfLedge(corner, xRadCornerAngle, maxSightRangeOverLedge);
-
-        if (!ledgeEnd.Equals(Vector3.zero))
-        {
-            AddVertexPoint(corner, SampleType.LedgeAtUpAngle);
-            AddVertexPoint(ledgeEnd, SampleType.LedgeAtUpAngle);
-
-        }
-        else
-            Debug.Log("nope");
+        return ledgeEnd;
     }
 
     /// <summary>
@@ -154,7 +147,42 @@ public partial class FOVRenderer
         return new Vector3(approximateCorner.x, cornerY, approximateCorner.z);
     }
 
-    private Vector3 TryGetEndOfLedge(Vector3 corner, float xRadCornerAngle, float maxSightRangeOverLedge)
+    private Vector3 TryBackTrackingLedgeEnd(Vector3 previousVertex, Vector3 sample, RaycastHit previousRayCastHit, float xRadCornerAngle, float maxSightRangeOverLedge)
+    {
+        Vector3 closestOnCollider = GetClosestPointOnColliderWithinYDirection(previousRayCastHit, previousVertex, sample);
+
+        return closestOnCollider;
+    }
+
+    private Vector3 GetClosestPointOnColliderWithinYDirection(RaycastHit raycastHit, Vector3 previousVertex, Vector3 sample)
+    {
+        Vector3 closestOnCollider = GetClosestPointOnCollider(raycastHit, sample);
+
+        //if the first approximation was good enough, just let it be let it be let it be
+        if (AreVerticallyAligned(sample.normalized * closestOnCollider.magnitude, closestOnCollider)
+            && AreSimilarHeight(closestOnCollider, previousVertex))
+            return closestOnCollider;
+
+        //ACylinder(closestOnCollider, Color.white);
+
+        //Did not find good enough let's use old closest point to get new closest point, then create line from it
+        Vector3 sampleRecalculated = sample.normalized * closestOnCollider.magnitude;
+        Vector3 closestOnColliderReCalculated = GetClosestPointOnCollider(raycastHit, sampleRecalculated);
+        Vector3 zombies, closestPointOnLine2;
+
+        //ACylinder(closestOnColliderReCalculated, Color.blue);
+
+        //Compare to closest points on collider to original direction vector and find the crossing x and z coordinates
+        if (Math3d.ClosestPointsOnTwoLines(out zombies, out closestPointOnLine2, closestOnCollider, closestOnColliderReCalculated - closestOnCollider, Vector3.zero, sampleRecalculated))
+        {
+            return new Vector3(closestPointOnLine2.x, previousVertex.y, closestPointOnLine2.z);
+        }
+
+        return Vector3.zero;
+    }
+
+
+    private Vector3 TryGetEndOfLedgeIterative(Vector3 corner, float xRadCornerAngle, float maxSightRangeOverLedge)
     {
         Vector3 ledgeEnd = Vector3.zero;
         int emptyRaysInRow = 0;
@@ -170,7 +198,7 @@ public partial class FOVRenderer
                 downRange += 0.2f;      //Compensate rounded corners
             Vector3 sampleStart = corner.normalized * startDistance;
             //Debug.Log(i + " " + startDistance + " " + downRange + "  " + sampleStart);
-            if (CheckColliderExists(sampleStart, Vector3.down, downRange))
+            if (CheckColliderExists(sampleStart, Vector3.down, 10f))
             {
                 emptyRaysInRow = 0;
                 ledgeEnd = new Vector3(sampleStart.x, corner.y, sampleStart.z);
@@ -257,6 +285,73 @@ public partial class FOVRenderer
         float hypotenusePlayerStanding = Mathf.Abs(playerHeight / Mathf.Sin(xRadAngleIn));                                                                           //Trignometric triangle calculation where playerHeight is Far Cathetus and hypothenus represents player sight range after corner      (Absolute because of negative angles)
         return hypotenusePlayerStanding + corner.magnitude;       //How far in theory could you see standing player if not hitting wall
     }
+
+    #endregion
+
+    #region Zombie code
+    /*
+     * 
+     * 
+     * private void TryCreateFloorToDownFloorVertex(RaycastHit previousRaycastHit, Vector3 previousSample, Vector3 sample, float xAngle, float yAngle)
+    {
+        Vector3 extraPolatedVec = ExtraPolateVector(SampleType.FloorToDownFloor, previousSample, sample, xAngle);
+        Vector3 cornerDirection = ((ConvertGlobal(previousSample) + Vector3.up * -0.2f) - ConvertGlobal(extraPolatedVec)).normalized;
+        Vector3 cornerSample = ConvertLocal(GetSpecificColliderHitPoint(extraPolatedVec, cornerDirection, SightRange, previousRaycastHit.collider));
+        if (cornerSample != Vector3.zero)
+        {
+            Vector3 corner = new Vector3(cornerSample.x, previousSample.y, cornerSample.z);
+            AddVertexPoint(corner, SampleType.FloorToDownFloor);
+        }
+
+
+        /*
+        Debug.Log(extraPolatedVec.magnitude + " " + previousSample.magnitude);
+        //ACylinder(extraPolatedVec, Color.white);
+        Vector3 closestPoint = GetClosestPointOnCollider(previousRaycastHit, extraPolatedVec);
+        Vector3 extraToClosest = extraPolatedVec - closestPoint;
+
+        //ACylinder(extraToClosest, Color.white);
+        bool adjacent = true;
+        //float yAngleRad = Vector3.Angle(extraToClosest, extraPolatedVec * -1) * Mathf.Deg2Rad;       //xAngle works directly, because the two lines are parallel when comparing angle
+        float yAngleRad = yAngle * Mathf.Deg2Rad;       //xAngle works directly, because the two lines are parallel when comparing angle
+        float offSetLenght;
+        float otherLenght;
+        bool isRightSide = Quaternion.LookRotation(closestPoint, Vector3.up).eulerAngles.y > Quaternion.LookRotation(extraPolatedVec, Vector3.up).eulerAngles.y;
+
+        if (!adjacent)
+        {
+            float oppCathetus = extraToClosest.magnitude;
+            float adjCathetus = oppCathetus / Mathf.Tan(yAngleRad);    //This is the offset lenght that closest point gets from collider (90 angle).
+            otherLenght = oppCathetus;
+            offSetLenght = adjCathetus;
+        }
+        else
+        {
+            float adjCathetus = extraToClosest.magnitude;
+            float oppCathetus = Mathf.Tan(yAngleRad) * adjCathetus;    //This is the offset lenght that closest point gets from collider (90 angle).
+            otherLenght = adjCathetus;
+            offSetLenght = oppCathetus;
+        }
+
+        Debug.Log("Adjacent: " + otherLenght + " OffSetLenght : " + offSetLenght + " Angle: "  + " " + yAngleRad * Mathf.Rad2Deg  + " Angle Rad: " + yAngleRad + " Tan Angle: "+ Mathf.Tan(yAngleRad));
+        this.name = (Quaternion.LookRotation(closestPoint, Vector3.up).eulerAngles.y - transform.rotation.eulerAngles.y).ToString() + " " + (Quaternion.LookRotation(extraPolatedVec, Vector3.up).eulerAngles.y - transform.rotation.eulerAngles.y).ToString();// + " " + yAngle.ToString();
+        this.name = isRightSide.ToString();
+        float rotAngle1 = isRightSide ? 90f : -90f;
+        float rotAngle2 = isRightSide ? -90f : 90f;
+        Vector3 offSet1 = Quaternion.Euler(0, rotAngle1, 0)  * extraToClosest.normalized * offSetLenght;
+        Vector3 offSet2 = Quaternion.Euler(0, rotAngle2, 0)  * extraToClosest.normalized * offSetLenght;
+        Vector3 absoluteClosestPoint1 = closestPoint - offSet1;
+        Vector3 absoluteClosestPoint2 = closestPoint - offSet2;
+
+        ///Vector3 closestPointReAligned = sample.normalized * closestPoint.magnitude;
+        //closestPointReAligned = Quaternion.Euler(extraPolatedVec) * closestPointReAligned;
+        //Vector3 closestPointReTargeted = GetClosestPointOnCollider(previousRaycastHit, closestPointReAligned);
+
+        AddVertexPoint(closestPoint, SampleType.FloorToDownFloor);
+       AddVertexPoint(absoluteClosestPoint1, SampleType.FloorToDownFloor);
+       AddVertexPoint(absoluteClosestPoint2, SampleType.FloorToDownFloor);
+        */
+    //}
 
     #endregion
 }
