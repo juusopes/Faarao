@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
     public LevelController lC;
     public InGameMenu menu;
 
-
+    public bool startDead;
     private void Awake()
     {
         Initialize();
@@ -179,19 +179,8 @@ public class PlayerController : MonoBehaviour
                 anotherCharacter = tempCharacter;
             }
         }
-
         abilityActive = false;
-        bool noAbilities = true;
-        int i = 0;
-        foreach(bool x in abilityAllowed)
-        {
-            if (abilityAllowed[i])
-            {
-                noAbilities = false;
-            }
-            i++;
-        }
-        if (noAbilities)
+        if (startDead)
         {
             death.damage = 10;
         }

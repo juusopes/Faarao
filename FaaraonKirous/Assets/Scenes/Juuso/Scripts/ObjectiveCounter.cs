@@ -11,48 +11,41 @@ public class ObjectiveCounter: MonoBehaviour
     public int objNum;
 
     public GameObject objectiveDoneMark;
-    public GameObject endPoint;
 
-    public int playersInside;
+    private ObjController objectiveContoller;
 
     public RewardController rewards;
 
     private void Start()
     {
-        playersInside = 0;
-
         //Set All Objectives To False
         objectiveDone = false;
-        objectiveDoneMark.SetActive(false);
+        if (objNum > 0)
+        {
+            objectiveDoneMark.SetActive(false);
+        }
 
         rewards = GameObject.FindGameObjectWithTag("LevelController").GetComponent<RewardController>();
+        objectiveContoller = transform.parent.gameObject.GetComponent<ObjController>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        var playerIn = other.gameObject.tag == "Player";
-
-        if (playerIn && objNum > 0)
+        if (other.gameObject.tag == "Player" && objNum > 0 && !objectiveDone)
         {
-            int tempObjectiveNum = other.GetComponent<ObjectiveCounter>().objNum;
             objectiveDone = true;
             objectiveDoneMark.SetActive(true);
 
-            rewards.objectiveCompleted = true;
-            rewards.objectivesCompleted[0] = true;
+            objectiveContoller.objectiveDone[objNum - 1] = true;
+
+            rewards.UpdateObjectives();
 
             this.gameObject.SetActive(false);
         }
 
-        if (playerIn && gameObject.name == "EndPoint")
+        if (other.gameObject.tag == "Player" && objNum == 0)
         {
-            playersInside++;
-
-            if (playersInside > 2)
-            {
-                playersInside = 2;
-            }
-
+            objectiveContoller.playersInside++;
             inEndPoint = true;
         }
     }
@@ -61,13 +54,11 @@ public class ObjectiveCounter: MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            playersInside--;
-
-            if (playersInside < 0)
+            if (objNum == 0)
             {
-                playersInside = 0;
+                objectiveContoller.playersInside--;
+                inEndPoint = false;
             }
-            inEndPoint = false;
         }
     }
 

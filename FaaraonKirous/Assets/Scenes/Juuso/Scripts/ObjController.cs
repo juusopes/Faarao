@@ -26,8 +26,13 @@ public class ObjController : MonoBehaviour
         {
             objectives[x].SetActive(false);
         }
+        for (int x = 0; x < objectives.Length - 1; x++)
+        {
+            objectives[x].SetActive(true);
+        }
+        playersInside = 0;
 
-        Scene scene = SceneManager.GetActiveScene();
+        //Scene scene = SceneManager.GetActiveScene();
 
         //if(scene.name == "Level 1")
         //{
@@ -48,7 +53,16 @@ public class ObjController : MonoBehaviour
         //objective4Done = objectivecounter4.objective4Done;
         //objective5Done = objectivecounter5.objective5Done;
         //inEndPoint = endPointer.inEndPoint;
-        //playersInside = endPointer.playersInside;    
+        if (playersInside < 0)
+        {
+            Debug.Log("TOO FEW!");
+            playersInside = 0;
+        }
+        if (playersInside > 2)
+        {
+            playersInside = 2;
+            Debug.Log("TOO MANY!");
+        }
         if (playersInside == 2)
         {
             CheckObjectives();

@@ -30,9 +30,9 @@ public class LevelController : MonoBehaviour
     public GameObject playerOneImage, playerTwoImage;
 
     [SerializeField]
-    private GameObject pharaoh;
+    public GameObject pharaoh;
     [SerializeField]
-    private GameObject priest;
+    public GameObject priest;
 
     //CameraControl
     private GameObject mainCam;
@@ -78,8 +78,12 @@ public class LevelController : MonoBehaviour
                 if (character.GetComponent<PlayerController>().playerOne)
                 {
                     currentCharacter = character;
+                    pharaoh = character;
                     character.GetComponent<PlayerController>().IsCurrentPlayer = true;
                     character.GetComponent<PlayerController>().IsActivePlayer = true;
+                } else
+                {
+                    priest = character;
                 }
                 if (currentCharacter == null)
                 {
