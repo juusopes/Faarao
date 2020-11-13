@@ -14,13 +14,13 @@ public class CameraControl : MonoBehaviour
     //Movement Script
     public float moveAmount;
     public float borderThickness = 10;
-    public Vector2 panLimit;
+    public int panLimit;
 
     public Transform cameraController;
     public Transform cameraPos;
     public Transform cameraStabilizer;
 
-    public float zoomSpeed;
+    private float zoomSpeed;
 
     public GameObject objective1, objective2, objective3, objective4, objective5;
 
@@ -41,6 +41,12 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         CamPos();
+
+        //transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -panLimit, panLimit), 
+        //    transform.position.y, 
+        //    Mathf.Clamp(cameraController.position.z, -panLimit, panLimit));
+
+
 
         if (Input.GetMouseButtonDown(2))
         {
