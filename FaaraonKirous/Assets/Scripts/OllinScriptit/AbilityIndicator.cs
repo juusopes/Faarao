@@ -51,8 +51,6 @@ public class AbilityIndicator : MonoBehaviour
         //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
         {
-            Debug.Log(hit.collider.tag);
-            Debug.Log(targetTag);
             if (hit.collider.tag == targetTag)
             {
                 target = hit.collider.gameObject;
@@ -109,6 +107,10 @@ public class AbilityIndicator : MonoBehaviour
         {
             targetTag = "Player";
         }
+        if (player.GetComponent<PlayerController>().abilityNum == 8)
+        {
+            targetTag = "TargetableObject";
+        }
     }
 
     private void ChangeAll()
@@ -138,6 +140,11 @@ public class AbilityIndicator : MonoBehaviour
             SwitchIndicator(4);
             SetCircleRange(4);
         }
+        if (player.GetComponent<PlayerController>().abilityNum == 8)
+        {
+            SwitchIndicator(6);
+            SetCircleRange(6);
+        }
         if (player.GetComponent<PlayerController>().abilityNum == 9)
         {
             SwitchIndicator(5);
@@ -145,8 +152,8 @@ public class AbilityIndicator : MonoBehaviour
         }
         if (player.GetComponent<PlayerController>().abilityNum == 10)
         {
-            SwitchIndicator(6);
-            SetCircleRange(6);
+            SwitchIndicator(7);
+            SetCircleRange(7);
         }
     }
     private void SetCircleRange(int num)
