@@ -29,6 +29,8 @@ public class CameraControl : MonoBehaviour
 
     public float rotation;
 
+    public int zPanlimit, xPanlimit;
+
     // Start is called before the first frame update
     void Start()
     {
