@@ -28,6 +28,7 @@ public partial class FOVRenderer
         Vector3 previousSample = Vector3.positiveInfinity;
         Vector3 secondPreviousSample = Vector3.positiveInfinity;
         bool hasResampled = false;
+        RaycastHit lastTrueRayCastHit = new RaycastHit();
 
         for (int x = 0; x < xRayCount; x++)
         {
@@ -39,6 +40,7 @@ public partial class FOVRenderer
 
             RaycastHit raycastHit;
             RaycastHit previousRayCastHit;
+
             //if(x > 0)
             previousRayCastHit = x > 0 ? lastColumnSampleRays[x - 1] : new RaycastHit();
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
@@ -46,7 +48,7 @@ public partial class FOVRenderer
             if (!hasResampled)
                 hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yGlobalAngleIn, raycastHit, ref yAngleSample, ref sample);
 
-            InspectSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, sample);
+            InspectSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, lastTrueRayCastHit, sample);
 
 
             //Save sample info for next iteration
@@ -56,6 +58,8 @@ public partial class FOVRenderer
             if (DebugRaypointShapes)
                 raySamplePoints[vertexIndex] = sample;
 #endif
+            if (raycastHit.collider != null)
+                lastTrueRayCastHit = raycastHit; 
             lastColumnSamplePoints[x] = sample;
             lastColumnSampleRays[x] = raycastHit;
             //CreateTriangle();
@@ -68,7 +72,7 @@ public partial class FOVRenderer
         }
     }
 
-    private void InspectSample(int x, int y, float xAngleSample, float yAngleSample, Vector3 previousSample, RaycastHit raycastHit, RaycastHit previousRayCastHit, Vector3 sample)
+    private void InspectSample(int x, int y, float xAngleSample, float yAngleSample, Vector3 previousSample, RaycastHit raycastHit, RaycastHit previousRayCastHit, RaycastHit lastTrueRayCastHit, Vector3 sample)
     {
         switch (GetVerticalDirection(xAngleSample))
         {
@@ -77,7 +81,7 @@ public partial class FOVRenderer
                 break;
             case Looking.ZeroAngle:
                 InspectDownSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, sample);
-                InspectFlatSample(yAngleSample, sample, previousRayCastHit);
+                InspectFlatSample(yAngleSample, sample, lastTrueRayCastHit);
                 break;
             case Looking.Up:
                 InspectUpSample(yAngleSample, previousSample, sample, previousRayCastHit);
@@ -120,8 +124,7 @@ public partial class FOVRenderer
             }
             //When ray did not hit floor after climbing a wall
             else if (IsWallToWall(previousRayCastHit, raycastHit) && IsClearlyLonger(previousSample, sample)
-                || lastSampleType == SampleType.FloorToWallCorner
-                || lastSampleType == SampleType.WallToFloorCorner)
+                || (lastSampleType == SampleType.FloorToWallCorner || lastSampleType == SampleType.WallToFloorCorner) && !AreSimilarHeight(previousSample, sample))
             {
                 Debug.Log("Ledge calculation");
                 TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);

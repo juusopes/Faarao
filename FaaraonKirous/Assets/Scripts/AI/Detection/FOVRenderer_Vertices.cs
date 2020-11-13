@@ -48,7 +48,7 @@ public partial class FOVRenderer
         AddVertexPoint(wallCorner, SampleType.WallToFloorCorner);
     }
 
-    private void TryCreateVertexToEndOfSightRange(SampleType lastType, float yAngleIn, Vector3 sample, RaycastHit previousRayCastHit)
+    private void TryCreateVertexToEndOfSightRange(SampleType lastType, float yAngleIn, Vector3 sample, RaycastHit lastTrueRayCastHit)
     {
         Vector3 downSample = GetSamplePoint(ConvertGlobal(sample), Vector3.down, playerHeight * 2f);
 
@@ -59,7 +59,7 @@ public partial class FOVRenderer
         }
         else if (lastType == SampleType.Floor || lastType == SampleType.FloorToDownFloor) // || lastType == SampleType.WallToFloorCorner)
         {
-            Vector3 ledgeEnd = GetLedgeEnd(false, yAngleIn, sample, previousRayCastHit, LastAddedVertex);
+            Vector3 ledgeEnd = GetLedgeEnd(false, yAngleIn, sample, lastTrueRayCastHit, LastAddedVertex);
             if (ledgeEnd != Vector3.zero)
                 AddVertexPoint(ledgeEnd, SampleType.EndOfSightRange);
         }
@@ -145,6 +145,7 @@ public partial class FOVRenderer
         else
         {
             maxSightRangeOverLedge = sample.magnitude;
+            Debug.Log(" aaaaaaaaaaaaaaaaaaaaaaaaaa" + maxSightRangeOverLedge);
             //ledgeEnd = TryBackTrackingLedgeEnd(previousVertex, sample, previousRayCastHit, xRadCornerAngle, maxSightRangeOverLedge);
         }
         ledgeEnd = BackTrackLedgeEnd(previousVertex, sample, previousRayCastHit, xRadCornerAngle, maxSightRangeOverLedge);
@@ -154,7 +155,9 @@ public partial class FOVRenderer
 
     private Vector3 BackTrackLedgeEnd(Vector3 previousVertex, Vector3 sample, RaycastHit previousRayCastHit, float xRadCornerAngle, float maxSightRangeOnLedge)
     {
-        Vector3 closestOnCollider = GetClosestPointOnColliderWithinYDirection(previousRayCastHit, previousVertex, sample);
+        Debug.Log(" aa" +maxSightRangeOnLedge);
+        Vector3 sampleScaled = sample.normalized * maxSightRangeOnLedge;
+        Vector3 closestOnCollider = GetClosestPointOnColliderWithinYDirection(previousRayCastHit, previousVertex, sampleScaled);
         if (closestOnCollider == Vector3.zero)
             return Vector3.zero;
         RaycastHit lastHit = previousRayCastHit;
@@ -183,7 +186,7 @@ public partial class FOVRenderer
                     if (hit.collider != lastHit.collider && HitPointIsUpFacing(hit))
                     {
                         lastHit = hit;
-                        closestOnCollider = GetClosestPointOnColliderWithinYDirection(hit, previousVertex, sample);
+                        closestOnCollider = GetClosestPointOnColliderWithinYDirection(hit, previousVertex, sampleScaled);
                         if (closestOnCollider == Vector3.zero)
                             break;
 

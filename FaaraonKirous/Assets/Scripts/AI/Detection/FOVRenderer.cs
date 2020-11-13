@@ -48,8 +48,8 @@ public partial class FOVRenderer : MonoBehaviour
     SampleType lastSampleType = 0;
 
     //Tweakable values
-    private const int yRayCount = (0) + 1;    // ODD NUMBER 
-    private const int xRayCount = (12) + 1;    // ODD NUMBER 
+    private const int yRayCount = (20) + 1;    // ODD NUMBER 
+    private const int xRayCount = (20) + 1;    // ODD NUMBER 
     private const float maxXAngle = -90.0000001f;   //Negative number is up!
     private const float ledgeStep = 0.25f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;

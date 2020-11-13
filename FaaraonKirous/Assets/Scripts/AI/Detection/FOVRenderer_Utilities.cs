@@ -60,7 +60,7 @@ public partial class FOVRenderer
     {
         if (testRayHit.collider == null || reSampleTest == Vector3.zero)
         {
-            Debug.LogWarning("No can do closest!");
+            Debug.LogWarning("No can do closest!" + testRayHit.collider);
             return Vector3.zero;
         }
 
