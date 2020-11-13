@@ -75,6 +75,6 @@ public class MultiplayerUIManager : MonoBehaviour
             _multiplayerMenu.SetActive(false);
         }
 
-        GameManager._instance.LoadLevel(1);
+        GameManager._instance.LoadScene(1);
     }
 }

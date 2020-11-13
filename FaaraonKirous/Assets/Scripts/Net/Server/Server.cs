@@ -181,7 +181,10 @@ public sealed class Server : NetworkHandler
             { (int)ClientPackets.syncRequest, ServerHandle.SyncRequest },
             { (int)ClientPackets.changeToCharacterRequest, ServerHandle.ChangeCharacterRequest },
             { (int)ClientPackets.unselectCharacter, ServerHandle.UnselectCharacter },
-            { (int)ClientPackets.setDestinationRequest, ServerHandle.SetDestinationRequest }
+            { (int)ClientPackets.setDestinationRequest, ServerHandle.SetDestinationRequest },
+            { (int)ClientPackets.killEnemy, ServerHandle.KillEnemy },
+            { (int)ClientPackets.crouching, ServerHandle.Crouching },
+            { (int)ClientPackets.running, ServerHandle.Running }
         };
 
         // Initialize connections
@@ -195,6 +198,10 @@ public sealed class Server : NetworkHandler
     }
 
     #region ConnectionStates
+    public bool IsSynced(int id)
+    {
+        return HasConnectionFlags(id, ConnectionState.Synced);
+    }
 
     public bool HasConnectionFlags(int id, ConnectionState flags)
     {

@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     //Running
     [HideInInspector]
-    public bool _isRunning;
+    private bool _isRunning;
     public bool IsRunning 
     { 
         get
@@ -31,13 +31,16 @@ public class PlayerController : MonoBehaviour
         set
         {
             _isRunning = value;
-            if (NetworkManager._instance.ShouldSendToServer)
+            if (IsCurrentPlayer)
             {
-                // TODO: Is running packet to client
-            }
-            else if (NetworkManager._instance.ShouldSendToClient)
-            {
-                // TODO: Is running packet to server
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.Running(PlayerNetManager.Type, _isRunning);
+                }
+                else if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.Running(PlayerNetManager.Type, _isRunning);
+                }
             }
         }
     }
@@ -48,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
     //Crouch
     [HideInInspector]
-    public bool _isCrouching;
+    private bool _isCrouching;
     public bool IsCrouching
     {
         get
@@ -58,13 +61,16 @@ public class PlayerController : MonoBehaviour
         set
         {
             _isCrouching = value;
-            if (NetworkManager._instance.ShouldSendToServer)
+            if (IsCurrentPlayer)
             {
-                // TODO: Is crouching packet to client
-            }
-            else if (NetworkManager._instance.ShouldSendToClient)
-            {
-                // TODO: Is crouching packet to server
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.Crouching(PlayerNetManager.Type, _isCrouching);
+                }
+                else if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.Crouching(PlayerNetManager.Type, _isCrouching);
+                }
             }
         }
     }
@@ -120,11 +126,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         Initialize();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -216,10 +217,6 @@ public class PlayerController : MonoBehaviour
                 {
                     doubleClickTimer = 0;
                 }
-                if (NetworkManager._instance.ShouldSendToServer)
-                {
-                    ClientSend.SetDestinationRequest(PlayerNetManager.Type, targetV3);
-                }
             }
         }
         if (doubleClickTimer < 0.5f)
@@ -264,17 +261,7 @@ public class PlayerController : MonoBehaviour
     public void GiveDestination(Vector3 v3)
     {
         targetV3 = v3;
-        if (NetworkManager._instance.IsHost)
-        {
-            SetDestination(targetV3);
-        }
-        else
-        {
-            if (NetworkManager._instance.ShouldSendToServer)
-            {
-                ClientSend.SetDestinationRequest(PlayerNetManager.Type, targetV3);
-            }
-        }
+        SetDestination(targetV3);
     }
 
     public Vector3 GetPosition()
@@ -406,38 +393,46 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        if (NetworkManager._instance.IsHost)
+        if (abilityNum == 9)
         {
-            if (abilityNum == 9)
+            if (lC.targetObject != null)
             {
-                if (lC.targetObject != null)
+                target = lC.targetObject;
+            }
+            else if (!useAttack)
+            {
+                target = null;
+            }
+            if (target != null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
                 {
-                    target = lC.targetObject;
-                }
-                else if (!useAttack)
-                {
-                    target = null;
-                }
-                if (target != null)
-                {
-                    if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
-                    {
-                        targetV3 = target.transform.position;
-                        navMeshAgent.SetDestination(targetV3);
+                    targetV3 = target.transform.position;
+                    SetDestination(targetV3);
 
-                        useAttack = true;
-                        abilityActive = false;
-                        GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Enemy";
-                    }
-                    if (targetEnemy == target)
+                    useAttack = true;
+                    abilityActive = false;
+                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Enemy";
+                }
+                if (targetEnemy == target)
+                {
+                    if (NetworkManager._instance.IsHost)
                     {
                         targetEnemy.GetComponent<DeathScript>().damage = 1;
-                        targetEnemy = null;
-                        target = null;
-                        useAttack = false;
-                        abilityNum = 0;
-                        Stay();
                     }
+                    else
+                    {
+                        if (NetworkManager._instance.ShouldSendToServer)
+                        {
+                            ClientSend.KillEnemy(targetEnemy.GetComponent<EnemyNetManager>().Id);
+                        }
+                    }
+                    
+                    targetEnemy = null;
+                    target = null;
+                    useAttack = false;
+                    abilityNum = 0;
+                    Stay();
                 }
             }
         }
@@ -515,12 +510,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void SetDestination(Vector3 position, bool changeTarget = false)
+    public void SetDestination(Vector3 position)
     {
         if (NetworkManager._instance.IsHost)
         {
-            if (changeTarget) targetV3 = position;
-
             if (position == null || navMeshAgent.destination == position || !navMeshAgent.enabled)
                 return;
 
@@ -530,6 +523,13 @@ public class PlayerController : MonoBehaviour
             navMeshAgent.destination = position;
             navMeshAgent.isStopped = false;
             navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : 0.5f;
+        }
+        else
+        {
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                ClientSend.SetDestinationRequest(PlayerNetManager.Type, position);
+            }
         }
     }
 

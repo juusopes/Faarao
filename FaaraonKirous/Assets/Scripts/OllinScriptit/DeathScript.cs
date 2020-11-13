@@ -4,7 +4,7 @@
 public class DeathScript : MonoBehaviour
 {
     [SerializeField]
-    private float hp;
+    public float hp;
     public float damage;
     public float heal;
     public bool isDead;
@@ -52,7 +52,7 @@ public class DeathScript : MonoBehaviour
             }
             damage = 0;
         }
-        if (hp == 0)
+        if (hp == 0 && !isDead)
         {
             isDead = true;
 

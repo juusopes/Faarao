@@ -85,5 +85,31 @@ public class ClientSend
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
 
+
+    public static void KillEnemy(int id)
+    {
+        var packet = new Packet((int)ClientPackets.killEnemy);
+        packet.Write(id);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
+
+    public static void Crouching(ObjectType character, bool state)
+    {
+        var packet = new Packet((int)ClientPackets.crouching);
+        packet.Write((short)character);
+        packet.Write(state);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
+
+    public static void Running(ObjectType character, bool state)
+    {
+        var packet = new Packet((int)ClientPackets.running);
+        packet.Write((short)character);
+        packet.Write(state);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
     #endregion
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Permissions;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     // Scene
     public int CurrentSceneIndex => SceneManager.GetActiveScene().buildIndex;
     public bool IsSceneLoaded { get; private set; } = false;
+    public bool IsLoading { get; set; } = false;
 
     // Prefabs
     private readonly Dictionary<ObjectType, GameObject> _objectPrefabs = new Dictionary<ObjectType, GameObject>();
@@ -69,13 +71,14 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;
 
+        IsLoading = true;
         IsSceneLoaded = false;
 
         // TODO: Start loading screen
 
         if (NetworkManager._instance.ShouldSendToClient)
         {
-            Server.Instance.ResetConnectionFlags(ConnectionState.LevelLoaded 
+            Server.Instance.ResetConnectionFlags(ConnectionState.LevelLoaded
                 | ConnectionState.Synced);
         }
 
@@ -93,27 +96,20 @@ public class GameManager : MonoBehaviour
         // TODO: Else just load save
     }
 
-    public void LoadLevel(int index)
+    public void LoadScene(int index, bool restartScene = false)
     {
         StartLoading();
 
-        LoadScene(index, true);
-    }
-
-    public void LoadScene(int index, bool restartLevel = false)
-    {
         if (NetworkManager._instance.ShouldSendToClient)
         {
             ServerSend.LoadScene(index);
         }
 
-        Debug.Log("Loading scene");
-
-        if (restartLevel || CurrentSceneIndex != index)
+        if (restartScene || CurrentSceneIndex != index)
         {
-            Debug.Log("Need to load or restarting");
+            Debug.Log("Scene not loaded or restarting. Loading scene.");
 
-            // Reset everything if level is changed. Otherwise we can keep static objects
+            // Reset everything if level is changed
             ResetAll();
 
             SceneManager.sceneLoaded += OnSceneLoad;
@@ -121,7 +117,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Dont need to load");
+            Debug.Log("Scene already loaded. Don't need to load.");
 
             // Scene is loaded if it is the current scene
             SceneLoaded();
@@ -151,7 +147,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("I am not host");
             if (NetworkManager._instance.ShouldSendToServer)
             {
                 Debug.Log("Scene loaded: Sending sync request");
@@ -163,6 +158,8 @@ public class GameManager : MonoBehaviour
     public void EndLoading()
     {
         // TODO: Exit loading screen
+
+        IsLoading = false;
 
         Time.timeScale = 1;
     }
@@ -225,7 +222,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectNetManager>> listEntry in _objectLists)
         {
-            foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
+            foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value.ToList())
             {
                 ObjectNetManager netManager = objectEntry.Value;
                 if (netManager.Delete()) listEntry.Value.Remove(objectEntry.Key);

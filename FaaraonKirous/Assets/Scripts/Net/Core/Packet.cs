@@ -21,7 +21,9 @@ public enum ServerPackets
     detectionConeUpdated,
     loadScene,
     endLoading,
-    changeToCharacter
+    changeToCharacter,
+    crouching,
+    running
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -35,7 +37,10 @@ public enum ClientPackets
     syncRequest,
     changeToCharacterRequest,
     unselectCharacter,
-    setDestinationRequest
+    setDestinationRequest,
+    killEnemy,
+    crouching,
+    running
 }
 
 public delegate void PacketHandler(int connection, Packet packet);
