@@ -32,11 +32,13 @@ public class RewardController : MonoBehaviour
             {
                 if (rewardPlayerOne[x])
                 {
-                    levelController.pharaoh.GetComponent<PlayerController>().abilityAllowed[rewardAbility[x]] = true;
+                    levelController.pharaohAbilities[rewardAbility[x]] = true;
+                    levelController.UpdateAbilities();
                 }
                 else if (!rewardPlayerOne[x])
                 {
-                    levelController.priest.GetComponent<PlayerController>().abilityAllowed[rewardAbility[x]] = true;
+                    levelController.priestAbilities[rewardAbility[x]] = true;
+                    levelController.UpdateAbilities();
                 }
             }
         }

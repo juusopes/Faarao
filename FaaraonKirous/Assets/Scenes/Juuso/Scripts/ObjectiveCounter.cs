@@ -8,6 +8,10 @@ public class ObjectiveCounter: MonoBehaviour
     public bool objectiveDone;
     public bool inEndPoint;
 
+    public bool pharaohOnly, priestOnly;
+
+    private GameObject pharaoh, priest;
+
     public int objNum;
 
     public GameObject objectiveDoneMark;
@@ -25,13 +29,15 @@ public class ObjectiveCounter: MonoBehaviour
             objectiveDoneMark.SetActive(false);
         }
 
+        priest = GameObject.Find("Priest");
+        pharaoh = GameObject.Find("Pharaoh");
         rewards = GameObject.FindGameObjectWithTag("LevelController").GetComponent<RewardController>();
         objectiveContoller = transform.parent.gameObject.GetComponent<ObjController>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && objNum > 0 && !objectiveDone)
+        if (((other.gameObject.tag == "Player" && !pharaohOnly && !priestOnly) || (other.gameObject == pharaoh && pharaohOnly) || (other.gameObject == priest && priestOnly)) && objNum > 0 && !objectiveDone)
         {
             objectiveDone = true;
             objectiveDoneMark.SetActive(true);

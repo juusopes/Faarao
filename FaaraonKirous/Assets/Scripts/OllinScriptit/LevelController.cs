@@ -44,6 +44,8 @@ public class LevelController : MonoBehaviour
 
     public InGameMenu canvas;
 
+    public bool[] priestAbilities;
+    public bool[] pharaohAbilities;
 
     // Start is called before the first frame update
     void Start()
@@ -99,6 +101,7 @@ public class LevelController : MonoBehaviour
             }
         }
 
+        UpdateAbilities();
         //SetCameraPos
         //mainCam.transform.parent = activeCharacter.transform;
     }
@@ -307,4 +310,10 @@ public class LevelController : MonoBehaviour
         }
 
     }
+    public void UpdateAbilities()
+    {
+        pharaoh.GetComponent<PlayerController>().abilityAllowed = pharaohAbilities;
+        priest.GetComponent<PlayerController>().abilityAllowed = priestAbilities;
+    }
+
 }

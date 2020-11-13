@@ -6,6 +6,7 @@ public class DeathScript : MonoBehaviour
     [SerializeField]
     private float hp;
     public float damage;
+    public float heal;
     public bool isDead;
 
     private CharacterNetManager CharacterNetManager { get; set; }
@@ -19,7 +20,13 @@ public class DeathScript : MonoBehaviour
     {
         if (NetworkManager._instance.IsHost)
         {
-            DeathCheck();
+            if (!isDead)
+            {
+                DeathCheck();
+            } else
+            {
+                AliveCheck();
+            }
         }
     }
 
@@ -58,5 +65,27 @@ public class DeathScript : MonoBehaviour
         //{
         //    Debug.Log(this.gameObject + "Is Dead!");
         //}
+    }
+
+    private void AliveCheck()
+    {
+        if (heal > 0)
+        {
+            hp += heal;
+            if (hp > 1)
+            {
+                hp = 1;
+            }
+            heal = 0;
+        }
+        if (hp > 0)
+        {
+            isDead = false;
+
+            if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.CharacterDied(CharacterNetManager.List, CharacterNetManager.Id);
+            }
+        }
     }
 }
