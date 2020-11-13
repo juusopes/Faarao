@@ -24,15 +24,10 @@ public class CameraControl : MonoBehaviour
 
     public GameObject objective1, objective2, objective3, objective4, objective5;
 
-    /// <summary>
-    /// ////////////
-    /// </summary>
     public bool rotating;
     public float rotateSpeed;
 
     public float rotation;
-    //public float offsetX, offsetY, offsetZ;
-    //public float offsetXold, offsetZold;
 
     // Start is called before the first frame update
     void Start()
@@ -55,10 +50,6 @@ public class CameraControl : MonoBehaviour
 
     private void LateUpdate()
     {
-
-        //cameraController.transform.position = cameraPos.transform.forward * 1;
-
-
         if (Input.GetMouseButton(2))
         {
             rotating = true;
@@ -74,20 +65,14 @@ public class CameraControl : MonoBehaviour
 
     private void Initialize()
     {
-        //offsetX = 0;
-        //offsetZ = 0;
-        //offsetXold = 0;
-        //offsetZold = 0;
-
         camHeight = 40;
         camFollow = false;
-        moveAmount = 40f;
+        moveAmount = 30f;
         zoomSpeed = 40f;
     }
 
     public void CamPos()
     {
-
 
         if (cameraPos.transform.position.y > 25f)
         {
@@ -132,10 +117,13 @@ public class CameraControl : MonoBehaviour
             {
                 transform.parent = null;
             }
+
 #if UNITY_EDITOR
-            if (CamUtility.IsMouseOverGameWindow())       //If unity editor only move the camera if it is insde the screen
+            if (CamUtility.IsMouseOverGameWindow())        //If unity editor only move the camera if it is insde the screen
 #endif
                 MoveCamera();
+
+
         }
     }
 
@@ -146,38 +134,43 @@ public class CameraControl : MonoBehaviour
             return;
         }
 
-        Vector3 pos = transform.position;
+        if(cameraController.transform.position.x > 130)
+        {
+            cameraController.transform.position = new Vector3(130, cameraController.transform.position.y, cameraController.transform.position.z);
+            return;
+        }
+
+        //Vector3 pos = transform.position;
         if (Input.mousePosition.x >= Screen.width - borderThickness)
         {
-            cameraPos.transform.Translate(transform.right * moveAmount * Time.deltaTime, Space.World);
-
-            //offsetX = cameraPos.transform.position.x - offsetXold;
+            cameraController.transform.Translate(transform.right * moveAmount * Time.deltaTime, Space.World);
+            //cameraPos.transform.Translate(transform.right * moveAmount * Time.deltaTime, Space.World);
         }
 
         else if (Input.mousePosition.x <= borderThickness)
         {
-            cameraPos.transform.Translate(transform.right * -moveAmount * Time.deltaTime, Space.World);
+            cameraController.transform.Translate(transform.right * -moveAmount * Time.deltaTime, Space.World);
 
-            //offsetX = cameraPos.transform.position.x - offsetXold;
+            //cameraPos.transform.Translate(transform.right * -moveAmount * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y >= Screen.height - borderThickness)
         {
-            cameraPos.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
+            cameraController.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
 
-            //offsetZ = cameraPos.transform.position.z - offsetZold;
+            //cameraPos.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y <= borderThickness)
         {
-            cameraPos.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
+            cameraController.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
 
-            //offsetZ = cameraPos.transform.position.z - offsetZold;
+            //cameraPos.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
         }
 
-        pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
-        pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
-        transform.position = pos;
+        //pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
+        //pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
+        //transform.position = pos;
     }
 
     public void CenterCamera()
@@ -191,28 +184,36 @@ public class CameraControl : MonoBehaviour
 
     public void FindObjective1()
     {
+        CenterCamera();
+
         cameraController.transform.position = new Vector3(objective1.transform.position.x, 0, objective1.transform.position.z);
         cameraStabilizer.transform.position = new Vector3(objective1.transform.position.x, 0, objective1.transform.position.z);
-
-        CenterCamera();
     }
     public void FindObjective2()
     {
+        CenterCamera();
+
         cameraController.transform.position = new Vector3(objective2.transform.position.x, 0, objective2.transform.position.z);
         cameraStabilizer.transform.position = new Vector3(objective2.transform.position.x, 0, objective2.transform.position.z);
     }
     public void FindObjective3()
     {
+        CenterCamera();
+
         cameraController.transform.position = new Vector3(objective3.transform.position.x, 0, objective3.transform.position.z);
         cameraStabilizer.transform.position = new Vector3(objective3.transform.position.x, 0, objective3.transform.position.z);
     }
     public void FindObjective4()
     {
+        CenterCamera();
+
         cameraController.transform.position = new Vector3(objective4.transform.position.x, 0, objective4.transform.position.z);
         cameraStabilizer.transform.position = new Vector3(objective4.transform.position.x, 0, objective4.transform.position.z);
     }
     public void FindObjective5()
     {
+        CenterCamera();
+
         cameraController.transform.position = new Vector3(objective5.transform.position.x, 0, objective5.transform.position.z);
         cameraStabilizer.transform.position = new Vector3(objective5.transform.position.x, 0, objective5.transform.position.z);
     }
