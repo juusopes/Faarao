@@ -89,9 +89,9 @@ public class AbilityIndicator : MonoBehaviour
             line.SetPosition(0, player.transform.position);
 
             //Vector Top point
-            Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
-            topPoint.y = 10;
-            line.SetPosition(line.positionCount / 2, topPoint);
+            //Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
+            //topPoint.y = 10;
+            //line.SetPosition(line.positionCount / 2, topPoint);
 
             //Line End
             line.SetPosition(line.positionCount - 1, transform.position);
@@ -102,6 +102,14 @@ public class AbilityIndicator : MonoBehaviour
         if (player.GetComponent<PlayerController>().abilityNum == 7 || player.GetComponent<PlayerController>().abilityNum == 9)
         {
             targetTag = "Enemy";
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 10)
+        {
+            targetTag = "Player";
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 8)
+        {
+            targetTag = "TargetableObject";
         }
     }
 
@@ -132,10 +140,20 @@ public class AbilityIndicator : MonoBehaviour
             SwitchIndicator(4);
             SetCircleRange(4);
         }
+        if (player.GetComponent<PlayerController>().abilityNum == 8)
+        {
+            SwitchIndicator(6);
+            SetCircleRange(6);
+        }
         if (player.GetComponent<PlayerController>().abilityNum == 9)
         {
             SwitchIndicator(5);
             SetCircleRange(5);
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 10)
+        {
+            SwitchIndicator(7);
+            SetCircleRange(7);
         }
     }
     private void SetCircleRange(int num)
@@ -203,11 +221,14 @@ public class AbilityIndicator : MonoBehaviour
                 Vector3 hitPos = hit.transform.position;
                 hitPos.y = playerPos.y;
                 float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
-                Debug.Log(distance);
+                //Debug.Log(distance);
                 if (distance > range)
                 {
                     endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance-range)*4));
                     player.GetComponent<PlayerController>().GiveDestination(endPoint);
+                } else
+                {
+                    player.GetComponent<PlayerController>().inRange = true;
                 }
                 abilityClicked = true;
             }

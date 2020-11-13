@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public sealed class Server : NetworkHandler
@@ -20,11 +22,11 @@ public sealed class Server : NetworkHandler
             return _instance;
         }
     }
-
     public int MaxPlayers { get; private set; } = Constants.maxPlayers;
     public int Port { get; private set; }
 
     public Dictionary<int, Connection> Connections { get; private set; }
+    public Dictionary<int, ConnectionState> ConnectionStates { get; private set; }
 
     public void Start(int port)
     {
@@ -84,27 +86,37 @@ public sealed class Server : NetworkHandler
         }
     }
 
-    public void BeginSendPacket(int connectionId, ChannelType channelType, Packet packet)
+    public void BeginSendPacket(int connectionId, ChannelType channelType, Packet packet, 
+        ConnectionState hasFlags = ConnectionState.None, 
+        ConnectionState doesNotHaveFlags = ConnectionState.None)
     {
-        if (Connections[connectionId].EndPoint != null) Connections[connectionId].BeginSendPacket(channelType, packet);
-    }
-
-    public void BeginSendPacketAll(ChannelType channelType, Packet packet)
-    {
-        // TODO: Check that connection has connected completely!!
-        foreach (Connection connection in Connections.Values)
-        {
-            if (connection.EndPoint != null) connection.BeginSendPacket(channelType, packet);
+        if (Connections[connectionId].EndPoint != null 
+            && HasConnectionFlags(connectionId, hasFlags)
+            && DoesNotHaveConnectionFlags(connectionId, doesNotHaveFlags)) 
+        { 
+            Connections[connectionId].BeginSendPacket(channelType, packet); 
         }
     }
 
-    public void BeginSendPacketAllExclude(int excludeReceiveId, ChannelType channelType, Packet packet)
+    public void BeginSendPacketAll(ChannelType channelType, Packet packet, 
+        ConnectionState hasFlags = ConnectionState.None,
+        ConnectionState doesNotHaveFlags = ConnectionState.None)
     {
         foreach (Connection connection in Connections.Values)
         {
-            if (connection.EndPoint != null && connection.ConnectionId != excludeReceiveId)
+            BeginSendPacket(connection.ConnectionId, channelType, packet, hasFlags, doesNotHaveFlags);
+        }
+    }
+
+    public void BeginSendPacketAllExclude(int excludeReceiveId, ChannelType channelType, Packet packet, 
+        ConnectionState hasFlags = ConnectionState.None,
+        ConnectionState doesNotHaveFlags = ConnectionState.None)
+    {
+        foreach (Connection connection in Connections.Values)
+        {
+            if (connection.ConnectionId != excludeReceiveId)
             {
-                connection.BeginSendPacket(channelType, packet);
+                BeginSendPacket(connection.ConnectionId, channelType, packet, hasFlags, doesNotHaveFlags);
             }
         }
     }
@@ -165,16 +177,79 @@ public sealed class Server : NetworkHandler
             { (int)ClientPackets.connectionRequest, ServerHandle.ConnectionRequest },
             { (int)ClientPackets.heartbeatReceived, ServerHandle.HeartbeatReceived },
             { (int)ClientPackets.abilityUsed, ServerHandle.AbilityUsed },
-            { (int)ClientPackets.enemyPossessed, ServerHandle.EnemyPossessed }
+            { (int)ClientPackets.enemyPossessed, ServerHandle.EnemyPossessed },
+            { (int)ClientPackets.syncRequest, ServerHandle.SyncRequest },
+            { (int)ClientPackets.changeToCharacterRequest, ServerHandle.ChangeCharacterRequest },
+            { (int)ClientPackets.unselectCharacter, ServerHandle.UnselectCharacter },
+            { (int)ClientPackets.setDestinationRequest, ServerHandle.SetDestinationRequest },
+            { (int)ClientPackets.killEnemy, ServerHandle.KillEnemy },
+            { (int)ClientPackets.crouching, ServerHandle.Crouching },
+            { (int)ClientPackets.running, ServerHandle.Running }
         };
 
         // Initialize connections
         Connections = new Dictionary<int, Connection>();
+        ConnectionStates = new Dictionary<int, ConnectionState>();
         for (int i = 1; i <= MaxPlayers; ++i)
         {
             Connections.Add(i, new Connection(i, Instance));
+            ConnectionStates.Add(i, ConnectionState.None);
         }
     }
 
-    
+    #region ConnectionStates
+    public bool IsSynced(int id)
+    {
+        return HasConnectionFlags(id, ConnectionState.Synced);
+    }
+
+    public bool HasConnectionFlags(int id, ConnectionState flags)
+    {
+        return (ConnectionStates[id] & flags) == flags;
+    }
+
+    public bool DoesNotHaveConnectionFlags(int id, ConnectionState flags)
+    {
+        return (ConnectionStates[id] & flags) == 0;
+    }
+
+    public void SetConnectionFlags(int id, ConnectionState flags)
+    {
+        ConnectionStates[id] = ConnectionStates[id].SetFlags(flags);
+    }
+
+    public void ResetConnectionFlags(int id, ConnectionState flags)
+    {
+        ConnectionStates[id] = ConnectionStates[id].ResetFlags(flags);
+    }
+
+    public void ResetConnectionFlags(ConnectionState flags,
+        ConnectionState hasFlags = ConnectionState.None,
+        ConnectionState doesNotHaveFlags = ConnectionState.None)
+    {
+        foreach (int id in ConnectionStates.Keys.ToList())
+        {
+            if (HasConnectionFlags(id, hasFlags)
+            && DoesNotHaveConnectionFlags(id, doesNotHaveFlags))
+            {
+                ResetConnectionFlags(id, flags);
+            }
+        }
+    }
+
+    public void SetConnectionFlags(ConnectionState flags,
+        ConnectionState hasFlags = ConnectionState.None,
+        ConnectionState doesNotHaveFlags = ConnectionState.None)
+    {
+        foreach (int id in ConnectionStates.Keys.ToList())
+        {
+            if (HasConnectionFlags(id, hasFlags)
+            && DoesNotHaveConnectionFlags(id, doesNotHaveFlags))
+            {
+                SetConnectionFlags(id, flags);
+            }
+        }
+    }
+
+    #endregion
 }

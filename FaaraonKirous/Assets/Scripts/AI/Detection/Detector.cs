@@ -170,7 +170,7 @@ public class Detector
             return false;
         if (character.isPosessed)
             return false;
-        float testRange = playerController != null && playerController.isCrouching ? SightRangeCrouching : SightRange;
+        float testRange = playerController != null && playerController.IsCrouching ? SightRangeCrouching : SightRange;
         return TestDetection(player, testRange, RayCaster.playerDetectLayerMask, RayCaster.PLAYER_TAG);
     }
 

@@ -4,22 +4,36 @@
 public class DeathScript : MonoBehaviour
 {
     [SerializeField]
-    private float hp;
+    public float hp;
     public float damage;
+    public float heal;
     public bool isDead;
-    // Start is called before the first frame update
-    void Start()
+
+    private CharacterNetManager CharacterNetManager { get; set; }
+
+    void Awake()
     {
         Initialize();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        DeathCheck();
+        if (NetworkManager._instance.IsHost)
+        {
+            if (!isDead)
+            {
+                DeathCheck();
+            } else
+            {
+                AliveCheck();
+            }
+        }
     }
 
-    private void Initialize() {
+    private void Initialize() 
+    {
+        CharacterNetManager = GetComponent<CharacterNetManager>();
+
         if (hp == 0)
         {
             hp = 1;
@@ -38,13 +52,40 @@ public class DeathScript : MonoBehaviour
             }
             damage = 0;
         }
-        if (hp == 0)
+        if (hp == 0 && !isDead)
         {
             isDead = true;
+
+            if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.CharacterDied(CharacterNetManager.List, CharacterNetManager.Id);
+            }
         }
         //if (isDead)
         //{
         //    Debug.Log(this.gameObject + "Is Dead!");
         //}
+    }
+
+    private void AliveCheck()
+    {
+        if (heal > 0)
+        {
+            hp += heal;
+            if (hp > 1)
+            {
+                hp = 1;
+            }
+            heal = 0;
+        }
+        if (hp > 0)
+        {
+            isDead = false;
+
+            if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.CharacterDied(CharacterNetManager.List, CharacterNetManager.Id);
+            }
+        }
     }
 }

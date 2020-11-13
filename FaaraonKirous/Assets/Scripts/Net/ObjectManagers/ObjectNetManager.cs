@@ -11,7 +11,6 @@ public class ObjectNetManager : MonoBehaviour
     public Transform Transform { get; private set; }
 
     public bool IsStatic { get; protected set; } = false;
-    public bool IsSyncable { get; protected set; } = true;
 
     [SerializeField]
     private ObjectList _list;
@@ -71,8 +70,6 @@ public class ObjectNetManager : MonoBehaviour
 
     public bool SyncObject()
     {
-        if (!IsSyncable) return false;
-
         if (NetworkManager._instance.ShouldSendToClient)
         {
             ServerSend.SyncObject(this);
@@ -81,13 +78,13 @@ public class ObjectNetManager : MonoBehaviour
         return true;
     }
 
-    public bool ObjectCreated()
+    public bool ObjectCreated(bool isSyncing = false)
     {
         if (IsStatic) return false;
 
         if (NetworkManager._instance.ShouldSendToClient)
         {
-            ServerSend.ObjectCreated(Type, Id, Transform.position, Transform.rotation);
+            ServerSend.ObjectCreated(Type, Id, Transform.position, Transform.rotation, isSyncing);
         }
 
         return true;

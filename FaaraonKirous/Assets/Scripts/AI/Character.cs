@@ -125,12 +125,10 @@ public class Character : MonoBehaviour
             linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
             InitNavMeshAgent();
             Assert.IsNotNull(deathScript, "Me cannut dai!");
-
         }
         else
         {
             Destroy(navMeshAgent);
-            Destroy(deathScript);
         }
 
         Assert.IsNotNull(enemyNetManager, "Can't touch this.");
@@ -177,14 +175,14 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
+        if (IsDead)
+        {
+            Die();
+            return;
+        }
+
         if (IsHost)
         {
-            if (IsDead)
-            {
-                SendToClient_EnemyDied();
-                Die();
-                return;
-            }
             detector.RunDetection();
             stateMachine.UpdateSM();
             TestOffLink();
@@ -594,12 +592,6 @@ public class Character : MonoBehaviour
     {
         if (ShouldSendToClient)
             ServerSend.SightChanged(enemyNetManager.Id, impairedSightRange, impairedFOV);
-    }
-
-    private void SendToClient_EnemyDied()
-    {
-        if (ShouldSendToClient)
-            ServerSend.EnemyDied(Id);
     }
 
     private void SendToClient_StateChanged()

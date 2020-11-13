@@ -32,11 +32,26 @@ public class ClientHandle
     }
     #endregion
 
+    #region LoadAndSave
+    public static void LoadScene(int connection, Packet packet)
+    {
+        int sceneIndex = packet.ReadInt();
+
+        Debug.Log("Load scene request received");
+
+        GameManager._instance.LoadScene(sceneIndex);
+    }
+
+    public static void EndLoading(int connection, Packet packet)
+    {
+        Debug.Log("End loading message received");
+        GameManager._instance.EndLoading();
+    }
+    #endregion
+
     #region ObjectSyncing
     public static void StartingObjectSync(int connection, Packet packet)
     {
-        // TODO: Pause game here too
-
         GameManager._instance.ClearAllObjects();
 
         NetworkManager._instance.IsConnectedToServer = true;
@@ -104,6 +119,20 @@ public class ClientHandle
     }
     #endregion
 
+    #region Character
+    public static void CharacterDied(int connection, Packet packet)
+    {
+        ObjectList list = (ObjectList)packet.ReadByte();
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
+        {
+            CharacterNetManager characterNetManager = (CharacterNetManager)netManager;
+            characterNetManager.DeathScript.isDead = true;
+        }
+    }
+    #endregion
+
     #region Enemy
     public static void SightChanged(int connection, Packet packet)
     {
@@ -128,17 +157,6 @@ public class ClientHandle
         {
             EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
             enemyNetManager.Character.UpdateStateIndicator(stateOption);
-        }
-    }
-
-    public static void EnemyDied(int connection, Packet packet)
-    {
-        int id = packet.ReadInt();
-
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
-        {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
-            enemyNetManager.Character.Die();
         }
     }
 
@@ -176,6 +194,40 @@ public class ClientHandle
         Vector3 position = packet.ReadVector3();
 
         AbilitySpawner.Instance.SpawnAtPosition(position, ability);
+    }
+    #endregion
+
+    #region Player
+
+    public static void ChangeToCharacter(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        LevelController._instance.ChangeToCharacter(character);
+    }
+
+    public static void Crouching(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
+        {
+            PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
+            playerNetManager.PlayerController.IsCrouching = state;
+        }
+    }
+
+    public static void Running(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
+        {
+            PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
+            playerNetManager.PlayerController.IsRunning = state;
+        }
     }
     #endregion
 

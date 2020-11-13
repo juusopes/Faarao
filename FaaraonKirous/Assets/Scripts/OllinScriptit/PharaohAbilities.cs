@@ -11,6 +11,7 @@ public class PharaohAbilities : MonoBehaviour
     private float invisibilityTimer;
     public GameObject[] indicatorList;
     public float[] rangeList;
+    public bool[] lineActive;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +34,7 @@ public class PharaohAbilities : MonoBehaviour
 
     public void Invisibility()
     {
-        if (GetComponent<PlayerController>().isActiveCharacter)
+        if (GetComponent<PlayerController>().IsCurrentPlayer)
         {
             //TempSetActive
             if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)

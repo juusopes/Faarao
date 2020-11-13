@@ -217,10 +217,10 @@ GameObject:
   - component: {fileID: 5706328075926723933}
   - component: {fileID: 5706328075926723927}
   - component: {fileID: 5706328075926723928}
-  - component: {fileID: 5706328075926723929}
   - component: {fileID: 2795708155777838719}
   - component: {fileID: -2370286539409642136}
   - component: {fileID: 5630104455298223005}
+  - component: {fileID: -3261075203119826798}
   m_Layer: 8
   m_Name: Pharaoh
   m_TagString: Player
@@ -344,35 +344,19 @@ MonoBehaviour:
   playerOne: 1
   movementSpeed: 10
   doubleClickTimer: 0
-  isRunning: 0
-  isActiveCharacter: 0
-  isCrouching: 0
+  _isRunning: 0
+  _isCrouching: 0
   abilityActive: 0
   indicator: {fileID: 5642665167690723842, guid: 608c7c670fc8a4347b2c9cdb6f954bde, type: 3}
   visibleInd: {fileID: 0}
   abilityNum: 0
   inRange: 0
+  abilityAllowed: 0101010101010101010101
   isInvisible: 0
   interactObject: {fileID: 0}
   targetEnemy: {fileID: 0}
   lC: {fileID: 0}
   menu: {fileID: 0}
---- !u!54 &5706328075926723929
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5706328075926723934}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!114 &2795708155777838719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,6 +389,7 @@ MonoBehaviour:
   - 3
   - 3
   - 3
+  lineActive: 
 --- !u!114 &-2370286539409642136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,3 +419,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _list: 1
   _type: 1
+--- !u!54 &-3261075203119826798
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5706328075926723934}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

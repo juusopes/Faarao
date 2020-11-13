@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerNetManager : DynamicNetManager
+public class PlayerNetManager : CharacterNetManager
 {
+    public PlayerController PlayerController { get; private set; }
+
     protected override void Awake()
     {
         IsStatic = true;
         base.Awake();
+    }
+
+    protected override void InitComponents()
+    {
+        base.InitComponents();
+        PlayerController = GetComponent<PlayerController>();
     }
 
     protected override void AddToGameManager()
@@ -19,12 +27,14 @@ public class PlayerNetManager : DynamicNetManager
     public override void SendSync(Packet packet)
     {
         base.SendSync(packet);
-        // TODO: Not implemented
+        packet.Write(PlayerController.IsRunning);
+        packet.Write(PlayerController.IsCrouching);
     }
 
     public override void HandleSync(Packet packet)
     {
         base.HandleSync(packet);
-        // TODO: Not implemented
+        PlayerController.IsRunning = packet.ReadBool();
+        PlayerController.IsCrouching = packet.ReadBool();
     }
 }

@@ -3,24 +3,77 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
+    // Managers
+    private PlayerNetManager PlayerNetManager { get; set; }
+
+
     //Which Player
     public bool playerOne;
 
     //Moving
     public float movementSpeed;
     public float doubleClickTimer;
-    public bool isRunning;
-    public bool isActiveCharacter;
+    public bool IsCurrentPlayer { get; set; } = false;
+    public bool IsActivePlayer { get; set; } = false;
     private NavMeshAgent navMeshAgent;
     private Vector3 targetV3;
     private Vector3 position;
+
+    //Running
+    [HideInInspector]
+    private bool _isRunning;
+    public bool IsRunning 
+    { 
+        get
+        {
+            return _isRunning;
+        } 
+        set
+        {
+            _isRunning = value;
+            if (IsCurrentPlayer)
+            {
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.Running(PlayerNetManager.Type, _isRunning);
+                }
+                else if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.Running(PlayerNetManager.Type, _isRunning);
+                }
+            }
+        }
+    }
 
     //PlayerSynergy
     private GameObject anotherCharacter;
     private bool lineOfSight;
 
     //Crouch
-    public bool isCrouching;
+    [HideInInspector]
+    private bool _isCrouching;
+    public bool IsCrouching
+    {
+        get
+        {
+            return _isCrouching;
+        }
+        set
+        {
+            _isCrouching = value;
+            if (IsCurrentPlayer)
+            {
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.Crouching(PlayerNetManager.Type, _isCrouching);
+                }
+                else if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.Crouching(PlayerNetManager.Type, _isCrouching);
+                }
+            }
+        }
+    }
 
     //Abilities
     //Indicator
@@ -32,6 +85,9 @@ public class PlayerController : MonoBehaviour
     public GameObject visibleInd;
     public int abilityNum;
     public bool inRange;
+    [HideInInspector]
+    public bool[] abilityAllowed;
+
     //Invisibility
     public bool isInvisible;
 
@@ -40,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
     //Interactive
     public GameObject interactObject;
+    private bool useInteract;
 
     //Climbing
     //public GameObject climbObject;
@@ -59,17 +116,15 @@ public class PlayerController : MonoBehaviour
     private GameObject target;
     private bool useAttack;
 
+    //Respawn
+    private bool useRespawn;
+    
     //Menu
     public LevelController lC;
     public InGameMenu menu;
 
-
+    public bool startDead;
     private void Awake()
-    {
-        linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, 0.5f, 1f);
-    }
-    // Start is called before the first frame update
-    void Start()
     {
         Initialize();
     }
@@ -81,23 +136,48 @@ public class PlayerController : MonoBehaviour
         {
             Moving();
             LineOfSight();
-            KeyControls();
-            Invisibility();
-            TestOffLink();
+            KeyControls();          
+            Invisibility();  // TODO: Does not work in multiplayer
+
+            if (NetworkManager._instance.IsHost)
+            {
+                TestOffLink();
+            }
+            
             Attack();
+            Respawn();
+            Interact();
             //Climb();
         }
         else
         {
-            StopNavigation();
+            if (NetworkManager._instance.IsHost)
+            {
+                StopNavigation();
+            }
             abilityActive = false;
         }
         SetIndicator();
     }
     private void Initialize()
     {
+        PlayerNetManager = GetComponent<PlayerNetManager>();
+        death = GetComponent<DeathScript>();
         navMeshAgent = this.GetComponent<NavMeshAgent>();
         camControl = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
+        lC = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
+        menu = lC.canvas;
+
+        if (NetworkManager._instance.IsHost)
+        {
+            linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, 0.5f, 1f);
+            targetV3 = transform.position;
+            Stay();
+        }
+        else
+        {
+            Destroy(navMeshAgent);
+        }
 
         GameObject[] tempCharacters = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject tempCharacter in tempCharacters)
@@ -107,33 +187,33 @@ public class PlayerController : MonoBehaviour
                 anotherCharacter = tempCharacter;
             }
         }
-        lC = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
-        menu = lC.canvas;
-        death = GetComponent<DeathScript>();
-        targetV3 = transform.position;
-        Stay();
         abilityActive = false;
+        if (startDead)
+        {
+            death.damage = 10;
+        }
     }
     public void Moving()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
         //DoubleClick Check
-        if (isActiveCharacter)
+        if (IsCurrentPlayer)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
             {
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                 {
                     targetV3 = hit.point;
+                    SetDestination(targetV3);
                 }
-                if (isRunning)
+                if (IsRunning)
                 {
-                    isRunning = false;
+                    IsRunning = false;
                 }
                 if (doubleClickTimer < 0.5f)
                 {
-                    isRunning = true;
+                    IsRunning = true;
                 }
                 if (doubleClickTimer >= 0.5f)
                 {
@@ -145,45 +225,45 @@ public class PlayerController : MonoBehaviour
         {
             doubleClickTimer += Time.deltaTime;
         }
+
         //Moving
         if ((!playerOne && !GetComponent<PriestAbilities>().useTeleknesis) || playerOne)
         {
-            if (isRunning)
+            if (NetworkManager._instance.IsHost)
             {
-                navMeshAgent.speed = movementSpeed * 1.5f;
-            }
-            else if (isCrouching)
-            {
-                navMeshAgent.speed = movementSpeed * 0.5f;
-            }
-            else
-            {
-                navMeshAgent.speed = movementSpeed;
-            }
-            //if (!climbing)
-            //{
-            navMeshAgent.SetDestination(targetV3);
-            //}
-            if (position == transform.position)
-            {
-                isRunning = false;
-            }
-            else
-            {
-                position = transform.position;
+                if (IsRunning)
+                {
+                    navMeshAgent.speed = movementSpeed * 1.5f;
+                }
+                else if (IsCrouching)
+                {
+                    navMeshAgent.speed = movementSpeed * 0.5f;
+                }
+                else
+                {
+                    navMeshAgent.speed = movementSpeed;
+                }
+                if (position == transform.position)
+                {
+                    IsRunning = false;
+                }
+                else
+                {
+                    position = transform.position;
+                }
             }
         }
     }
     public void Stay()
     {
-        navMeshAgent.SetDestination(transform.position);
+        SetDestination(transform.position);
         targetV3 = transform.position;
     }
     
     public void GiveDestination(Vector3 v3)
     {
         targetV3 = v3;
-        navMeshAgent.SetDestination(targetV3);
+        SetDestination(targetV3);
     }
 
     public Vector3 GetPosition()
@@ -213,33 +293,23 @@ public class PlayerController : MonoBehaviour
     }
     public void Crouch()
     {
-        if (isActiveCharacter)
+        if (IsCurrentPlayer)
         {
-            if (isRunning)
+            if (IsRunning)
             {
-                isRunning = false;
-                isCrouching = true;
+                IsRunning = false;
+                IsCrouching = true;
             }
-            else if (!isCrouching)
+            else if (!IsCrouching)
             {
-                isCrouching = true;
+                IsCrouching = true;
             }
             else
             {
-                isCrouching = false;
+                IsCrouching = false;
             }
         }
     }
-    //private void InvisiblitySpell()
-    //{
-    //    if (isActiveCharacter)
-    //    {
-    //        if (lineOfSight)
-    //        {
-    //            anotherCharacter.GetComponent<PlayerController>().isInvisible = true;
-    //        }
-    //    }
-    //}
 
     private void Invisibility()
     {
@@ -255,7 +325,7 @@ public class PlayerController : MonoBehaviour
 
     private void SetIndicator()
     {
-        if (isActiveCharacter)
+        if (IsCurrentPlayer)
         {
             if (abilityActive)
             {
@@ -292,7 +362,7 @@ public class PlayerController : MonoBehaviour
 
     private void CamFollow()
     {
-        if (isActiveCharacter)
+        if (IsCurrentPlayer)
         {
             if (camControl.GetComponent<CameraControl>().camFollow)
             {
@@ -309,15 +379,40 @@ public class PlayerController : MonoBehaviour
 
     public void Interact()
     {
-        if (interactObject != null)
+        // TODO: Doesn't work in multiplayer
+        if (abilityNum == 8)
         {
-            if (!interactObject.GetComponent<Activator>().activated)
+            if (lC.targetObject != null)
             {
-                interactObject.GetComponent<Activator>().activated = true;
+                target = lC.targetObject;
             }
-            else
+            else if (!useAttack)
             {
-                interactObject.GetComponent<Activator>().activated = false;
+                target = null;
+            }
+            if (target != null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                {
+                    targetV3 = target.transform.position;
+                    SetDestination(targetV3);
+
+                    useInteract = true;
+                    abilityActive = false;
+                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "TargetableObject";
+                }
+                if (interactObject == target)
+                {
+                    if (NetworkManager._instance.IsHost)
+                    {
+                        interactObject.gameObject.GetComponent<ActivatorScript>().Activate();
+                    }
+                    interactObject = null;
+                    target = null;
+                    useInteract = false;
+                    abilityNum = 0;
+                    Stay();
+                }
             }
         }
     }
@@ -336,10 +431,10 @@ public class PlayerController : MonoBehaviour
             }
             if (target != null)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) && isActiveCharacter)
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
                 {
                     targetV3 = target.transform.position;
-                    navMeshAgent.SetDestination(targetV3);
+                    SetDestination(targetV3);
 
                     useAttack = true;
                     abilityActive = false;
@@ -347,7 +442,18 @@ public class PlayerController : MonoBehaviour
                 }
                 if (targetEnemy == target)
                 {
-                    targetEnemy.GetComponent<DeathScript>().damage = 1;
+                    if (NetworkManager._instance.IsHost)
+                    {
+                        targetEnemy.GetComponent<DeathScript>().damage = 1;
+                    }
+                    else
+                    {
+                        if (NetworkManager._instance.ShouldSendToServer)
+                        {
+                            ClientSend.KillEnemy(targetEnemy.GetComponent<EnemyNetManager>().Id);
+                        }
+                    }
+                    
                     targetEnemy = null;
                     target = null;
                     useAttack = false;
@@ -358,22 +464,66 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Respawn()
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            if (abilityNum == 10)
+            {
+                if (lC.targetObject != null)
+                {
+                    target = lC.targetObject;
+                }
+                else if (!useRespawn)
+                {
+                    target = null;
+                }
+                if (target != null)
+                {
+                    if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                    {
+                        targetV3 = target.transform.position;
+                        navMeshAgent.SetDestination(targetV3);
+                        useRespawn = true;
+                        abilityActive = false;
+                        GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Player";
+                    }
+                    if (targetEnemy == target)
+                    {
+                        targetEnemy.GetComponent<DeathScript>().heal = 1;
+                        targetEnemy = null;
+                        target = null;
+                        useRespawn = false;
+                        abilityNum = 0;
+                        Stay();
+                    }
+                }
+            }
+        }
+    }
+
     public void UseAbility(int tempAbilityNum)
     {
-        if (!abilityActive)
+        if (abilityAllowed[tempAbilityNum])
         {
-            abilityActive = true;
-            abilityNum = tempAbilityNum;
-        }
-        else if (abilityNum != tempAbilityNum)
+            if (!abilityActive)
+            {
+                abilityActive = true;
+                abilityNum = tempAbilityNum;
+            }
+            else if (abilityNum != tempAbilityNum)
+            {
+                abilityActive = true;
+                abilityNum = tempAbilityNum;
+            }
+            else
+            {
+                abilityActive = false;
+                abilityNum = 0;
+            }
+        } else
         {
-            abilityActive = true;
-            abilityNum = tempAbilityNum;
-        }
-        else
-        {
-            abilityActive = false;
-            abilityNum = 0;
+            Debug.Log(tempAbilityNum);
         }
 
     }
@@ -388,15 +538,25 @@ public class PlayerController : MonoBehaviour
 
     public void SetDestination(Vector3 position)
     {
-        if (position == null || navMeshAgent.destination == position || !navMeshAgent.enabled)
-            return;
+        if (NetworkManager._instance.IsHost)
+        {
+            if (position == null || navMeshAgent.destination == position || !navMeshAgent.enabled)
+                return;
 
-        if (!OnNavMesh.IsReachable(transform, position))
-            return;
+            if (!OnNavMesh.IsReachable(transform, position))
+                return;
 
-        navMeshAgent.destination = position;
-        navMeshAgent.isStopped = false;
-        navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : 0.5f;
+            navMeshAgent.destination = position;
+            navMeshAgent.isStopped = false;
+            navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : 0.5f;
+        }
+        else
+        {
+            if (NetworkManager._instance.ShouldSendToServer)
+            {
+                ClientSend.SetDestinationRequest(PlayerNetManager.Type, position);
+            }
+        }
     }
 
     public void StopNavigation()
@@ -414,6 +574,10 @@ public class PlayerController : MonoBehaviour
         {
             Crouch();
         }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            UseAbility(8);
+        }
         //if (Input.GetKeyDown(KeyCode.I))
         //{
         //    InvisiblitySpell();
@@ -421,6 +585,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             UseAbility(9);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            UseAbility(10);
         }
         //Abilities
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -451,23 +619,11 @@ public class PlayerController : MonoBehaviour
         {
             UseAbility(7);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            UseAbility(8);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            UseAbility(9);
-        }
 
         //Camera
         if (Input.GetKeyDown(KeyCode.C))
         {
             CamFollow();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            Interact();
         }
         //if (Input.GetKeyDown(KeyCode.U))
         //{
