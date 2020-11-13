@@ -30,9 +30,9 @@ public class LevelController : MonoBehaviour
     public GameObject playerOneImage, playerTwoImage;
 
     [SerializeField]
-    private GameObject pharaoh;
+    public GameObject pharaoh;
     [SerializeField]
-    private GameObject priest;
+    public GameObject priest;
 
     //CameraControl
     private GameObject mainCam;
@@ -44,6 +44,8 @@ public class LevelController : MonoBehaviour
 
     public InGameMenu canvas;
 
+    public bool[] priestAbilities;
+    public bool[] pharaohAbilities;
 
     // Start is called before the first frame update
     void Start()
@@ -78,8 +80,12 @@ public class LevelController : MonoBehaviour
                 if (character.GetComponent<PlayerController>().playerOne)
                 {
                     currentCharacter = character;
+                    pharaoh = character;
                     character.GetComponent<PlayerController>().IsCurrentPlayer = true;
                     character.GetComponent<PlayerController>().IsActivePlayer = true;
+                } else
+                {
+                    priest = character;
                 }
                 if (currentCharacter == null)
                 {
@@ -95,6 +101,7 @@ public class LevelController : MonoBehaviour
             }
         }
 
+        UpdateAbilities();
         //SetCameraPos
         //mainCam.transform.parent = activeCharacter.transform;
     }
@@ -303,4 +310,10 @@ public class LevelController : MonoBehaviour
         }
 
     }
+    public void UpdateAbilities()
+    {
+        pharaoh.GetComponent<PlayerController>().abilityAllowed = pharaohAbilities;
+        priest.GetComponent<PlayerController>().abilityAllowed = priestAbilities;
+    }
+
 }

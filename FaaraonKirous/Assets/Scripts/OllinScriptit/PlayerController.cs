@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviour
     public GameObject visibleInd;
     public int abilityNum;
     public bool inRange;
+    [HideInInspector]
     public bool[] abilityAllowed;
 
     //Invisibility
@@ -114,11 +115,14 @@ public class PlayerController : MonoBehaviour
     private GameObject target;
     private bool useAttack;
 
+    //Respawn
+    private bool useRespawn;
+    
     //Menu
     public LevelController lC;
     public InGameMenu menu;
 
-
+    public bool startDead;
     private void Awake()
     {
         Initialize();
@@ -131,8 +135,7 @@ public class PlayerController : MonoBehaviour
         {
             Moving();
             LineOfSight();
-            KeyControls();
-            
+            KeyControls();          
             Invisibility();  // TODO: Does not work in multiplayer
 
             if (NetworkManager._instance.IsHost)
@@ -141,6 +144,7 @@ public class PlayerController : MonoBehaviour
             }
             
             Attack();
+            Respawn();
             //Climb();
         }
         else
@@ -181,19 +185,8 @@ public class PlayerController : MonoBehaviour
                 anotherCharacter = tempCharacter;
             }
         }
-
         abilityActive = false;
-        bool noAbilities = true;
-        int i = 0;
-        foreach(bool x in abilityAllowed)
-        {
-            if (abilityAllowed[i])
-            {
-                noAbilities = false;
-            }
-            i++;
-        }
-        if (noAbilities)
+        if (startDead)
         {
             death.damage = 10;
         }
@@ -315,16 +308,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    //private void InvisiblitySpell()
-    //{
-    //    if (isActiveCharacter)
-    //    {
-    //        if (lineOfSight)
-    //        {
-    //            anotherCharacter.GetComponent<PlayerController>().isInvisible = true;
-    //        }
-    //    }
-    //}
 
     private void Invisibility()
     {
@@ -455,6 +438,44 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Respawn()
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            if (abilityNum == 10)
+            {
+                if (lC.targetObject != null)
+                {
+                    target = lC.targetObject;
+                }
+                else if (!useRespawn)
+                {
+                    target = null;
+                }
+                if (target != null)
+                {
+                    if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                    {
+                        targetV3 = target.transform.position;
+                        navMeshAgent.SetDestination(targetV3);
+                        useRespawn = true;
+                        abilityActive = false;
+                        GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Player";
+                    }
+                    if (targetEnemy == target)
+                    {
+                        targetEnemy.GetComponent<DeathScript>().heal = 1;
+                        targetEnemy = null;
+                        target = null;
+                        useRespawn = false;
+                        abilityNum = 0;
+                        Stay();
+                    }
+                }
+            }
+        }
+    }
+
     public void UseAbility(int tempAbilityNum)
     {
         if (abilityAllowed[tempAbilityNum])
@@ -534,6 +555,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             UseAbility(9);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            UseAbility(10);
         }
         //Abilities
         if (Input.GetKeyDown(KeyCode.Alpha1))

@@ -31,7 +31,7 @@ public class PlayerActiveArea : MonoBehaviour
         {
             player.GetComponent<PlayerController>().interactObject = other.gameObject;
         }
-        else if (other.tag == "Enemy")
+        else if (other.tag == "Enemy" || other.tag == "Player")
         {
             player.GetComponent<PlayerController>().targetEnemy = other.gameObject;
         }
