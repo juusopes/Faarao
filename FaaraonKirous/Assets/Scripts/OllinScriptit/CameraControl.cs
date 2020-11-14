@@ -29,7 +29,7 @@ public class CameraControl : MonoBehaviour
 
     public float rotation;
 
-    public int zPanlimit, xPanlimit;
+    public int zPanLimit, xPanLimit;
 
     // Start is called before the first frame update
     void Start()
@@ -44,11 +44,9 @@ public class CameraControl : MonoBehaviour
     {
         CamPos();
 
-        //transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -panLimit, panLimit), 
-        //    transform.position.y, 
-        //    Mathf.Clamp(cameraController.position.z, -panLimit, panLimit));
-
-
+        transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -xPanLimit, xPanLimit),
+            transform.position.y,
+            Mathf.Clamp(cameraController.position.z, -zPanLimit, zPanLimit));
 
         if (Input.GetMouseButtonDown(2))
         {
@@ -142,11 +140,11 @@ public class CameraControl : MonoBehaviour
             return;
         }
 
-        if(cameraController.transform.position.x > 130)
-        {
-            cameraController.transform.position = new Vector3(130, cameraController.transform.position.y, cameraController.transform.position.z);
-            return;
-        }
+        //if(cameraController.transform.position.x > 130)
+        //{
+        //    cameraController.transform.position = new Vector3(130, cameraController.transform.position.y, cameraController.transform.position.z);
+        //    return;
+        //}
 
         //Vector3 pos = transform.position;
         if (Input.mousePosition.x >= Screen.width - borderThickness)
