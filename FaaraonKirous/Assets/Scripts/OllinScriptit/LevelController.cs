@@ -119,7 +119,7 @@ public class LevelController : MonoBehaviour
 
     private void KeyBoardControls()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             if (NetworkManager._instance.IsHost)
             {
@@ -135,7 +135,7 @@ public class LevelController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (NetworkManager._instance.IsHost)
             {

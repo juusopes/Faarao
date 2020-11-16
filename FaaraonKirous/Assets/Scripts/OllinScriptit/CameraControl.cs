@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    public GameObject activeCharacter;
+    public GameObject activeCharacter => GameManager._instance.CurrentCharacter;
     private float camHeight;
     private Quaternion camRot;
     public bool camFollow;
 
     //Movement Script
     public float moveAmount;
-    public float borderThickness = 10;
+    public float borderThickness;
     public int panLimit;
 
     public Transform cameraController;
@@ -22,6 +22,7 @@ public class CameraControl : MonoBehaviour
     private float zoomSpeed;
 
     public GameObject objective1, objective2, objective3, objective4, objective5;
+    public GameObject character1, character2;
 
     public bool rotating;
     public float rotateSpeed;
@@ -29,6 +30,9 @@ public class CameraControl : MonoBehaviour
     public float rotation;
 
     public int zPanLimit, xPanLimit;
+
+    private float clickTime, timeSinceLastClick;
+    private float doubleClick = 0.2f;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +45,30 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            timeSinceLastClick = Time.time - clickTime;
+
+            if(timeSinceLastClick <= doubleClick)
+            {
+                FindCharacter1();
+            }
+
+            clickTime = Time.time;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            timeSinceLastClick = Time.time - clickTime;
+
+            if (timeSinceLastClick <= doubleClick)
+            {
+                FindCharacter2();
+            }
+
+            clickTime = Time.time;
+        }
+
         CamPos();
 
         transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -xPanLimit, xPanLimit),
@@ -127,8 +155,6 @@ public class CameraControl : MonoBehaviour
             if (CamUtility.IsMouseOverGameWindow())        //If unity editor only move the camera if it is insde the screen
 #endif
                 MoveCamera();
-
-
         }
     }
 
@@ -163,46 +189,62 @@ public class CameraControl : MonoBehaviour
 
     public void CenterCamera()
     {
-        cameraStabilizer.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
-        cameraController.transform.position = new Vector3(cameraStabilizer.position.x, 0, cameraStabilizer.position.z);
+        cameraStabilizer.transform.position = new Vector3(cameraStabilizer.position.x, cameraStabilizer.transform.position.y, cameraStabilizer.position.z);
+        cameraController.transform.position = new Vector3(cameraStabilizer.position.x, cameraController.transform.position.y, cameraStabilizer.position.z);
 
-        cameraController.transform.eulerAngles = new Vector3(cameraPos.rotation.x, cameraPos.rotation.y, cameraPos.rotation.z);
-        cameraPos.transform.position = new Vector3(cameraController.position.x, cameraPos.position.y, cameraController.position.z - 39.76f);
+        //cameraController.transform.eulerAngles = new Vector3(cameraController.rotation.x, cameraController.rotation.y, cameraController.rotation.z);
+        //cameraPos.transform.position = new Vector3(cameraController.position.x, cameraPos.position.y, cameraController.position.z - 39.76f);
     }
 
     public void FindObjective1()
     {
         CenterCamera();
 
-        cameraController.transform.position = new Vector3(objective1.transform.position.x, 0, objective1.transform.position.z);
-        cameraStabilizer.transform.position = new Vector3(objective1.transform.position.x, 0, objective1.transform.position.z);
+        cameraController.transform.position = new Vector3(objective1.transform.position.x, cameraController.transform.position.y, objective1.transform.position.z);
+        //cameraStabilizer.transform.position = new Vector3(objective1.transform.position.x, cameraStabilizer.transform.position.y, objective1.transform.position.z);
     }
     public void FindObjective2()
     {
         CenterCamera();
 
-        cameraController.transform.position = new Vector3(objective2.transform.position.x, 0, objective2.transform.position.z);
-        cameraStabilizer.transform.position = new Vector3(objective2.transform.position.x, 0, objective2.transform.position.z);
+        cameraController.transform.position = new Vector3(objective2.transform.position.x, cameraController.transform.position.y, objective2.transform.position.z);
+        //cameraStabilizer.transform.position = new Vector3(objective2.transform.position.x, cameraStabilizer.transform.position.y, objective2.transform.position.z);
     }
     public void FindObjective3()
     {
         CenterCamera();
 
-        cameraController.transform.position = new Vector3(objective3.transform.position.x, 0, objective3.transform.position.z);
-        cameraStabilizer.transform.position = new Vector3(objective3.transform.position.x, 0, objective3.transform.position.z);
+        cameraController.transform.position = new Vector3(objective3.transform.position.x, cameraController.transform.position.y, objective3.transform.position.z);
+        //cameraStabilizer.transform.position = new Vector3(objective3.transform.position.x, cameraStabilizer.transform.position.y, objective3.transform.position.z);
     }
     public void FindObjective4()
     {
         CenterCamera();
 
-        cameraController.transform.position = new Vector3(objective4.transform.position.x, 0, objective4.transform.position.z);
-        cameraStabilizer.transform.position = new Vector3(objective4.transform.position.x, 0, objective4.transform.position.z);
+        cameraController.transform.position = new Vector3(objective4.transform.position.x, cameraController.transform.position.y, objective4.transform.position.z);
+        //cameraStabilizer.transform.position = new Vector3(objective4.transform.position.x, cameraStabilizer.transform.position.y, objective4.transform.position.z);
     }
     public void FindObjective5()
     {
         CenterCamera();
 
-        cameraController.transform.position = new Vector3(objective5.transform.position.x, 0, objective5.transform.position.z);
-        cameraStabilizer.transform.position = new Vector3(objective5.transform.position.x, 0, objective5.transform.position.z);
+        cameraController.transform.position = new Vector3(objective5.transform.position.x, cameraController.transform.position.y, objective5.transform.position.z);
+        //cameraStabilizer.transform.position = new Vector3(objective5.transform.position.x, cameraStabilizer.transform.position.y, objective5.transform.position.z);
+    }
+
+    public void FindCharacter1()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(character1.transform.position.x, cameraController.transform.position.y, character1.transform.position.z);
+        //cameraStabilizer.transform.position = new Vector3(character1.transform.position.x, cameraStabilizer.transform.position.y, character1.transform.position.z);
+    }
+
+    public void FindCharacter2()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(character2.transform.position.x, cameraController.transform.position.y, character2.transform.position.z);
+        //cameraStabilizer.transform.position = new Vector3(character2.transform.position.x, cameraStabilizer.transform.position.y, character2.transform.position.z);
     }
 }
