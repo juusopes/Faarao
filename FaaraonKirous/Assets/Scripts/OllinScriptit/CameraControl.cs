@@ -9,7 +9,6 @@ public class CameraControl : MonoBehaviour
     private float camHeight;
     private Quaternion camRot;
     public bool camFollow;
-    //public bool cameraRotating;
 
     //Movement Script
     public float moveAmount;
@@ -29,7 +28,7 @@ public class CameraControl : MonoBehaviour
 
     public float rotation;
 
-    public int zPanlimit, xPanlimit;
+    public int zPanLimit, xPanLimit;
 
     // Start is called before the first frame update
     void Start()
@@ -44,11 +43,9 @@ public class CameraControl : MonoBehaviour
     {
         CamPos();
 
-        //transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -panLimit, panLimit), 
-        //    transform.position.y, 
-        //    Mathf.Clamp(cameraController.position.z, -panLimit, panLimit));
-
-
+        transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -xPanLimit, xPanLimit),
+            transform.position.y,
+            Mathf.Clamp(cameraController.position.z, -zPanLimit, zPanLimit));
 
         if (Input.GetMouseButtonDown(2))
         {
@@ -142,43 +139,26 @@ public class CameraControl : MonoBehaviour
             return;
         }
 
-        if(cameraController.transform.position.x > 130)
-        {
-            cameraController.transform.position = new Vector3(130, cameraController.transform.position.y, cameraController.transform.position.z);
-            return;
-        }
-
-        //Vector3 pos = transform.position;
         if (Input.mousePosition.x >= Screen.width - borderThickness)
         {
             cameraController.transform.Translate(transform.right * moveAmount * Time.deltaTime, Space.World);
-            //cameraPos.transform.Translate(transform.right * moveAmount * Time.deltaTime, Space.World);
         }
 
         else if (Input.mousePosition.x <= borderThickness)
         {
             cameraController.transform.Translate(transform.right * -moveAmount * Time.deltaTime, Space.World);
-
-            //cameraPos.transform.Translate(transform.right * -moveAmount * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y >= Screen.height - borderThickness)
         {
             cameraController.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
-
-            //cameraPos.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y <= borderThickness)
         {
             cameraController.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
-
-            //cameraPos.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
         }
 
-        //pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
-        //pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
-        //transform.position = pos;
     }
 
     public void CenterCamera()

@@ -96,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
     //Interactive
     public GameObject interactObject;
+    private bool useInteract;
 
     //Climbing
     //public GameObject climbObject;
@@ -145,6 +146,7 @@ public class PlayerController : MonoBehaviour
             
             Attack();
             Respawn();
+            Interact();
             //Climb();
         }
         else
@@ -378,15 +380,39 @@ public class PlayerController : MonoBehaviour
     public void Interact()
     {
         // TODO: Doesn't work in multiplayer
-        if (interactObject != null)
+        if (abilityNum == 8)
         {
-            if (!interactObject.GetComponent<Activator>().activated)
+            if (lC.targetObject != null)
             {
-                interactObject.GetComponent<Activator>().activated = true;
+                target = lC.targetObject;
             }
-            else
+            else if (!useAttack)
             {
-                interactObject.GetComponent<Activator>().activated = false;
+                target = null;
+            }
+            if (target != null)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                {
+                    targetV3 = target.transform.position;
+                    SetDestination(targetV3);
+
+                    useInteract = true;
+                    abilityActive = false;
+                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "TargetableObject";
+                }
+                if (interactObject == target)
+                {
+                    if (NetworkManager._instance.IsHost)
+                    {
+                        interactObject.gameObject.GetComponent<ActivatorScript>().Activate();
+                    }
+                    interactObject = null;
+                    target = null;
+                    useInteract = false;
+                    abilityNum = 0;
+                    Stay();
+                }
             }
         }
     }
@@ -548,6 +574,10 @@ public class PlayerController : MonoBehaviour
         {
             Crouch();
         }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            UseAbility(8);
+        }
         //if (Input.GetKeyDown(KeyCode.I))
         //{
         //    InvisiblitySpell();
@@ -589,23 +619,11 @@ public class PlayerController : MonoBehaviour
         {
             UseAbility(7);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            UseAbility(8);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            UseAbility(9);
-        }
 
         //Camera
         if (Input.GetKeyDown(KeyCode.C))
         {
             CamFollow();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            Interact();
         }
         //if (Input.GetKeyDown(KeyCode.U))
         //{
