@@ -74,7 +74,7 @@ public class Character : MonoBehaviour
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
-    private EnemyNetManager enemyNetManager;
+    private EnemyObjectManager enemyNetManager;
     private DeathScript deathScript;
 
     //Aid scripts (create with new)
@@ -115,7 +115,7 @@ public class Character : MonoBehaviour
     #region Start and run
     void Awake()
     {
-        enemyNetManager = GetComponent<EnemyNetManager>();
+        enemyNetManager = GetComponent<EnemyObjectManager>();
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         deathScript = GetComponent<DeathScript>();
 

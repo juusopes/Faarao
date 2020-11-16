@@ -135,4 +135,9 @@ public abstract class NetworkHandler
             }
         });
     }
+
+    public virtual void ConnectionTimeout()
+    {
+
+    }
 }

@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 1274679408148448376}
   - component: {fileID: 8668365835249963842}
   - component: {fileID: 1842785535916910530}
-  - component: {fileID: 8250965499647274183}
   - component: {fileID: -6113639550760508180}
+  - component: {fileID: 4331518717048695686}
   m_Layer: 8
   m_Name: Priest
   m_TagString: Player
@@ -141,8 +141,6 @@ MonoBehaviour:
   playerOne: 0
   movementSpeed: 10
   doubleClickTimer: 0
-  _isRunning: 0
-  _isCrouching: 0
   abilityActive: 0
   indicator: {fileID: 5642665167690723842, guid: 608c7c670fc8a4347b2c9cdb6f954bde, type: 3}
   visibleInd: {fileID: 0}
@@ -154,6 +152,7 @@ MonoBehaviour:
   targetEnemy: {fileID: 0}
   lC: {fileID: 0}
   menu: {fileID: 0}
+  startDead: 0
 --- !u!114 &8668365835249963842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,21 +201,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 1
   damage: 0
+  heal: 0
   isDead: 0
---- !u!114 &8250965499647274183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274679408148448382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a60fe3271f1a2dc47b05f6425f4c1bd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _list: 1
-  _type: 2
 --- !u!54 &-6113639550760508180
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -233,6 +219,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4331518717048695686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274679408148448382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 606b2fec9789a9d4e8a91cc12569e6c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _list: 1
+  _type: 2
 --- !u!1 &8668365834707991896
 GameObject:
   m_ObjectHideFlags: 0

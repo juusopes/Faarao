@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data.Odbc;
 using System.Linq;
 using System.Security.Permissions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Rendering;
@@ -24,13 +26,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager _instance;
 
-    private readonly Dictionary<ObjectList, Dictionary<int, ObjectNetManager>> _objectLists = new Dictionary<ObjectList, Dictionary<int, ObjectNetManager>>();
+    private readonly Dictionary<ObjectList, Dictionary<int, ObjectManager>> _objectLists = new Dictionary<ObjectList, Dictionary<int, ObjectManager>>();
     private readonly Dictionary<ObjectList, int> _counters = new Dictionary<ObjectList, int>();
-
-    // Scene
-    public int CurrentSceneIndex => SceneManager.GetActiveScene().buildIndex;
-    public bool IsSceneLoaded { get; private set; } = false;
-    public bool IsLoading { get; set; } = false;
 
     // Prefabs
     private readonly Dictionary<ObjectType, GameObject> _objectPrefabs = new Dictionary<ObjectType, GameObject>();
@@ -40,6 +37,26 @@ public class GameManager : MonoBehaviour
     // Player Characters
     public GameObject Priest { get; private set; } = null;
     public GameObject Pharaoh { get; private set; } = null;
+    
+
+    // Player specific properties
+    public Dictionary<int, PlayerInfo> Players { get; private set; } = new Dictionary<int, PlayerInfo>();
+    public ObjectType? ControlledPlayerCharacter 
+        => Players[NetworkManager._instance.MyConnectionId].ControlledCharacter;
+    public GameObject CurrentCharacter => GetCurrentCharacterObject();
+
+    private GameObject GetCurrentCharacterObject()
+    {
+        switch (ControlledPlayerCharacter)
+        {
+            case ObjectType.pharaoh:
+                return Pharaoh;
+            case ObjectType.priest:
+                return Priest;
+        }
+
+        return null;
+    }
 
     private void Awake()
     {
@@ -54,125 +71,215 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // Add host to players
+        if (NetworkManager._instance.IsHost)
+        {
+            Players.Add(Constants.defaultConnectionId, new PlayerInfo
+            {
+                Name = "me"  // TODO: Get profile name
+            });
+        }
+
         // Add lists
-        _objectLists.Add(ObjectList.enemy, new Dictionary<int, ObjectNetManager>());
-        _objectLists.Add(ObjectList.player, new Dictionary<int, ObjectNetManager>());
+        _objectLists.Add(ObjectList.enemy, new Dictionary<int, ObjectManager>());
+        _objectLists.Add(ObjectList.player, new Dictionary<int, ObjectManager>());
         _objectPrefabs.Add(ObjectType.enemy, _enemyClientPrefab);
 
         // For testing
         if (NetworkManager._instance.Testing && NetworkManager._instance.IsHost)
         {
             IsSceneLoaded = true;
+            IsFullyLoaded = true;
         }
     }
 
-    #region Loading
+    #region LoadingAndSaving
+    public int CurrentSceneIndex => SceneManager.GetActiveScene().buildIndex;
+    public bool IsSceneLoaded
+    {
+        get
+        {
+            return _isSceneLoaded;
+        }
+        private set
+        {
+            _isSceneLoaded = value;
+            if (value == true)
+            {
+                if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.SyncRequest();
+                }
+            }
+            else
+            {
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    // Every client's scene is considered to not be loaded
+                    Server.Instance.ResetConnectionFlags(ConnectionState.SceneLoaded);
+                }
+            }
+        }
+    }
+
+    public bool IsFullyLoaded
+    {
+        get
+        {
+            return _isFullyLoaded;
+        }
+        private set
+        {
+            _isFullyLoaded = value;
+            if (value == true)
+            {
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    SyncAllObjects();
+                }
+            }
+            else
+            {
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    // Every client is now considered to be unsynced
+                    Server.Instance.ResetConnectionFlags(ConnectionState.Synced);
+                }
+            }
+        }
+    }
+    private bool _isSceneLoaded = false;
+    private bool _isFullyLoaded = false;
+
     public void StartLoading()
     {
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.StartLoading();
+        }
+
+        InGameMenu._instance.EnableLoadingScreen();
+
         Time.timeScale = 0;
 
-        IsLoading = true;
+        IsFullyLoaded = false;
         IsSceneLoaded = false;
-
-        // TODO: Start loading screen
-
-        if (NetworkManager._instance.ShouldSendToClient)
-        {
-            Server.Instance.ResetConnectionFlags(ConnectionState.LevelLoaded
-                | ConnectionState.Synced);
-        }
-
-        ClearAllObjects();
     }
 
-    public void LoadSave(string saveFile)
+    public void LoadLevel(int sceneIndex)
     {
         StartLoading();
 
-        // TODO: Get save file
+        LoadScene(sceneIndex, true);
 
-        // TODO: If scene is different load it.
-
-        // TODO: Else just load save
+        EndLoading();
     }
 
-    public void LoadScene(int index, bool restartScene = false)
+    public void LoadScene(int sceneIndex, bool restart = false)
     {
-        StartLoading();
-
         if (NetworkManager._instance.ShouldSendToClient)
         {
-            ServerSend.LoadScene(index);
+            ServerSend.LoadScene(sceneIndex);
         }
 
-        if (restartScene || CurrentSceneIndex != index)
+        if (restart || CurrentSceneIndex != sceneIndex)
         {
-            Debug.Log("Scene not loaded or restarting. Loading scene.");
-
-            // Reset everything if level is changed
+            // We must reset all object collections but we don't need to destroy them
+            // Objects are instead destroyed implictly
             ResetAll();
-
-            SceneManager.sceneLoaded += OnSceneLoad;
-            SceneManager.LoadSceneAsync(index, LoadSceneMode.Single);
+            StartCoroutine(LoadSceneAsynchronously(sceneIndex));
         }
         else
         {
-            Debug.Log("Scene already loaded. Don't need to load.");
-
-            // Scene is loaded if it is the current scene
-            SceneLoaded();
-        }
-    }
-    
-    public void OnSceneLoad(Scene scene, LoadSceneMode mode)
-    {
-        SceneManager.sceneLoaded -= OnSceneLoad;
-        SceneLoaded();
-    }
-
-    public void SceneLoaded()
-    {
-        Debug.Log("Scene loaded");
-        IsSceneLoaded = true;
-
-        if (NetworkManager._instance.IsHost)
-        {
-            if (NetworkManager._instance.ShouldSendToClient)
-            {
-                // This makes sure that clients who are waiting for syncing can sync
-                SyncAllObjects();
-            }
-
-            EndLoading();
-        }
-        else
-        {
-            if (NetworkManager._instance.ShouldSendToServer)
-            {
-                Debug.Log("Scene loaded: Sending sync request");
-                ClientSend.SyncRequest();
-            }
+            // We must destroy all objects that are non-static
+            ClearAllObjects();
+            IsSceneLoaded = true;
         }
     }
 
     public void EndLoading()
     {
-        // TODO: Exit loading screen
-
-        IsLoading = false;
-
         Time.timeScale = 1;
+
+        IsFullyLoaded = true;
+
+        InGameMenu._instance.DisableLoadingScreen();
     }
+
+    private IEnumerator LoadSceneAsynchronously(int sceneIndex, GameState state = null)
+    {
+        AsyncOperation loadSceneOperation = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Single);
+
+        // TODO: Update loading screen text to "Loading scene"
+
+        while (!loadSceneOperation.isDone)
+        {
+            float progress = Mathf.Clamp01(loadSceneOperation.progress / Constants.maxSceneLoadProgress);
+
+            // TODO: Update progress bar and percentage
+
+            yield return null;
+        }
+
+        IsSceneLoaded = true;
+    }
+
+    public void StartSaving()
+    {
+
+    }
+
+    public void EndSaving()
+    {
+
+    }
+
+    public void SaveToFile(string saveName)
+    {
+        // TODO: 
+    }
+
+    public void LoadFromFile(string saveName)
+    {
+        StartLoading();
+
+        // TODO: Deserialize saveFile
+        int sceneIndex = 0;
+        GameState saveState = null;
+
+        if (CurrentSceneIndex != sceneIndex)
+        {
+            ResetAll();
+            //StartCoroutine(LoadSceneAsynchronously(sceneIndex, saveState));
+        }
+        else
+        {
+            // StartCoroutine(LoadSceneAsynchronously(sceneIndex, saveState));
+        }
+    }
+
+    private void LoadGameState(GameState state)
+    {
+        ClearAllObjects();
+
+
+
+        // TODO: Instantiate objects
+        // TODO: Set object states
+
+    }
+
+
     #endregion
 
     #region Core
-    public bool TryGetObject(ObjectList list, int id, out ObjectNetManager netManager)
+    public bool TryGetObject(ObjectList list, int id, out ObjectManager netManager)
     {
         // TODO: Check if scene is loaded. Maybe not necessary even?
         return _objectLists[list].TryGetValue(id, out netManager);
     }
 
-    private void AddObject(int id, ObjectNetManager netManager)
+    private void AddObject(int id, ObjectManager netManager)
     {
         ObjectList list = netManager.List;
 
@@ -189,7 +296,8 @@ public class GameManager : MonoBehaviour
     private int CreateNextId(ObjectList list)
     {
         int nextAvailableId;
-        if (!_counters.TryGetValue(list, out nextAvailableId)) {
+        if (!_counters.TryGetValue(list, out nextAvailableId))
+        {
             _counters.Add(list, 0);  // Create counter
             nextAvailableId = 0;
         }
@@ -204,11 +312,14 @@ public class GameManager : MonoBehaviour
     #region Syncing
     public void ResetAll()
     {
-        // Object lists
-        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectNetManager>> listEntry in _objectLists)
+        // Objects
+        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectManager>> listEntry in _objectLists)
         {
             listEntry.Value.Clear();
         }
+
+        // Controlled characters
+        ResetControlledCharacters();
 
         // Counters
         _counters.Clear();
@@ -220,41 +331,52 @@ public class GameManager : MonoBehaviour
 
     public void ClearAllObjects()
     {
-        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectNetManager>> listEntry in _objectLists)
+        // Objects
+        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectManager>> listEntry in _objectLists)
         {
-            foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value.ToList())
+            foreach (KeyValuePair<int, ObjectManager> objectEntry in listEntry.Value.ToList())
             {
-                ObjectNetManager netManager = objectEntry.Value;
+                ObjectManager netManager = objectEntry.Value;
                 if (netManager.Delete()) listEntry.Value.Remove(objectEntry.Key);
             }
         }
 
+        // Controlled characters
+        ResetControlledCharacters();
+
+        // Counters
         _counters.Clear();
+    }
+
+    public void ResetControlledCharacters()
+    {
+        foreach (int id in Players.Keys)
+        {
+            Players[id].ControlledCharacter = null;
+        }
     }
 
     public void SyncAllObjects()
     {
         // Do not sync if scene is not loaded
-        if (!IsSceneLoaded) return;
-
-        ServerSend.StartObjectSync();
+        if (!IsFullyLoaded) return;
 
         // First create objects
-        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectNetManager>> listEntry in _objectLists)
+        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectManager>> listEntry in _objectLists)
         {
-            foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
+            foreach (KeyValuePair<int, ObjectManager> objectEntry in listEntry.Value)
             {
-                ObjectNetManager netManager = objectEntry.Value;
+                ObjectManager netManager = objectEntry.Value;
                 netManager.ObjectCreated(true);
             }
         }
 
         // Then sync them all
-        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectNetManager>> listEntry in _objectLists)
+        foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectManager>> listEntry in _objectLists)
         {
-            foreach (KeyValuePair<int, ObjectNetManager> objectEntry in listEntry.Value)
+            foreach (KeyValuePair<int, ObjectManager> objectEntry in listEntry.Value)
             {
-                ObjectNetManager netManager = objectEntry.Value;
+                ObjectManager netManager = objectEntry.Value;
                 netManager.SyncObject();
             }
         }
@@ -265,13 +387,12 @@ public class GameManager : MonoBehaviour
         // All of the clients whose level was loaded should now be synced
         // This means we can start sending packets that require syncing to be complete
         Server.Instance.SetConnectionFlags(ConnectionState.Synced,
-            ConnectionState.LevelLoaded,
-            ConnectionState.Synced);
+            ConnectionState.SceneLoaded);
     }
     #endregion
 
     #region Adders
-    public void AddPlayerCharacter(ObjectNetManager netManager)
+    public void AddPlayerCharacter(ObjectManager netManager)
     {
         switch (netManager.Type)
         {
@@ -284,7 +405,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ObjectCreatedHost(ObjectNetManager netManager, bool useTypeForId = false)
+    public void ObjectCreatedHost(ObjectManager netManager, bool useTypeForId = false)
     {
         ObjectList list = netManager.List;
 
@@ -304,7 +425,54 @@ public class GameManager : MonoBehaviour
     public void CreateObjectClient(ObjectType type, int id, Vector3 position, Quaternion rotation)
     {
         GameObject newObject = InstantiateObjectClient(type, position, rotation);
-        AddObject(id, newObject.GetComponent<ObjectNetManager>());
+        AddObject(id, newObject.GetComponent<ObjectManager>());
     }
+    #endregion
+
+    #region Players
+
+    public void UnselectCharacter(int controllerId = Constants.defaultConnectionId)
+    {
+        ObjectType? character = Players[controllerId].ControlledCharacter;
+
+        // Make sure there is character to unselect
+        if (!character.HasValue) return;
+
+        // Unselect character
+        if (TryGetObject(ObjectList.player, (int)character.Value, out ObjectManager objectManager))
+        {
+            PlayerObjectManager playerObjectManager = (PlayerObjectManager)objectManager;
+            if (playerObjectManager.Controller == controllerId)
+            {
+                playerObjectManager.Controller = null;
+
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.CharacterControllerUpdate(character.Value, Constants.noConnectionId);
+                }
+            }
+        }
+    }
+
+    public void SelectCharacter(ObjectType character, int controllerId = Constants.defaultConnectionId)
+    {
+        if (TryGetObject(ObjectList.player, (int)character, out ObjectManager objectManager))
+        {
+            PlayerObjectManager playerObjectManager = (PlayerObjectManager)objectManager;
+            if (playerObjectManager.Controller == null)
+            {
+                // Unselect before selecting
+                UnselectCharacter(controllerId);
+
+                playerObjectManager.Controller = controllerId;
+
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.CharacterControllerUpdate(character, controllerId);
+                }
+            }
+        }
+    }
+
     #endregion
 }

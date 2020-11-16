@@ -124,7 +124,7 @@ public sealed class Server : NetworkHandler
     public override void BeginHandlePacket(int connectionId, IPEndPoint endPoint, Packet packet)
     {
         // Handle new connections
-        if (connectionId == Constants.DefaultConnectionId)  // if default ID is used, connection has not been established
+        if (connectionId == Constants.defaultConnectionId)  // if default ID is used, connection has not been established
         {
             ConnectClient(endPoint, packet);
             return;
@@ -158,7 +158,7 @@ public sealed class Server : NetworkHandler
         {
             if (Connections[i].EndPoint == null)
             {
-                Connections[i].Connect(endPoint, Constants.DefaultConnectionId);
+                Connections[i].Connect(endPoint, Constants.defaultConnectionId);
                 Connections[i].BeginHandlePacket(packet);
                 return;
             }
@@ -173,14 +173,13 @@ public sealed class Server : NetworkHandler
         // Initialize packet handler
         _packetHandlers = new Dictionary<int, PacketHandler>()
         {
-            { (int)ClientPackets.connectionAcceptedReceived, ServerHandle.ConnectionAcceptedReceived },
             { (int)ClientPackets.connectionRequest, ServerHandle.ConnectionRequest },
             { (int)ClientPackets.heartbeatReceived, ServerHandle.HeartbeatReceived },
             { (int)ClientPackets.abilityUsed, ServerHandle.AbilityUsed },
             { (int)ClientPackets.enemyPossessed, ServerHandle.EnemyPossessed },
             { (int)ClientPackets.syncRequest, ServerHandle.SyncRequest },
-            { (int)ClientPackets.changeToCharacterRequest, ServerHandle.ChangeCharacterRequest },
-            { (int)ClientPackets.unselectCharacter, ServerHandle.UnselectCharacter },
+            { (int)ClientPackets.selectCharacterRequest, ServerHandle.SelectCharacterRequest },
+            { (int)ClientPackets.unselectCharacterRequest, ServerHandle.UnselectCharacterRequest },
             { (int)ClientPackets.setDestinationRequest, ServerHandle.SetDestinationRequest },
             { (int)ClientPackets.killEnemy, ServerHandle.KillEnemy },
             { (int)ClientPackets.crouching, ServerHandle.Crouching },

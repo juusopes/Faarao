@@ -8,32 +8,22 @@ public class ServerHandle
     #region Core
     public static void ConnectionRequest(int connection, Packet packet)
     {
+        // Player connected
+        NetworkManager._instance.PlayerConnected(connection, "null");
+
+        // Send connection accepted message
         ServerSend.ConnectionAccepted(connection);
-    }
 
-    public static void ConnectionAcceptedReceived(int connection, Packet packet)
-    {
-        string msg = packet.ReadString();
+        // Sync player info
+        ServerSend.SyncPlayers(connection);
 
-        Debug.Log($"Connection acceptance received. Contains message: {msg}");
+        // Start loading
+        ServerSend.StartLoading(connection);
 
-        // For testing
-        //for (int i = 1; i <= 100; ++i)
-        //{
-        //    ServerSend.Message(connection, i.ToString());
-        //}
-
-        // TODO: Pause game here. And wait that all clients are paused too
-
-        // TODO: This should propably be done by the network manager
-
-        Server.Instance.SetConnectionFlags(connection, ConnectionState.Connected);
-
-        Debug.Log("Sending load scene request");
-
-        if (GameManager._instance.IsSceneLoaded)
+        // Send load scene order if scene is fully loaded
+        if (GameManager._instance.IsFullyLoaded)
         {
-            ServerSend.LoadScene(GameManager._instance.CurrentSceneIndex);
+            ServerSend.LoadScene(GameManager._instance.CurrentSceneIndex, connection);
         }
     }
 
@@ -48,11 +38,11 @@ public class ServerHandle
     }
     #endregion
 
-    #region Load
+    #region LoadAndSave
     public static void SyncRequest(int connection, Packet packet)
     {
         // Clients level has loaded and is ready to sync
-        Server.Instance.SetConnectionFlags(connection, ConnectionState.LevelLoaded);
+        Server.Instance.SetConnectionFlags(connection, ConnectionState.SceneLoaded);
 
         // Sync if possible
         GameManager._instance.SyncAllObjects();
@@ -79,36 +69,29 @@ public class ServerHandle
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
 
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
         {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            EnemyObjectManager enemyNetManager = (EnemyObjectManager)netManager;
             enemyNetManager.Character.PossessAI(position);
         }
     }
     #endregion
 
     #region Player
-
-    public static void ChangeCharacterRequest(int connection, Packet packet)
+    public static void SelectCharacterRequest(int connection, Packet packet)
     {
         if (!Server.Instance.IsSynced(connection)) return;
 
         ObjectType character = (ObjectType)packet.ReadShort();
 
-        if (LevelController._instance.CanChangeToCharacter(character))
-        {
-            LevelController._instance.ChangeToCharacter(character, false);
-            ServerSend.ChangeToCharacter(connection, character);
-        }
+        GameManager._instance.SelectCharacter(character, connection);
     }
 
-    public static void UnselectCharacter(int connection, Packet packet)
+    public static void UnselectCharacterRequest(int connection, Packet packet)
     {
         if (!Server.Instance.IsSynced(connection)) return;
 
-        ObjectType character = (ObjectType)packet.ReadShort();
-
-        LevelController._instance.UnselectCharacter(character);
+        GameManager._instance.UnselectCharacter(connection);
     }
 
     public static void SetDestinationRequest(int connection, Packet packet)
@@ -118,10 +101,10 @@ public class ServerHandle
         ObjectType character = (ObjectType)packet.ReadShort();
         Vector3 destination = packet.ReadVector3();
 
-        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
         {
             
-            PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
             playerNetManager.PlayerController.SetDestination(destination);
         }
     }
@@ -132,9 +115,9 @@ public class ServerHandle
 
         int id = packet.ReadInt();
 
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
         {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            EnemyObjectManager enemyNetManager = (EnemyObjectManager)netManager;
             enemyNetManager.DeathScript.damage = 1;
         }
     }
@@ -146,9 +129,9 @@ public class ServerHandle
         ObjectType character = (ObjectType)packet.ReadShort();
         bool state = packet.ReadBool();
 
-        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
         {
-            PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
             playerNetManager.PlayerController.IsCrouching = state;
 
             ServerSend.Crouching(character, state, connection);
@@ -162,9 +145,9 @@ public class ServerHandle
         ObjectType character = (ObjectType)packet.ReadShort();
         bool state = packet.ReadBool();
 
-        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
         {
-            PlayerNetManager playerNetManager = (PlayerNetManager)netManager;
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
             playerNetManager.PlayerController.IsRunning = state;
 
             ServerSend.Running(character, state, connection);

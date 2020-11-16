@@ -9,9 +9,28 @@ using System.IO;
 
 public class InGameMenu : MonoBehaviour
 {
+    public static InGameMenu _instance;
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else if (_instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+        }
+    }
+
     public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     public GameObject gameplayButton, audioButton, controlsButton, videoButton;
+
+    // TODO: For testing
+    public GameObject objectivePanel;
+
     public int savedLevel;
     public float lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ;
     public float lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2;
@@ -117,8 +136,20 @@ public class InGameMenu : MonoBehaviour
         if (NetworkManager._instance.IsHost)
         {
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            GameManager._instance.LoadScene(sceneIndex, true);
+            GameManager._instance.LoadLevel(sceneIndex);
         }
+    }
+
+    public void EnableLoadingScreen()
+    {
+        // TODO: This is for testing only. Don't destroy on load canvas would be better
+        objectivePanel.SetActive(true);
+    }
+
+    public void DisableLoadingScreen()
+    {
+        // TODO: This is for testing only. Don't destroy on load canvas would be better
+        objectivePanel.SetActive(false);
     }
 
     public void GoToMainMenu()
