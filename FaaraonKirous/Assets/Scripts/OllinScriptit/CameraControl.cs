@@ -45,40 +45,9 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            timeSinceLastClick = Time.time - clickTime;
-
-            if(timeSinceLastClick <= doubleClick)
-            {
-                FindCharacter1();
-            }
-
-            clickTime = Time.time;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            timeSinceLastClick = Time.time - clickTime;
-
-            if (timeSinceLastClick <= doubleClick)
-            {
-                FindCharacter2();
-            }
-
-            clickTime = Time.time;
-        }
-
         CamPos();
 
-        transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -xPanLimit, xPanLimit),
-            transform.position.y,
-            Mathf.Clamp(cameraController.position.z, -zPanLimit, zPanLimit));
 
-        if (Input.GetMouseButtonDown(2))
-        {
-            CenterCamera();
-        }
     }
 
     private void LateUpdate()
@@ -106,25 +75,57 @@ public class CameraControl : MonoBehaviour
 
     public void CamPos()
     {
+        transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -xPanLimit, xPanLimit),
+                                        transform.position.y,
+                                        Mathf.Clamp(cameraController.position.z, -zPanLimit, zPanLimit));
 
-        if (cameraPos.transform.position.y > 25f)
+        if (Input.GetMouseButtonDown(2))
+        {
+            CenterCamera();
+        }
+
+        if (cameraController.transform.position.y > -10f)
         {
             // scrolling up (zoom in)
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
-                cameraPos.transform.Translate(transform.forward * zoomSpeed * Time.deltaTime, Space.World);
-                cameraPos.transform.Translate(transform.up * -zoomSpeed * Time.deltaTime, Space.World);
+                cameraController.transform.Translate(transform.forward * zoomSpeed * Time.deltaTime, Space.World);
+                cameraController.transform.Translate(transform.up * -zoomSpeed * Time.deltaTime, Space.World);
             }
         }
 
-        if (cameraPos.transform.position.y < 35f)
+        if (cameraController.transform.position.y < 0f)
         {
             //scrolling down (zoom out)
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
-                cameraPos.transform.Translate(transform.forward * -zoomSpeed * Time.deltaTime, Space.World);
-                cameraPos.transform.Translate(transform.up * zoomSpeed * Time.deltaTime, Space.World);
+                cameraController.transform.Translate(transform.forward * -zoomSpeed * Time.deltaTime, Space.World);
+                cameraController.transform.Translate(transform.up * zoomSpeed * Time.deltaTime, Space.World);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            timeSinceLastClick = Time.time - clickTime;
+
+            if (timeSinceLastClick <= doubleClick)
+            {
+                FindCharacter1();
+            }
+
+            clickTime = Time.time;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            timeSinceLastClick = Time.time - clickTime;
+
+            if (timeSinceLastClick <= doubleClick)
+            {
+                FindCharacter2();
+            }
+
+            clickTime = Time.time;
         }
 
         if (camFollow)
