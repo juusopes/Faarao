@@ -12,7 +12,6 @@ public enum ServerPackets
     objectCreated,
     updateObjectTransform,
     disposableObjectCreated,
-    startingObjectSync,
     syncObject,
     sightChanged,
     abilityVisualEffectCreated,
@@ -21,22 +20,23 @@ public enum ServerPackets
     detectionConeUpdated,
     loadScene,
     endLoading,
-    changeToCharacter,
+    characterControllerUpdate,
     crouching,
-    running
+    running,
+    startLoading,
+    syncPlayers
 }
 
 /// <summary>Sent from client to server.</summary>
 public enum ClientPackets
 {
     connectionRequest = 1,
-    connectionAcceptedReceived,
     heartbeatReceived,
     abilityUsed,
     enemyPossessed,
     syncRequest,
-    changeToCharacterRequest,
-    unselectCharacter,
+    selectCharacterRequest,
+    unselectCharacterRequest,
     setDestinationRequest,
     killEnemy,
     crouching,

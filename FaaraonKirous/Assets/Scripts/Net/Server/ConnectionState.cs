@@ -9,8 +9,8 @@ public enum ConnectionState
     None = 0,
     Synced = 1 << 0,
     Connected = 1 << 1,
-    LevelLoaded = 1 << 2,
-    All = None | Synced | Connected | LevelLoaded
+    SceneLoaded = 1 << 2,
+    All = None | Synced | Connected | SceneLoaded
 }
 
 public static class ConnectionStateExtensions

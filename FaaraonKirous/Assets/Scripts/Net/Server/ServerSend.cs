@@ -28,45 +28,78 @@ public class ServerSend
 
         Server.Instance.BeginSendPacket(connection, ChannelType.Unreliable, packet);
     }
+
+    public static void SyncPlayers(int connection)
+    {
+        var packet = new Packet((int)ServerPackets.syncPlayers);
+
+        // Player count
+        packet.Write(GameManager._instance.Players.Count);
+
+        // Player info
+        foreach (int id in GameManager._instance.Players.Keys)
+        {
+            packet.Write(id);
+            packet.Write(GameManager._instance.Players[id].Name);
+        }
+
+        Server.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet);
+    }
     #endregion
 
     #region LoadAndSave
-    public static void LoadScene(int index)
+    public static void StartLoading(int? connection = null)
+    {
+        var packet = new Packet((int)ServerPackets.startLoading);
+
+        if (connection.HasValue)
+        {
+            Server.Instance.BeginSendPacket(connection.Value, ChannelType.Reliable, packet);
+        }
+        else
+        {
+            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet,
+                ConnectionState.Connected,
+                ConnectionState.SceneLoaded);
+        }
+        
+    }
+
+    public static void LoadScene(int index, int? connection = null)
     {
         var packet = new Packet((int)ServerPackets.loadScene);
         packet.Write(index);
 
-        // TODO: Send to specific connection instead of going through all connections
-        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, 
-            ConnectionState.Connected, 
-            ConnectionState.LevelLoaded);
+        if (connection.HasValue)
+        {
+            Server.Instance.BeginSendPacket(connection.Value, ChannelType.Reliable, packet);
+        }
+        else
+        {
+            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet,
+                ConnectionState.Connected,
+                ConnectionState.SceneLoaded);
+        }
     }
 
     public static void EndLoading()
     {
         var packet = new Packet((int)ServerPackets.endLoading);
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet,
-            ConnectionState.LevelLoaded, ConnectionState.Synced);
+            ConnectionState.SceneLoaded,
+            ConnectionState.Synced);
     }
     #endregion
 
     #region ObjectSyncing
-    // TODO: This may not be necessary
-    public static void StartObjectSync()
-    {
-        var packet = new Packet((int)ServerPackets.startingObjectSync);
-        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, 
-            ConnectionState.LevelLoaded, ConnectionState.Synced);
-    }
-
-    public static void SyncObject(ObjectNetManager netManager)
+    public static void SyncObject(ObjectManager netManager)
     {
         var packet = new Packet((int)ServerPackets.syncObject);
         packet.Write((byte)netManager.List);
         packet.Write(netManager.Id);
         netManager.SendSync(packet);
-        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, 
-            ConnectionState.LevelLoaded, ConnectionState.Synced);
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet,
+            ConnectionState.SceneLoaded, ConnectionState.Synced);
     }
     #endregion
 
@@ -81,7 +114,7 @@ public class ServerSend
 
         if (isSyncing)
         {
-            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.LevelLoaded, 
+            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.SceneLoaded, 
                 ConnectionState.Synced);
         }
         else
@@ -187,12 +220,13 @@ public class ServerSend
 
     #region Player
 
-    public static void ChangeToCharacter(int connection, ObjectType character)
+    public static void CharacterControllerUpdate(ObjectType character, int controllerId)
     {
-        var packet = new Packet((int)ServerPackets.changeToCharacter);
+        var packet = new Packet((int)ServerPackets.characterControllerUpdate);
         packet.Write((short)character);
+        packet.Write(controllerId);
 
-        Server.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet, ConnectionState.Synced);
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
     }
 
     public static void Crouching(ObjectType character, bool state, int? excludeId = null)

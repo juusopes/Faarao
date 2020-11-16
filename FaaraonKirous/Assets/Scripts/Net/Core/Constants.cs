@@ -16,7 +16,9 @@ public class Constants
     public const float timeout = 1f;
     public const int updateFrequency = 10;  // ms
     public const int heartbeatFrequency = 1000;  // ms
-    public const int DefaultConnectionId = 0;
+    public const int defaultConnectionId = 0;
+    public const int serverConnectionId = defaultConnectionId;
+    public const int noConnectionId = -1;
     public const int maxPlayers = 50;
     public const int defaultPing = 1000;  // ms
     //public const int resendDelay = 30;  // ms
@@ -25,4 +27,6 @@ public class Constants
 
     public const int port = 26950;
     public const string ip = "127.0.0.1";
+
+    public const float maxSceneLoadProgress = .9f;
 }

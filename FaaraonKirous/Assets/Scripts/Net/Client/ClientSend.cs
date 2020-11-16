@@ -12,13 +12,6 @@ public class ClientSend
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
 
-    public static void ConnectionAcceptedReceived()
-    {
-        var packet = new Packet((int)ClientPackets.connectionAcceptedReceived);
-        packet.Write("Happy to join server");
-        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
-    }
-
     public static void HeartbeatReceived(long timeStamp)
     {
         var packet = new Packet((int)ClientPackets.heartbeatReceived);
@@ -60,18 +53,17 @@ public class ClientSend
 
     #region Player
 
-    public static void ChangeToCharacterRequest(ObjectType character)
+    public static void SelectCharacterRequest(ObjectType character)
     {
-        var packet = new Packet((int)ClientPackets.changeToCharacterRequest);
+        var packet = new Packet((int)ClientPackets.selectCharacterRequest);
         packet.Write((short)character);
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
 
-    public static void UnselectCharacter(ObjectType character)
+    public static void UnselectCharacter()
     {
-        var packet = new Packet((int)ClientPackets.unselectCharacter);
-        packet.Write((short)character);
+        var packet = new Packet((int)ClientPackets.unselectCharacterRequest);
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }

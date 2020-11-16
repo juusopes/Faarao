@@ -219,8 +219,8 @@ GameObject:
   - component: {fileID: 5706328075926723928}
   - component: {fileID: 2795708155777838719}
   - component: {fileID: -2370286539409642136}
-  - component: {fileID: 5630104455298223005}
   - component: {fileID: -3261075203119826798}
+  - component: {fileID: 9181582814195248809}
   m_Layer: 8
   m_Name: Pharaoh
   m_TagString: Player
@@ -344,8 +344,6 @@ MonoBehaviour:
   playerOne: 1
   movementSpeed: 10
   doubleClickTimer: 0
-  _isRunning: 0
-  _isCrouching: 0
   abilityActive: 0
   indicator: {fileID: 5642665167690723842, guid: 608c7c670fc8a4347b2c9cdb6f954bde, type: 3}
   visibleInd: {fileID: 0}
@@ -357,6 +355,7 @@ MonoBehaviour:
   targetEnemy: {fileID: 0}
   lC: {fileID: 0}
   menu: {fileID: 0}
+  startDead: 0
 --- !u!114 &2795708155777838719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,21 +403,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 1
   damage: 0
+  heal: 0
   isDead: 0
---- !u!114 &5630104455298223005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5706328075926723934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a60fe3271f1a2dc47b05f6425f4c1bd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _list: 1
-  _type: 1
 --- !u!54 &-3261075203119826798
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -435,3 +421,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &9181582814195248809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5706328075926723934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 606b2fec9789a9d4e8a91cc12569e6c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _list: 1
+  _type: 1

@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class PlayerController : MonoBehaviour
 {
     // Managers
-    private PlayerNetManager PlayerNetManager { get; set; }
+    private PlayerObjectManager PlayerNetManager { get; set; }
 
 
     //Which Player
@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Initialize()
     {
-        PlayerNetManager = GetComponent<PlayerNetManager>();
+        PlayerNetManager = GetComponent<PlayerObjectManager>();
         death = GetComponent<DeathScript>();
         navMeshAgent = this.GetComponent<NavMeshAgent>();
         camControl = GameObject.FindGameObjectWithTag("MainCamera").transform.parent.gameObject;
@@ -450,7 +450,7 @@ public class PlayerController : MonoBehaviour
                     {
                         if (NetworkManager._instance.ShouldSendToServer)
                         {
-                            ClientSend.KillEnemy(targetEnemy.GetComponent<EnemyNetManager>().Id);
+                            ClientSend.KillEnemy(targetEnemy.GetComponent<EnemyObjectManager>().Id);
                         }
                     }
                     
