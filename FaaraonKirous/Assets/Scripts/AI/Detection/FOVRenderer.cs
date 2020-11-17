@@ -127,7 +127,11 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void LateUpdate()
     {
-        //  UpdateViewCone();
+#if UNITY_EDITOR
+        if (debuggingFrame)
+            return;
+#endif
+        UpdateViewCone();
     }
 
     private void UpdateViewCone()
@@ -176,7 +180,7 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void AddVertexPoint(Vector3 sample, SampleType sampleType)
     {
-        Debug.Log("Added vertex: " + sample + " with type: " + sampleType);
+        Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>");
         lastSampleType = sampleType;
 
 #if UNITY_EDITOR
@@ -235,18 +239,18 @@ public partial class FOVRenderer : MonoBehaviour
     }
 
 
-#endregion
+    #endregion
 
-#region Shader values ==================================================================================================================================
+    #region Shader values ==================================================================================================================================
 
     public void UpdateMaterialProperties(LineType background, LineType fill, float percentage)
     {
         //material.SetFloat(THICKNESS, outerThickness);
     }
 
-#endregion
+    #endregion
 
-#region 2D version =====================================================================================================================================
+    #region 2D version =====================================================================================================================================
 
     /*
     void UpdateMesh2D()
@@ -314,6 +318,6 @@ public partial class FOVRenderer : MonoBehaviour
     }
     */
 
-#endregion
+    #endregion
 
 }

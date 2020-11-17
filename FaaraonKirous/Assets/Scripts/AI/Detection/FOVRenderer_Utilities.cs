@@ -37,7 +37,7 @@ public partial class FOVRenderer
         if (DebugRayCasts)
         {
             Color color = direction.y == 0 ? Color.yellow : Color.green;
-            Debug.DrawRay(globalStart, direction * range, color, 1000f);
+            Debug.DrawRay(globalStart, direction * range, color, rayTime);
         }
 
 #endif
@@ -114,7 +114,7 @@ public partial class FOVRenderer
     {
 #if UNITY_EDITOR
         if (DebugRayCasts)
-            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.cyan, 1000f);
+            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.cyan, rayTime);
 #endif
         if (specificCollider != null)
         {
@@ -149,7 +149,7 @@ public partial class FOVRenderer
     {
 #if UNITY_EDITOR
         if (DebugRayCasts)
-            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.blue, 1000f);
+            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.blue, rayTime);
 #endif
         return Physics.Raycast(ConvertGlobal(localSampleStart), direction, out rayCastHitReturn, range, RayCaster.viewConeLayerMask);
     }

@@ -106,14 +106,15 @@ public partial class FOVRenderer
         //When dropping to lower level than last hit (only add vertex to first floor hit point)
         if (IsClearlyLower(previousSample, sample) && HitPointIsUpFacing(raycastHit))
         {
-                TryCreateFloorVertex(raycastHit, sample);
-                Debug.Log("<b><color=blue>Floor calculation</color></b>");
-                if (x > 0)
-                {
-                    Debug.Log("<b><color=cyan>Floor to down floor calculation</color></b>");
-                    //TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSample, yAngleSample);
-                    TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
-                }
+            //First try to create ledge before creating floor to keep last vertex correct
+            if (x > 0)
+            {
+                Debug.Log("<b><color=cyan>Floor to down floor calculation</color></b>");
+                //TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSample, yAngleSample);
+                TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
+            }
+            TryCreateFloorVertex(raycastHit, sample);
+            Debug.Log("<b><color=blue>Floor calculation</color></b>");
         }
         //When going forward from wall to floor
         if (IsWallToFloor(previousRayCastHit, raycastHit))
@@ -126,10 +127,11 @@ public partial class FOVRenderer
         {
             Debug.Log("<b><color=orange>Floor to wall calculation</color></b>");
             //Todo: consider back tracking
-            TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample);
+            if (!TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample))
+                TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
         }
         //Hit two walls that are clearly not same wall
-        else if (IsWallToWall(previousRayCastHit, raycastHit) && IsClearlyLonger(previousSample, sample))        
+        else if (IsWallToWall(previousRayCastHit, raycastHit) && IsClearlyLonger(previousSample, sample))
         {
             Debug.Log("<b><color=lime>Ledge calculation hitting a wall further away</color></b>");
             TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
@@ -141,7 +143,7 @@ public partial class FOVRenderer
             TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
         }
         //If previous hit was on a floor and new sample is reaching max sight while not hitting anything
-        else if ( HitPointIsUpFacing(previousRayCastHit) && AreSimilarLenght(sample, SightRange))                  
+        else if (HitPointIsUpFacing(previousRayCastHit) && AreSimilarLenght(sample, SightRange))
         {
             Debug.Log("<b><color=olive>Ledge calculation end of sight </color></b>");
             TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
@@ -166,7 +168,7 @@ public partial class FOVRenderer
             if (IsClearlyLonger(previousSample, sample))
             {
                 Debug.Log("<b><color=magenta>Ledge calculation AT UP ANGLES </color></b>");
-                TryCreateLedgeVertices(lastSampleType, true, yAngleSample, previousSample, sample, previousRayCastHit);
+                TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
             }
 
         }
@@ -179,7 +181,7 @@ public partial class FOVRenderer
 
             //TODO: WEIRD BLUE RAYCASTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //TODO sample whole new sample in "missing spot", then add closest point as bonus to the second one
-                
+
             Vector3 preColumnSample = lastColumnSamplePoints[x];
             int retargeting = ShouldRetargetY(preColumnSample, sampleOut);
 

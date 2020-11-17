@@ -25,6 +25,9 @@ public partial class FOVRenderer
     
     private int maxXIterations = 999;
 
+    private bool debuggingFrame = false;     //Debug only one frame
+
+    private float rayTime => debuggingFrame ? 0.1f : 1000f;
 
     private enum DebugMode
     {

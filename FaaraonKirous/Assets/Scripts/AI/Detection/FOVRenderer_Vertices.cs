@@ -32,14 +32,16 @@ public partial class FOVRenderer
         }
     }
 
-    private void TryCreateFloorToWallCornerVertex(float yAngleIn, Vector3 previousSample, Vector3 sample)
+    private bool TryCreateFloorToWallCornerVertex(float yAngleIn, Vector3 previousSample, Vector3 sample)
     {
         Vector3 wallCorner = new Vector3(sample.x, previousSample.y, sample.z);     //Simulate position of corner
         Vector3 cornerDirectionCheck = Quaternion.Euler(100, yAngleIn, 0) * Vector3.forward;
         if (CheckColliderExists(wallCorner + Vector3.up * 0.2f, cornerDirectionCheck, 0.5f))
         {
             AddVertexPoint(wallCorner, SampleType.FloorToWallCorner);
+            return true;
         }
+        return false;
     }
 
     private void TryCreateWallToFloorCornerVertex(Vector3 previousSample, Vector3 sample)
@@ -66,16 +68,16 @@ public partial class FOVRenderer
         }
     }
 
-    private void TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit)
+    private void TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, Vector3 ledgeStartSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
     {
         //Get corner or use last corner
         bool needNewCorner = lastType == SampleType.FloorToWallCorner || lastType == SampleType.LedgeAtUpAngle || lastType == SampleType.LedgeAtDownAngle || lastType == SampleType.WallToWall;
 
-        Debug.Log("Try create ledge vertices with extra start corner: " + needNewCorner);
+        Debug.Log("<b>Try create ledge vertices with extra start corner: </b>" + needNewCorner);
         Vector3 closestCorner = Vector3.zero;
         if (needNewCorner)
         {
-            closestCorner = GetLedgeCorner(yAngleIn, previousSample, sample);
+            closestCorner = GetLedgeCorner(yAngleIn, ledgeStartSample, sample);
             if (closestCorner == Vector3.zero)
             {
                 Debug.LogWarning("Closest corner is zero");
@@ -87,7 +89,7 @@ public partial class FOVRenderer
             closestCorner = LastAddedVertex;
         }
 
-        Vector3 ledgeEnd = GetLedgeEnd(isAboveZeroAngle, yAngleIn, sample, previousRayCastHit, closestCorner);
+        Vector3 ledgeEnd = GetLedgeEnd(isAboveZeroAngle, yAngleIn, sample, ledgeStartRayCastHit, closestCorner);
 
         //If we found ledge end, add vertices
         if (ledgeEnd != Vector3.zero)
