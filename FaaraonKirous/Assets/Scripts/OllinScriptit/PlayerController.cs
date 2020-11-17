@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
     public GameObject visibleInd;
     public int abilityNum;
     public bool inRange;
-    [HideInInspector]
+    //[HideInInspector]
     public bool[] abilityAllowed;
 
     //Invisibility

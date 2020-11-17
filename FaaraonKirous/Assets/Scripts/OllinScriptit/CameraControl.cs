@@ -192,9 +192,6 @@ public class CameraControl : MonoBehaviour
     {
         cameraStabilizer.transform.position = new Vector3(cameraStabilizer.position.x, cameraStabilizer.transform.position.y, cameraStabilizer.position.z);
         cameraController.transform.position = new Vector3(cameraStabilizer.position.x, cameraController.transform.position.y, cameraStabilizer.position.z);
-
-        //cameraController.transform.eulerAngles = new Vector3(cameraController.rotation.x, cameraController.rotation.y, cameraController.rotation.z);
-        //cameraPos.transform.position = new Vector3(cameraController.position.x, cameraPos.position.y, cameraController.position.z - 39.76f);
     }
 
     public void FindObjective1()
@@ -202,35 +199,30 @@ public class CameraControl : MonoBehaviour
         CenterCamera();
 
         cameraController.transform.position = new Vector3(objective1.transform.position.x, cameraController.transform.position.y, objective1.transform.position.z);
-        //cameraStabilizer.transform.position = new Vector3(objective1.transform.position.x, cameraStabilizer.transform.position.y, objective1.transform.position.z);
     }
     public void FindObjective2()
     {
         CenterCamera();
 
         cameraController.transform.position = new Vector3(objective2.transform.position.x, cameraController.transform.position.y, objective2.transform.position.z);
-        //cameraStabilizer.transform.position = new Vector3(objective2.transform.position.x, cameraStabilizer.transform.position.y, objective2.transform.position.z);
     }
     public void FindObjective3()
     {
         CenterCamera();
 
         cameraController.transform.position = new Vector3(objective3.transform.position.x, cameraController.transform.position.y, objective3.transform.position.z);
-        //cameraStabilizer.transform.position = new Vector3(objective3.transform.position.x, cameraStabilizer.transform.position.y, objective3.transform.position.z);
     }
     public void FindObjective4()
     {
         CenterCamera();
 
         cameraController.transform.position = new Vector3(objective4.transform.position.x, cameraController.transform.position.y, objective4.transform.position.z);
-        //cameraStabilizer.transform.position = new Vector3(objective4.transform.position.x, cameraStabilizer.transform.position.y, objective4.transform.position.z);
     }
     public void FindObjective5()
     {
         CenterCamera();
 
         cameraController.transform.position = new Vector3(objective5.transform.position.x, cameraController.transform.position.y, objective5.transform.position.z);
-        //cameraStabilizer.transform.position = new Vector3(objective5.transform.position.x, cameraStabilizer.transform.position.y, objective5.transform.position.z);
     }
 
     public void FindCharacter1()
@@ -238,7 +230,6 @@ public class CameraControl : MonoBehaviour
         CenterCamera();
 
         cameraController.transform.position = new Vector3(character1.transform.position.x, cameraController.transform.position.y, character1.transform.position.z);
-        //cameraStabilizer.transform.position = new Vector3(character1.transform.position.x, cameraStabilizer.transform.position.y, character1.transform.position.z);
     }
 
     public void FindCharacter2()
@@ -246,6 +237,5 @@ public class CameraControl : MonoBehaviour
         CenterCamera();
 
         cameraController.transform.position = new Vector3(character2.transform.position.x, cameraController.transform.position.y, character2.transform.position.z);
-        //cameraStabilizer.transform.position = new Vector3(character2.transform.position.x, cameraStabilizer.transform.position.y, character2.transform.position.z);
     }
 }
