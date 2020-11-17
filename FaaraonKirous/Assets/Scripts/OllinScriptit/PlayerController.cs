@@ -625,17 +625,6 @@ public class PlayerController : MonoBehaviour
         {
             CamFollow();
         }
-        //if (Input.GetKeyDown(KeyCode.U))
-        //{
-        //    if (climbing)
-        //    {
-        //        climbing = false;
-        //    }
-        //    else
-        //    {
-        //        climbing = true;
-        //    }
-        //}
     }
     public bool PointerOverUI()
     {
