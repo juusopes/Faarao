@@ -22,7 +22,7 @@ public static class RayCaster
     public static readonly LayerMask defaultLayerMask = ~(1 << 2);   //~() means all other than what is inside
 
     public static readonly int LayerListStructures = layerDefault;
-    public static readonly int LayerListDefaultIgnore = layerIgnoreRay | layerEditor;
+    public static readonly int LayerListDefaultIgnore = layerIgnoreRay | layerTrans | layerEditor;
     public static readonly int LayerListCharacters = layerPlayer | layerEnemy;
     public static readonly int LayerListRaycastable = layerLadder | layerDistraction | layerClickSelector;
     public static readonly int LayerListObjects = LayerListCharacters | LayerListRaycastable;

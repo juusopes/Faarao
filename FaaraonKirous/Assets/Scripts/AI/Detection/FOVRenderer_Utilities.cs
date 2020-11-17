@@ -67,17 +67,54 @@ public partial class FOVRenderer
         return ConvertLocal(testRayHit.collider.ClosestPoint(ConvertGlobal(reSampleTest)));
     }
 
+    private Vector3 GetClosestPointOnColliderWithinYDirection(RaycastHit raycastHit, Vector3 previousVertex, Vector3 sample)
+    {
+        sample.y = previousVertex.y;
+        Vector3 closestOnCollider = GetClosestPointOnCollider(raycastHit, sample);
+        //ACylinder(closestOnCollider, Color.blue);
+        //if the first approximation was good enough, just let it be let it be let it be
+        if (AreVerticallyAligned(sample.normalized * closestOnCollider.magnitude, closestOnCollider)
+            && AreSimilarHeight(closestOnCollider, previousVertex))
+            return closestOnCollider;
+
+        //Did not find good enough let's use old closest point to get new closest point, then create line from it
+        Vector3 sampleRecalculated = sample.normalized * closestOnCollider.magnitude;
+
+        Vector3 closestOnColliderReCalculated = GetClosestPointOnCollider(raycastHit, sampleRecalculated);
+        Vector3 intersection;
+        Vector3 testStartPoint1 = new Vector3(closestOnCollider.x, 0, closestOnCollider.z);
+        Vector3 testStartPoint2 = Vector3.zero;
+        Vector3 testVec1 = (closestOnColliderReCalculated - closestOnCollider) * 10f;
+        Vector3 testVec2 = sample;
+        Debug.Log("hit" + raycastHit.collider);
+        //ACylinder(testVec1, Color.white);
+        //ACylinder(testVec2, Color.white);
+        //ACylinder(testStartPoint1);
+        //ACylinder(testStartPoint2);
+        testVec1.y = 0;     //2d
+        testVec2.y = 0;     //2d
+        //Get the 2D flattened intersection of sample and out two last closest points
+        if (Math3d.LineLineIntersection(out intersection, testStartPoint1, testVec1, testStartPoint2, testVec2))
+        {
+            return new Vector3(intersection.x, previousVertex.y, intersection.z);
+        }
+
+        Debug.Log("Could not find intersection");
+
+        return Vector3.zero;
+    }
+
     /// <summary>
     /// Input local space sample and check if ground exists in downRange
     /// </summary>
     /// <param name="localSampleStart"></param>
     /// <param name="downRange"></param>
     /// <returns></returns>
-    private Vector3 GetSpecificColliderHitPoint(Vector3 localSampleStart, Vector3 direction, float range, Collider specificCollider)
+    private Vector3 GetHitPointOnSpecificCollider(Vector3 localSampleStart, Vector3 direction, float range, Collider specificCollider)
     {
 #if UNITY_EDITOR
         if (DebugRayCasts)
-            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.blue, 1000f);
+            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.cyan, 1000f);
 #endif
         if (specificCollider != null)
         {

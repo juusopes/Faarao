@@ -24,7 +24,7 @@ public partial class FOVRenderer
     {
         Vector3 extraPolatedVec = ExtraPolateVector(SampleType.FloorToDownFloor, previousSample, sample, xAngle);
         Vector3 cornerDirection = ((ConvertGlobal(previousSample) + Vector3.up * -0.2f) - ConvertGlobal(extraPolatedVec)).normalized;
-        Vector3 cornerSample = ConvertLocal(GetSpecificColliderHitPoint(extraPolatedVec, cornerDirection, SightRange, previousRaycastHit.collider));
+        Vector3 cornerSample = ConvertLocal(GetHitPointOnSpecificCollider(extraPolatedVec, cornerDirection, SightRange, previousRaycastHit.collider));
         if (cornerSample != Vector3.zero)
         {
             Vector3 corner = new Vector3(cornerSample.x, previousSample.y, cornerSample.z);
@@ -52,6 +52,7 @@ public partial class FOVRenderer
     {
         Vector3 downSample = GetSamplePoint(ConvertGlobal(sample), Vector3.down, playerHeight * 2f);
 
+
         if (sample.y - downSample.y < playerHeight + yTolerance
             && AreSimilarHeight(LastAddedVertex, downSample))
         {
@@ -67,9 +68,10 @@ public partial class FOVRenderer
 
     private void TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit)
     {
-        Debug.Log("Try create ledge vertices");
         //Get corner or use last corner
-        bool needNewCorner = lastType != SampleType.WallToFloorCorner;
+        bool needNewCorner = lastType == SampleType.FloorToWallCorner || lastType == SampleType.LedgeAtUpAngle || lastType == SampleType.LedgeAtDownAngle || lastType == SampleType.WallToWall;
+
+        Debug.Log("Try create ledge vertices with extra start corner: " + needNewCorner);
         Vector3 closestCorner = Vector3.zero;
         if (needNewCorner)
         {
@@ -145,7 +147,6 @@ public partial class FOVRenderer
         else
         {
             maxSightRangeOverLedge = sample.magnitude;
-            Debug.Log(" aaaaaaaaaaaaaaaaaaaaaaaaaa" + maxSightRangeOverLedge);
             //ledgeEnd = TryBackTrackingLedgeEnd(previousVertex, sample, previousRayCastHit, xRadCornerAngle, maxSightRangeOverLedge);
         }
         ledgeEnd = BackTrackLedgeEnd(previousVertex, sample, previousRayCastHit, xRadCornerAngle, maxSightRangeOverLedge);
@@ -155,7 +156,6 @@ public partial class FOVRenderer
 
     private Vector3 BackTrackLedgeEnd(Vector3 previousVertex, Vector3 sample, RaycastHit previousRayCastHit, float xRadCornerAngle, float maxSightRangeOnLedge)
     {
-        Debug.Log(" aa" +maxSightRangeOnLedge);
         Vector3 sampleScaled = sample.normalized * maxSightRangeOnLedge;
         Vector3 closestOnCollider = GetClosestPointOnColliderWithinYDirection(previousRayCastHit, previousVertex, sampleScaled);
         if (closestOnCollider == Vector3.zero)
@@ -197,36 +197,6 @@ public partial class FOVRenderer
         }
 
         return closestOnCollider;
-    }
-
-    private Vector3 GetClosestPointOnColliderWithinYDirection(RaycastHit raycastHit, Vector3 previousVertex, Vector3 sample)
-    {
-        sample.y = previousVertex.y;
-        Vector3 closestOnCollider = GetClosestPointOnCollider(raycastHit, sample);
-
-        //if the first approximation was good enough, just let it be let it be let it be
-        if (AreVerticallyAligned(sample.normalized * closestOnCollider.magnitude, closestOnCollider)
-            && AreSimilarHeight(closestOnCollider, previousVertex))
-            return closestOnCollider;
-
-        //Did not find good enough let's use old closest point to get new closest point, then create line from it
-        Vector3 sampleRecalculated = sample.normalized * closestOnCollider.magnitude;
-
-        Vector3 closestOnColliderReCalculated = GetClosestPointOnCollider(raycastHit, sampleRecalculated);
-        Vector3 intersection;
-        Vector3 testVec1 = (closestOnColliderReCalculated - closestOnCollider) * 10f;
-        Vector3 testVec2 = sample;
-        testVec1.y = 0;     //2d
-        testVec2.y = 0;     //2d
-        //Get the 2D flattened intersection of sample and out two last closest points
-        if (Math3d.LineLineIntersection(out intersection, new Vector3(closestOnCollider.x, 0, closestOnCollider.z), testVec1, Vector3.zero, testVec2))
-        {
-            return new Vector3(intersection.x, previousVertex.y, intersection.z);
-        }
-
-        Debug.Log("Could not find intersection");
-
-        return Vector3.zero;
     }
 
     private Vector3 ExtraPolateVector(SampleType type, Vector3 previousSample, Vector3 sample, float xAngle)

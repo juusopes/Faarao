@@ -40,7 +40,7 @@ public partial class FOVRenderer : MonoBehaviour
     public Vector3[] raySamplePoints;
     private Vector3[] lastColumnSamplePoints;
     private RaycastHit[] lastColumnSampleRays;
-    public List<Vector3> vertexPoints;
+    public List<Vector4> vertexPoints;
     public Vector2[] uv;
     public int[] triangles;
     int vertexIndex = 1;
@@ -48,9 +48,9 @@ public partial class FOVRenderer : MonoBehaviour
     SampleType lastSampleType = 0;
 
     //Tweakable values
-    private const int yRayCount = (20) + 1;    // ODD NUMBER 
-    private const int xRayCount = (20) + 1;    // ODD NUMBER 
-    private const float maxXAngle = -90.0000001f;   //Negative number is up!
+    private const int yRayCount = (0) + 1;    // Horizontal angles ODD NUMBER 
+    private const int xRayCount = (10) + 1;    // Vertical angles ODD NUMBER 
+    private const float maxXAngle = (90.0000001f) * -1;   //Negative number is up!
     private const float ledgeStep = 0.25f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;
     private const float enemySightHeight = 2.785f;
@@ -73,16 +73,15 @@ public partial class FOVRenderer : MonoBehaviour
 
     private enum SampleType
     {
-        None,
-        Floor,
-        FloorToDownFloor,
-        FloorToUpFloor,
-        FloorToWallCorner,
-        WallToWall,
-        WallToFloorCorner,
-        EndOfSightRange,
-        LedgeAtDownAngle,
-        LedgeAtUpAngle
+        None,               //Black
+        Floor,              //Blue
+        FloorToDownFloor,   //Cyan
+        FloorToWallCorner,  //Orange
+        WallToWall,         //Yellow
+        WallToFloorCorner,  //White
+        EndOfSightRange,    //Red
+        LedgeAtDownAngle,   //Green   
+        LedgeAtUpAngle      //Magenta
     }
 
 
@@ -165,7 +164,7 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void InitMesh()
     {
-        vertexPoints = new List<Vector3>();
+        vertexPoints = new List<Vector4>();
         AddVertexPoint(MeshOrigin, SampleType.None);
     }
 
@@ -179,7 +178,12 @@ public partial class FOVRenderer : MonoBehaviour
     {
         Debug.Log("Added vertex: " + sample + " with type: " + sampleType);
         lastSampleType = sampleType;
+
+#if UNITY_EDITOR
+        vertexPoints.Add(new Vector4(sample.x, sample.y, sample.z, (int)sampleType));
+#else
         vertexPoints.Add(sample);
+#endif
     }
 
     private Vector2 GetVertexUV(int y, Vector3 vertex)
@@ -222,7 +226,7 @@ public partial class FOVRenderer : MonoBehaviour
         if (DebugRaypointShapes)
             StartCoroutine(Balls(raySamplePoints));
         if (DebugVertexShapes)
-            StartCoroutine(Boxes(vertices));
+            StartCoroutine(Boxes(vertexPoints.ToArray()));
 #endif
 
         mesh.vertices = vertices;
@@ -231,18 +235,18 @@ public partial class FOVRenderer : MonoBehaviour
     }
 
 
-    #endregion
+#endregion
 
-    #region Shader values ==================================================================================================================================
+#region Shader values ==================================================================================================================================
 
     public void UpdateMaterialProperties(LineType background, LineType fill, float percentage)
     {
         //material.SetFloat(THICKNESS, outerThickness);
     }
 
-    #endregion
+#endregion
 
-    #region 2D version =====================================================================================================================================
+#region 2D version =====================================================================================================================================
 
     /*
     void UpdateMesh2D()
@@ -310,6 +314,6 @@ public partial class FOVRenderer : MonoBehaviour
     }
     */
 
-    #endregion
+#endregion
 
 }
