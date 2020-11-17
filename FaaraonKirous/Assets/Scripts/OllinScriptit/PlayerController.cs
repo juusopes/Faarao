@@ -193,19 +193,19 @@ public class PlayerController : MonoBehaviour
     }
     public void Moving()
     {
+        if (NetworkManager._instance.IsHost && navMeshAgent.isOnOffMeshLink)
+        {
+            navMeshAgent.speed = movementSpeed * 1.5f;
+            IsRunning = true;
+            IsCrouching = false;
+            return;
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
         //DoubleClick Check
         if (IsCurrentPlayer)
         {
-            if (navMeshAgent.isOnOffMeshLink)
-            {
-                navMeshAgent.speed = movementSpeed * 1.5f;
-                IsRunning = true;
-                IsCrouching = false;
-                return;
-            }
-
             if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
