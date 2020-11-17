@@ -29,10 +29,8 @@ public class LevelController : MonoBehaviour
     private int currentCharacterIndex;
     public GameObject playerOneImage, playerTwoImage;
 
-    [SerializeField]
-    public GameObject pharaoh;
-    [SerializeField]
-    public GameObject priest;
+    public GameObject pharaoh => GameManager._instance.Pharaoh;
+    public GameObject priest => GameManager._instance.Priest;
 
     //CameraControl
     private GameObject mainCam;
