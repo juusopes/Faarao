@@ -20,14 +20,13 @@ public class PlayerController : MonoBehaviour
     private Vector3 position;
 
     //Running
-    [HideInInspector]
     private bool _isRunning;
-    public bool IsRunning 
-    { 
+    public bool IsRunning
+    {
         get
         {
             return _isRunning;
-        } 
+        }
         set
         {
             _isRunning = value;
@@ -50,7 +49,6 @@ public class PlayerController : MonoBehaviour
     private bool lineOfSight;
 
     //Crouch
-    [HideInInspector]
     private bool _isCrouching;
     public bool IsCrouching
     {
@@ -118,7 +116,7 @@ public class PlayerController : MonoBehaviour
 
     //Respawn
     private bool useRespawn;
-    
+
     //Menu
     public LevelController lC;
     public InGameMenu menu;
@@ -136,14 +134,14 @@ public class PlayerController : MonoBehaviour
         {
             Moving();
             LineOfSight();
-            KeyControls();          
+            KeyControls();
             Invisibility();  // TODO: Does not work in multiplayer
 
             if (NetworkManager._instance.IsHost)
             {
                 TestOffLink();
             }
-            
+
             Attack();
             Respawn();
             Interact();
@@ -200,6 +198,14 @@ public class PlayerController : MonoBehaviour
         //DoubleClick Check
         if (IsCurrentPlayer)
         {
+            if (navMeshAgent.isOnOffMeshLink)
+            {
+                navMeshAgent.speed = movementSpeed * 1.5f;
+                IsRunning = true;
+                IsCrouching = false;
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
@@ -259,7 +265,7 @@ public class PlayerController : MonoBehaviour
         SetDestination(transform.position);
         targetV3 = transform.position;
     }
-    
+
     public void GiveDestination(Vector3 v3)
     {
         targetV3 = v3;
@@ -295,6 +301,9 @@ public class PlayerController : MonoBehaviour
     {
         if (IsCurrentPlayer)
         {
+            if (navMeshAgent.isOnOffMeshLink)
+                return;
+
             if (IsRunning)
             {
                 IsRunning = false;
@@ -453,7 +462,7 @@ public class PlayerController : MonoBehaviour
                             ClientSend.KillEnemy(targetEnemy.GetComponent<EnemyObjectManager>().Id);
                         }
                     }
-                    
+
                     targetEnemy = null;
                     target = null;
                     useAttack = false;
@@ -521,7 +530,8 @@ public class PlayerController : MonoBehaviour
                 abilityActive = false;
                 abilityNum = 0;
             }
-        } else
+        }
+        else
         {
             Debug.Log(tempAbilityNum);
         }
