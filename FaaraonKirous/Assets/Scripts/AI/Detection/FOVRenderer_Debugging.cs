@@ -27,7 +27,7 @@ public partial class FOVRenderer
 
     private bool debuggingFrame = false;     //Debug only one frame
 
-    private float rayTime => debuggingFrame ? 0.1f : 1000f;
+    private float rayTime => debuggingFrame ? 1000f : 0.1f;
 
     private enum DebugMode
     {
@@ -49,7 +49,7 @@ public partial class FOVRenderer
             GameObject sphere = CreatePrimitive(vert, PrimitiveType.Sphere, new Vector3(0.25f, 0.25f, 0.25f), raySamplePointsParent);
             sphere.GetComponent<Renderer>().material = ballMat;
             sphere.name = "Ray sample point";
-            yield return new WaitForSeconds(1f / arr.Length);
+           // yield return new WaitForSeconds(1f / arr.Length);
         }
     }
 
@@ -99,7 +99,7 @@ public partial class FOVRenderer
 
             cube.GetComponent<Renderer>().material.color = color;
             cube.name = "Vertex Point: " + (SampleType)vert.w;
-            yield return new WaitForSeconds(1f / arr.Length);
+            //yield return new WaitForSeconds(1f / arr.Length);
         }
     }
 

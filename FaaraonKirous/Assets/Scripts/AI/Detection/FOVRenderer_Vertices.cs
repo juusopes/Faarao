@@ -73,7 +73,7 @@ public partial class FOVRenderer
         //Get corner or use last corner
         bool needNewCorner = lastType == SampleType.FloorToWallCorner || lastType == SampleType.LedgeAtUpAngle || lastType == SampleType.LedgeAtDownAngle || lastType == SampleType.WallToWall;
 
-        Debug.Log("<b>Try create ledge vertices with extra start corner: </b>" + needNewCorner);
+        //Debug.Log("<b>Try create ledge vertices with extra start corner: </b>" + needNewCorner);
         Vector3 closestCorner = Vector3.zero;
         if (needNewCorner)
         {
@@ -97,15 +97,15 @@ public partial class FOVRenderer
             //Add corner if we need to
             if (needNewCorner)
             {
-                Debug.Log("Added new corner");
+                //Debug.Log("Added new corner");
                 AddVertexPoint(closestCorner, SampleType.WallToFloorCorner);
             }
 
             SampleType sampleType = isAboveZeroAngle ? SampleType.LedgeAtUpAngle : SampleType.LedgeAtDownAngle;
             AddVertexPoint(ledgeEnd, sampleType);
         }
-        else
-            Debug.Log("Nope could not understand ledges! ");
+        //else
+         //   Debug.Log("Nope could not understand ledges! ");
     }
 
     #endregion
@@ -212,7 +212,7 @@ public partial class FOVRenderer
                 float heightFromSight = 0 - previousSample.y;
                 float xAngleRad = (90f - xAngle) * Mathf.Deg2Rad;
                 float hypotenuse = heightFromSight / Mathf.Cos(xAngleRad);
-                Debug.Log("Le" + heightFromSight + " " + xAngleRad);
+                //Debug.Log("Le" + heightFromSight + " " + xAngleRad);
                 return sample.normalized * hypotenuse;
         }
 
@@ -278,7 +278,7 @@ public partial class FOVRenderer
     {
         Vector3 ledgeEnd = Vector3.zero;
         int emptyRaysInRow = 0;
-        Debug.Log("Try to get ledge end with range : " + maxSightRangeOverLedge);
+        //Debug.Log("Try to get ledge end with range : " + maxSightRangeOverLedge);
         //Iterate from 0 to max looking down to see if we actually have a ledge
         int iterations = Mathf.CeilToInt((maxSightRangeOverLedge - corner.magnitude) / ledgeStep);
         for (int i = 1; i <= iterations; i++)

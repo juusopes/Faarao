@@ -72,13 +72,13 @@ public class GameManager : MonoBehaviour
         }
 
         // Add host to players
-        if (NetworkManager._instance.IsHost)
-        {
+        //if (NetworkManager._instance.IsHost)
+        //{
             Players.Add(Constants.defaultConnectionId, new PlayerInfo
             {
                 Name = "me"  // TODO: Get profile name
             });
-        }
+        //}
 
         // Add lists
         _objectLists.Add(ObjectList.enemy, new Dictionary<int, ObjectManager>());

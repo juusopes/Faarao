@@ -50,8 +50,8 @@ public partial class FOVRenderer
             previousRayCastHit = x > 0 ? lastColumnSampleRays[x - 1] : new RaycastHit();
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
 
-            if (!hasResampled)
-                hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yGlobalAngleIn, raycastHit, ref yAngleSample, ref sample);
+            //if (!hasResampled)
+            //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yGlobalAngleIn, raycastHit, ref yAngleSample, ref sample);
 
             InspectSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, lastTrueRayCastHit, sample);
 
@@ -109,23 +109,23 @@ public partial class FOVRenderer
             //First try to create ledge before creating floor to keep last vertex correct
             if (x > 0)
             {
-                Debug.Log("<b><color=cyan>Floor to down floor calculation</color></b>");
+               // Debug.Log("<b><color=cyan>Floor to down floor calculation</color></b>");
                 //TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSample, yAngleSample);
                 TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
             }
             TryCreateFloorVertex(raycastHit, sample);
-            Debug.Log("<b><color=blue>Floor calculation</color></b>");
+            //Debug.Log("<b><color=blue>Floor calculation</color></b>");
         }
         //When going forward from wall to floor
         if (IsWallToFloor(previousRayCastHit, raycastHit))
         {
-            Debug.Log("<b><color=white>Wall to floor calculation</color></b>");
+            //Debug.Log("<b><color=white>Wall to floor calculation</color></b>");
             TryCreateWallToFloorCornerVertex(previousSample, sample);
         }
         //When going up from floor to wall
         else if (IsFloorToWall(previousRayCastHit, raycastHit))
         {
-            Debug.Log("<b><color=orange>Floor to wall calculation</color></b>");
+            //Debug.Log("<b><color=orange>Floor to wall calculation</color></b>");
             //Todo: consider back tracking
             if (!TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample))
                 TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
@@ -133,19 +133,19 @@ public partial class FOVRenderer
         //Hit two walls that are clearly not same wall
         else if (IsWallToWall(previousRayCastHit, raycastHit) && IsClearlyLonger(previousSample, sample))
         {
-            Debug.Log("<b><color=lime>Ledge calculation hitting a wall further away</color></b>");
+            //Debug.Log("<b><color=lime>Ledge calculation hitting a wall further away</color></b>");
             TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
         }
         //When ray did not hit floor after climbing a wall
         else if (lastSampleType == SampleType.FloorToWallCorner && !AreSimilarHeight(previousSample, sample) && !AreVerticallyAligned(previousSample, sample))
         {
-            Debug.Log("<b><color=green>Ledge calculation climbing up and missing floor</color></b>");
+            //Debug.Log("<b><color=green>Ledge calculation climbing up and missing floor</color></b>");
             TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
         }
         //If previous hit was on a floor and new sample is reaching max sight while not hitting anything
         else if (HitPointIsUpFacing(previousRayCastHit) && AreSimilarLenght(sample, SightRange))
         {
-            Debug.Log("<b><color=olive>Ledge calculation end of sight </color></b>");
+            //Debug.Log("<b><color=olive>Ledge calculation end of sight </color></b>");
             TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
         }
         // }
@@ -156,7 +156,7 @@ public partial class FOVRenderer
     {
         if (AreSimilarLenght(sample, SightRange))
         {
-            Debug.Log("<b><color=red>End of sight calculation</color></b>");
+            //Debug.Log("<b><color=red>End of sight calculation</color></b>");
             TryCreateVertexToEndOfSightRange(lastSampleType, yAngleSample, sample, previousRayCastHit);
         }
     }
@@ -167,7 +167,7 @@ public partial class FOVRenderer
         {
             if (IsClearlyLonger(previousSample, sample))
             {
-                Debug.Log("<b><color=magenta>Ledge calculation AT UP ANGLES </color></b>");
+                //Debug.Log("<b><color=magenta>Ledge calculation AT UP ANGLES </color></b>");
                 TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
             }
 

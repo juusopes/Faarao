@@ -86,7 +86,7 @@ public partial class FOVRenderer
         Vector3 testStartPoint2 = Vector3.zero;
         Vector3 testVec1 = (closestOnColliderReCalculated - closestOnCollider) * 10f;
         Vector3 testVec2 = sample;
-        Debug.Log("hit" + raycastHit.collider);
+        //Debug.Log("hit" + raycastHit.collider);
         //ACylinder(testVec1, Color.white);
         //ACylinder(testVec2, Color.white);
         //ACylinder(testStartPoint1);
@@ -99,7 +99,7 @@ public partial class FOVRenderer
             return new Vector3(intersection.x, previousVertex.y, intersection.z);
         }
 
-        Debug.Log("Could not find intersection");
+        //Debug.Log("Could not find intersection");
 
         return Vector3.zero;
     }

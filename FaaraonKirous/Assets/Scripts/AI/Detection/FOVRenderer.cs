@@ -48,8 +48,8 @@ public partial class FOVRenderer : MonoBehaviour
     SampleType lastSampleType = 0;
 
     //Tweakable values
-    private const int yRayCount = (0) + 1;    // Horizontal angles ODD NUMBER 
-    private const int xRayCount = (10) + 1;    // Vertical angles ODD NUMBER 
+    private const int yRayCount = (50) + 1;    // Horizontal angles ODD NUMBER 
+    private const int xRayCount = (50) + 1;    // Vertical angles ODD NUMBER 
     private const float maxXAngle = (90.0000001f) * -1;   //Negative number is up!
     private const float ledgeStep = 0.25f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;
@@ -180,7 +180,7 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void AddVertexPoint(Vector3 sample, SampleType sampleType)
     {
-        Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>");
+        //Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>");
         lastSampleType = sampleType;
 
 #if UNITY_EDITOR
