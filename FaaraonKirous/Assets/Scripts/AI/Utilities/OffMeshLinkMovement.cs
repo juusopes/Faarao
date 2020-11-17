@@ -188,8 +188,8 @@ class OffMeshLinkMovement
             }
         }
         //Snap pos after ladder
-        if(linkRoute.stopRotate)
-            navMeshAgent.Warp(linkRoute.route.Last());
+        //if(linkRoute.stopRotate)
+        //    navMeshAgent.Warp(linkRoute.route.Last());
         navMeshAgent.updateRotation = true;
         navMeshAgent.CompleteOffMeshLink();
         MoveAcrossNavMeshesStarted = false;
