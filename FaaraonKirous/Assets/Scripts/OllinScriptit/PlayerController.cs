@@ -542,7 +542,7 @@ public class PlayerController : MonoBehaviour
         if (navMeshAgent.isOnOffMeshLink && linkMovement.CanStartLink())
         {
             OffMeshLinkRoute route = linkMovement.GetOffMeshLinkRoute();
-            StartCoroutine(linkMovement.MoveAcrossNavMeshLink(route));
+            StartCoroutine(linkMovement.MoveAcrossNavMeshLink(route, targetV3));
         }
     }
 
