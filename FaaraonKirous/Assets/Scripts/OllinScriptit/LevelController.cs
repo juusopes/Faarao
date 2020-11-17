@@ -49,6 +49,11 @@ public class LevelController : MonoBehaviour
     void Start()
     {
         Initialize();
+
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.SelectCharacter(ObjectType.pharaoh);
+        }
     }
 
     // Update is called once per frame
