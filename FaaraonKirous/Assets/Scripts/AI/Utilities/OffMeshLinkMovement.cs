@@ -39,7 +39,7 @@ class OffMeshLinkMovement
             area = data.offMeshLink.area;
         //var areaLink = (OffMeshLink)navMeshAgent.navMeshOwner;
         //if(areaLink != null)
-            //area = areaLink.area;
+        //area = areaLink.area;
 
         //Debug.Log("Area: " + area);
 
@@ -62,6 +62,10 @@ class OffMeshLinkMovement
 
         OffMeshLinkRoute linkRoute = new OffMeshLinkRoute();
         linkRoute.route = route;
+        linkRoute.RotationType = OffMeshRotationType.RotateMoving;
+        Vector3 relativePos = route[1] - route[0];
+        linkRoute.faceDirection = Quaternion.LookRotation(relativePos, Vector3.up);
+
 
         return linkRoute;
     }
@@ -78,6 +82,9 @@ class OffMeshLinkMovement
 
         OffMeshLinkRoute linkRoute = new OffMeshLinkRoute();
         linkRoute.route = route;
+        linkRoute.RotationType = OffMeshRotationType.RotateMoving;
+        Vector3 relativePos = route[1] - route[0];
+        linkRoute.faceDirection = Quaternion.LookRotation(relativePos, Vector3.up);
 
         return linkRoute;
     }
@@ -130,7 +137,7 @@ class OffMeshLinkMovement
         OffMeshLinkRoute linkRoute = new OffMeshLinkRoute();
         linkRoute.route = route;
         linkRoute.faceDirection = Quaternion.LookRotation(faceDirection, Vector3.up);
-        linkRoute.stopRotate = true;
+        linkRoute.RotationType = OffMeshRotationType.StopRotate;
         if (data.offMeshLink != null)
             linkRoute.area = data.offMeshLink.area;
         else
@@ -139,7 +146,11 @@ class OffMeshLinkMovement
         return linkRoute;
     }
 
-
+    public IEnumerator MoveAcrossNavMeshLink(OffMeshLinkRoute linkRoute, Vector3 destination)
+    {
+        yield return MoveAcrossNavMeshLink(linkRoute);
+        navMeshAgent.SetDestination(destination);
+    }
 
     public IEnumerator MoveAcrossNavMeshLink(OffMeshLinkRoute linkRoute)
     {
@@ -149,7 +160,10 @@ class OffMeshLinkMovement
         MoveAcrossNavMeshesStarted = true;
 
         //Traverse the off mesh route
-        navMeshAgent.updateRotation = !linkRoute.stopRotate;
+        navMeshAgent.updateRotation = linkRoute.RotationType == OffMeshRotationType.None;
+        Quaternion startRotation = charTransform.rotation;
+        Quaternion newRotation = Quaternion.Euler(linkRoute.faceDirection.eulerAngles);
+
         for (int i = 1; i < linkRoute.route.Length; i++)
         {
             Vector3 startPos = linkRoute.route[i - 1];
@@ -160,35 +174,34 @@ class OffMeshLinkMovement
             while (t < 1.0f)
             {
                 charTransform.position = Vector3.Lerp(startPos, endPos, t);
+                //Match rotation
+                if (i == 1 && linkRoute.RotationType == OffMeshRotationType.RotateMoving)
+                {
+                    charTransform.rotation = Quaternion.Lerp(startRotation, newRotation, t * 10);
+                }
                 //navMeshAgent.destination = charTransform.position;
                 t += tStep * Time.deltaTime;
                 yield return null;
             }
 
             //Match rotation
-            if (i == 1 && linkRoute.stopRotate)
+            if (i == 1 && linkRoute.RotationType == OffMeshRotationType.StopRotate)
             {
-                if (linkRoute.faceDirection != null)
+                var timePassed = 0f;
+                while (timePassed < duration)
                 {
-                    var startRotation = charTransform.rotation;
+                    var factor = timePassed / duration;
+                    charTransform.rotation = Quaternion.Lerp(startRotation, newRotation, factor);
+                    timePassed += Time.deltaTime;
 
-                    Quaternion newRotation = Quaternion.Euler(linkRoute.faceDirection.eulerAngles);
-
-                    var timePassed = 0f;
-                    while (timePassed < duration)
-                    {
-                        var factor = timePassed / duration;
-                        charTransform.rotation = Quaternion.Lerp(startRotation, newRotation, factor);
-                        timePassed += Time.deltaTime;
-
-                        yield return null;
-                    }
-                    charTransform.rotation = linkRoute.faceDirection;
+                    yield return null;
                 }
+                charTransform.rotation = linkRoute.faceDirection;
             }
         }
+        //TODO: WARP TO CLOSEST POINT IN NAVMESH COMPARING TO LAST POSITION
         //Snap pos after ladder
-        if(linkRoute.stopRotate)
+        if (linkRoute.RotationType == OffMeshRotationType.StopRotate)
             navMeshAgent.Warp(linkRoute.route.Last());
         navMeshAgent.updateRotation = true;
         navMeshAgent.CompleteOffMeshLink();
