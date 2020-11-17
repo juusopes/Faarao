@@ -18,8 +18,9 @@ public class NetworkManager : MonoBehaviour
 
     public bool ShouldSendToClient => Server.Instance.IsOnline;
 
-    // TODO: Add is connected bool to should send to server
     public bool ShouldSendToServer => !IsHost;
+
+    public int MyConnectionId { get; set; } = Constants.defaultConnectionId;
 
     // For testing
     public bool Testing => _testing;
@@ -125,6 +126,39 @@ public class NetworkManager : MonoBehaviour
 
             return true;
         }
+    }
+
+
+    public void PlayerConnected(int connectionId, string name)
+    {
+        GameManager._instance.Players.Add(connectionId, new PlayerInfo
+        {
+            Name = name,
+            ControlledCharacter = null
+        });
+
+        if (ShouldSendToClient)
+        {
+            Server.Instance.SetConnectionFlags(connectionId, ConnectionState.Connected);
+            // TODO: Send player connected packet to all connected clients, but exclude id
+        }
+    }
+
+    public void PlayerDisconnected(int connectionId)
+    {
+        if (IsHost)
+        {
+            // Unselect the character of the disconnecting player
+            GameManager._instance.UnselectCharacter(connectionId);
+
+            if (ShouldSendToClient)
+            {
+                Server.Instance.ResetConnectionFlags(connectionId, ConnectionState.All);
+                // TODO: Send player disconnected packet to all connected clients
+            }
+        }
+
+        GameManager._instance.Players.Remove(connectionId);
     }
 
     private void OnApplicationQuit()

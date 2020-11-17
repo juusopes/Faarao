@@ -9,7 +9,7 @@ public class DeathScript : MonoBehaviour
     public float heal;
     public bool isDead;
 
-    private CharacterNetManager CharacterNetManager { get; set; }
+    private CharacterObjectManager CharacterNetManager { get; set; }
 
     void Awake()
     {
@@ -32,7 +32,7 @@ public class DeathScript : MonoBehaviour
 
     private void Initialize() 
     {
-        CharacterNetManager = GetComponent<CharacterNetManager>();
+        CharacterNetManager = GetComponent<CharacterObjectManager>();
 
         if (hp == 0)
         {

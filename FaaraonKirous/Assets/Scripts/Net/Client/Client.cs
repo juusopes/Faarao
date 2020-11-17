@@ -25,7 +25,7 @@ public sealed class Client : NetworkHandler
     {
         InitializeClientData();
 
-        Connection.Connect(endPoint, Constants.DefaultConnectionId);
+        Connection.Connect(endPoint, Constants.defaultConnectionId);
 
         StartInternalUpdate();
 
@@ -37,7 +37,6 @@ public sealed class Client : NetworkHandler
     public void Disconnect()
     {
         if (CloseSocket()) Debug.Log("Disconnected from server.");
-        NetworkManager._instance.IsConnectedToServer = false;
     }
 
     protected override void OnReceiveException()
@@ -74,7 +73,6 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.objectCreated, ClientHandle.ObjectCreated },
             { (int)ServerPackets.updateObjectTransform, ClientHandle.UpdateObjectTransform },
             { (int)ServerPackets.disposableObjectCreated, ClientHandle.DisposableObjectCreated },
-            { (int)ServerPackets.startingObjectSync, ClientHandle.StartingObjectSync },
             { (int)ServerPackets.syncObject, ClientHandle.SyncObject },
             { (int)ServerPackets.sightChanged, ClientHandle.SightChanged },
             { (int)ServerPackets.abilityVisualEffectCreated, ClientHandle.AbilityVisualEffectCreated },
@@ -82,14 +80,16 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.characterDied, ClientHandle.CharacterDied },
             { (int)ServerPackets.detectionConeUpdated, ClientHandle.DetectionConeUpdated },
             { (int)ServerPackets.loadScene, ClientHandle.LoadScene },
+            { (int)ServerPackets.startLoading, ClientHandle.StartLoading },
             { (int)ServerPackets.endLoading, ClientHandle.EndLoading },
-            { (int)ServerPackets.changeToCharacter, ClientHandle.ChangeToCharacter },
+            { (int)ServerPackets.characterControllerUpdate, ClientHandle.CharacterControllerUpdate },
             { (int)ServerPackets.crouching, ClientHandle.Crouching },
-            { (int)ServerPackets.running, ClientHandle.Running }
+            { (int)ServerPackets.running, ClientHandle.Running },
+            { (int)ServerPackets.syncPlayers, ClientHandle.SyncPlayers }
         };
 
         // Initialize connection
-        Connection = new Connection(Constants.DefaultConnectionId, Instance);
+        Connection = new Connection(Constants.defaultConnectionId, Instance);
     }
 
     
