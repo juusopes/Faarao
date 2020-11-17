@@ -19,6 +19,8 @@ public class ObjController : MonoBehaviour
     public bool[] objectiveDone;
     public bool inEndPoint;
 
+    public int objectivesInLevel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +28,7 @@ public class ObjController : MonoBehaviour
         {
             objectives[x].SetActive(false);
         }
-        for (int x = 0; x < objectives.Length - 1; x++)
+        for (int x = 0; x < objectivesInLevel; x++)
         {
             objectives[x].SetActive(true);
         }
