@@ -50,6 +50,7 @@ public partial class FOVRenderer
             previousRayCastHit = x > 0 ? lastColumnSampleRays[x - 1] : new RaycastHit();
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
 
+
             //if (!hasResampled)
             //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yGlobalAngleIn, raycastHit, ref yAngleSample, ref sample);
 
@@ -67,6 +68,7 @@ public partial class FOVRenderer
                 lastTrueRayCastHit = raycastHit;
             lastColumnSamplePoints[x] = sample;
             lastColumnSampleRays[x] = raycastHit;
+
             //CreateTriangle();
 
             secondPreviousSample = previousSample;
@@ -74,6 +76,10 @@ public partial class FOVRenderer
             vertexIndex++;
             xAngleSample -= xAngleIncrease;
 
+
+            if (raycastHit.collider)
+                if (raycastHit.collider.CompareTag("HighestObject"))
+                    return;
         }
     }
 
