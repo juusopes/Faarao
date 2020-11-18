@@ -22,7 +22,8 @@ public class CameraControl : MonoBehaviour
     private float zoomSpeed;
 
     public GameObject objective1, objective2, objective3, objective4, objective5;
-    public GameObject character1, character2;
+    private GameObject character1 => GameManager._instance.Pharaoh;
+    private GameObject character2 => GameManager._instance.Priest;
 
     public bool rotating;
     public float rotateSpeed;
