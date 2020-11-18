@@ -29,4 +29,6 @@ public class Constants
     public const string ip = "127.0.0.1";
 
     public const float maxSceneLoadProgress = .9f;
+
+    public const int sioUdpConnectionReset = -1744830452;
 }

@@ -18,6 +18,8 @@ public class AbilityIndicator : MonoBehaviour
     public Vector3 endPoint;
     private float range;
     private bool abilityClicked;
+
+    private bool calculateNeeded;
     //AbilityTargets
 
 
@@ -102,14 +104,20 @@ public class AbilityIndicator : MonoBehaviour
         if (player.GetComponent<PlayerController>().abilityNum == 7 || player.GetComponent<PlayerController>().abilityNum == 9)
         {
             targetTag = "Enemy";
+            calculateNeeded = false;
         }
-        if (player.GetComponent<PlayerController>().abilityNum == 10)
+        else if (player.GetComponent<PlayerController>().abilityNum == 10)
         {
             targetTag = "Player";
+            calculateNeeded = false;
         }
-        if (player.GetComponent<PlayerController>().abilityNum == 8)
+        else if (player.GetComponent<PlayerController>().abilityNum == 8)
         {
             targetTag = "TargetableObject";
+            calculateNeeded = false;
+        } else
+        {
+            calculateNeeded = true;
         }
     }
 
@@ -137,23 +145,23 @@ public class AbilityIndicator : MonoBehaviour
         }
         if (player.GetComponent<PlayerController>().abilityNum == 5)
         {
-            SwitchIndicator(4);
-            SetCircleRange(4);
+            SwitchIndicator(7);
+            SetCircleRange(7);
         }
         if (player.GetComponent<PlayerController>().abilityNum == 8)
         {
-            SwitchIndicator(6);
-            SetCircleRange(6);
+            SwitchIndicator(8);
+            SetCircleRange(8);
         }
         if (player.GetComponent<PlayerController>().abilityNum == 9)
         {
-            SwitchIndicator(5);
-            SetCircleRange(5);
+            SwitchIndicator(9);
+            SetCircleRange(9);
         }
         if (player.GetComponent<PlayerController>().abilityNum == 10)
         {
-            SwitchIndicator(7);
-            SetCircleRange(7);
+            SwitchIndicator(10);
+            SetCircleRange(10);
         }
     }
     private void SetCircleRange(int num)
@@ -208,29 +216,31 @@ public class AbilityIndicator : MonoBehaviour
         }
     }
     private void DistanceCalculator()
-    {
+    {if (calculateNeeded) { 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
-        //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
-        {
-            //vectorLength = vectorLength / 6.6f;
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
             {
-                playerPos = player.GetComponent<PlayerController>().GetPosition();
-                Vector3 hitPos = hit.transform.position;
-                hitPos.y = playerPos.y;
-                float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
-                //Debug.Log(distance);
-                if (distance > range)
+                //vectorLength = vectorLength / 6.6f;
+                if (Input.GetKeyDown(KeyCode.Mouse1))
                 {
-                    endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance-range)*4));
-                    player.GetComponent<PlayerController>().GiveDestination(endPoint);
-                } else
-                {
-                    player.GetComponent<PlayerController>().inRange = true;
+                    playerPos = player.GetComponent<PlayerController>().GetPosition();
+                    Vector3 hitPos = hit.transform.position;
+                    hitPos.y = playerPos.y;
+                    float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
+                    //Debug.Log(distance);
+                    if (distance > range)
+                    {
+                        endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance - range) * 4));
+                        player.GetComponent<PlayerController>().GiveDestination(endPoint);
+                    }
+                    else
+                    {
+                        player.GetComponent<PlayerController>().inRange = true;
+                    }
+                    abilityClicked = true;
                 }
-                abilityClicked = true;
             }
         }
         if (abilityClicked)

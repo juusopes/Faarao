@@ -24,7 +24,10 @@ public enum ServerPackets
     crouching,
     running,
     startLoading,
-    syncPlayers
+    syncPlayers,
+    playerConnected,
+    playerDisconnected,
+    serverStopped
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -40,7 +43,8 @@ public enum ClientPackets
     setDestinationRequest,
     killEnemy,
     crouching,
-    running
+    running,
+    disconnecting
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

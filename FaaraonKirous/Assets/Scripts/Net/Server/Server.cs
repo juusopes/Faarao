@@ -70,6 +70,10 @@ public sealed class Server : NetworkHandler
 
     public void Stop()
     {
+        if (_socket == null) return;
+
+        ServerSend.ServerStopped();
+
         if (CloseSocket()) Debug.Log("Server stopped.");
     }
 
@@ -84,6 +88,11 @@ public sealed class Server : NetworkHandler
         {
             if (connection.EndPoint != null) connection.InternalUpdate();
         }
+    }
+
+    public override void ConnectionTimeout(int connection)
+    {
+        DisconnectClient(connection);
     }
 
     public void BeginSendPacket(int connectionId, ChannelType channelType, Packet packet, 
@@ -126,7 +135,7 @@ public sealed class Server : NetworkHandler
         // Handle new connections
         if (connectionId == Constants.defaultConnectionId)  // if default ID is used, connection has not been established
         {
-            ConnectClient(endPoint, packet);
+            AddConnection(endPoint, packet);
             return;
         }
 
@@ -139,9 +148,9 @@ public sealed class Server : NetworkHandler
         Connections[connectionId].BeginHandlePacket(packet);
     }
 
-    private void ConnectClient(IPEndPoint endPoint, Packet packet)
+    private void AddConnection(IPEndPoint endPoint, Packet packet)
     {
-        // Handle resent connection requests and acknowledgements (sendId has not been updated)
+        // Handle packets from client if he has not updated his sendId
         for (int i = 1; i <= MaxPlayers; ++i)
         {
             if (Connections[i].EndPoint != null && Connections[i].EndPoint.ToString() == endPoint.ToString())
@@ -158,6 +167,7 @@ public sealed class Server : NetworkHandler
         {
             if (Connections[i].EndPoint == null)
             {
+                Debug.Log($"Chosen id is {i}");
                 Connections[i].Connect(endPoint, Constants.defaultConnectionId);
                 Connections[i].BeginHandlePacket(packet);
                 return;
@@ -165,10 +175,47 @@ public sealed class Server : NetworkHandler
         }
     }
 
+    private void ConnectClient(int connection, string name)
+    {
+        SetConnectionFlags(connection, ConnectionState.Connected);
+        GameManager._instance.PlayerConnected(connection, name);
+
+        ServerSend.ConnectionAccepted(connection);
+        ServerSend.SyncPlayers(connection);
+        ServerSend.StartLoading(connection);
+
+        if (GameManager._instance.IsFullyLoaded)
+        {
+            ServerSend.LoadScene(GameManager._instance.CurrentSceneIndex, connection);
+        }
+    }
+
+    public void DisconnectClient(int connection)
+    {
+        // Check that player is not already disconnected
+        if (Connections[connection].EndPoint == null) return;
+
+        // Disconnect
+        Connections[connection].Disconnect();
+
+        // Handle disconnect in main thread
+        ThreadManager._instance.ExecuteOnMainThread(() => 
+        {
+            // Reset connection internals
+            Connections[connection].Reset();
+
+            // Reset flags
+            ResetConnectionFlags(connection, ConnectionState.All);
+
+            GameManager._instance.PlayerDisconnected(connection);
+        });
+    }
+
     private void InitializeServerData()
     {
         // Initialize UDP client
         _socket = new UdpClient(Port);
+        IgnoreRemoteHostClosedConnection();
 
         // Initialize packet handler
         _packetHandlers = new Dictionary<int, PacketHandler>()
@@ -183,7 +230,8 @@ public sealed class Server : NetworkHandler
             { (int)ClientPackets.setDestinationRequest, ServerHandle.SetDestinationRequest },
             { (int)ClientPackets.killEnemy, ServerHandle.KillEnemy },
             { (int)ClientPackets.crouching, ServerHandle.Crouching },
-            { (int)ClientPackets.running, ServerHandle.Running }
+            { (int)ClientPackets.running, ServerHandle.Running },
+            { (int)ClientPackets.disconnecting, ServerHandle.Disconnecting }
         };
 
         // Initialize connections

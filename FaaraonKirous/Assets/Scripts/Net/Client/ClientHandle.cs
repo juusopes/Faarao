@@ -11,7 +11,7 @@ public class ClientHandle
         string msg = packet.ReadString();
 
         Debug.Log($"Message from server: {msg}");
-        NetworkManager._instance.MyConnectionId = sendId;
+        GameManager._instance.CurrentPlayerId = sendId;
         Client.Instance.Connection.SendId = sendId;
     }
 
@@ -45,6 +45,27 @@ public class ClientHandle
                 ControlledCharacter = null
             });
         }
+    }
+
+    public static void PlayerConnected(int connection, Packet packet)
+    {
+        int playerId = packet.ReadInt();
+        string playerName = packet.ReadString();
+
+        GameManager._instance.PlayerConnected(playerId, playerName);
+    }
+
+    public static void PlayerDisconnected(int connection, Packet packet)
+    {
+        int playerId = packet.ReadInt();
+
+        GameManager._instance.PlayerDisconnected(playerId);
+    }
+
+    public static void ServerStopped(int connection, Packet packet)
+    {
+        // TODO: Close game etc.
+        Client.Instance.Disconnect();
     }
     #endregion
 
