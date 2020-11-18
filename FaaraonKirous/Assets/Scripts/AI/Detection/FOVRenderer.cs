@@ -32,6 +32,8 @@ public partial class FOVRenderer : MonoBehaviour
     Mesh mesh;
     Material material;
     public Character character;
+    private Vector3 lastPosition;
+    private Quaternion lastRotation;
     private Vector3 origin;
     private float yStartingAngle = 0;
     private float xStartingAngle = 0;
@@ -48,8 +50,8 @@ public partial class FOVRenderer : MonoBehaviour
     SampleType lastSampleType = 0;
 
     //Tweakable values
-    private const int yRayCount = (50) + 1;    // Horizontal angles ODD NUMBER 
-    private const int xRayCount = (50) + 1;    // Vertical angles ODD NUMBER 
+    private const int yRayCount = (8) + 1;    // Horizontal angles ODD NUMBER 
+    private const int xRayCount = (8) + 1;    // Vertical angles ODD NUMBER 
     private const float maxXAngle = (90.0000001f) * -1;   //Negative number is up!
     private const float ledgeStep = 0.25f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;
@@ -131,7 +133,12 @@ public partial class FOVRenderer : MonoBehaviour
         if (debuggingFrame)
             return;
 #endif
-        UpdateViewCone();
+
+        if(ShouldUpdateViewCone())
+            UpdateViewCone();
+
+        lastPosition = transform.position;
+        lastRotation = transform.rotation;
     }
 
     private void UpdateViewCone()
@@ -140,6 +147,12 @@ public partial class FOVRenderer : MonoBehaviour
         SetAimDirection(transform.forward, yFOV, xFOV);
         UpdateMesh();
     }
+
+    private bool ShouldUpdateViewCone()
+    {
+        return lastPosition != transform.position || !lastRotation.EqualsQuaternion(lastRotation);
+    }
+
     public void SetOrigin(Vector3 origin)
     {
         this.origin = origin;

@@ -68,7 +68,7 @@ public partial class FOVRenderer
         }
     }
 
-    private void TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, Vector3 ledgeStartSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
+    private bool TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, Vector3 ledgeStartSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
     {
         //Get corner or use last corner
         bool needNewCorner = lastType == SampleType.FloorToWallCorner || lastType == SampleType.LedgeAtUpAngle || lastType == SampleType.LedgeAtDownAngle || lastType == SampleType.WallToWall;
@@ -81,7 +81,7 @@ public partial class FOVRenderer
             if (closestCorner == Vector3.zero)
             {
                 Debug.LogWarning("Closest corner is zero");
-                return;
+                return false;
             }
         }
         else
@@ -103,9 +103,11 @@ public partial class FOVRenderer
 
             SampleType sampleType = isAboveZeroAngle ? SampleType.LedgeAtUpAngle : SampleType.LedgeAtDownAngle;
             AddVertexPoint(ledgeEnd, sampleType);
+            return true;
         }
         //else
-         //   Debug.Log("Nope could not understand ledges! ");
+        //   Debug.Log("Nope could not understand ledges! ");
+        return false;
     }
 
     #endregion

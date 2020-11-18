@@ -29,9 +29,11 @@ public static class UtilsClass
         return n;
     }
 
-    public static bool Approximately(this Quaternion quatA, Quaternion value, float acceptableRange)
+    public static bool EqualsQuaternion(this Quaternion quatA, Quaternion value, float? acceptableRange = null)
     {
-        return 1 - Mathf.Abs(Quaternion.Dot(quatA, value)) < acceptableRange;
+        if (!acceptableRange.HasValue)
+            acceptableRange = 1 - Mathf.Epsilon;
+        return 1 - Mathf.Abs(Quaternion.Dot(quatA, value)) < acceptableRange.Value;
     }
 
     //Todo: test this ..

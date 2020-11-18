@@ -23,8 +23,8 @@ public partial class FOVRenderer
 
     private void IterateX(int y, float yGlobalAngleIn)
     {
-        float xAngleSample = xStartingAngle;
-        float yAngleSample = yGlobalAngleIn;
+        float xAngleSampled = xStartingAngle;
+        float yAngleSampled = yGlobalAngleIn;
         Vector3 previousSample = Vector3.positiveInfinity;
         Vector3 secondPreviousSample = Vector3.positiveInfinity;
         bool hasResampled = false;
@@ -32,7 +32,7 @@ public partial class FOVRenderer
 
         for (int x = 0; x < xRayCount; x++)
         {
-            if (xAngleSample < maxXAngle)       //Negatives are up angle
+            if (xAngleSampled < maxXAngle)       //Negatives are up angle
                 return;
 
 #if UNITY_EDITOR
@@ -40,7 +40,7 @@ public partial class FOVRenderer
                 return;
 #endif
 
-            Vector3 direction = Quaternion.Euler(xAngleSample, yAngleSample, 0) * Vector3.forward;
+            Vector3 direction = Quaternion.Euler(xAngleSampled, yAngleSampled, 0) * Vector3.forward;
             //Debug.Log(xAngle + " " + Quaternion.LookRotation(direction, Vector3.up).eulerAngles.x);
 
             RaycastHit raycastHit;
@@ -52,9 +52,9 @@ public partial class FOVRenderer
 
 
             //if (!hasResampled)
-            //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSample, yGlobalAngleIn, raycastHit, ref yAngleSample, ref sample);
+            //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSampled, yGlobalAngleIn, raycastHit, ref yAngleSampled, ref sample);
 
-            InspectSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, lastTrueRayCastHit, sample);
+            InspectSample(false, x, xAngleSampled, yAngleSampled, previousSample, raycastHit, previousRayCastHit, lastTrueRayCastHit, sample);
 
 
             //Save sample info for next iteration
@@ -74,34 +74,46 @@ public partial class FOVRenderer
             secondPreviousSample = previousSample;
             previousSample = sample;
             vertexIndex++;
-            xAngleSample -= xAngleIncrease;
+            xAngleSampled -= xAngleIncrease;
 
 
-            if (raycastHit.collider)
-                if (raycastHit.collider.CompareTag("HighestObject"))
-                    return;
+            if (ShouldQuitXIteration(xAngleSampled, raycastHit, previousRayCastHit))
+                return;
         }
     }
 
-    private void InspectSample(int x, int y, float xAngleSample, float yAngleSample, Vector3 previousSample, RaycastHit raycastHit, RaycastHit previousRayCastHit, RaycastHit lastTrueRayCastHit, Vector3 sample)
+    private bool ShouldQuitXIteration(float xAngleSampled, RaycastHit raycastHit, RaycastHit previousRayCastHit)
     {
-        switch (GetVerticalDirection(xAngleSample))
+        if (previousRayCastHit.collider && raycastHit.collider == null)
+            if (previousRayCastHit.collider.CompareTag("HighestObject"))
+                return true;
+
+        //If the first two upsamples have no hit, just give up iteration
+        // if (xAngleSampled < -1 && raycastHit.collider == null && previousRayCastHit.collider == null)
+        //     return true;
+
+        return false;
+    }
+
+    private void InspectSample(bool isResample, int x, float xAngleSampled, float yAngleSampled, Vector3 previousSample, RaycastHit raycastHit, RaycastHit previousRayCastHit, RaycastHit lastTrueRayCastHit, Vector3 sample)
+    {
+        switch (GetVerticalDirection(xAngleSampled))
         {
             case Looking.Down:
-                InspectDownSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, sample);
+                InspectDownSample(isResample, x, xAngleSampled, yAngleSampled, previousSample, raycastHit, previousRayCastHit, sample);
                 break;
             case Looking.ZeroAngle:
-                InspectDownSample(x, y, xAngleSample, yAngleSample, previousSample, raycastHit, previousRayCastHit, sample);
-                InspectFlatSample(yAngleSample, sample, lastTrueRayCastHit);
+                InspectDownSample(isResample, x, xAngleSampled, yAngleSampled, previousSample, raycastHit, previousRayCastHit, sample);
+                InspectFlatSample(yAngleSampled, sample, lastTrueRayCastHit);
                 break;
             case Looking.Up:
-                InspectUpSample(yAngleSample, previousSample, sample, previousRayCastHit);
+                InspectUpSample(yAngleSampled, previousSample, sample, raycastHit, previousRayCastHit);
                 break;
         }
     }
 
 
-    private void InspectDownSample(int x, int y, float xAngleSample, float yAngleSample, Vector3 previousSample, RaycastHit raycastHit, RaycastHit previousRayCastHit, Vector3 sample)
+    private void InspectDownSample(bool isResample, int x, float xAngleSampled, float yAngleSampled, Vector3 previousSample, RaycastHit raycastHit, RaycastHit previousRayCastHit, Vector3 sample)
     {
         // if (!AreVerticallyAligned(previousSample, sample))        //Ignore any hits that are above previous
         //{
@@ -109,15 +121,18 @@ public partial class FOVRenderer
 
         //Debug.Log("Last sampled vertex was of type: " + lastSampleType);
 
+        bool reSampleX = false;
+
         //When dropping to lower level than last hit (only add vertex to first floor hit point)
         if (IsClearlyLower(previousSample, sample) && HitPointIsUpFacing(raycastHit))
         {
             //First try to create ledge before creating floor to keep last vertex correct
             if (x > 0)
             {
-               // Debug.Log("<b><color=cyan>Floor to down floor calculation</color></b>");
-                //TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSample, yAngleSample);
-                TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
+                // Debug.Log("<b><color=cyan>Floor to down floor calculation</color></b>");
+                //TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSampled, yAngleSampled);
+                reSampleX = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
+
             }
             TryCreateFloorVertex(raycastHit, sample);
             //Debug.Log("<b><color=blue>Floor calculation</color></b>");
@@ -133,58 +148,76 @@ public partial class FOVRenderer
         {
             //Debug.Log("<b><color=orange>Floor to wall calculation</color></b>");
             //Todo: consider back tracking
-            if (!TryCreateFloorToWallCornerVertex(yAngleSample, previousSample, sample))
-                TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
+            if (!TryCreateFloorToWallCornerVertex(yAngleSampled, previousSample, sample))
+                reSampleX = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //Hit two walls that are clearly not same wall
         else if (IsWallToWall(previousRayCastHit, raycastHit) && IsClearlyLonger(previousSample, sample))
         {
             //Debug.Log("<b><color=lime>Ledge calculation hitting a wall further away</color></b>");
-            TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
+            reSampleX = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //When ray did not hit floor after climbing a wall
         else if (lastSampleType == SampleType.FloorToWallCorner && !AreSimilarHeight(previousSample, sample) && !AreVerticallyAligned(previousSample, sample))
         {
             //Debug.Log("<b><color=green>Ledge calculation climbing up and missing floor</color></b>");
-            TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
+            reSampleX = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //If previous hit was on a floor and new sample is reaching max sight while not hitting anything
         else if (HitPointIsUpFacing(previousRayCastHit) && AreSimilarLenght(sample, SightRange))
         {
             //Debug.Log("<b><color=olive>Ledge calculation end of sight </color></b>");
-            TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
+            reSampleX = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
         }
         // }
+
+        if (!isResample && reSampleX)
+        {
+            Debug.Log("Sample was " + xAngleSampled + " " + yAngleSampled);
+            ReSampleXAngle(x, LastAddedVertex, previousRayCastHit);
+        }
     }
 
 
-    private void InspectFlatSample(float yAngleSample, Vector3 sample, RaycastHit previousRayCastHit)
+    private void InspectFlatSample(float yAngleSampled, Vector3 sample, RaycastHit previousRayCastHit)
     {
         if (AreSimilarLenght(sample, SightRange))
         {
             //Debug.Log("<b><color=red>End of sight calculation</color></b>");
-            TryCreateVertexToEndOfSightRange(lastSampleType, yAngleSample, sample, previousRayCastHit);
+            TryCreateVertexToEndOfSightRange(lastSampleType, yAngleSampled, sample, previousRayCastHit);
         }
     }
 
-    private void InspectUpSample(float yAngleSample, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit)
+    private void InspectUpSample(float yAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit raycastHit, RaycastHit previousRayCastHit)
     {
         if (!AreVerticallyAligned(previousSample, sample))
         {
             if (IsClearlyLonger(previousSample, sample))
             {
                 //Debug.Log("<b><color=magenta>Ledge calculation AT UP ANGLES </color></b>");
-                TryCreateLedgeVertices(lastSampleType, false, yAngleSample, previousSample, sample, previousRayCastHit);
+                TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
             }
 
         }
+    }
+    private void ReSampleXAngle(int x, Vector3 ledgeEnd, RaycastHit previousRayCastHit)
+    {
+        Debug.Log("Resampling");
+        Vector3 direction = (ConvertGlobal(ledgeEnd) - origin + Vector3.up * 0.1f).normalized;
+        float xAngleSampled = Quaternion.LookRotation(direction, Vector3.up).eulerAngles.x;
+        float yAngleSampled = Quaternion.LookRotation(direction, Vector3.up).eulerAngles.y;
+        Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
+        //Debug.Log(xAngle + " " + Quaternion.LookRotation(direction, Vector3.up).eulerAngles.x);
+        RaycastHit raycastHit;
+        Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
+
+        InspectSample(true, x, xAngleSampled, yAngleSampled, ledgeEnd, raycastHit, previousRayCastHit, previousRayCastHit, sample);
     }
 
     private bool TryReTargetingSamplingAngle(int x, int y, float xAngle, float yAngleIn, RaycastHit raycastHit, ref float yAngleOut, ref Vector3 sampleOut)
     {
         if (y > 0)
         {
-
             //TODO: WEIRD BLUE RAYCASTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //TODO sample whole new sample in "missing spot", then add closest point as bonus to the second one
 
