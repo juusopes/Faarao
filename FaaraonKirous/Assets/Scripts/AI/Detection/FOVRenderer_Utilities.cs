@@ -188,6 +188,22 @@ public partial class FOVRenderer
         return HitPointIsSideFacing(raycastHit1) && HitPointIsSideFacing(raycastHit2);
     }
 
+    private bool HasHit(RaycastHit raycastHit)
+    {
+        return raycastHit.collider != null;
+    }
+
+    private bool HasNotHit(RaycastHit raycastHit)
+    {
+        return raycastHit.collider == null;
+    }
+    private bool AreHittingSameCollider(RaycastHit previousRaycastHit, RaycastHit raycastHit)
+    {
+        if (raycastHit.collider == null || previousRaycastHit.collider == null)
+            return false;
+        return raycastHit.collider == previousRaycastHit.collider;
+    }
+
     public bool HitPointIsUpFacing(RaycastHit raycastHit)
     {
         if (raycastHit.collider == null)
@@ -215,7 +231,7 @@ public partial class FOVRenderer
 
     public bool IsClearlyLower(Vector3 start, Vector3 end)
     {
-        //Debug.Log((end.y - start.y < -verticalThreshold) +" " +start.y + "-" + end.y + "=" + (end.y - start.y));
+        Debug.Log((end.y - start.y < -verticalThreshold) +" " +start.y + "-" + end.y + "=" + (end.y - start.y));
         return end.y - start.y < -verticalThreshold;
     }
 

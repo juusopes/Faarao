@@ -548,11 +548,13 @@ MonoBehaviour:
   yRayCount: 0
   xRayCount: 0
   debugMode: 5
-  ballMat: {fileID: 0}
+  ballMat: {fileID: 2100000, guid: d60f8b1c0f8939a419fc0a739e24bdda, type: 2}
+  ballMat2: {fileID: 2100000, guid: ee15538f17310b54d91417a909a98827, type: 2}
   maxXIterations: 999
   debuggingOneFrame: 0
   debuggingLogging: 0
   disableReSampling: 1
+  drawShapesOnIgnoredSamples: 0
 --- !u!33 &6024281465610095463
 MeshFilter:
   m_ObjectHideFlags: 0

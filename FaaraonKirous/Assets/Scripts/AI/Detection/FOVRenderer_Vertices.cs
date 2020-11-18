@@ -78,6 +78,7 @@ public partial class FOVRenderer
         if (needNewCorner)
         {
             closestCorner = GetLedgeCorner(yAngleIn, ledgeStartSample, sample);
+            //Debug.Log(ledgeStartSample + " " + closestCorner);
             if (closestCorner == Vector3.zero)
             {
                 Debug.LogWarning("Closest corner is zero");
@@ -98,7 +99,7 @@ public partial class FOVRenderer
             if (needNewCorner)
             {
                 //Debug.Log("Added new corner");
-                AddVertexPoint(closestCorner, SampleType.WallToFloorCorner);
+                AddVertexPoint(closestCorner, SampleType.LedgeStartCorner);
             }
 
             SampleType sampleType = isAboveZeroAngle ? SampleType.LedgeAtUpAngle : SampleType.LedgeAtDownAngle;
@@ -127,9 +128,13 @@ public partial class FOVRenderer
         Vector3 approximateCorner = new Vector3(previousSample.x, approximateY, previousSample.z);                                   //Corner position that is on same x and z as real corner but y is on sample vector (raycast vector)
         //Vector3 direction = Vector3.down + sample.normalized * 0.2f;                                                //Get direction of ledge
         Vector3 direction = Quaternion.Euler(cornerCheckAngle, yAngleIn, 0) * Vector3.forward;
-        float cornerY = GetSamplePoint(ConvertGlobal(approximateCorner), direction, approximateY - previousSample.y + 0.5f).y;       //Raycast almost straight down towards ledge to determine y height
-        if (cornerY < previousSample.y)                                                                          //If ray failed, use approximate corner
-            return approximateCorner;
+        RaycastHit raycastHit;
+        float cornerY = GetSamplePoint(ConvertGlobal(approximateCorner), direction, approximateY - previousSample.y + 0.5f, out raycastHit).y;       //Raycast almost straight down towards ledge to determine y height
+        if (HasNotHit(raycastHit))                                                                          //If ray failed, use approximate corner
+        {
+            Debug.Log("Ray failed " + cornerY + " " + previousSample.y);
+            return Vector3.zero;
+        }
 
         return new Vector3(approximateCorner.x, cornerY, approximateCorner.z);
     }

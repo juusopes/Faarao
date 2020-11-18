@@ -39,7 +39,7 @@ public partial class FOVRenderer : MonoBehaviour
     private float xStartingAngle = 0;
     float yAngleIncrease;
     float xAngleIncrease;
-    public Vector3[] raySamplePoints;
+    public Vector4[] raySamplePoints;
     private Vector3[] lastColumnSamplePoints;
     private RaycastHit[] lastColumnSampleRays;
     public List<Vector4> vertexPoints;
@@ -82,6 +82,7 @@ public partial class FOVRenderer : MonoBehaviour
         WallToWall,         //Yellow
         WallToFloorCorner,  //White
         EndOfSightRange,    //Red
+        LedgeStartCorner,   //Pink   
         LedgeAtDownAngle,   //Green   
         LedgeAtUpAngle      //Magenta
     }
@@ -114,6 +115,7 @@ public partial class FOVRenderer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.localRotation = Quaternion.identity;
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         material = GetComponent<Renderer>().material;
@@ -123,12 +125,16 @@ public partial class FOVRenderer : MonoBehaviour
 #if UNITY_EDITOR
         if (DebugRaypointShapes)
         {
-            raySamplePoints = new Vector3[yRayCount * xRayCount + 1];
+            raySamplePoints = new Vector4[yRayCount * xRayCount + 1];
             raySamplePoints[0] = Vector3.zero;
         }
 #endif
 
-        UpdateViewCone();
+#if UNITY_EDITOR
+        if (debuggingOneFrame)
+            Invoke("UpdateViewCone", 0.1f);     //Call with delay, so objects can reset trans etc.
+#endif
+
         //SaveAsset();
     }
 

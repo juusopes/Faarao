@@ -17,6 +17,8 @@ public partial class FOVRenderer
     [SerializeField]
     private Material ballMat;
     [SerializeField]
+    private Material ballMat2;
+    [SerializeField]
     private int maxXIterations = 999;
     [SerializeField]
     private bool debuggingOneFrame;     //Debug only one frame
@@ -48,17 +50,17 @@ public partial class FOVRenderer
         All
     }
 
-    IEnumerator Balls(Vector3[] arr)
+    IEnumerator Balls(Vector4[] arr)
     {
         yield return new WaitForSeconds(0f);
         Destroy(raySamplePointsParent);
         raySamplePointsParent = new GameObject("Ray sample points");
-        foreach (Vector3 vert in arr)
+        foreach (Vector4 vert in arr)
         {
             GameObject sphere = CreatePrimitive(vert, PrimitiveType.Sphere, new Vector3(0.25f, 0.25f, 0.25f), raySamplePointsParent);
-            sphere.GetComponent<Renderer>().material = ballMat;
+            sphere.GetComponent<Renderer>().material = (int)vert.w == 0 ? ballMat2 : ballMat;
             sphere.name = "Ray sample point";
-           // yield return new WaitForSeconds(1f / arr.Length);
+            // yield return new WaitForSeconds(1f / arr.Length);
         }
     }
 
@@ -85,6 +87,9 @@ public partial class FOVRenderer
                 case (float)SampleType.FloorToWallCorner:
                     color = new Color(1.0f, 0.64f, 0.0f);
                     break;
+                case (float)SampleType.LedgeStartCorner:
+                    color = new Color(1.0f, 0.75f, 0.8f);
+                    break;
                 case (float)SampleType.LedgeAtDownAngle:
                     color = Color.green;
                     break;
@@ -102,7 +107,7 @@ public partial class FOVRenderer
                     break;
                 default:
                     color = Color.gray;
-                    break; 
+                    break;
             }
 
 

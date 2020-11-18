@@ -151,9 +151,17 @@ public class Character : MonoBehaviour
     {
         if (IsHost)
         {
+            // ForceStraigthen();
             detector = new Detector(this);
             InitNavigator();
         }
+    }
+
+    private void ForceStraigthen()
+    {
+        Quaternion q = transform.rotation;
+        q.eulerAngles = new Vector3(0, q.eulerAngles.y, 0);
+        transform.rotation = q;
     }
 
     private void InitNavMeshAgent()
