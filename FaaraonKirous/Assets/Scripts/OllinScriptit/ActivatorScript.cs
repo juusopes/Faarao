@@ -8,12 +8,22 @@ public class ActivatorScript : MonoBehaviour
     public bool activated;
     public void Activate()
     {
-        if(activated)
+        if (activated)
         {
             activated = false;
-        } else
+        }
+        else
         {
             activated = true;
+        }
+    }
+    private void ShootRay()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit = new RaycastHit();
+        //DoubleClick Check
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
+        {
         }
     }
 }
