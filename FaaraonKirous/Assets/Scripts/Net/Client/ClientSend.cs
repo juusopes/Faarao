@@ -8,6 +8,8 @@ public class ClientSend
     #region Core
     public static void ConnectionRequest()
     {
+        Debug.Log("Sending request");
+
         var packet = new Packet((int)ClientPackets.connectionRequest);
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
@@ -16,6 +18,12 @@ public class ClientSend
     {
         var packet = new Packet((int)ClientPackets.heartbeatReceived);
         packet.Write(timeStamp);
+        Client.Instance.BeginSendPacket(ChannelType.Unreliable, packet);
+    }
+
+    public static void Disconnecting()
+    {
+        var packet = new Packet((int)ClientPackets.disconnecting);
         Client.Instance.BeginSendPacket(ChannelType.Unreliable, packet);
     }
     #endregion
@@ -27,7 +35,6 @@ public class ClientSend
         var packet = new Packet((int)ClientPackets.syncRequest);
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
-
     #endregion
 
 

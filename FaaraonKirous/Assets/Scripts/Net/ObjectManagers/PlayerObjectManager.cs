@@ -22,7 +22,7 @@ public class PlayerObjectManager : CharacterObjectManager
                 PlayerController.IsActivePlayer = true;
 
                 // If controller is me
-                if (value.Value == NetworkManager._instance.MyConnectionId)
+                if (value.Value == GameManager._instance.CurrentPlayerId)
                 {
                     PlayerController.IsCurrentPlayer = true;
                 }
