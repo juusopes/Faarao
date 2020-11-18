@@ -18,10 +18,10 @@ public partial class FOVRenderer
     /// <param name="direction"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    private Vector3 GetSamplePoint(Vector3 globalStart, Vector3 direction, float range)
+    private Vector3 GetSamplePoint(Vector3 globalStart, Vector3 direction, float range, Color? color = null)
     {
         RaycastHit rayCastHit = new RaycastHit();
-        return GetSamplePoint(globalStart, direction, range, out rayCastHit);
+        return GetSamplePoint(globalStart, direction, range, out rayCastHit, color);
     }
 
     /// <summary>
@@ -31,13 +31,15 @@ public partial class FOVRenderer
     /// <param name="direction"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    private Vector3 GetSamplePoint(Vector3 globalStart, Vector3 direction, float range, out RaycastHit rayCastHitReturn)
+    private Vector3 GetSamplePoint(Vector3 globalStart, Vector3 direction, float range, out RaycastHit rayCastHitReturn, Color? color = null)
     {
 #if UNITY_EDITOR
         if (DebugRayCasts)
         {
-            Color color = direction.y == 0 ? Color.yellow : Color.green;
-            Debug.DrawRay(globalStart, direction * range, color, rayTime);
+            Color colorDir = AreSimilarFloat(direction.y, 0, 0.01f) ? Color.yellow : Color.green;
+            //if (color.HasValue)
+            //    colorDir = color.Value;
+            Debug.DrawRay(globalStart, direction * range, colorDir, rayTime);
         }
 
 #endif
@@ -156,7 +158,7 @@ public partial class FOVRenderer
 
     private Looking GetVerticalDirection(float xAngle)
     {
-        if (xAngle == 0)
+        if (AreSimilarFloat(xAngle, 0, 0.01f))
             return Looking.ZeroAngle;
         if (xAngle < 0)
             return Looking.Up;
@@ -244,6 +246,10 @@ public partial class FOVRenderer
     public bool AreSimilarLenght(Vector3 sample1, float comparison)
     {
         return Mathf.Abs(sample1.magnitude - comparison) < horizontalThreshold;
+    }
+    public bool AreSimilarFloat(float a, float b, float tolerance)
+    {
+        return Mathf.Abs(a - b) < tolerance;
     }
 
     public bool AreSimilarYDirection(Vector3 sample1, Vector3 sample2)

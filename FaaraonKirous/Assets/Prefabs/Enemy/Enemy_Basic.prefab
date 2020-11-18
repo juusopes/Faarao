@@ -33,9 +33,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 6024281465610095461}
   - {fileID: 1392255657621091735}
   - {fileID: 1295752339806913344}
-  - {fileID: 6024281465610095461}
   - {fileID: 3906442262546596267}
   - {fileID: 4496652939998034992}
   - {fileID: 1412583379822920920}
@@ -206,7 +206,7 @@ Transform:
   m_LocalScale: {x: 0.18629073, y: 0.18629073, z: 0.18629073}
   m_Children: []
   m_Father: {fileID: 1295752339492584483}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1295752339806913349
 MeshFilter:
@@ -526,7 +526,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1295752339492584483}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4206237600293076343
 MonoBehaviour:
@@ -545,8 +545,14 @@ MonoBehaviour:
   vertexPoints: []
   uv: []
   triangles: 
+  yRayCount: 0
+  xRayCount: 0
   debugMode: 5
   ballMat: {fileID: 0}
+  maxXIterations: 999
+  debuggingOneFrame: 0
+  debuggingLogging: 0
+  disableReSampling: 1
 --- !u!33 &6024281465610095463
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -781,7 +787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6656941681219716555, guid: 7f97556d0afa4694db6506a3446b7a6e, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6656941681219716555, guid: 7f97556d0afa4694db6506a3446b7a6e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

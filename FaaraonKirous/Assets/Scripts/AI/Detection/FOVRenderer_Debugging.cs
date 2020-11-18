@@ -11,23 +11,32 @@ using UnityEngine.Rendering.VirtualTexturing;
 
 public partial class FOVRenderer
 {
-
+    [Header("Debugging (Editor only)")]
     [SerializeField]
     private DebugMode debugMode = DebugMode.All;
     [SerializeField]
     private Material ballMat;
+    [SerializeField]
+    private int maxXIterations = 999;
+    [SerializeField]
+    private bool debuggingOneFrame;     //Debug only one frame
+    [SerializeField]
+    private bool debuggingLogging;
+    [SerializeField]
+    private bool disableReSampling = true;
+    [SerializeField]
+    private bool drawShapesOnIgnoredSamples = false;
+
     private bool DebugRayCasts => debugMode == DebugMode.Raycasts || debugMode == DebugMode.All;
     private bool DebugVertexShapes => debugMode == DebugMode.VertexShapes || debugMode == DebugMode.AllShapes || debugMode == DebugMode.All;
     private bool DebugRaypointShapes => debugMode == DebugMode.RaypointShapes || debugMode == DebugMode.AllShapes || debugMode == DebugMode.All;
     private GameObject vertexPointsParent;
     private GameObject raySamplePointsParent;
     private GameObject randomPointsParent;
-    
-    private int maxXIterations = 999;
 
-    private bool debuggingFrame = true;     //Debug only one frame
 
-    private float rayTime => debuggingFrame ? 1000f : 10f;
+
+    private float rayTime => debuggingOneFrame ? 1000f : 1f;
 
     private enum DebugMode
     {
@@ -105,11 +114,9 @@ public partial class FOVRenderer
 
     void ACylinder(Vector3 localPos, Color? color = null)
     {
-        Destroy(randomPointsParent);
-        randomPointsParent = new GameObject("Random test points");
         if (DebugRaypointShapes)
         {
-            GameObject sphere = CreatePrimitive(localPos, PrimitiveType.Cylinder, new Vector3(0.3f, 0.25f, 0.3f), randomPointsParent);
+            GameObject sphere = CreatePrimitive(localPos, PrimitiveType.Cylinder, new Vector3(0.25f, 0.03f, 0.25f), randomPointsParent);
             sphere.GetComponent<Renderer>().material.color = color ?? Color.magenta;
             sphere.name = "Random test point";
         }

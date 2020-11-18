@@ -50,8 +50,8 @@ public partial class FOVRenderer : MonoBehaviour
     SampleType lastSampleType = 0;
 
     //Tweakable values
-    private const int yRayCount = (8) + 1;    // Horizontal angles ODD NUMBER 
-    private const int xRayCount = (8) + 1;    // Vertical angles ODD NUMBER 
+    public int yRayCount;// = (8) + 1;    // Horizontal angles ODD NUMBER 
+    public int xRayCount;// = (8) + 1;    // Vertical angles ODD NUMBER 
     private const float maxXAngle = (90.0000001f) * -1;   //Negative number is up!
     private const float ledgeStep = 0.25f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;
@@ -94,6 +94,7 @@ public partial class FOVRenderer : MonoBehaviour
     private Vector3 ConvertGlobal(Vector3 inVec) => transform.TransformPoint(inVec);
     private Vector3 ConvertLocal(Vector3 inVec) => transform.InverseTransformPoint(inVec);
     private Vector3 LastAddedVertex => vertexPoints[vertexPoints.Count - 1];
+    private Vector3 FirstVertex => vertexPoints[0];
 
     private Vector3 MeshOrigin => Vector3.zero - Vector3.up * playerHeight;
     #endregion
@@ -102,6 +103,10 @@ public partial class FOVRenderer : MonoBehaviour
     void Awake()
     {
         Assert.IsNotNull(character, "Character is not set!");
+        if (yRayCount % 2 == 0)
+            yRayCount += 1;
+        if (xRayCount % 2 == 0)
+            xRayCount += 1;
         Assert.IsTrue(yRayCount % 2 == 1, "Raycount must be odd number");
         Assert.IsTrue(xRayCount % 2 == 1, "Raycount must be odd number");
     }
@@ -130,7 +135,7 @@ public partial class FOVRenderer : MonoBehaviour
     private void LateUpdate()
     {
 #if UNITY_EDITOR
-        if (debuggingFrame)
+        if (debuggingOneFrame)
             return;
 #endif
 
@@ -143,6 +148,13 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void UpdateViewCone()
     {
+#if UNITY_EDITOR
+        if (drawShapesOnIgnoredSamples)
+        {
+            Destroy(randomPointsParent);
+            randomPointsParent = new GameObject("Random test points");
+        }
+#endif
         SetOrigin(transform.position);
         SetAimDirection(transform.forward, yFOV, xFOV);
         UpdateMesh();
@@ -193,7 +205,9 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void AddVertexPoint(Vector3 sample, SampleType sampleType)
     {
-        //Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>");
+#if UNITY_EDITOR
+        if (debuggingLogging) Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>");
+#endif
         lastSampleType = sampleType;
 
 #if UNITY_EDITOR

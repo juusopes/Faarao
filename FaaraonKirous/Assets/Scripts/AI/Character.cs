@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
 
+[SelectionBase]
 public class Character : MonoBehaviour
 {
     #region User setting fields
