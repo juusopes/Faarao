@@ -77,7 +77,9 @@ public static class OnNavMesh
     /// <returns></returns>
     public static bool IsReachable(Transform navObject, Vector3 testPosition)
     {
-        return NavMesh.CalculatePath(testPosition, navObject.position, NavMesh.AllAreas, new NavMeshPath());
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(testPosition, navObject.position, NavMesh.AllAreas, path);
+        return path.status == NavMeshPathStatus.PathComplete;
     }
 
     /// <summary>

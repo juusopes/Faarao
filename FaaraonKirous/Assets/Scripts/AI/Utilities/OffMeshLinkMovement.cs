@@ -64,7 +64,8 @@ class OffMeshLinkMovement
         linkRoute.route = route;
         linkRoute.RotationType = OffMeshRotationType.RotateMoving;
         Vector3 relativePos = route[1] - route[0];
-        linkRoute.faceDirection = Quaternion.LookRotation(relativePos, Vector3.up);
+        relativePos.y = 0;
+        linkRoute.faceDirection = Quaternion.LookRotation(relativePos);
 
 
         return linkRoute;
@@ -84,7 +85,8 @@ class OffMeshLinkMovement
         linkRoute.route = route;
         linkRoute.RotationType = OffMeshRotationType.RotateMoving;
         Vector3 relativePos = route[1] - route[0];
-        linkRoute.faceDirection = Quaternion.LookRotation(relativePos, Vector3.up);
+        relativePos.y = 0;
+        linkRoute.faceDirection = Quaternion.LookRotation(relativePos);
 
         return linkRoute;
     }
