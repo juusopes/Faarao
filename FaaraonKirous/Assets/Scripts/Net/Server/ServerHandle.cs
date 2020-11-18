@@ -8,9 +8,12 @@ public class ServerHandle
     #region Core
     public static void ConnectionRequest(int connection, Packet packet)
     {
-        // Player connected
-        NetworkManager._instance.PlayerConnected(connection, "null");
+        Debug.Log($"{GameManager._instance.Players.Count} Join request received!");
 
+        // TODO: Call connect client
+        Server.Instance.SetConnectionFlags(connection, ConnectionState.Connected);
+        GameManager._instance.PlayerConnected(connection, "Placeholder: Please fix");
+        
         // Send connection accepted message
         ServerSend.ConnectionAccepted(connection);
 
@@ -35,6 +38,11 @@ public class ServerHandle
         int ping = (int)((DateTime.Now.Ticks - timeStamp) / TimeSpan.TicksPerMillisecond);
         // TODO: Check that connection is not null
         Server.Instance.Connections[connection].Ping = ping;
+    }
+
+    public static void Disconnecting(int connection, Packet packet)
+    {
+        Server.Instance.DisconnectClient(connection);
     }
     #endregion
 

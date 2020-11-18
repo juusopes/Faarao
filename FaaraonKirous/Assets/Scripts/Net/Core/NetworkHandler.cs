@@ -18,6 +18,7 @@ public abstract class NetworkHandler
     public abstract void BeginHandlePacket(int connectionId, IPEndPoint endPoint, Packet packet);
     protected abstract void OnReceiveException();
     protected abstract void InternalUpdate();
+    public abstract void ConnectionTimeout(int connection);
 
     public NetworkSimulator Simulator { get; private set; } = null;
 
@@ -31,7 +32,7 @@ public abstract class NetworkHandler
         if (_socket != null)
         {
             // TODO: Cannot close socket on client. But should close on server
-            //_socket.Close();
+            _socket.Close();
             _socket = null;
 
             _internalUpdateCts.Cancel();
@@ -136,8 +137,12 @@ public abstract class NetworkHandler
         });
     }
 
-    public virtual void ConnectionTimeout()
+    protected void IgnoreRemoteHostClosedConnection()
     {
-
+        _socket.Client.IOControl(
+            (IOControlCode)Constants.sioUdpConnectionReset,
+            new byte[] { 0, 0, 0, 0 },
+            null
+        );
     }
 }

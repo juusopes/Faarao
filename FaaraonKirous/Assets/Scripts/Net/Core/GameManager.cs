@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.Linq;
 using System.Security.Permissions;
 using TMPro;
@@ -34,30 +34,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyClientPrefab = null;
 
-    // Player Characters
-    public GameObject Priest { get; private set; } = null;
-    public GameObject Pharaoh { get; private set; } = null;
-    
-
-    // Player specific properties
-    public Dictionary<int, PlayerInfo> Players { get; private set; } = new Dictionary<int, PlayerInfo>();
-    public ObjectType? ControlledPlayerCharacter 
-        => Players[NetworkManager._instance.MyConnectionId].ControlledCharacter;
-    public GameObject CurrentCharacter => GetCurrentCharacterObject();
-
-    private GameObject GetCurrentCharacterObject()
-    {
-        switch (ControlledPlayerCharacter)
-        {
-            case ObjectType.pharaoh:
-                return Pharaoh;
-            case ObjectType.priest:
-                return Priest;
-        }
-
-        return null;
-    }
-
     private void Awake()
     {
         if (_instance == null)
@@ -71,14 +47,12 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Add host to players
-        if (NetworkManager._instance.IsHost)
+        // TODO: Hosts name should be added later
+        // Add default so that we don't get errors
+        Players.Add(Constants.defaultConnectionId, new PlayerInfo
         {
-            Players.Add(Constants.defaultConnectionId, new PlayerInfo
-            {
-                Name = "me"  // TODO: Get profile name
-            });
-        }
+            Name = "default"
+        });
 
         // Add lists
         _objectLists.Add(ObjectList.enemy, new Dictionary<int, ObjectManager>());
@@ -93,7 +67,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    #region LoadingAndSaving
+    #region Loading/Saving
     public int CurrentSceneIndex => SceneManager.GetActiveScene().buildIndex;
     public bool IsSceneLoaded
     {
@@ -115,7 +89,7 @@ public class GameManager : MonoBehaviour
             {
                 if (NetworkManager._instance.ShouldSendToClient)
                 {
-                    // Every client's scene is considered to not be loaded
+                    // Every client's scene is considered to not be loaded, if host's scene is not loaded
                     Server.Instance.ResetConnectionFlags(ConnectionState.SceneLoaded);
                 }
             }
@@ -157,9 +131,7 @@ public class GameManager : MonoBehaviour
         {
             ServerSend.StartLoading();
         }
-
-        InGameMenu._instance.EnableLoadingScreen();
-
+        
         Time.timeScale = 0;
 
         IsFullyLoaded = false;
@@ -172,7 +144,17 @@ public class GameManager : MonoBehaviour
 
         LoadScene(sceneIndex, true);
 
-        EndLoading();
+        WaitForSceneLoad(() => EndLoading());
+    }
+
+    private IEnumerator WaitForSceneLoad(Action action)
+    {
+        while (!IsSceneLoaded)
+        {
+            yield return null;
+        }
+
+        action();
     }
 
     public void LoadScene(int sceneIndex, bool restart = false)
@@ -202,8 +184,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
 
         IsFullyLoaded = true;
-
-        InGameMenu._instance.DisableLoadingScreen();
     }
 
     private IEnumerator LoadSceneAsynchronously(int sceneIndex, GameState state = null)
@@ -222,6 +202,7 @@ public class GameManager : MonoBehaviour
         }
 
         IsSceneLoaded = true;
+        EndLoading();
     }
 
     public void StartSaving()
@@ -261,9 +242,6 @@ public class GameManager : MonoBehaviour
     private void LoadGameState(GameState state)
     {
         ClearAllObjects();
-
-
-
         // TODO: Instantiate objects
         // TODO: Set object states
 
@@ -309,7 +287,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region Syncing
+    #region Syncing/Clearing
     public void ResetAll()
     {
         // Objects
@@ -391,19 +369,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region Adders
-    public void AddPlayerCharacter(ObjectManager netManager)
-    {
-        switch (netManager.Type)
-        {
-            case ObjectType.pharaoh:
-                Pharaoh = netManager.gameObject;
-                break;
-            case ObjectType.priest:
-                Priest = netManager.gameObject;
-                break;
-        }
-    }
+    #region Creators/Adders
 
     public void ObjectCreatedHost(ObjectManager netManager, bool useTypeForId = false)
     {
@@ -414,9 +380,6 @@ public class GameManager : MonoBehaviour
 
         netManager.ObjectCreated();
     }
-    #endregion
-
-    #region Creators
     public GameObject InstantiateObjectClient(ObjectType type, Vector3 position, Quaternion rotation)
     {
         return Instantiate(_objectPrefabs[type], position, rotation);
@@ -430,6 +393,73 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Players
+    public GameObject Priest { get; private set; } = null;
+    public GameObject Pharaoh { get; private set; } = null;
+
+    public int CurrentPlayerId { get; set; } = Constants.defaultConnectionId;
+    public Dictionary<int, PlayerInfo> Players { get; private set; } 
+        = new Dictionary<int, PlayerInfo>();
+    public ObjectType? ControlledCharacter
+        => Players[CurrentPlayerId].ControlledCharacter;
+    public GameObject CurrentCharacter
+    {
+        get
+        {
+            switch (ControlledCharacter)
+            {
+                case ObjectType.pharaoh:
+                    return Pharaoh;
+                case ObjectType.priest:
+                    return Priest;
+            }
+            return null;
+        }
+    }
+
+    public void AddPlayerCharacter(ObjectManager netManager)
+    {
+        switch (netManager.Type)
+        {
+            case ObjectType.pharaoh:
+                Pharaoh = netManager.gameObject;
+                break;
+            case ObjectType.priest:
+                Priest = netManager.gameObject;
+                break;
+        }
+    }
+
+    public void PlayerConnected(int id, string name)
+    {
+        Players.Add(id, new PlayerInfo
+        {
+            Name = name,
+            ControlledCharacter = null
+        });
+
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.PlayerConnected(id, name);
+        }
+    }
+
+    public void PlayerDisconnected(int id)
+    {
+        Debug.Log($"{Players[id].Name} disconnected");
+
+        if (NetworkManager._instance.IsHost)
+        {
+            // Unselect the character of the disconnecting player
+            UnselectCharacter(id);
+
+            if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.PlayerDisconnected(id);
+            }
+        }
+
+        Players.Remove(id);
+    }
 
     public void UnselectCharacter(int controllerId = Constants.defaultConnectionId)
     {

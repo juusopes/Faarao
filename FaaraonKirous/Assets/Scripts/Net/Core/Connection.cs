@@ -23,6 +23,8 @@ public class Connection
     private readonly NetworkHandler _networkHandler;
     private readonly Dictionary<ChannelType, IChannel> _channels = new Dictionary<ChannelType, IChannel>();
 
+    private readonly object _lock = new object();
+
     public Connection(int connectionId, NetworkHandler networkHandler)
     {
         ConnectionId = connectionId;
@@ -42,8 +44,11 @@ public class Connection
 
     public void Disconnect()
     {
-        // TODO: Call connection closed on network handler
         EndPoint = null;
+    }
+
+    public void Reset()
+    {
         _channels.Clear();
     }
 
@@ -52,7 +57,11 @@ public class Connection
         foreach (IChannel channel in _channels.Values)
         {
             channel.InternalUpdate(out bool timeout);
-            if (timeout) Disconnect();
+            if (timeout)
+            {
+                _networkHandler.ConnectionTimeout(ConnectionId);
+                return;
+            }
         }
     }
 
@@ -77,8 +86,6 @@ public class Connection
 
     public void BeginHandlePacket(Packet packet)
     {
-        //Debug.Log($"Handling packet from connection {ConnectionId}");
-
         ChannelType channelType = (ChannelType)packet.ReadByte();
         _channels[channelType].BeginHandlePacket(packet);
     }
