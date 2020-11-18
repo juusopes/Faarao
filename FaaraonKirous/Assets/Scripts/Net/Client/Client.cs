@@ -23,6 +23,8 @@ public sealed class Client : NetworkHandler
 
     public void ConnectToServer(IPEndPoint endPoint)
     {
+        Debug.Log("ConnectToServer");
+
         InitializeClientData();
 
         Connection.Connect(endPoint, Constants.defaultConnectionId);
@@ -34,8 +36,17 @@ public sealed class Client : NetworkHandler
         ClientSend.ConnectionRequest();
     }
 
+    public override void ConnectionTimeout(int connection)
+    {
+        Disconnect();
+    }
+
     public void Disconnect()
     {
+        if (Connection == null || Connection.EndPoint == null) return;
+
+        ClientSend.Disconnecting();
+
         if (CloseSocket()) Debug.Log("Disconnected from server.");
     }
 
@@ -63,6 +74,7 @@ public sealed class Client : NetworkHandler
     {
         // Initialize UDP client
         _socket = new UdpClient(0);
+        IgnoreRemoteHostClosedConnection();
 
         // Initialize packet handlers
         _packetHandlers = new Dictionary<int, PacketHandler>()
@@ -85,7 +97,10 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.characterControllerUpdate, ClientHandle.CharacterControllerUpdate },
             { (int)ServerPackets.crouching, ClientHandle.Crouching },
             { (int)ServerPackets.running, ClientHandle.Running },
-            { (int)ServerPackets.syncPlayers, ClientHandle.SyncPlayers }
+            { (int)ServerPackets.syncPlayers, ClientHandle.SyncPlayers },
+            { (int)ServerPackets.playerConnected, ClientHandle.PlayerConnected },
+            { (int)ServerPackets.playerDisconnected, ClientHandle.PlayerDisconnected },
+            { (int)ServerPackets.serverStopped, ClientHandle.ServerStopped }
         };
 
         // Initialize connection

@@ -43,7 +43,33 @@ public class ServerSend
             packet.Write(GameManager._instance.Players[id].Name);
         }
 
-        Server.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet);
+        Server.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet, ConnectionState.Connected);
+    }
+
+    public static void PlayerConnected(int connection, string name)
+    {
+        var packet = new Packet((int)ServerPackets.playerConnected);
+        packet.Write(connection);
+        packet.Write(name);
+
+        Server.Instance.BeginSendPacketAllExclude(connection, ChannelType.Reliable, packet,
+            ConnectionState.Connected);
+    }
+
+    public static void PlayerDisconnected(int connection)
+    {
+        var packet = new Packet((int)ServerPackets.playerDisconnected);
+        packet.Write(connection);
+
+        Server.Instance.BeginSendPacketAllExclude(connection, ChannelType.Reliable, packet, 
+            ConnectionState.Connected);
+    }
+
+    public static void ServerStopped()
+    {
+        var packet = new Packet((int)ServerPackets.serverStopped);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Unreliable, packet);
     }
     #endregion
 

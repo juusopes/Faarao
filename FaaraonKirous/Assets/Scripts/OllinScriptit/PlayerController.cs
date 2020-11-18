@@ -20,13 +20,14 @@ public class PlayerController : MonoBehaviour
     private Vector3 position;
 
     //Running
+    [HideInInspector]
     private bool _isRunning;
-    public bool IsRunning
-    {
+    public bool IsRunning 
+    { 
         get
         {
             return _isRunning;
-        }
+        } 
         set
         {
             _isRunning = value;
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
     private bool lineOfSight;
 
     //Crouch
+    [HideInInspector]
     private bool _isCrouching;
     public bool IsCrouching
     {
@@ -116,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
     //Respawn
     private bool useRespawn;
-
+    
     //Menu
     public LevelController lC;
     public InGameMenu menu;
@@ -134,14 +136,14 @@ public class PlayerController : MonoBehaviour
         {
             Moving();
             LineOfSight();
-            KeyControls();
+            KeyControls();          
             Invisibility();  // TODO: Does not work in multiplayer
 
             if (NetworkManager._instance.IsHost)
             {
                 TestOffLink();
             }
-
+            
             Attack();
             Respawn();
             Interact();
@@ -193,14 +195,6 @@ public class PlayerController : MonoBehaviour
     }
     public void Moving()
     {
-        if (NetworkManager._instance.IsHost && navMeshAgent.isOnOffMeshLink)
-        {
-            navMeshAgent.speed = movementSpeed * 1.5f;
-            IsRunning = true;
-            IsCrouching = false;
-            return;
-        }
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
         //DoubleClick Check
@@ -265,7 +259,7 @@ public class PlayerController : MonoBehaviour
         SetDestination(transform.position);
         targetV3 = transform.position;
     }
-
+    
     public void GiveDestination(Vector3 v3)
     {
         targetV3 = v3;
@@ -301,9 +295,6 @@ public class PlayerController : MonoBehaviour
     {
         if (IsCurrentPlayer)
         {
-            if (navMeshAgent.isOnOffMeshLink)
-                return;
-
             if (IsRunning)
             {
                 IsRunning = false;
@@ -391,25 +382,35 @@ public class PlayerController : MonoBehaviour
         // TODO: Doesn't work in multiplayer
         if (abilityNum == 8)
         {
-            if (lC.targetObject != null)
-            {
-                target = lC.targetObject;
-            }
-            else if (!useAttack)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit = new RaycastHit();
+            //DoubleClick Check
+
+            if (!useInteract)
             {
                 target = null;
             }
-            if (target != null)
-            {
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
-                {
-                    targetV3 = target.transform.position;
-                    SetDestination(targetV3);
 
-                    useInteract = true;
-                    abilityActive = false;
-                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "TargetableObject";
+            if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer && !PointerOverUI())
+            {
+                if (lC.targetObject != null)
+                {
+                    target = lC.targetObject;
+                    if (target.tag == "TargetableObject")
+                    {
+                        if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
+                        {
+                            targetV3 = hit.point;
+                            SetDestination(targetV3);
+                        }
+
+                        useInteract = true;
+                        abilityActive = false;
+                    }
                 }
+            }
+            if (interactObject != null)
+            {
                 if (interactObject == target)
                 {
                     if (NetworkManager._instance.IsHost)
@@ -430,25 +431,31 @@ public class PlayerController : MonoBehaviour
     {
         if (abilityNum == 9)
         {
-            if (lC.targetObject != null)
-            {
-                target = lC.targetObject;
-            }
-            else if (!useAttack)
+            //if (IsCurrentPlayer)
+            //{
+            //    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Enemy";
+            //}
+            if (!useAttack)
             {
                 target = null;
             }
-            if (target != null)
+            if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                if (lC.targetObject != null)
                 {
-                    targetV3 = target.transform.position;
-                    SetDestination(targetV3);
-
-                    useAttack = true;
-                    abilityActive = false;
-                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Enemy";
+                    target = lC.targetObject;
+                    if (target.tag == "Enemy")
+                    {
+                        targetV3 = target.transform.position;
+                        targetV3.y = transform.position.y;
+                        SetDestination(targetV3);
+                        useAttack = true;
+                        abilityActive = false;
+                    }
                 }
+            }
+            if (targetEnemy != null)
+            {
                 if (targetEnemy == target)
                 {
                     if (NetworkManager._instance.IsHost)
@@ -462,7 +469,6 @@ public class PlayerController : MonoBehaviour
                             ClientSend.KillEnemy(targetEnemy.GetComponent<EnemyObjectManager>().Id);
                         }
                     }
-
                     targetEnemy = null;
                     target = null;
                     useAttack = false;
@@ -479,24 +485,30 @@ public class PlayerController : MonoBehaviour
         {
             if (abilityNum == 10)
             {
-                if (lC.targetObject != null)
-                {
-                    target = lC.targetObject;
-                }
-                else if (!useRespawn)
+                //if (IsCurrentPlayer)
+                //{
+                //    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Player";
+                //}
+                if (!useRespawn)
                 {
                     target = null;
                 }
-                if (target != null)
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
                 {
-                    if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                    if (lC.targetObject != null)
                     {
-                        targetV3 = target.transform.position;
-                        navMeshAgent.SetDestination(targetV3);
-                        useRespawn = true;
-                        abilityActive = false;
-                        GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "Player";
+                            target = lC.targetObject;
+                        if (target.tag == "Player")
+                        {
+                            targetV3 = target.transform.position;
+                            navMeshAgent.SetDestination(targetV3);
+                            useRespawn = true;
+                            abilityActive = false;
+                        }
                     }
+                }
+                if (targetEnemy != null)
+                {
                     if (targetEnemy == target)
                     {
                         targetEnemy.GetComponent<DeathScript>().heal = 1;
@@ -510,6 +522,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    
 
     public void UseAbility(int tempAbilityNum)
     {
@@ -530,8 +543,7 @@ public class PlayerController : MonoBehaviour
                 abilityActive = false;
                 abilityNum = 0;
             }
-        }
-        else
+        } else
         {
             Debug.Log(tempAbilityNum);
         }
@@ -542,7 +554,7 @@ public class PlayerController : MonoBehaviour
         if (navMeshAgent.isOnOffMeshLink && linkMovement.CanStartLink())
         {
             OffMeshLinkRoute route = linkMovement.GetOffMeshLinkRoute();
-            StartCoroutine(linkMovement.MoveAcrossNavMeshLink(route, targetV3));
+            StartCoroutine(linkMovement.MoveAcrossNavMeshLink(route));
         }
     }
 
@@ -635,17 +647,6 @@ public class PlayerController : MonoBehaviour
         {
             CamFollow();
         }
-        //if (Input.GetKeyDown(KeyCode.U))
-        //{
-        //    if (climbing)
-        //    {
-        //        climbing = false;
-        //    }
-        //    else
-        //    {
-        //        climbing = true;
-        //    }
-        //}
     }
     public bool PointerOverUI()
     {
