@@ -565,7 +565,7 @@ public class PlayerController : MonoBehaviour
             if (position == null || navMeshAgent.destination == position || !navMeshAgent.enabled)
                 return;
 
-            if (!OnNavMesh.IsReachable(transform, position))
+            if (!OnNavMesh.IsCompletelyReachable(transform, position))
                 return;
 
             navMeshAgent.destination = position;

@@ -231,7 +231,7 @@ public partial class FOVRenderer
 
     public bool IsClearlyLower(Vector3 start, Vector3 end)
     {
-        Debug.Log((end.y - start.y < -verticalThreshold) +" " +start.y + "-" + end.y + "=" + (end.y - start.y));
+        //Debug.Log((end.y - start.y < -verticalThreshold) +" " +start.y + "-" + end.y + "=" + (end.y - start.y));
         return end.y - start.y < -verticalThreshold;
     }
 

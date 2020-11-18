@@ -33,7 +33,7 @@ public class WaypointGroup : MonoBehaviour
                 Waypoint wp = trans.GetComponent<Waypoint>();
                 if (wp != null)
                 {
-                    if (OnNavMesh.IsReachable(navTestTrans, trans.position) || wp.type == WaypointType.Climb)
+                    if (OnNavMesh.IsPartiallyReachable(navTestTrans, trans.position) || wp.type == WaypointType.Climb)
                     {
                         waypoints.Add(wp);
                     }

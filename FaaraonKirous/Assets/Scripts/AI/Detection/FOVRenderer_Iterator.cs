@@ -184,7 +184,6 @@ public partial class FOVRenderer
             if (debuggingLogging) Debug.Log("<b><color=white>Wall to floor calculation</color></b>");
 #endif
             TryCreateWallToFloorCornerVertex(previousSample, sample);
-            Debug.Log(previousRayCastHit.collider + " " + raycastHit.collider);
             if(!AreHittingSameCollider(previousRayCastHit, raycastHit))
                 TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
         }
@@ -197,7 +196,7 @@ public partial class FOVRenderer
             //Todo: consider back tracking
             if (!TryCreateFloorToWallCornerVertex(yAngleSampled, previousSample, sample))
             {
-                Debug.Log("Nope");
+                //Debug.Log("Nope");
                 reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
             }
 

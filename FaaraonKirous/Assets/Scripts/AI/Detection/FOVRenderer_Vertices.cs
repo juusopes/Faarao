@@ -77,11 +77,11 @@ public partial class FOVRenderer
         Vector3 closestCorner = Vector3.zero;
         if (needNewCorner)
         {
-            closestCorner = GetLedgeCorner(yAngleIn, ledgeStartSample, sample);
+            closestCorner = GetLedgeCorner(yAngleIn, ledgeStartSample, sample, ledgeStartRayCastHit);
             //Debug.Log(ledgeStartSample + " " + closestCorner);
             if (closestCorner == Vector3.zero)
             {
-                Debug.LogWarning("Closest corner is zero");
+                Debug.LogError("Closest corner is zero");
                 return Vector3.zero;
             }
         }
@@ -122,18 +122,25 @@ public partial class FOVRenderer
     /// <param name="previousSample"></param>
     /// <param name="sample"></param>
     /// <returns></returns>
-    private Vector3 GetLedgeCorner(float yAngleIn, Vector3 previousSample, Vector3 sample)
+    private Vector3 GetLedgeCorner(float yAngleIn, Vector3 previousSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
     {
         float approximateY = (sample.normalized * previousSample.magnitude).y;
         Vector3 approximateCorner = new Vector3(previousSample.x, approximateY, previousSample.z);                                   //Corner position that is on same x and z as real corner but y is on sample vector (raycast vector)
         //Vector3 direction = Vector3.down + sample.normalized * 0.2f;                                                //Get direction of ledge
         Vector3 direction = Quaternion.Euler(cornerCheckAngle, yAngleIn, 0) * Vector3.forward;
-        RaycastHit raycastHit;
-        float cornerY = GetSamplePoint(ConvertGlobal(approximateCorner), direction, approximateY - previousSample.y + 0.5f, out raycastHit).y;       //Raycast almost straight down towards ledge to determine y height
-        if (HasNotHit(raycastHit))                                                                          //If ray failed, use approximate corner
+        RaycastHit testRaycastHit;
+        float range = approximateY - previousSample.y + 0.5f;
+        float cornerY = GetSamplePoint(ConvertGlobal(approximateCorner), direction, range, out testRaycastHit).y;       //Raycast almost straight down towards ledge to determine y height
+        if (HasNotHit(testRaycastHit))                                                                          //If ray failed, use approximate corner
         {
-            Debug.Log("Ray failed " + cornerY + " " + previousSample.y);
-            return Vector3.zero;
+            Vector3 reTry = GetClosestPointOnCollider(ledgeStartRayCastHit, approximateCorner);
+            if(reTry == Vector3.zero)
+            {
+                Debug.Log("Corner failed " + approximateY + " " + previousSample.y + " " + range);
+                return Vector3.zero;
+            }
+
+            cornerY = reTry.y;
         }
 
         return new Vector3(approximateCorner.x, cornerY, approximateCorner.z);
