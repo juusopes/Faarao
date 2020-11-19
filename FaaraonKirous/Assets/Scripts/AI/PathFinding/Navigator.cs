@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Navigator
 {
     private WaypointGroup wpGroup;
-    public int currentWaypoint = 0;
+    private int currentWaypoint = 0;
     private int direction = 1; // -1 or 1
     private Transform parentTrans;
 
@@ -15,6 +15,7 @@ public class Navigator
     private PatrolType patrolType => wpGroup == null ? 0 : wpGroup.GetPatrolType();
     private int waypointCount => wpGroup == null ? 0 : wpGroup.GetWaypointCount();
     private bool IsValidIndex(int index) => wpGroup.IsValidIndex(index);
+    public int CurrentWaypointIndex => currentWaypoint;
 
     public Navigator(Transform parentTrans, WaypointGroup wpGroup)
     {
@@ -31,8 +32,9 @@ public class Navigator
         return wpGroup.GetWaypoint(0);
     }
 
-    public Waypoint GetCurrentWaypoint()
+    public Waypoint GetSavedWaypoint(int index)
     {
+        currentWaypoint = index;
         return wpGroup.GetWaypoint(currentWaypoint);
     }
 

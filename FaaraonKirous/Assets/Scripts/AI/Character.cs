@@ -44,7 +44,7 @@ public class Character : MonoBehaviour
     private float distractionTimer;
 
     [HideInInspector]
-    public Vector3 additionalTarget;
+    public Vector3 possessedGoToTarget;
     [HideInInspector]
     public Vector3 currentDistractionPos;
     [HideInInspector]
@@ -366,7 +366,7 @@ public class Character : MonoBehaviour
     public void PossessAI(Vector3 position)
     {
         stateMachine.PlayerTakesControl();
-        additionalTarget = position;
+        possessedGoToTarget = position;
     }
 
     public void VisualizePath()
@@ -588,6 +588,16 @@ public class Character : MonoBehaviour
             return true;
         return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending;
     }
+    #endregion
+
+    #region SaveAndLoad
+    
+    public void SaveLoaded(Vector3 lastSeenPos, int currentWaypointIndex)
+    {
+        lastSeenPosition = lastSeenPos;
+        currentWaypoint = navigator.GetSavedWaypoint(currentWaypointIndex);
+    }
+
     #endregion
 
     #region Networking

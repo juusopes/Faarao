@@ -68,14 +68,14 @@ public class EnemyObjectManager : CharacterObjectManager
     {
         base.WriteState(dataPacket);
         dataPacket.Write(Character.lastSeenPosition);
-        dataPacket.Write(Character.navigator.currentWaypoint);
+        dataPacket.Write(Character.navigator.CurrentWaypointIndex);
     }
 
     public override void ReadState(Packet dataPacket)
     {
         base.ReadState(dataPacket);
-        Character.lastSeenPosition = dataPacket.ReadVector3();
-        Character.navigator.currentWaypoint = dataPacket.ReadInt();
-        
+        Vector3 lastSeenPosition = dataPacket.ReadVector3();
+        int currentWaypoint = dataPacket.ReadInt();
+        Character.SaveLoaded(lastSeenPosition, currentWaypoint);
     }
 }

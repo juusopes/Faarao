@@ -37,7 +37,7 @@ public class Save
             // Read data
             using (Packet packet = new Packet())
             {
-                objectManager.ReadState(packet);
+                objectManager.WriteState(packet);
                 Data = packet.ToArray().ToList();
             }
         }
