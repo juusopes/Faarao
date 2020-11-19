@@ -119,7 +119,7 @@ public class ClientHandle
         Vector3 position = packet.ReadVector3();
         Quaternion rotation = packet.ReadQuaternion();
 
-        GameManager._instance.CreateObjectClient(type, id, position, rotation);
+        GameManager._instance.CreateObjectWithId(type, id, position, rotation);
     }
 
     public static void DisposableObjectCreated(int connection, Packet packet)
@@ -128,7 +128,7 @@ public class ClientHandle
         Vector3 position = packet.ReadVector3();
         Quaternion rotation = packet.ReadQuaternion();
 
-        GameManager._instance.InstantiateObjectClient(type, position, rotation);
+        GameManager._instance.InstantiateObject(type, position, rotation);
     }
     #endregion
 
@@ -245,7 +245,7 @@ public class ClientHandle
         if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager objectManager))
         {
             PlayerObjectManager playerObjectManager = (PlayerObjectManager)objectManager;
-            if (controllerId == Constants.noConnectionId)
+            if (controllerId == Constants.noId)
             {
                 playerObjectManager.Controller = null;
             }

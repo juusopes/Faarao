@@ -49,7 +49,7 @@ public class PlayerObjectManager : CharacterObjectManager
 
     protected override void Awake()
     {
-        IsStatic = true;
+        IsUnique = true;
         base.Awake();
     }
 
@@ -80,7 +80,7 @@ public class PlayerObjectManager : CharacterObjectManager
         }
         else
         {
-            packet.Write(Constants.noConnectionId);
+            packet.Write(Constants.noId);
         }
     }
 
@@ -94,7 +94,7 @@ public class PlayerObjectManager : CharacterObjectManager
 
         // Controller
         int controller = packet.ReadInt();
-        if (controller == Constants.noConnectionId)
+        if (controller == Constants.noId)
         {
             Controller = null;
         }
@@ -104,9 +104,9 @@ public class PlayerObjectManager : CharacterObjectManager
         }
     }
 
-    public override void Reset()
+    public override void ResetObject()
     {
-        base.Reset();
+        base.ResetObject();
 
         // Controller must be reset so that we don't get any bugs
         _controller = null;

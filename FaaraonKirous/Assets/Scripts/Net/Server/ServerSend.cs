@@ -267,7 +267,7 @@ public class ServerSend
         }
         else
         {
-            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
         }
         
     }
@@ -280,11 +280,12 @@ public class ServerSend
 
         if (excludeId.HasValue)
         {
-            Server.Instance.BeginSendPacketAllExclude(excludeId.Value, ChannelType.Reliable, packet);
+            Server.Instance.BeginSendPacketAllExclude(excludeId.Value, ChannelType.Reliable, packet, 
+                ConnectionState.Synced);
         }
         else
         {
-            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet);
+            Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
         }
     }
     #endregion
