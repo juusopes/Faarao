@@ -79,5 +79,10 @@ public class WaypointGroup : MonoBehaviour
     {
         return patrolType;
     }
+
+    public void SetGroupId(int index)
+    {
+        //WaypointGroupManager .id = index
+    }
 }
 
