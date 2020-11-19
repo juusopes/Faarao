@@ -17,7 +17,7 @@ public class ControlledState : State
     public override void OnStateEnter()
     {
         character.StopNavigation();
-        character.additionalTarget = UtilsClass.GetMinVector();
+        character.possessedGoToTarget = UtilsClass.GetMinVector();
         controlledTimer = 0;
         character.clickSelector.SetActive(false);
         character.SetSightVisuals(false);
@@ -33,8 +33,8 @@ public class ControlledState : State
 
     void ActPosessed()
     {
-        if (!UtilsClass.IsMinimumVector(character.additionalTarget))
-            character.SetDestination(character.additionalTarget);
+        if (!UtilsClass.IsMinimumVector(character.possessedGoToTarget))
+            character.SetDestination(character.possessedGoToTarget);
 
         controlledTimer += Time.deltaTime;
         if (controlledTimer >= character.ControlledDuration)
