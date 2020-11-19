@@ -13,19 +13,28 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: Opaque
-  disabledShaderPasses: []
+    RenderType: Transparent
+  disabledShaderPasses:
+  - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
+<<<<<<< Updated upstream:FaaraonKirous/Assets/Scenes/Diana/DiananSkene/Dianan_assetit/Objects/Materials/terrain2_mat.mat
         m_Texture: {fileID: 2800000, guid: 7ee0b1d201fd21547b190c5368e7260e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 2800000, guid: 366139ecb3d986d4ea4da13e82177aad, type: 3}
+=======
+        m_Texture: {fileID: 2800000, guid: ff9a5f67adb50824cb1f9a4a0fdd6e38, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: 5484e0b4936542b488bef8053930c2a7, type: 3}
+>>>>>>> Stashed changes:FaaraonKirous/Assets/Scenes/Diana/DiananSkene/Dianan_assetit/Objects/terrain2_mat.mat
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -33,11 +42,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+<<<<<<< Updated upstream:FaaraonKirous/Assets/Scenes/Diana/DiananSkene/Dianan_assetit/Objects/Materials/terrain2_mat.mat
         m_Texture: {fileID: 2800000, guid: 7ee0b1d201fd21547b190c5368e7260e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 2800000, guid: 5726b2146ce571c4ca0e7673737cfcae, type: 3}
+=======
+        m_Texture: {fileID: 2800000, guid: ff9a5f67adb50824cb1f9a4a0fdd6e38, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 2800000, guid: bea3e6b9ee2cf5b46aeda657da7c8431, type: 3}
+>>>>>>> Stashed changes:FaaraonKirous/Assets/Scenes/Diana/DiananSkene/Dianan_assetit/Objects/terrain2_mat.mat
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -54,7 +71,7 @@ Material:
     - _BumpScale: 0.86
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -66,10 +83,10 @@ Material:
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _Surface: 0
+    - _SrcBlend: 5
+    - _Surface: 1
     - _WorkflowMode: 1
-    - _ZWrite: 1
+    - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
