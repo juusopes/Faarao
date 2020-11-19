@@ -22,7 +22,7 @@ public class WaypointGroup : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        Transform navTestTrans = GameObject.FindObjectOfType<NavMeshAgent>().transform;
+        Transform navTestTrans = GameManager._instance.Pharaoh.transform;
         Assert.IsNotNull(navTestTrans);
 
         for (int i = 0; i < transform.childCount; i++)
