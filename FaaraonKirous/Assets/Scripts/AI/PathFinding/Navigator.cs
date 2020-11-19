@@ -31,6 +31,11 @@ public class Navigator
         return wpGroup.GetWaypoint(0);
     }
 
+    public Waypoint GetCurrentWaypoint()
+    {
+        return wpGroup.GetWaypoint(currentWaypoint);
+    }
+
     public Waypoint GetNextWaypoint()
     {
         if (waypointCount == 0)
