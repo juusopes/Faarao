@@ -82,7 +82,7 @@ public class WaypointGroup : MonoBehaviour
 
     public void SetGroupId(int index)
     {
-        //WaypointGroupManager .id = index
+        GetComponent<WaypointGroupManager>().Id = index;
     }
 }
 

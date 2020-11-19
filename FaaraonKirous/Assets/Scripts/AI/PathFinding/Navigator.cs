@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Navigator
 {
     private WaypointGroup wpGroup;
-    private int currentWaypoint = 0;
+    public int currentWaypoint = 0;
     private int direction = 1; // -1 or 1
     private Transform parentTrans;
 

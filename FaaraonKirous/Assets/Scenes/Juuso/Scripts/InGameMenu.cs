@@ -159,45 +159,17 @@ public class InGameMenu : MonoBehaviour
 
     public void SaveLevel()
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/LevelInfo.dat");
-        LevelData data = new LevelData();
-
-        if (player != null && player2 != null)
+        if (NetworkManager._instance.IsHost)
         {
-            print("Level saved at: " + player.transform.position);
-
-            data.lastSaveSpotX = player.transform.position.x;
-            data.lastSaveSpotY = player.transform.position.y;
-            data.lastSaveSpotZ = player.transform.position.z;
-
-            data.lastSaveSpotX2 = player2.transform.position.x;
-            data.lastSaveSpotY2 = player2.transform.position.y;
-            data.lastSaveSpotZ2 = player2.transform.position.z;
+            GameManager._instance.SaveToFile();
         }
-
-        string savedLevel = SceneManager.GetActiveScene().name;
-        data.savedLevel = savedLevel;
-
-        bf.Serialize(file, data);
-
-        file.Close();
     }
 
     public void LoadLevel()
     {
-        if (File.Exists(Application.persistentDataPath + "/LevelInfo.dat"))
+        if (NetworkManager._instance.IsHost)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/LevelInfo.dat", FileMode.Open);
-            LevelData data = (LevelData)bf.Deserialize(file);
-
-            print("Level loaded at: " + player.transform.position);
-
-            file.Close();
-
-            player.transform.position = new Vector3(data.lastSaveSpotX, data.lastSaveSpotY, data.lastSaveSpotZ);
-            player2.transform.position = new Vector3(data.lastSaveSpotX2, data.lastSaveSpotY2, data.lastSaveSpotZ2);
+            GameManager._instance.LoadFromFile();
         }
     }
 
