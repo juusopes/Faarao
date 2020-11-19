@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class WPGroupIndexer : MonoBehaviour
 {
     private static WPGroupIndexer _instance;
@@ -32,7 +32,10 @@ public class WPGroupIndexer : MonoBehaviour
             // code here for Editor only
         }
 #else
+        if (Application.isPlaying)
+        {
             Destroy(this.gameObject);
+        }
 #endif
     }
 }
