@@ -159,6 +159,10 @@ public class PlayerController : MonoBehaviour
             abilityActive = false;
         }
         SetIndicator();
+        if (!IsCurrentPlayer)
+        {
+            abilityActive = false;
+        }
     }
     private void Initialize()
     {

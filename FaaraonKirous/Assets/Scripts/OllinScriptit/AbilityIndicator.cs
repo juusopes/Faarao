@@ -25,6 +25,7 @@ public class AbilityIndicator : MonoBehaviour
     //Line Of Sight
     private bool hasLineOfSight;
     private Vector3 lineOfSightPoint;
+    private bool lineOfSightPointBool;
 
     // Start is called before the first frame update
     void Start()
@@ -95,7 +96,8 @@ public class AbilityIndicator : MonoBehaviour
 
             //Shoot Ray To see if in line of sight
             //DoubleClick Check
-        
+
+            PointCalculator();
             //Vector Top point
             //Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
             //topPoint.y = 10;
@@ -263,39 +265,42 @@ public class AbilityIndicator : MonoBehaviour
                 player.GetComponent<PlayerController>().inRange = true; 
                 abilityClicked = false;
                 player.GetComponent<PlayerController>().searchingForSight = false;
-                lineOfSightPoint.y = -1000;
             }
         }
     }
     public void PointCalculator()
     {
         RaycastHit hit = new RaycastHit();
-        if (lineOfSightPoint.y > -500)
+        if (lineOfSightPointBool)
         {
-            Debug.Log(lineOfSightPoint.y);
-            if (Physics.Raycast(player.transform.position, lineOfSightPoint - player.transform.position, out hit, Vector3.Distance(player.transform.position, lineOfSightPoint), RayCaster.attackLayerMask))
+            if (Physics.Raycast(player.transform.position, lineOfSightPoint - player.transform.position, out hit, Vector3.Distance(player.transform.position, lineOfSightPoint) - 0.3f, RayCaster.attackLayerMask))
             {
                 hasLineOfSight = false;
-                Debug.Log(hit.collider);
             }
             else
             {
                 hasLineOfSight = true;
-                lineOfSightPoint.y = -1000;
+                lineOfSightPointBool = false;
             }
+            Debug.Log(hasLineOfSight);
         }
         else
         {
-            if (Physics.Raycast(player.transform.position, transform.position - player.transform.position, out hit, Vector3.Distance(player.transform.position, transform.position), RayCaster.attackLayerMask))
+            if (Physics.Raycast(player.transform.position, transform.position - player.transform.position, out hit, Vector3.Distance(player.transform.position, transform.position) - 0.3f, RayCaster.attackLayerMask))
             {
                 hasLineOfSight = false;
-                Debug.Log(hit.collider);
             }
             else
             {
                 hasLineOfSight = true;
-                lineOfSightPoint.y = -1000;
+                lineOfSightPointBool = false;
             }
+        }
+        if (abilityClicked && hasLineOfSight)
+        {
+            player.GetComponent<PlayerController>().inRange = true;
+            player.GetComponent<PlayerController>().Stay();
+            player.GetComponent<PlayerController>().searchingForSight = false;
         }
     }
 }
