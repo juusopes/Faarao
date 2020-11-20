@@ -18,7 +18,7 @@ public class Constants
     public const int heartbeatFrequency = 1000;  // ms
     public const int defaultConnectionId = 0;
     public const int serverConnectionId = defaultConnectionId;
-    public const int noConnectionId = -1;
+    public const int noId = -1;
     public const int maxPlayers = 50;
     public const int defaultPing = 1000;  // ms
     //public const int resendDelay = 30;  // ms
