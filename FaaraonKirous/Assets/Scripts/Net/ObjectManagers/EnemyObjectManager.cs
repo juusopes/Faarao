@@ -8,6 +8,12 @@ public class EnemyObjectManager : CharacterObjectManager
     public float LatestDetectionConeTimestamp { get; set; } = 0;
     public bool AcceptingDetectionConeUpdates { get; set; } = false;
 
+    protected override void Awake()
+    {
+        IsPreIndexed = true;
+        base.Awake();
+    }
+
     protected override void InitComponents()
     {
         base.InitComponents();
@@ -42,11 +48,34 @@ public class EnemyObjectManager : CharacterObjectManager
         Character.impairedFOV = packet.ReadBool();
 
         // State
-        Character.UpdateStateIndicator((StateOption)packet.ReadByte());
+        if (NetworkManager._instance.IsHost)
+        {
+            Character.SetState((StateOption)packet.ReadByte());
+        }
+        else
+        {
+            Character.UpdateStateIndicator((StateOption)packet.ReadByte());
+        }
+        
 
         // Detection cone
 
         // ..
 
+    }
+
+    public override void WriteState(Packet dataPacket)
+    {
+        base.WriteState(dataPacket);
+        dataPacket.Write(Character.lastSeenPosition);
+        dataPacket.Write(Character.navigator.CurrentWaypointIndex);
+    }
+
+    public override void ReadState(Packet dataPacket)
+    {
+        base.ReadState(dataPacket);
+        Vector3 lastSeenPosition = dataPacket.ReadVector3();
+        int currentWaypoint = dataPacket.ReadInt();
+        Character.SaveLoaded(lastSeenPosition, currentWaypoint);
     }
 }

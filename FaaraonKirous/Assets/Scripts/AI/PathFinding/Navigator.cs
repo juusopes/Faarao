@@ -15,6 +15,7 @@ public class Navigator
     private PatrolType patrolType => wpGroup == null ? 0 : wpGroup.GetPatrolType();
     private int waypointCount => wpGroup == null ? 0 : wpGroup.GetWaypointCount();
     private bool IsValidIndex(int index) => wpGroup.IsValidIndex(index);
+    public int CurrentWaypointIndex => currentWaypoint;
 
     public Navigator(Transform parentTrans, WaypointGroup wpGroup)
     {
@@ -29,6 +30,12 @@ public class Navigator
         //if (patrolType == PatrolType.ShorterBackAndForth || patrolType == PatrolType.ShorterOnce)
         //    return wpGroup.GetWaypoint(GetClosestWaypoint(parentTrans));
         return wpGroup.GetWaypoint(0);
+    }
+
+    public Waypoint GetSavedWaypoint(int index)
+    {
+        currentWaypoint = index;
+        return wpGroup.GetWaypoint(currentWaypoint);
     }
 
     public Waypoint GetNextWaypoint()
