@@ -20,6 +20,8 @@ public class ObjectiveCounter: MonoBehaviour
 
     public RewardController rewards;
 
+    public ActivatorScript activated, activated2, activated3, activated4, activated5;
+
     private void Start()
     {
         //Set All Objectives To False
@@ -35,9 +37,9 @@ public class ObjectiveCounter: MonoBehaviour
         objectiveContoller = transform.parent.gameObject.GetComponent<ObjController>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Update()
     {
-        if (((other.gameObject.tag == "Player" && !pharaohOnly && !priestOnly) || (other.gameObject == pharaoh && pharaohOnly) || (other.gameObject == priest && priestOnly)) && objNum > 0 && !objectiveDone)
+        if (activated.activated == true)
         {
             objectiveDone = true;
             objectiveDoneMark.SetActive(true);
@@ -48,6 +50,21 @@ public class ObjectiveCounter: MonoBehaviour
 
             this.gameObject.SetActive(false);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //if (((other.gameObject.tag == "Player" && !pharaohOnly && !priestOnly) || (other.gameObject == pharaoh && pharaohOnly) || (other.gameObject == priest && priestOnly)) && objNum > 0 && !objectiveDone)
+        //{
+        //    objectiveDone = true;
+        //    objectiveDoneMark.SetActive(true);
+
+        //    objectiveContoller.objectiveDone[objNum - 1] = true;
+
+        //    rewards.UpdateObjectives();
+
+        //    this.gameObject.SetActive(false);
+        //}
 
         if (other.gameObject.tag == "Player" && objNum == 0)
         {
@@ -56,23 +73,15 @@ public class ObjectiveCounter: MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            if (objNum == 0)
-            {
-                objectiveContoller.playersInside--;
-                inEndPoint = false;
-            }
-        }
-    }
-
-    //public void addObjectiveDone()
+    //private void OnTriggerExit(Collider other)
     //{
-    //    if(objective1Done)
+    //    if (other.gameObject.tag == "Player")
     //    {
-    //        objective1Done = true;
+    //        if (objNum == 0)
+    //        {
+    //            objectiveContoller.playersInside--;
+    //            inEndPoint = false;
+    //        }
     //    }
     //}
 }
