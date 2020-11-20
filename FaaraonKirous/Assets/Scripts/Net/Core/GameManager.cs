@@ -174,6 +174,8 @@ public class GameManager : MonoBehaviour
 
         IsFullyLoaded = true;
         WillLoadSave = false;
+
+        Debug.Log("Loading ended");
     }
 
     public void LoadLevel(int sceneIndex)
@@ -182,7 +184,7 @@ public class GameManager : MonoBehaviour
 
         LoadScene(sceneIndex, true);
 
-        WaitForSceneLoad(() => EndLoading());
+        StartCoroutine(WaitForSceneLoad(() => EndLoading()));
     }
 
     private IEnumerator WaitForSceneLoad(Action action)
@@ -311,11 +313,12 @@ public class GameManager : MonoBehaviour
         LoadScene(save.SceneIndex);
 
         // Load game state
-        WaitForSceneLoad(() => LoadGameState(save));
+        StartCoroutine(WaitForSceneLoad(() => LoadGameState(save)));
     }
 
     private void LoadGameState(Save save)
     {
+        Debug.Log("Loading gamestate");
         // This is just a safety precaution, as objects should be destroyed during scene loading
         ClearAllObjects();
 
@@ -337,7 +340,7 @@ public class GameManager : MonoBehaviour
         {
             if (!savedObject.IsStatic)
             {
-                CreateObjectWithId(savedObject.Type, savedObject.Id, savedObject.Position, savedObject.Rotation);
+                CreateObjectWithId(savedObject.Type, savedObject.Id, Vector3.zero, Quaternion.identity);
             }
         }
 

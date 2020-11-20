@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public float doubleClickTimer;
     public bool IsCurrentPlayer { get; set; } = false;
     public bool IsActivePlayer { get; set; } = false;
-    private NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
     private Vector3 targetV3;
     private Vector3 position;
 
