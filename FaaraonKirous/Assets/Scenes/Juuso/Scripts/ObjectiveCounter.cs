@@ -72,16 +72,4 @@ public class ObjectiveCounter: MonoBehaviour
             inEndPoint = true;
         }
     }
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.tag == "Player")
-    //    {
-    //        if (objNum == 0)
-    //        {
-    //            objectiveContoller.playersInside--;
-    //            inEndPoint = false;
-    //        }
-    //    }
-    //}
 }
