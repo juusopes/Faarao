@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7830774809276716598}
   - component: {fileID: 6558186252532390291}
   - component: {fileID: 9000352525154250073}
-  - component: {fileID: 9195561810704443739}
+  - component: {fileID: 7965757788464945410}
   m_Layer: 0
   m_Name: Scaffolding End piece
   m_TagString: Untagged
@@ -82,8 +82,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &9195561810704443739
-MeshCollider:
+--- !u!65 &7965757788464945410
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -91,8 +91,7 @@ MeshCollider:
   m_GameObject: {fileID: 7487041552539470988}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4689754736094721223, guid: 839f7d37cd2da2343bbecb29f1ea464c, type: 3}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.4597626, y: 4.1338797, z: 4.372875}
+  m_Center: {x: -0.03300357, y: -0.6874294, z: 0.06526482}
