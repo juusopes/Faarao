@@ -1,4 +1,6 @@
-﻿using ParrelSync;
+﻿#if UNITY_EDITOR
+using ParrelSync;
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -14,14 +16,25 @@ public class NetworkManager : MonoBehaviour
 
     public bool IsConnectedToServer { get; set; } = false;
 
-    public bool IsSingleplayer { get; set; } = true;
-
     public bool ShouldSendToClient => Server.Instance.IsOnline;
-    public bool ShouldSendToServer => !IsHost && IsConnectedToServer; 
+
+    public bool ShouldSendToServer => !IsHost;
+
+
 
     // For testing
+    public bool Testing => _testing;
+
     [SerializeField]
-    private bool _willHostServer;
+    private bool _testing = false;
+    [SerializeField]
+    private bool _simulateNetwork = false;
+    [SerializeField]
+    private float _simulationDropPercentage = 0;
+    [SerializeField]
+    private int _simulationMinLatency = 0;
+    [SerializeField]
+    private int _simulationMaxLatency = 0;
 
     private void Awake()
     {
@@ -33,50 +46,87 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
+            return;
         }
 
-        if (ClonesManager.IsClone())
+#if UNITY_EDITOR
+        if (Testing)
         {
-            // Automatically connect to local host if this is the clone editor
-            JoinServer();
-        }
-        else
-        {
-            if (_willHostServer)
+
+            if (ClonesManager.IsClone())
+            {
+                // Automatically connect to local host if this is the clone editor
+                JoinServer();
+            }
+            else
             {
                 // Automatically start server if this is the original editor
                 HostServer();
-                IsSingleplayer = false;
             }
         }
+#endif
     }
 
-    public void HostServer()
+    public bool HostServer()
     {
         if (Client.Instance.IsOnline || Server.Instance.IsOnline)
         {
             Debug.Log("Cannot create server if server or client is online!");
+            return false;
         }
         else
         {
-            Server.Instance.Start(26950);
+            Server.Instance.Start(Constants.port);
+
+            // For testing
+            if (_simulateNetwork)
+            {
+                Server.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+                {
+                    DropPercentage = _simulationDropPercentage,
+                    MinLatency = _simulationMinLatency,
+                    MaxLatency = _simulationMaxLatency
+                });
+            }
+
+            return true;
         }
     }
 
-    public void JoinServer()
+    public bool JoinServer(IPEndPoint endPoint = null)
     {
+        Debug.Log("Trying to join server");
+
         if (Client.Instance.IsOnline || Server.Instance.IsOnline)
         {
             Debug.Log("Cannot join server if server or client is online!");
+            return false;
         }
         else
         {
             IsHost = false;
-            // TODO: Server IP and port should be given through text fields
-            string serverIp = "127.0.0.1";
-            int serverPort = 26950;
-            IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
-            Client.Instance.ConnectToServer(ipEndPoint);
+
+            if (endPoint == null)
+            {
+                string serverIp = Constants.ip;
+                int serverPort = Constants.port;
+                endPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
+            }
+            
+            Client.Instance.ConnectToServer(endPoint);
+
+            // For testing
+            if (_simulateNetwork)
+            {
+                Client.Instance.SetNetworkSimulator(new NetworkSimulatorConfig
+                {
+                    DropPercentage = _simulationDropPercentage,
+                    MinLatency = _simulationMinLatency,
+                    MaxLatency = _simulationMaxLatency
+                });
+            }
+
+            return true;
         }
     }
 

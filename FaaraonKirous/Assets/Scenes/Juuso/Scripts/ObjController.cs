@@ -8,95 +8,118 @@ using UnityEngine.SceneManagement;
 
 public class ObjController : MonoBehaviour
 {
-    //public int objectivesDone;
+    public int objectivesNeeded;
 
-    public GameObject objective1;
-    public Text objective1text;
-
-    public GameObject objective2;
-    public Text objective2text;
-
-    public GameObject objective3;
-    public Text objective3text;
-
-    public int objCount;
+    public GameObject[] objectives;
     public int playersInside;
 
-    public Objectivecounter2 objectivecounter1, objectivecounter2, objectivecounter3, endPointer;
-    public bool objective1Done, objective2Done, objective3Done, inEndPoint;
+    public ObjectiveCounter[] objectiveCounters;
+    public ObjectiveCounter endPointer;
+
+    public bool[] objectiveDone;
+    public bool inEndPoint;
+
+    public int objectivesInLevel;
 
     // Start is called before the first frame update
     void Start()
     {
-        //objective1Done2 = false;
+        for (int x = 0; x < objectives.Length - 1; x++)
+        {
+            objectives[x].SetActive(false);
+        }
+        for (int x = 0; x < objectivesInLevel; x++)
+        {
+            objectives[x].SetActive(true);
+        }
+        playersInside = 0;
 
-        objCount = 3;
+        //Scene scene = SceneManager.GetActiveScene();
 
-        objective1.SetActive(false);
-        objective2.SetActive(false);
-        objective3.SetActive(false);
-        //objective4.SetActive(false);
-        //objective5.SetActive(false);
+        //if(scene.name == "Level 1")
+        //{
+        //    AddObjectives(3);
+        //}
 
-        objective1text.text = "step on platform";
-        objective2text.text = "Get to souteast corner";
-        objective3text.text = "Get to northeast corner";
-        //objective4text.text = "banana for scale";
-        //objective5text.text = "fish for sale ipsum lorem mitelie meneekää testinä että saa toiselle riville asti asdasdasd";
-
-
-        AddObjectives(3);
+        //else if (scene.name == "Level 2")
+        //{
+        //    AddObjectives(4);
+        //}
     }
 
     public void Update()
     {
-        objective1Done = objectivecounter1.objective1Done;
-        objective2Done = objectivecounter2.objective2Done;
-        objective3Done = objectivecounter3.objective3Done;
-        inEndPoint = endPointer.inEndPoint;
-        playersInside = endPointer.playersInside;
-
-        //Jos kaikki objectivet tehty ja molemmat pelaajat ovat loppukohdassa
-        if (objective1Done && objective2Done && objective3Done && inEndPoint && playersInside == 2)
+        //objective1Done = objectivecounter1.objective1Done;
+        //objective2Done = objectivecounter2.objective2Done;
+        //objective3Done = objectivecounter3.objective3Done;
+        //objective4Done = objectivecounter4.objective4Done;
+        //objective5Done = objectivecounter5.objective5Done;
+        //inEndPoint = endPointer.inEndPoint;
+        if (playersInside < 0)
         {
-            print(playersInside + " loppu lähellä");
-
-            //nyt toistaiseksi kovakoodattuna.
-            SceneManager.LoadScene("Level 2");
+            Debug.Log("TOO FEW!");
+            playersInside = 0;
+        }
+        if (playersInside > 2)
+        {
+            playersInside = 2;
+            Debug.Log("TOO MANY!");
+        }
+        if (playersInside == 2)
+        {
+            CheckObjectives();
         }
     }
 
-    public int AddObjectives(int objCount)
+    private void CheckObjectives()
     {
-        //Adds objectives in scene
-        List<int> objectives = new List<int>();
-
-        for (int i = 0; i < objCount; i++)
+        //Counts the number of completed objectives
+        int tempBoolCounter = 0;
+        foreach (bool done in objectiveDone)
         {
-            objectives.Add(i);
-
-            if (objectives.Contains(0))
+            if (done)
             {
-                objective1.SetActive(true);
+                tempBoolCounter++;
             }
-            if (objectives.Contains(1))
-            {
-                objective2.SetActive(true);
-            }
-            if (objectives.Contains(2))
-            {
-                objective3.SetActive(true);
-            }
-            //if (objectives.Contains(3))
-            //{
-            //    objective4.SetActive(true);
-            //}
-            //if (objectives.Contains(4))
-            //{
-            //    objective5.SetActive(true);
-            //}
         }
-
-        return objCount;
+        //Moves to next Build Index if enough objectives are done 
+        if (tempBoolCounter >= objectivesNeeded)
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.buildIndex + 1);
+        }
     }
+    //public int AddObjectives(int objCount)
+    //{
+    //    //Adds objectives in scene
+    //    List<int> objectives = new List<int>();
+
+    //    for (int i = 0; i < objCount; i++)
+    //    {
+    //        objectives.Add(i);
+
+    //        if (objectives.Contains(0))
+    //        {
+    //            objective1.SetActive(true);
+    //        }
+    //        if (objectives.Contains(1))
+    //        {
+    //            objective2.SetActive(true);
+    //        }
+    //        if (objectives.Contains(2))
+    //        {
+    //            objective3.SetActive(true);
+    //        }
+    //        if (objectives.Contains(3))
+    //        {
+    //            objective4.SetActive(true);
+    //        }
+    //        if (objectives.Contains(4))
+    //        {
+    //            objective5.SetActive(true);
+    //        }
+    //    }
+
+    //    return objCount;
+    //}
 }

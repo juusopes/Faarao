@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerActiveArea : MonoBehaviour
 {
@@ -34,7 +31,7 @@ public class PlayerActiveArea : MonoBehaviour
         {
             player.GetComponent<PlayerController>().interactObject = other.gameObject;
         }
-        else if (other.tag == "Enemy")
+        else if (other.tag == "Enemy" || other.tag == "Player")
         {
             player.GetComponent<PlayerController>().targetEnemy = other.gameObject;
         }

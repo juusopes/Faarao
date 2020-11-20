@@ -16,23 +16,45 @@ public class DetectionState : State
 
     public override void OnStateEnter()
     {
+        Debug.Log("Dete");
         searchTimer = 0;
         character.StopNavigation();
     }
+
+    public override void PlayerDied()
+    {
+        character.LostTrackOfPlayer();
+        ToTrackingState();
+    }
+
     void Detect()
     {
         character.LerpLookAt(ChaseTarget);
 
         if (CanSeePlayer)
         {
-            searchTimer = 0;
+                searchTimer = 0;
+        }
+        else if (IsCautious())
+        {
+            StartTracking();
         }
         else
         {
             searchTimer += Time.deltaTime;
-            if (searchTimer >= character.SearchingDuration)
-                ToAlertState();
+            if (searchTimer >= character.DetectionLostReactionDelay)
+            {
+                StartTracking();
+            }
         }
     }
+
+    void StartTracking()
+    {
+        character.LostTrackOfPlayer();
+        //ToAlertState();
+        ToTrackingState();
+    }
 }
+
 

@@ -12,23 +12,39 @@ public enum ServerPackets
     objectCreated,
     updateObjectTransform,
     disposableObjectCreated,
-    startingObjectSync,
     syncObject,
     sightChanged,
     abilityVisualEffectCreated,
     stateChanged,
-    enemyDied,
-    detectionConeUpdated
+    characterDied,
+    detectionConeUpdated,
+    loadScene,
+    endLoading,
+    characterControllerUpdate,
+    crouching,
+    running,
+    startLoading,
+    syncPlayers,
+    playerConnected,
+    playerDisconnected,
+    serverStopped
 }
 
 /// <summary>Sent from client to server.</summary>
 public enum ClientPackets
 {
     connectionRequest = 1,
-    connectionAcceptedReceived,
     heartbeatReceived,
     abilityUsed,
-    enemyPossessed
+    enemyPossessed,
+    syncRequest,
+    selectCharacterRequest,
+    unselectCharacterRequest,
+    setDestinationRequest,
+    killEnemy,
+    crouching,
+    running,
+    disconnecting
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

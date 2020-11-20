@@ -28,6 +28,9 @@ public class AIClass : ScriptableObject
     [Tooltip("How long AI will search/wait/inspect by default")]
     [Range(0, 1000)]
     public float searchingDuration = 5f;
+    [Tooltip("How long will AI wait before reacting to lost detection")]
+    [Range(0, 1000)]
+    public float detectionLostReactionDelay = 3f;
 
     [Header("General")]
     [Tooltip("How long AI will be controlled once posessed")]
@@ -45,6 +48,8 @@ public class AIClass : ScriptableObject
     [Header("Navigation Agent")]
     [Range(0, 100)]
     public float navSpeed = 4f;
+    [Range(0, 100)]
+    public float navTrackSpeed = 2.5f;
     [Range(0, 1000)]
     public float navAngularSpeed = 420f;
     [Range(0, 100)]

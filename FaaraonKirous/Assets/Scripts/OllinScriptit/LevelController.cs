@@ -7,11 +7,30 @@ using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
+    public static LevelController _instance;
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else if (_instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+            return;
+        }
+    }
+
     //Switch Character
     private GameObject[] characters;
-    public GameObject activeCharacter;
-    private int currentCharacter;
+    public GameObject currentCharacter => GameManager._instance.CurrentCharacter;
+    private int currentCharacterIndex;
     public GameObject playerOneImage, playerTwoImage;
+
+    public GameObject pharaoh => GameManager._instance.Pharaoh;
+    public GameObject priest => GameManager._instance.Priest;
 
     //CameraControl
     private GameObject mainCam;
@@ -23,20 +42,26 @@ public class LevelController : MonoBehaviour
 
     public InGameMenu canvas;
 
+    public bool[] priestAbilities;
+    public bool[] pharaohAbilities;
 
     // Start is called before the first frame update
     void Start()
     {
-        //objCount = 3;
-
         Initialize();
+
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.SelectCharacter(ObjectType.pharaoh);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         KeyBoardControls();
-        InivsibilityView();
+        // TODO: Doesn't work if no activeCharacter
+        //InivsibilityView();
     }
 
     private void Initialize()
@@ -47,36 +72,15 @@ public class LevelController : MonoBehaviour
 
         canvas.gameObject.SetActive(true);
         playerOneImage.SetActive(true);
-        //SetACtiveCharacter
-        currentCharacter = 0;
-        foreach (GameObject character in characters)
-        {
-            character.GetComponent<PlayerController>().isActiveCharacter = false;
-            if (character.GetComponent<PlayerController>().playerOne)
-            {
-                activeCharacter = character;
-                character.GetComponent<PlayerController>().isActiveCharacter = true;
-            }
-            if (activeCharacter == null)
-            {
-                currentCharacter++;
-            }
-        }
-        if (activeCharacter == null)
-        {
-            currentCharacter = 0;
-            characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = true;
-            activeCharacter = characters[currentCharacter];
-        }
+
+        UpdateAbilities();
         //SetCameraPos
-        mainCam.transform.parent = activeCharacter.transform;
-
-
+        //mainCam.transform.parent = activeCharacter.transform;
     }
 
     private void InivsibilityView()
     {
-        if (activeCharacter.GetComponent<PlayerController>().isInvisible)
+        if (currentCharacter.GetComponent<PlayerController>().isInvisible)
         {
             if (postProcessWeight <= 1)
             {
@@ -91,65 +95,84 @@ public class LevelController : MonoBehaviour
         }
         mainCam.transform.GetChild(0).GetComponent<PostProcessVolume>().weight = postProcessWeight;
     }
-    public void SwitchCharacter()
-    {
-        //Switch Player
-        characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = false;
-        currentCharacter++;
-        if (currentCharacter > characters.Length - 1)
-        {
-            currentCharacter = 0;
-        }
-        activeCharacter = characters[currentCharacter];
-        characters[currentCharacter].GetComponent<PlayerController>().isActiveCharacter = true;
-        mainCam.GetComponent<CameraControl>().activeCharacter = activeCharacter;
-        if (mainCam.GetComponent<CameraControl>().camFollow)
-        {
-            mainCam.transform.parent = activeCharacter.transform;
-        }
-
-        //Set UI elements
-        if (currentCharacter == 1)
-        {
-            playerOneImage.SetActive(false);
-            playerTwoImage.SetActive(true);
-        }
-        else
-        {
-            playerOneImage.SetActive(true);
-            playerTwoImage.SetActive(false);
-        }
-
-    }
+    
 
     //ButtonInterface
     public void ActiveCharacterAttack()
     {
-        activeCharacter.GetComponent<PlayerController>().Attack();
+        currentCharacter.GetComponent<PlayerController>().Attack();
     }
-    public void ActiveCharacterAbility1()
-    {
-        activeCharacter.GetComponent<PlayerController>().UseAbility1();
-    }
+    //public void ActiveCharacterAbility()
+    //{
+    //    activeCharacter.GetComponent<PlayerController>().UseAbility();
+    //}
     public void ActiveCharacterCrouch()
     {
-        activeCharacter.GetComponent<PlayerController>().Crouch();
+        currentCharacter.GetComponent<PlayerController>().Crouch();
     }
     public void ActiveCharacterInteract()
     {
-        activeCharacter.GetComponent<PlayerController>().Interact();
+        currentCharacter.GetComponent<PlayerController>().Interact();
     }
     public void ActiveCharacterStay()
     {
-        activeCharacter.GetComponent<PlayerController>().Stay();
+        currentCharacter.GetComponent<PlayerController>().Stay();
     }
 
 
     private void KeyBoardControls()
     {
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SwitchCharacter();
+            if (NetworkManager._instance.IsHost)
+            {
+                
+                GameManager._instance.SelectCharacter(ObjectType.priest);
+            }
+            else
+            {
+                if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.SelectCharacterRequest(ObjectType.priest);
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (NetworkManager._instance.IsHost)
+            {
+                GameManager._instance.SelectCharacter(ObjectType.pharaoh);
+            }
+            else
+            {
+                if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.SelectCharacterRequest(ObjectType.pharaoh);
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            if (NetworkManager._instance.IsHost)
+            {
+                GameManager._instance.UnselectCharacter();
+            }
+            else
+            {
+                if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.UnselectCharacter();
+                }
+            }
         }
     }
+
+    public void UpdateAbilities()
+    {
+        pharaoh.GetComponent<PlayerController>().abilityAllowed = pharaohAbilities;
+        priest.GetComponent<PlayerController>().abilityAllowed = priestAbilities;
+    }
+
 }

@@ -44,7 +44,7 @@ public class Character : MonoBehaviour
     private float distractionTimer;
 
     [HideInInspector]
-    public Vector3 additionalTarget;
+    public Vector3 possessedGoToTarget;
     [HideInInspector]
     public Vector3 currentDistractionPos;
     [HideInInspector]
@@ -54,7 +54,6 @@ public class Character : MonoBehaviour
     #region Regular fields
     [HideInInspector]
     public Vector3 chaseTarget;
-    [HideInInspector]
     public Vector3 lastSeenPosition;
     private Waypoint currentWaypoint;
     private bool waypointFinished = false;
@@ -63,7 +62,8 @@ public class Character : MonoBehaviour
     public bool couldDetectPlayer1;
     public bool couldDetectPlayer2;
 
-    public StateOption CurrentStateIndicator { get; private set; } = StateOption.PatrolState;
+    public StateOption PreviousStateOption { get; private set; } = StateOption.PatrolState;
+    public StateOption CurrentStateOption { get; private set; } = StateOption.PatrolState;
 
     private GameObject player1ref;
     private GameObject player2ref;
@@ -74,15 +74,14 @@ public class Character : MonoBehaviour
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
-    private EnemyNetManager enemyNetManager;
+    private EnemyObjectManager enemyNetManager;
     private DeathScript deathScript;
 
     //Aid scripts (create with new)
-    private Navigator navigator;                    //new create
+    public Navigator navigator;                    //new create
     private StateMachine stateMachine;              //new create
     private SightRenderer player1SightRenderer;   //new create
     private SightRenderer player2SightRenderer;   //new create
-    private SightDetection player2SightDetection;   //new create
     public SightDetection testSightDetection;      //new create
     public Detector detector;                       //new create
     private OffMeshLinkMovement linkMovement;       //new create
@@ -101,6 +100,7 @@ public class Character : MonoBehaviour
     public float SightRangeCrouching => impairedSightRange ? classSettings.impairedSightRange : classSettings.sightRangeCrouching;
     public float FOV => impairedFOV ? classSettings.impairedFov : classSettings.fov;
     public float SearchingDuration => classSettings.searchingDuration;
+    public float DetectionLostReactionDelay => classSettings.detectionLostReactionDelay;
     public float ControlledDuration => classSettings.controlledDuration;
     public float SightSpeed => classSettings.sightSpeed;
     public bool IsDead => deathScript == null ? false : deathScript.isDead;
@@ -115,7 +115,7 @@ public class Character : MonoBehaviour
     #region Start and run
     void Awake()
     {
-        enemyNetManager = GetComponent<EnemyNetManager>();
+        enemyNetManager = GetComponent<EnemyObjectManager>();
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         deathScript = GetComponent<DeathScript>();
 
@@ -125,12 +125,10 @@ public class Character : MonoBehaviour
             linkMovement = new OffMeshLinkMovement(transform, navMeshAgent, classSettings.modelRadius, classSettings.navJumpHeight);      //TODO: Check radius and height
             InitNavMeshAgent();
             Assert.IsNotNull(deathScript, "Me cannut dai!");
-
         }
         else
         {
             Destroy(navMeshAgent);
-            Destroy(deathScript);
         }
 
         Assert.IsNotNull(enemyNetManager, "Can't touch this.");
@@ -143,8 +141,9 @@ public class Character : MonoBehaviour
         player1SightRenderer.ResetLineRenderer(Player1);
         player2SightRenderer = new SightRenderer(gameObject, classSettings.lm, 0.2f, MaxSightRange);
         player2SightRenderer.ResetLineRenderer(Player2);
-       //player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, SightSpeed);
+        //player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, SightSpeed);
         testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, 1000f);
+        lastSeenPosition = UtilsClass.GetMinVector();
     }
 
     private void Start()
@@ -169,39 +168,36 @@ public class Character : MonoBehaviour
     private void InitNavigator()
     {
         //if (waypointGroup == null)
-            //Debug.Log("Character with no wp group!", this);
+        //Debug.Log("Character with no wp group!", this);
         navigator = new Navigator(this.transform, waypointGroup);
         currentWaypoint = navigator.GetFirstWaypoint();
     }
 
     private void Update()
     {
+        if (IsDead)
+        {
+            Die();
+            return;
+        }
+
         if (IsHost)
         {
-            if (IsDead)
-            {
-                if (ShouldSendToClient)
-                    ServerSend.EnemyDied(Id);
-                Die();
-                return;
-            }
+            detector.RunDetection();
             stateMachine.UpdateSM();
             TestOffLink();
             RunImpairementCounters();
         }
     }
 
-    private void LateUpdate()
-    {
-        if (IsHost)
-        {
-            detector.RunDetection();
-        }
-    }
-
     #endregion
 
     #region Generic
+
+    public void LostTrackOfPlayer()
+    {
+        lastSeenPosition = OnNavMesh.GetRandomPointOnUnitCircleSameHeight(chaseTarget, 2f);
+    }
 
     private GameObject RefreshPlayer(int i)
     {
@@ -233,7 +229,7 @@ public class Character : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Enemy " + gameObject.name + " diededed");
+        Debug.Log("Enemy " + gameObject.name + " dieded");
         //Own components
         Destroy(navMeshAgent);
         Destroy(deathScript);
@@ -243,7 +239,7 @@ public class Character : MonoBehaviour
             Destroy(c.gameObject);
 
         player1SightRenderer.DestroyLine();
-        player2SightDetection.DestroyLine();
+        player2SightRenderer.DestroyLine();
         testSightDetection.DestroyLine();
         gameObject.tag = "DeadEnemy";
         Collider[] colliders = GetComponents<Collider>();
@@ -263,16 +259,19 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void SetState(StateOption stateOption)
+    {
+        stateMachine.SetState(stateOption);
+    }
 
     public void UpdateStateIndicator(StateOption stateOption)
     {
         if (stateIndicators == null || stateVisualizer == null)
             return;
+        PreviousStateOption = CurrentStateOption;
+        CurrentStateOption = stateOption;
 
-        CurrentStateIndicator = stateOption;
-
-        if (ShouldSendToClient)
-            ServerSend.StateChanged(Id, stateOption);
+        SendToClient_StateChanged();
 
         stateVisualizer.sprite = stateIndicators.GetIndicator(stateOption);
     }
@@ -367,7 +366,7 @@ public class Character : MonoBehaviour
     public void PossessAI(Vector3 position)
     {
         stateMachine.PlayerTakesControl();
-        additionalTarget = position;
+        possessedGoToTarget = position;
     }
 
     public void VisualizePath()
@@ -379,6 +378,21 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Movement
+
+    public void SetTrackingMovementSpeed(bool enable)
+    {
+        navMeshAgent.speed = enable ? classSettings.navTrackSpeed : classSettings.navSpeed;
+    }
+
+
+    public void SearchLastSeenPosition()
+    {
+        if (UtilsClass.IsMinimumVector(lastSeenPosition))
+            return;
+
+        SetDestination(lastSeenPosition);
+
+    }
 
     public void PanicRunAround()
     {
@@ -462,13 +476,12 @@ public class Character : MonoBehaviour
             return;
         waypointTimer = false;
         Waypoint nextWaypoint = navigator.GetNextWaypoint();
-        if (nextWaypoint != null)
-            if (currentWaypoint.type == WaypointType.Climb && nextWaypoint.type != WaypointType.Climb)
-                navMeshAgent.enabled = true;
         if (nextWaypoint == null)
-            navigator = null;
-        else
-            currentWaypoint = nextWaypoint;
+            return;
+        if (currentWaypoint.type == WaypointType.Climb && nextWaypoint.type != WaypointType.Climb)
+            navMeshAgent.enabled = true;
+
+        currentWaypoint = nextWaypoint;
     }
 
     public void OnWaypoint()
@@ -550,7 +563,6 @@ public class Character : MonoBehaviour
         if (!OnNavMesh.IsReachable(transform, position))
             return;
 
-
         navMeshAgent.destination = position;
         navMeshAgent.isStopped = false;
         navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : classSettings.navStoppingDistance;
@@ -578,12 +590,30 @@ public class Character : MonoBehaviour
     }
     #endregion
 
+    #region SaveAndLoad
+    
+    public void SaveLoaded(Vector3 lastSeenPos, int currentWaypointIndex)
+    {
+        lastSeenPosition = lastSeenPos;
+        currentWaypoint = navigator.GetSavedWaypoint(currentWaypointIndex);
+    }
+
+    #endregion
+
     #region Networking
+
     public void SendToClient_SightChanged()
     {
         if (ShouldSendToClient)
             ServerSend.SightChanged(enemyNetManager.Id, impairedSightRange, impairedFOV);
     }
+
+    private void SendToClient_StateChanged()
+    {
+        if (ShouldSendToClient)
+            ServerSend.StateChanged(Id, CurrentStateOption);
+    }
+
 
     #endregion
 

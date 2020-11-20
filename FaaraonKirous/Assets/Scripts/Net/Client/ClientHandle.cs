@@ -11,9 +11,10 @@ public class ClientHandle
         string msg = packet.ReadString();
 
         Debug.Log($"Message from server: {msg}");
+        GameManager._instance.CurrentPlayerId = sendId;
         Client.Instance.Connection.SendId = sendId;
-        ClientSend.ConnectionAcceptedReceived();
     }
+
     public static void Message(int connection, Packet packet)
     {
         string msg = packet.ReadString();
@@ -30,24 +31,76 @@ public class ClientHandle
 
         ClientSend.HeartbeatReceived(timeStamp);
     }
+
+    public static void SyncPlayers(int connection, Packet packet)
+    {
+        GameManager._instance.Players.Clear();
+
+        int count = packet.ReadInt();
+        for (int i = 0; i < count; ++i)
+        {
+            GameManager._instance.Players.Add(packet.ReadInt(), new PlayerInfo
+            {
+                Name = packet.ReadString(),
+                ControlledCharacter = null
+            });
+        }
+    }
+
+    public static void PlayerConnected(int connection, Packet packet)
+    {
+        int playerId = packet.ReadInt();
+        string playerName = packet.ReadString();
+
+        GameManager._instance.PlayerConnected(playerId, playerName);
+    }
+
+    public static void PlayerDisconnected(int connection, Packet packet)
+    {
+        int playerId = packet.ReadInt();
+
+        GameManager._instance.PlayerDisconnected(playerId);
+    }
+
+    public static void ServerStopped(int connection, Packet packet)
+    {
+        // TODO: Close game etc.
+        Client.Instance.Disconnect();
+    }
+    #endregion
+
+    #region LoadAndSave
+    public static void StartLoading(int connection, Packet packet)
+    {
+        Debug.Log("Start loading message received");
+
+        GameManager._instance.StartLoading();
+    }
+
+    public static void LoadScene(int connection, Packet packet)
+    {
+        int sceneIndex = packet.ReadInt();
+
+        Debug.Log("Load scene message received");
+
+        GameManager._instance.LoadScene(sceneIndex);
+    }
+
+    public static void EndLoading(int connection, Packet packet)
+    {
+        Debug.Log("End loading message received");
+
+        GameManager._instance.EndLoading();
+    }
     #endregion
 
     #region ObjectSyncing
-    public static void StartingObjectSync(int connection, Packet packet)
-    {
-        // TODO: Pause game here too
-
-        GameManager._instance.ClearAllObjects();
-
-        NetworkManager._instance.IsConnectedToServer = true;
-    }
-
     public static void SyncObject(int connection, Packet packet)
     {
         ObjectList list = (ObjectList)packet.ReadByte();
         int id = packet.ReadInt();
 
-        if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(list, id, out ObjectManager netManager))
         {
             netManager.HandleSync(packet);
         }
@@ -66,7 +119,7 @@ public class ClientHandle
         Vector3 position = packet.ReadVector3();
         Quaternion rotation = packet.ReadQuaternion();
 
-        GameManager._instance.CreateObjectClient(type, id, position, rotation);
+        GameManager._instance.CreateObjectWithId(type, id, position, rotation);
     }
 
     public static void DisposableObjectCreated(int connection, Packet packet)
@@ -75,7 +128,7 @@ public class ClientHandle
         Vector3 position = packet.ReadVector3();
         Quaternion rotation = packet.ReadQuaternion();
 
-        GameManager._instance.InstantiateObjectClient(type, position, rotation);
+        GameManager._instance.InstantiateObject(type, position, rotation);
     }
     #endregion
 
@@ -86,11 +139,34 @@ public class ClientHandle
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
         Quaternion rotation = packet.ReadQuaternion();
+        float timestamp = packet.ReadFloat();
 
-        if (GameManager._instance.TryGetObject(list, id, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(list, id, out ObjectManager netManager))
         {
-            netManager.Transform.position = position;
-            netManager.Transform.rotation = rotation;
+            DynamicObjectManager dynamic = (DynamicObjectManager)netManager;
+
+            if (dynamic.LatestTransformTimestamp < timestamp)
+            {
+                dynamic.Transform.position = position;
+                dynamic.Transform.rotation = rotation;
+
+                // Update timestamp
+                dynamic.LatestTransformTimestamp = timestamp;
+            }
+        }
+    }
+    #endregion
+
+    #region Character
+    public static void CharacterDied(int connection, Packet packet)
+    {
+        ObjectList list = (ObjectList)packet.ReadByte();
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(list, id, out ObjectManager netManager))
+        {
+            CharacterObjectManager characterNetManager = (CharacterObjectManager)netManager;
+            characterNetManager.DeathScript.isDead = true;
         }
     }
     #endregion
@@ -102,9 +178,9 @@ public class ClientHandle
         bool impairedSightRange = packet.ReadBool();
         bool impairedFOV = packet.ReadBool();
 
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
         {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            EnemyObjectManager enemyNetManager = (EnemyObjectManager)netManager;
             enemyNetManager.Character.impairedSightRange = impairedSightRange;
             enemyNetManager.Character.impairedFOV = impairedFOV;
         }
@@ -115,21 +191,10 @@ public class ClientHandle
         int id = packet.ReadInt();
         StateOption stateOption = (StateOption)packet.ReadByte();
 
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
         {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            EnemyObjectManager enemyNetManager = (EnemyObjectManager)netManager;
             enemyNetManager.Character.UpdateStateIndicator(stateOption);
-        }
-    }
-
-    public static void EnemyDied(int connection, Packet packet)
-    {
-        int id = packet.ReadInt();
-
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
-        {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
-            enemyNetManager.Character.Die();
         }
     }
 
@@ -138,12 +203,24 @@ public class ClientHandle
         int id = packet.ReadInt();
         float percentage = packet.ReadFloat();
         LineType color = (LineType)packet.ReadByte();
-        bool changeState = packet.ReadBool();
+        bool changeAcceptionState = packet.ReadBool();
+        float timestamp = packet.ReadFloat();
 
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
         {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
-            // TODO: Update detection cone
+            EnemyObjectManager enemy = (EnemyObjectManager)netManager;
+
+            if (changeAcceptionState)
+            {
+                enemy.AcceptingDetectionConeUpdates = !enemy.AcceptingDetectionConeUpdates;
+                enemy.Character.UpdateSightVisuals(percentage, color);
+                enemy.LatestDetectionConeTimestamp = 0;
+            }
+            else if (enemy.AcceptingDetectionConeUpdates && enemy.LatestDetectionConeTimestamp < timestamp)
+            {
+                enemy.Character.UpdateSightVisuals(percentage, color);
+                enemy.LatestDetectionConeTimestamp = timestamp;
+            }
         }
     }
     #endregion
@@ -155,6 +232,52 @@ public class ClientHandle
         Vector3 position = packet.ReadVector3();
 
         AbilitySpawner.Instance.SpawnAtPosition(position, ability);
+    }
+    #endregion
+
+    #region Player
+
+    public static void CharacterControllerUpdate(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        int controllerId = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager objectManager))
+        {
+            PlayerObjectManager playerObjectManager = (PlayerObjectManager)objectManager;
+            if (controllerId == Constants.noId)
+            {
+                playerObjectManager.Controller = null;
+            }
+            else
+            {
+                playerObjectManager.Controller = controllerId;
+            }
+        }
+    }
+
+    public static void Crouching(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.IsCrouching = state;
+        }
+    }
+
+    public static void Running(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.IsRunning = state;
+        }
     }
     #endregion
 

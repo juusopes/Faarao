@@ -35,7 +35,7 @@ public class ChaseState : State
         {
             if (!CanSeePlayer)
             {
-                LostTrackOfPlayer();
+                character.LostTrackOfPlayer();
                 ToTrackingState();
             }
         }

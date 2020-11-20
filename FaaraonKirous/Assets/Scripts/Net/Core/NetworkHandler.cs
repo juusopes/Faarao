@@ -9,10 +9,6 @@ using UnityEngine;
 
 public abstract class NetworkHandler
 {
-    // TESTING
-    private static System.Random rand = new System.Random();
-    // END TESTING
-
     public bool IsOnline { get; private set; } = false;
 
     protected UdpClient _socket = null;
@@ -22,13 +18,21 @@ public abstract class NetworkHandler
     public abstract void BeginHandlePacket(int connectionId, IPEndPoint endPoint, Packet packet);
     protected abstract void OnReceiveException();
     protected abstract void InternalUpdate();
+    public abstract void ConnectionTimeout(int connection);
+
+    public NetworkSimulator Simulator { get; private set; } = null;
+
+    public void SetNetworkSimulator(NetworkSimulatorConfig config)
+    {
+        Simulator = new NetworkSimulator(config, SendRaw);
+    }
 
     protected bool CloseSocket()
     {
         if (_socket != null)
         {
             // TODO: Cannot close socket on client. But should close on server
-            //_socket.Close();
+            _socket.Close();
             _socket = null;
 
             _internalUpdateCts.Cancel();
@@ -48,6 +52,11 @@ public abstract class NetworkHandler
             while (!token.IsCancellationRequested)
             {
                 await Task.Delay(Constants.updateFrequency);
+
+                if (Simulator != null)
+                {
+                    Simulator.InternalUpdate();
+                }
                 InternalUpdate();
             }
             Debug.Log("Internal update stopped");
@@ -86,26 +95,28 @@ public abstract class NetworkHandler
 
     public void SendPacket(Packet packet, IPEndPoint endPoint)
     {
+        if (Simulator != null)
+        {
+            Simulator.Add(packet, endPoint);
+        }
+        else
+        {
+            SendRaw(packet, endPoint);
+        }
+    }
+
+    public void SendRaw(Packet packet, IPEndPoint endPoint)
+    {
         try
         {
-            // TESTING
-            //int n = rand.Next(0, 100);
-            //if (n < 20)
-            //{
-            //    Debug.Log($"Simulated packet loss");
-            //    return;
-            //}
-            // END TESTING
-
+            // TODO: check that connection is not null
             _socket.BeginSend(packet.ToArray(), packet.Length(), endPoint, null, null);
-            //Debug.Log("Packet sent succesfully");
         }
         catch (Exception ex)
         {
             Debug.Log($"Error sending data via UDP: {ex}");
         }
     }
-
 
     public void HandlePacket(Packet packet, int connectionId)
     {
@@ -116,7 +127,7 @@ public abstract class NetworkHandler
         // Packet can be disposed now
         packet.Dispose();
 
-        ThreadManager.ExecuteOnMainThread(() =>
+        ThreadManager._instance.ExecuteOnMainThread(() =>
         {
             using (var newPacket = new Packet(packetBytes))
             {
@@ -124,5 +135,14 @@ public abstract class NetworkHandler
                 _packetHandlers[packetType](connectionId, newPacket);
             }
         });
+    }
+
+    protected void IgnoreRemoteHostClosedConnection()
+    {
+        _socket.Client.IOControl(
+            (IOControlCode)Constants.sioUdpConnectionReset,
+            new byte[] { 0, 0, 0, 0 },
+            null
+        );
     }
 }

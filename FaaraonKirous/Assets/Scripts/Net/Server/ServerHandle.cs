@@ -5,27 +5,29 @@ using UnityEngine;
 
 public class ServerHandle
 {
+    #region Core
     public static void ConnectionRequest(int connection, Packet packet)
     {
+        Debug.Log($"{GameManager._instance.Players.Count} Join request received!");
+
+        // TODO: Call connect client
+        Server.Instance.SetConnectionFlags(connection, ConnectionState.Connected);
+        GameManager._instance.PlayerConnected(connection, "Placeholder: Please fix");
+        
+        // Send connection accepted message
         ServerSend.ConnectionAccepted(connection);
-    }
 
-    public static void ConnectionAcceptedReceived(int connection, Packet packet)
-    {
-        string msg = packet.ReadString();
+        // Sync player info
+        ServerSend.SyncPlayers(connection);
 
-        Debug.Log($"Connection acceptance received. Contains message: {msg}");
+        // Start loading
+        ServerSend.StartLoading(connection);
 
-        // For testing
-        //for (int i = 1; i <= 100; ++i)
-        //{
-        //    ServerSend.Message(connection, i.ToString());
-        //}
-
-        // TODO: Pause game here. And wait that all clients are paused too
-
-        // TODO: This should propably be done by the network manager
-        GameManager._instance.SyncAllObjects();
+        // Send load scene order if scene is fully loaded
+        if (GameManager._instance.IsFullyLoaded)
+        {
+            ServerSend.LoadScene(GameManager._instance.CurrentSceneIndex, connection);
+        }
     }
 
     public static void HeartbeatReceived(int connection, Packet packet)
@@ -38,10 +40,28 @@ public class ServerHandle
         Server.Instance.Connections[connection].Ping = ping;
     }
 
-    #region Abilities
+    public static void Disconnecting(int connection, Packet packet)
+    {
+        Server.Instance.DisconnectClient(connection);
+    }
+    #endregion
 
+    #region LoadAndSave
+    public static void SyncRequest(int connection, Packet packet)
+    {
+        // Clients level has loaded and is ready to sync
+        Server.Instance.SetConnectionFlags(connection, ConnectionState.SceneLoaded);
+
+        // Sync if possible
+        GameManager._instance.SyncAllObjects();
+    }
+    #endregion
+
+    #region Abilities
     public static void AbilityUsed(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         AbilityOption ability = (AbilityOption)packet.ReadByte();
         Vector3 position = packet.ReadVector3();
 
@@ -52,13 +72,93 @@ public class ServerHandle
 
     public static void EnemyPossessed(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
 
-        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectNetManager netManager))
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
         {
-            EnemyNetManager enemyNetManager = (EnemyNetManager)netManager;
+            EnemyObjectManager enemyNetManager = (EnemyObjectManager)netManager;
             enemyNetManager.Character.PossessAI(position);
+        }
+    }
+    #endregion
+
+    #region Player
+    public static void SelectCharacterRequest(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        GameManager._instance.SelectCharacter(character, connection);
+    }
+
+    public static void UnselectCharacterRequest(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        GameManager._instance.UnselectCharacter(connection);
+    }
+
+    public static void SetDestinationRequest(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        ObjectType character = (ObjectType)packet.ReadShort();
+        Vector3 destination = packet.ReadVector3();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.SetDestination(destination);
+        }
+    }
+
+    public static void KillEnemy(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
+        {
+            EnemyObjectManager enemyNetManager = (EnemyObjectManager)netManager;
+            enemyNetManager.DeathScript.damage = 1;
+        }
+    }
+
+    public static void Crouching(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.IsCrouching = state;
+
+            ServerSend.Crouching(character, state, connection);
+        }
+    }
+
+    public static void Running(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.IsRunning = state;
+
+            ServerSend.Running(character, state, connection);
         }
     }
     #endregion

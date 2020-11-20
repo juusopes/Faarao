@@ -11,13 +11,12 @@ GameObject:
   - component: {fileID: 107450789380032905}
   - component: {fileID: 3950332493937903148}
   - component: {fileID: 1240338386486227686}
-  - component: {fileID: 7239715180009446666}
   m_Layer: 0
   m_Name: bazier_unity 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &107450789380032905
 Transform:
@@ -84,20 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7239715180009446666
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 735895714682721075}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6664704765399504552, guid: 8d701771372f8c2498d91f1b16817562, type: 3}
 --- !u!1001 &3451748791764989718
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,20 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    public GameObject activeCharacter;
+    public GameObject activeCharacter => GameManager._instance.CurrentCharacter;
     private float camHeight;
     private Quaternion camRot;
     public bool camFollow;
 
     //Movement Script
     public float moveAmount;
-    public float borderThickness = 10;
-    public Vector2 panLimit;
+    public float borderThickness;
+    public int panLimit;
 
-    public GameObject cameraAnchor;
+    public Transform cameraController;
+    public Transform cameraPos;
+    public Transform cameraStabilizer;
+
+    private float zoomSpeed;
+
+    public GameObject objective1, objective2, objective3, objective4, objective5;
+    private GameObject character1 => GameManager._instance.Pharaoh;
+    private GameObject character2 => GameManager._instance.Priest;
+
+    public bool rotating;
+    public float rotateSpeed;
+
+    public float rotation;
+
+    public int zPanLimit, xPanLimit;
+
+    private float clickTime, timeSinceLastClick;
+    private float doubleClick = 0.2f;
 
     // Start is called before the first frame update
     void Start()
@@ -28,29 +47,97 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         CamPos();
+
+
+    }
+
+    private void LateUpdate()
+    {
+        if (Input.GetMouseButton(2))
+        {
+            rotating = true;
+
+            rotation += rotateSpeed * Input.GetAxis("Mouse X");
+            cameraController.transform.eulerAngles = new Vector3(0, rotation, 0);
+        }
+        else
+        {
+            rotating = false;
+        }
     }
 
     private void Initialize()
     {
-        camRot = transform.rotation;
         camHeight = 40;
         camFollow = false;
-        moveAmount = 40f;
+        moveAmount = 30f;
+        zoomSpeed = 40f;
     }
 
-    private void CamPos()
+    public void CamPos()
     {
+        transform.position = new Vector3(Mathf.Clamp(cameraController.position.x, -xPanLimit, xPanLimit),
+                                        transform.position.y,
+                                        Mathf.Clamp(cameraController.position.z, -zPanLimit, zPanLimit));
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            CenterCamera();
+        }
+
+        if (cameraController.transform.position.y > -10f)
+        {
+            // scrolling up (zoom in)
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                cameraController.transform.Translate(transform.forward * zoomSpeed * Time.deltaTime, Space.World);
+                cameraController.transform.Translate(transform.up * -zoomSpeed * Time.deltaTime, Space.World);
+            }
+        }
+
+        if (cameraController.transform.position.y < 0f)
+        {
+            //scrolling down (zoom out)
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                cameraController.transform.Translate(transform.forward * -zoomSpeed * Time.deltaTime, Space.World);
+                cameraController.transform.Translate(transform.up * zoomSpeed * Time.deltaTime, Space.World);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            timeSinceLastClick = Time.time - clickTime;
+
+            if (timeSinceLastClick <= doubleClick)
+            {
+                FindCharacter1();
+            }
+
+            clickTime = Time.time;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            timeSinceLastClick = Time.time - clickTime;
+
+            if (timeSinceLastClick <= doubleClick)
+            {
+                FindCharacter2();
+            }
+
+            clickTime = Time.time;
+        }
+
         if (camFollow)
         {
             if (transform.parent != null)
             {
-                transform.rotation = camRot;
                 transform.position = new Vector3(transform.parent.transform.position.x, camHeight, transform.parent.transform.position.z);
 
-                Vector3 v3 = cameraAnchor.transform.position;
+                Vector3 v3 = cameraController.transform.position;
                 v3.x = transform.parent.transform.position.x;
-                cameraAnchor.transform.position = v3;
-
+                cameraController.transform.position = v3;
             }
             if (transform.parent == null)
             {
@@ -61,43 +148,95 @@ public class CameraControl : MonoBehaviour
         }
         else
         {
-            camRot.z = 0;
-            transform.rotation = camRot;
             if (transform.parent != null)
             {
                 transform.parent = null;
             }
+
 #if UNITY_EDITOR
-            if(CamUtility.IsMouseOverGameWindow())       //If unity editor only move the camera if it is insde the screen
+            if (CamUtility.IsMouseOverGameWindow())        //If unity editor only move the camera if it is insde the screen
 #endif
                 MoveCamera();
         }
     }
 
-    private void MoveCamera()
+    public void MoveCamera()
     {
-        Vector3 pos = transform.position;
+        if (rotating)
+        {
+            return;
+        }
+
         if (Input.mousePosition.x >= Screen.width - borderThickness)
         {
-            pos.x += moveAmount * Time.deltaTime;
+            cameraController.transform.Translate(transform.right * moveAmount * Time.deltaTime, Space.World);
         }
 
         else if (Input.mousePosition.x <= borderThickness)
         {
-            pos.x -= moveAmount * Time.deltaTime;
+            cameraController.transform.Translate(transform.right * -moveAmount * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y >= Screen.height - borderThickness)
         {
-            pos.z += moveAmount * Time.deltaTime;
+            cameraController.transform.Translate(transform.forward * moveAmount * Time.deltaTime, Space.World);
         }
 
         if (Input.mousePosition.y <= borderThickness)
         {
-            pos.z -= moveAmount * Time.deltaTime;
+            cameraController.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
         }
-        pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
-        pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
-        transform.position = pos;
+
+    }
+
+    public void CenterCamera()
+    {
+        cameraStabilizer.transform.position = new Vector3(cameraStabilizer.position.x, cameraStabilizer.transform.position.y, cameraStabilizer.position.z);
+        cameraController.transform.position = new Vector3(cameraStabilizer.position.x, cameraController.transform.position.y, cameraStabilizer.position.z);
+    }
+
+    public void FindObjective1()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(objective1.transform.position.x, cameraController.transform.position.y, objective1.transform.position.z);
+    }
+    public void FindObjective2()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(objective2.transform.position.x, cameraController.transform.position.y, objective2.transform.position.z);
+    }
+    public void FindObjective3()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(objective3.transform.position.x, cameraController.transform.position.y, objective3.transform.position.z);
+    }
+    public void FindObjective4()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(objective4.transform.position.x, cameraController.transform.position.y, objective4.transform.position.z);
+    }
+    public void FindObjective5()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(objective5.transform.position.x, cameraController.transform.position.y, objective5.transform.position.z);
+    }
+
+    public void FindCharacter1()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(character1.transform.position.x, cameraController.transform.position.y, character1.transform.position.z);
+    }
+
+    public void FindCharacter2()
+    {
+        CenterCamera();
+
+        cameraController.transform.position = new Vector3(character2.transform.position.x, cameraController.transform.position.y, character2.transform.position.z);
     }
 }

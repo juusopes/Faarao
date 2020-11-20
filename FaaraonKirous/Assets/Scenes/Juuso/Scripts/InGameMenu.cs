@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -8,9 +9,28 @@ using System.IO;
 
 public class InGameMenu : MonoBehaviour
 {
+    public static InGameMenu _instance;
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else if (_instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+        }
+    }
+
     public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     public GameObject gameplayButton, audioButton, controlsButton, videoButton;
+
+    // TODO: For testing
+    public GameObject objectivePanel;
+
     public int savedLevel;
     public float lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ;
     public float lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2;
@@ -36,11 +56,12 @@ public class InGameMenu : MonoBehaviour
         gameplayPanel.SetActive(false);
 
         startTime = Time.time;
-        //TODO: fix below
-        if(player)
+
+        if (player != null && player2 != null)
+        {
             player.transform.position = new Vector3(lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ);
-        if(player2)
             player2.transform.position = new Vector3(lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2);
+        }
     }
 
     // Update is called once per frame
@@ -107,13 +128,28 @@ public class InGameMenu : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene("OllinScene");
+        SceneManager.LoadScene(1);
     }
 
     public void RestartLevel()
     {
-        string restartLevel = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(restartLevel);
+        if (NetworkManager._instance.IsHost)
+        {
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            GameManager._instance.LoadLevel(sceneIndex);
+        }
+    }
+
+    public void EnableLoadingScreen()
+    {
+        // TODO: This is for testing only. Don't destroy on load canvas would be better
+        objectivePanel.SetActive(true);
+    }
+
+    public void DisableLoadingScreen()
+    {
+        // TODO: This is for testing only. Don't destroy on load canvas would be better
+        objectivePanel.SetActive(false);
     }
 
     public void GoToMainMenu()
@@ -123,42 +159,17 @@ public class InGameMenu : MonoBehaviour
 
     public void SaveLevel()
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/LevelInfo.dat");
-        LevelData data = new LevelData();
-
-        print("Level saved at: " + player.transform.position);
-
-        data.lastSaveSpotX = player.transform.position.x;
-        data.lastSaveSpotY = player.transform.position.y;
-        data.lastSaveSpotZ = player.transform.position.z;
-
-        data.lastSaveSpotX2 = player2.transform.position.x;
-        data.lastSaveSpotY2 = player2.transform.position.y;
-        data.lastSaveSpotZ2 = player2.transform.position.z;
-
-        string savedLevel = SceneManager.GetActiveScene().name;
-        data.savedLevel = savedLevel;
-
-        bf.Serialize(file, data);
-
-        file.Close();
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.SaveToFile();
+        }
     }
 
     public void LoadLevel()
     {
-        if (File.Exists(Application.persistentDataPath + "/LevelInfo.dat"))
+        if (NetworkManager._instance.IsHost)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/LevelInfo.dat", FileMode.Open);
-            LevelData data = (LevelData)bf.Deserialize(file);
-
-            print("Level loaded at: " + player.transform.position);
-
-            file.Close();
-
-            player.transform.position = new Vector3(data.lastSaveSpotX, data.lastSaveSpotY, data.lastSaveSpotZ);
-            player2.transform.position = new Vector3(data.lastSaveSpotX2, data.lastSaveSpotY2, data.lastSaveSpotZ2);
+            GameManager._instance.LoadFromFile();
         }
     }
 
