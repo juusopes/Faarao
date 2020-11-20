@@ -22,6 +22,9 @@ public class AbilityIndicator : MonoBehaviour
     private bool calculateNeeded;
     //AbilityTargets
 
+    //Line Of Sight
+    private bool hasLineOfSight;
+    private Vector3 lineOfSightPoint;
 
     // Start is called before the first frame update
     void Start()
@@ -90,6 +93,37 @@ public class AbilityIndicator : MonoBehaviour
             //Line Start
             line.SetPosition(0, player.transform.position);
 
+            //Shoot Ray To see if in line of sight
+            RaycastHit hit = new RaycastHit();
+            //DoubleClick Check
+            if (lineOfSightPoint.y > -500)
+            {
+                Debug.Log(lineOfSightPoint.y);
+                if (Physics.Raycast(player.transform.position, lineOfSightPoint - player.transform.position, out hit, Vector3.Distance(player.transform.position, lineOfSightPoint), RayCaster.attackLayerMask))
+                {
+                    hasLineOfSight = false;
+                    Debug.Log(hit.collider);
+                }
+                else
+                {
+                    hasLineOfSight = true;
+                    lineOfSightPoint.y = -1000;
+                }
+            }
+            else
+            {
+                Debug.Log("Calculating mousepint");
+                if (Physics.Raycast(player.transform.position, transform.position - player.transform.position, out hit, Vector3.Distance(player.transform.position, transform.position), RayCaster.attackLayerMask))
+                {
+                    hasLineOfSight = false;
+                    Debug.Log(hit.collider);
+                }
+                else
+                {
+                    hasLineOfSight = true;
+                    lineOfSightPoint.y = -1000;
+                }
+            }
             //Vector Top point
             //Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
             //topPoint.y = 10;
@@ -228,9 +262,16 @@ public class AbilityIndicator : MonoBehaviour
                     playerPos = player.GetComponent<PlayerController>().GetPosition();
                     Vector3 hitPos = hit.transform.position;
                     hitPos.y = playerPos.y;
+                    lineOfSightPoint = hit.transform.position;
+                    hitPos.y = playerPos.y;
                     float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
                     //Debug.Log(distance);
-                    if (distance > range)
+                    if (!hasLineOfSight)
+                    {
+                        player.GetComponent<PlayerController>().GiveDestination(hitPos);
+                        player.GetComponent<PlayerController>().searchingForSight = true;
+                    }
+                    else if (distance > range)
                     {
                         endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance - range) * 4));
                         player.GetComponent<PlayerController>().GiveDestination(endPoint);
@@ -247,8 +288,10 @@ public class AbilityIndicator : MonoBehaviour
         {
             if (endPoint.x == player.GetComponent<PlayerController>().GetPosition().x && endPoint.z == player.GetComponent<PlayerController>().GetPosition().z)
             {
-                player.GetComponent<PlayerController>().inRange = true;
+                player.GetComponent<PlayerController>().inRange = true; 
                 abilityClicked = false;
+                player.GetComponent<PlayerController>().searchingForSight = false;
+                lineOfSightPoint.y = -1000;
             }
         }
     }

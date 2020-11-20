@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviour
     public GameObject visibleInd;
     public int abilityNum;
     public bool inRange;
+    public bool searchingForSight;
     //[HideInInspector]
     public bool[] abilityAllowed;
 
@@ -543,11 +544,7 @@ public class PlayerController : MonoBehaviour
                 abilityActive = false;
                 abilityNum = 0;
             }
-        } else
-        {
-            Debug.Log(tempAbilityNum);
         }
-
     }
     private void TestOffLink()
     {
