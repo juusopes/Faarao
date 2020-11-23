@@ -22,6 +22,7 @@ public class ObjController : MonoBehaviour
     public int objectivesInLevel;
 
     private IEnumerator coroutine;
+    public GameObject fadeToBlack;
 
     // Start is called before the first frame update
     void Start()
@@ -69,8 +70,8 @@ public class ObjController : MonoBehaviour
         //Moves to next Build Index if enough objectives are done 
         if (tempBoolCounter >= objectivesNeeded)
         {
-            Scene scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.buildIndex + 1);
+            fadeToBlack.SetActive(true);
+            LoadNextScene();
         }
     }
 
