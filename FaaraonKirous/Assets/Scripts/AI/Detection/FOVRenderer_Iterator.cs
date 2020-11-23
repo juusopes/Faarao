@@ -26,6 +26,7 @@ public partial class FOVRenderer
         float xAngleSampled = xStartingAngle;
         float yAngleSampled = yGlobalAngleIn;
         Vector3 previousSample = Vector3.positiveInfinity;
+        //Vector3 previousSample = vertexPoints[0];
         Vector3 secondPreviousSample = Vector3.positiveInfinity;
         bool hasResampled = false;
         RaycastHit lastTrueRayCastHit = new RaycastHit();

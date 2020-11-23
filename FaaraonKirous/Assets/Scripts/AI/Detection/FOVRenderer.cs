@@ -45,6 +45,7 @@ public partial class FOVRenderer : MonoBehaviour
     public List<Vector4> vertexPoints;
     public Vector2[] uv;
     public int[] triangles;
+    public Vector3[] normals;
     int vertexIndex = 1;
     int triangleIndex = 0;
     SampleType lastSampleType = 0;
@@ -65,6 +66,7 @@ public partial class FOVRenderer : MonoBehaviour
     private const float horizontalThreshold = 0.1f;
     private const float distanceThreshold = 0.5f;
     private const float SlopeTolerance = 0.5f;         //Dotproduct for hitnormal
+    private const float vertexYOffset = 0.1f;
 
     private enum Looking
     {
@@ -86,7 +88,12 @@ public partial class FOVRenderer : MonoBehaviour
         LedgeAtDownAngle,   //Green   
         LedgeAtUpAngle      //Magenta
     }
-
+    private struct VertexSample
+    {
+        Vector3 vertex;
+        SampleType sampleType;
+        int[] edgeNeighbours;
+    }
 
     private float yFOV => character.FOV;
     private float xFOV => 90f;
@@ -145,7 +152,7 @@ public partial class FOVRenderer : MonoBehaviour
             return;
 #endif
 
-        if(ShouldUpdateViewCone())
+        if (ShouldUpdateViewCone())
             UpdateViewCone();
 
         lastPosition = transform.position;
@@ -200,7 +207,8 @@ public partial class FOVRenderer : MonoBehaviour
     private void InitMesh()
     {
         vertexPoints = new List<Vector4>();
-        AddVertexPoint(MeshOrigin, SampleType.None);
+        //AddVertexPoint(MeshOrigin, SampleType.None);
+        //Debug.Log(MeshOrigin);
     }
 
     private void InitIterations()
@@ -211,6 +219,7 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void AddVertexPoint(Vector3 sample, SampleType sampleType)
     {
+        sample.y = sample.y + vertexYOffset;
 #if UNITY_EDITOR
         if (debuggingLogging) Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>");
 #endif
@@ -233,42 +242,131 @@ public partial class FOVRenderer : MonoBehaviour
         return vertexUV;
     }
 
-    private void CreateTriangle()
+    private void CreateTriangleCone(int index)
     {
-        if (vertexIndex > 1)
+        if (index > 2)
         {
             triangles[triangleIndex + 0] = 0;
-            triangles[triangleIndex + 1] = vertexIndex - 1;
-            triangles[triangleIndex + 2] = vertexIndex;
+            triangles[triangleIndex + 1] = index - 1;
+            triangles[triangleIndex + 2] = index;
 
             triangleIndex += 3;
         }
     }
 
+    private void CreateTriangleQuad(int index)
+    {
+        if(index % 2 == 1)
+        {
+            triangles[triangleIndex + 0] = index - 1;
+            triangles[triangleIndex + 1] = index;
+            triangles[triangleIndex + 2] = index + 1;
+        }
+        else
+        {
+            triangles[triangleIndex + 0] = index - 1;
+            triangles[triangleIndex + 1] = index + 1;
+            triangles[triangleIndex + 2] = index;
+        }
+        triangleIndex += 3;
+    }
+
+
+    private bool StartingType(SampleType st) => st == SampleType.None || st == SampleType.Floor || st == SampleType.FloorToDownFloor || st == SampleType.WallToFloorCorner || st == SampleType.LedgeStartCorner;
+    private bool EndingType(SampleType st) => st == SampleType.EndOfSightRange || st == SampleType.FloorToWallCorner || st == SampleType.LedgeAtDownAngle || st == SampleType.LedgeAtUpAngle || st == SampleType.WallToWall;
+
+    private bool IsSecondPair(SampleType st1, SampleType st2)
+    {
+        //if(st1 == SampleType.None || st1 == SampleType.Floor && st2 == SampleType.FloorToWallCorner || st2 == SampleType.LedgeAtDownAngle)
+        if (st1 == SampleType.WallToFloorCorner || st1 == SampleType.LedgeStartCorner 
+            && st2 == SampleType.EndOfSightRange || st2 == SampleType.FloorToWallCorner || st2 == SampleType.LedgeAtDownAngle || st2 == SampleType.LedgeAtUpAngle || st2 == SampleType.WallToWall)
+            return true;
+
+        return false;
+    }
+
+
     private void CreateMesh()
     {
         mesh.Clear();
+        List<Vector4> vertexList = new List<Vector4>();
+        List<Vector4> vertexList2 = new List<Vector4>();
 
-        Vector3[] vertices = new Vector3[vertexPoints.Count];
+        vertexList.Add(vertexPoints[0]);
+        vertexPoints.RemoveAt(0);
+        float firstY = vertexList[0].y;
+        for (int i = 0; i < vertexPoints.Count; i++)
+        {
+            if (AreSimilarFloat(firstY, vertexPoints[i].y, verticalThreshold))
+            {
+                vertexList.Add(vertexPoints[i]);
+                vertexPoints.RemoveAt(i);
+                i--;
+            }
+        }
+        /*
+        for (int i = 1; i < vertexList.Count; i++)
+        {
+            if (IsSecondPair((SampleType)vertexList[i - 1].w, (SampleType)vertexList[i].w))
+            {
+                vertexList2.Add(vertexPoints[i - 1]);
+                vertexList2.Add(vertexPoints[i]);
+                vertexList.RemoveAt(i - 1);
+                vertexList.RemoveAt(i);
+                i--;
+                i--;
+            }
+        }
+
+        */
+        //Debug.Log(vertexList.Count);
+
+        if (vertexList.Count < 3)
+            Debug.LogWarning("Lil len");
+
+        Vector3[] vertices = new Vector3[vertexList.Count];
+
         uv = new Vector2[vertices.Length];
         uv[0] = Vector2.zero;
         triangles = new int[vertices.Length * 3];
+        normals = new Vector3[vertexList.Count];
 
         for (int i = 0; i < vertices.Length; i++)
         {
-            vertices[i] = vertexPoints[i];
+            //Debug.Log(i);
+            vertices[i] = vertexList[i];
+            uv[i] = new Vector2(1, 1);
+            //normals[i] = Vector3.up;
+
+            if(i > 0 && i < vertices.Length - 1)
+            {
+                CreateTriangleQuad(i);
+
+                /*if (i == 1)
+                    CreateTriangleQuad(i);
+                else if (AreSimilarLenght(vertices[i], vertices[i - 2], 2f))
+                    CreateTriangleQuad(i);
+                else
+                    Debug.Log("Index " + i + " Ignored" + vertices[i].magnitude + " " + vertices[i - 2].magnitude);*/
+            }
+
         }
+
+
 
 #if UNITY_EDITOR
         if (DebugRaypointShapes)
             StartCoroutine(Balls(raySamplePoints));
         if (DebugVertexShapes)
             StartCoroutine(Boxes(vertexPoints.ToArray()));
+        if (DebugCleanedVertexShapes)
+            StartCoroutine(Capsules(vertexList.ToArray()));
 #endif
 
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uv;
+        mesh.normals = normals;
     }
 
 

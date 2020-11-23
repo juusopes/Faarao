@@ -219,63 +219,63 @@ public partial class FOVRenderer
         return dot > -SlopeTolerance && dot < SlopeTolerance;
     }
 
-    public bool IsClearlyLonger(Vector3 start, Vector3 end)
+    public bool IsClearlyLonger(Vector3 start, Vector3 end, float tolerance = distanceThreshold)
     {
-        return end.magnitude - start.magnitude > distanceThreshold;
+        return end.magnitude - start.magnitude > tolerance;
     }
 
-    public bool IsClearlyHigher(Vector3 start, Vector3 end)
+    public bool IsClearlyHigher(Vector3 start, Vector3 end, float tolerance = verticalThreshold)
     {
-        return end.y - start.y > verticalThreshold;
+        return end.y - start.y > tolerance;
     }
 
-    public bool IsClearlyLower(Vector3 start, Vector3 end)
+    public bool IsClearlyLower(Vector3 start, Vector3 end, float tolerance = verticalThreshold)
     {
         //Debug.Log((end.y - start.y < -verticalThreshold) +" " +start.y + "-" + end.y + "=" + (end.y - start.y));
-        return end.y - start.y < -verticalThreshold;
+        return end.y - start.y < -tolerance;
     }
 
-    public bool AreVerticallyAligned(Vector3 sample1, Vector3 sample2)
+    public bool AreVerticallyAligned(Vector3 sample1, Vector3 sample2, float tolerance = horizontalThreshold)
     {
-        return Mathf.Abs(sample1.x - sample2.x) < horizontalThreshold
-        && Mathf.Abs(sample1.z - sample2.z) < horizontalThreshold;
+        return Mathf.Abs(sample1.x - sample2.x) < tolerance
+        && Mathf.Abs(sample1.z - sample2.z) < tolerance;
     }
-    public bool AreSimilarOnX(Vector3 sample1, Vector3 sample2)
+    public bool AreSimilarOnX(Vector3 sample1, Vector3 sample2, float tolerance = horizontalThreshold)
     {
-        return Mathf.Abs(sample1.x - sample2.x) < horizontalThreshold;
+        return Mathf.Abs(sample1.x - sample2.x) < tolerance;
     }
-    public bool AreSimilarOnZ(Vector3 sample1, Vector3 sample2)
+    public bool AreSimilarOnZ(Vector3 sample1, Vector3 sample2, float tolerance = horizontalThreshold)
     {
-        return Mathf.Abs(sample1.z - sample2.z) < horizontalThreshold;
-    }
-
-    public bool AreSimilarHeight(Vector3 sample1, Vector3 sample2)
-    {
-        return Mathf.Abs(sample1.y - sample2.y) < verticalThreshold;
+        return Mathf.Abs(sample1.z - sample2.z) < tolerance;
     }
 
-    public bool AreSimilarLenght(Vector3 sample1, Vector3 sample2)
+    public bool AreSimilarHeight(Vector3 sample1, Vector3 sample2, float tolerance = verticalThreshold)
     {
-        return Mathf.Abs(sample1.magnitude - sample2.magnitude) < horizontalThreshold;
+        return Mathf.Abs(sample1.y - sample2.y) < tolerance;
     }
 
-    public bool AreSimilarLenght(Vector3 sample1, float comparison)
+    public bool AreSimilarLenght(Vector3 sample1, Vector3 sample2, float tolerance = horizontalThreshold)
     {
-        return Mathf.Abs(sample1.magnitude - comparison) < horizontalThreshold;
+        return Mathf.Abs(sample1.magnitude - sample2.magnitude) < tolerance;
+    }
+
+    public bool AreSimilarLenght(Vector3 sample1, float comparison, float tolerance = horizontalThreshold)
+    {
+        return Mathf.Abs(sample1.magnitude - comparison) < tolerance;
     }
     public bool AreSimilarFloat(float a, float b, float tolerance)
     {
         return Mathf.Abs(a - b) < tolerance;
     }
 
-    public bool AreSimilarYDirection(Vector3 sample1, Vector3 sample2)
+    public bool AreSimilarYDirection(Vector3 sample1, Vector3 sample2, float tolerance = directionTolerance)
     {
         sample1 = sample1.normalized;
         sample2 = sample2.normalized;
         Vector2 test1 = new Vector2(sample1.x, sample1.z);
         Vector2 test2 = new Vector2(sample2.x, sample2.z);
         Debug.Log("Similarity is " + Vector2.Dot(test1, test2));
-        return Vector2.Dot(test1, test2) > directionTolerance;
+        return Vector2.Dot(test1, test2) > tolerance;
     }
     #endregion
 }
