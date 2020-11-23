@@ -384,7 +384,6 @@ public class Character : MonoBehaviour
         navMeshAgent.speed = enable ? classSettings.navTrackSpeed : classSettings.navSpeed;
     }
 
-
     public void SearchLastSeenPosition()
     {
         if (UtilsClass.IsMinimumVector(lastSeenPosition))

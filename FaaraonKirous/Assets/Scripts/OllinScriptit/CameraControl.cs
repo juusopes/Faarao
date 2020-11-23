@@ -13,7 +13,6 @@ public class CameraControl : MonoBehaviour
     //Movement Script
     public float moveAmount;
     public float borderThickness;
-    public int panLimit;
 
     public Transform cameraController;
     public Transform cameraPos;
@@ -35,6 +34,9 @@ public class CameraControl : MonoBehaviour
     private float clickTime, timeSinceLastClick;
     private float doubleClick = 0.2f;
 
+    public float dampTime = 0.15f;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,8 +49,6 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         CamPos();
-
-
     }
 
     private void LateUpdate()
@@ -186,7 +186,6 @@ public class CameraControl : MonoBehaviour
         {
             cameraController.transform.Translate(transform.forward * -moveAmount * Time.deltaTime, Space.World);
         }
-
     }
 
     public void CenterCamera()
