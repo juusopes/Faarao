@@ -26,6 +26,7 @@ public class AbilityIndicator : MonoBehaviour
     private bool hasLineOfSight;
     private Vector3 lineOfSightPoint;
     private bool lineOfSightPointBool;
+    private bool allOk;
 
     // Start is called before the first frame update
     void Start()
@@ -231,7 +232,7 @@ public class AbilityIndicator : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
             {
                 //vectorLength = vectorLength / 6.6f;
-                if (Input.GetKeyDown(KeyCode.Mouse1))
+                if (Input.GetKeyDown(KeyCode.Mouse1)|| allOk)
                 {
                     playerPos = player.GetComponent<PlayerController>().GetPosition();
                     Vector3 hitPos = hit.transform.position;
@@ -244,17 +245,24 @@ public class AbilityIndicator : MonoBehaviour
                     {
                         player.GetComponent<PlayerController>().GiveDestination(hitPos);
                         player.GetComponent<PlayerController>().searchingForSight = true;
+                        Debug.Log("CASE1");
                     }
                     else if (distance > range)
                     {
                         endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance - range) * 4));
                         player.GetComponent<PlayerController>().GiveDestination(endPoint);
+                        Debug.Log("CASE2");
                     }
                     else
                     {
                         player.GetComponent<PlayerController>().inRange = true;
+                        Debug.Log("CASE3");
                     }
                     abilityClicked = true;
+                    if (allOk)
+                    {
+                        allOk = false;
+                    }
                 }
             }
         }
@@ -298,9 +306,8 @@ public class AbilityIndicator : MonoBehaviour
         }
         if (abilityClicked && hasLineOfSight)
         {
-            player.GetComponent<PlayerController>().inRange = true;
-            player.GetComponent<PlayerController>().Stay();
             player.GetComponent<PlayerController>().searchingForSight = false;
+            allOk = true;
         }
     }
 }

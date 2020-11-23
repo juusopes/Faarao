@@ -40,6 +40,7 @@ public class AbilityController : MonoBehaviour
         {
             abilityActivated = true;
         }
+        Debug.Log("Ability Activated: " + abilityActivated + ", In Range: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Sight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
         if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange && abilityActivated && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight)
         {
