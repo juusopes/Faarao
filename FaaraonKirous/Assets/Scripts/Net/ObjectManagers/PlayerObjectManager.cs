@@ -94,14 +94,33 @@ public class PlayerObjectManager : CharacterObjectManager
 
         // Controller
         int controller = packet.ReadInt();
-        if (controller == Constants.noId)
+        if (NetworkManager._instance.IsHost)
         {
             Controller = null;
         }
         else
         {
-            Controller = controller;
+            if (controller == Constants.noId)
+            {
+                Controller = null;
+            }
+            else
+            {
+                Controller = controller;
+            }
         }
+    }
+
+    public override void WriteState(Packet dataPacket)
+    {
+        base.WriteState(dataPacket);
+    }
+
+    public override void ReadState(Packet dataPacket)
+    {
+        base.ReadState(dataPacket);
+        PlayerController.navMeshAgent.Warp(Transform.position);
+        PlayerController.Stay();
     }
 
     public override void ResetObject()

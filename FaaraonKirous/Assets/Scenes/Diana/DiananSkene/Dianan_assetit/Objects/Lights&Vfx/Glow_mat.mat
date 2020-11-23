@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Glow_mat
-  m_Shader: {fileID: -6465566751694194690, guid: 2c8f4371abef78042a145313361c5fb3, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: ad89581bfeed3f44c81def7fdfae4bb8, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,12 +19,21 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_8C1CF8B7:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_B33BD3ED_Texture_1:
         m_Texture: {fileID: 2800000, guid: 9173f925c95820b408425d22dbe7ae11, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_2A131F18: 1.1
+    - Vector1_34332E5D: -1.16
+    - Vector1_5D58C353: 0.08
+    - Vector1_66F5C362: 0.01
+    - Vector1_ED2BF4A9: 6.18
     m_Colors:
     - Color_71A3336: {r: 1.8115512, g: 2.3422103, b: 1.1600568, a: 0}
+    - Color_CDAC5F15: {r: 0, g: 0.19069634, b: 0.016345412, a: 0}
   m_BuildTextureStacks: []
