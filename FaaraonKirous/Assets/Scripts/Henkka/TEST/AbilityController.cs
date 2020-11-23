@@ -39,10 +39,14 @@ public class AbilityController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             abilityActivated = true;
+            Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
+                 + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
         }
-        Debug.Log("Ability Activated: " + abilityActivated + ", In Range: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Sight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
-        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange && abilityActivated && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight)
+        Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
+                + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
+
+        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange && abilityActivated && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight)
         {
             PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
             if (caster.abilityNum == 2 && !caster.playerOne)
@@ -85,6 +89,8 @@ public class AbilityController : MonoBehaviour
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
                 caster.inRange = false;
+                caster.searchingForSight = true;
+                caster.abilityClicked = false;
                 abilityActivated = false;
                 click = 0;
             }
