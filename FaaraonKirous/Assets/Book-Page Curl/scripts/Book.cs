@@ -8,8 +8,12 @@ public enum FlipMode
     LeftToRight
 }
 [ExecuteInEditMode]
+
 public class Book : MonoBehaviour {
     public Canvas canvas;
+
+    public GameObject continueButton;
+
     [SerializeField]
     RectTransform BookPanel;
     public Sprite background;
@@ -18,6 +22,9 @@ public class Book : MonoBehaviour {
     public bool enableShadowEffect=true;
     //represent the index of the sprite shown in the right page
     public int currentPage = 0;
+
+
+
     public int TotalPageCount
     {
         get { return bookPages.Length; }
@@ -402,5 +409,17 @@ public class Book : MonoBehaviour {
         }
         if (onFinish != null)
             onFinish();
+    }
+
+    public void OnLastPage()
+    {
+        if(currentPage == bookPages.Length)
+        {
+            continueButton.SetActive(true);
+        }
+        else
+        {
+            continueButton.SetActive(false);
+        }
     }
 }

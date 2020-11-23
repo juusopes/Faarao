@@ -21,6 +21,8 @@ public class ObjController : MonoBehaviour
 
     public int objectivesInLevel;
 
+    private IEnumerator coroutine;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,28 +35,10 @@ public class ObjController : MonoBehaviour
             objectives[x].SetActive(true);
         }
         playersInside = 0;
-
-        //Scene scene = SceneManager.GetActiveScene();
-
-        //if(scene.name == "Level 1")
-        //{
-        //    AddObjectives(3);
-        //}
-
-        //else if (scene.name == "Level 2")
-        //{
-        //    AddObjectives(4);
-        //}
     }
 
     public void Update()
     {
-        //objective1Done = objectivecounter1.objective1Done;
-        //objective2Done = objectivecounter2.objective2Done;
-        //objective3Done = objectivecounter3.objective3Done;
-        //objective4Done = objectivecounter4.objective4Done;
-        //objective5Done = objectivecounter5.objective5Done;
-        //inEndPoint = endPointer.inEndPoint;
         if (playersInside < 0)
         {
             Debug.Log("TOO FEW!");
@@ -89,37 +73,19 @@ public class ObjController : MonoBehaviour
             SceneManager.LoadScene(scene.buildIndex + 1);
         }
     }
-    //public int AddObjectives(int objCount)
-    //{
-    //    //Adds objectives in scene
-    //    List<int> objectives = new List<int>();
 
-    //    for (int i = 0; i < objCount; i++)
-    //    {
-    //        objectives.Add(i);
+    public void LoadNextScene()
+    {
+        StartCoroutine(WaitForSeconds2());
+    }
 
-    //        if (objectives.Contains(0))
-    //        {
-    //            objective1.SetActive(true);
-    //        }
-    //        if (objectives.Contains(1))
-    //        {
-    //            objective2.SetActive(true);
-    //        }
-    //        if (objectives.Contains(2))
-    //        {
-    //            objective3.SetActive(true);
-    //        }
-    //        if (objectives.Contains(3))
-    //        {
-    //            objective4.SetActive(true);
-    //        }
-    //        if (objectives.Contains(4))
-    //        {
-    //            objective5.SetActive(true);
-    //        }
-    //    }
-
-    //    return objCount;
-    //}
+    public IEnumerator WaitForSeconds2()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5);
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.buildIndex + 1);
+        }
+    }
 }
