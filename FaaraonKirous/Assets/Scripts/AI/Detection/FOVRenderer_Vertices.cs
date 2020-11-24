@@ -20,18 +20,6 @@ public partial class FOVRenderer
         //}
     }
 
-    private void TryCreateFloorToDownFloorVertex(RaycastHit previousRaycastHit, Vector3 previousSample, Vector3 sample, float xAngle, float yAngle)
-    {
-        Vector3 extraPolatedVec = ExtraPolateVector(SampleType.FloorToDownFloor, previousSample, sample, xAngle);
-        Vector3 cornerDirection = ((ConvertGlobal(previousSample) + Vector3.up * -0.2f) - ConvertGlobal(extraPolatedVec)).normalized;
-        Vector3 cornerSample = ConvertLocal(GetHitPointOnSpecificCollider(extraPolatedVec, cornerDirection, SightRange, previousRaycastHit.collider));
-        if (cornerSample != Vector3.zero)
-        {
-            Vector3 corner = new Vector3(cornerSample.x, previousSample.y, cornerSample.z);
-            AddVertexPoint(corner, SampleType.FloorToDownFloor);
-        }
-    }
-
     private bool TryCreateFloorToWallCornerVertex(float yAngleIn, Vector3 previousSample, Vector3 sample)
     {
         Vector3 wallCorner = new Vector3(sample.x, previousSample.y, sample.z);     //Simulate position of corner
@@ -68,7 +56,7 @@ public partial class FOVRenderer
         }
     }
 
-    private Vector3 TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, Vector3 ledgeStartSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
+    private Vector3 TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, float xAngleIn, Vector3 ledgeStartSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
     {
         //Get corner or use last corner
         bool needNewCorner = lastType == SampleType.FloorToWallCorner || lastType == SampleType.LedgeAtUpAngle || lastType == SampleType.LedgeAtDownAngle || lastType == SampleType.WallToWall;
@@ -77,7 +65,7 @@ public partial class FOVRenderer
         Vector3 closestCorner = Vector3.zero;
         if (needNewCorner)
         {
-            closestCorner = GetLedgeCorner(yAngleIn, ledgeStartSample, sample, ledgeStartRayCastHit);
+            closestCorner = GetLedgeCorner(yAngleIn, xAngleIn, ledgeStartSample, sample, ledgeStartRayCastHit);
             //Debug.Log(ledgeStartSample + " " + closestCorner);
             if (closestCorner == Vector3.zero)
             {
@@ -106,8 +94,8 @@ public partial class FOVRenderer
             AddVertexPoint(ledgeEnd, sampleType);
             return ledgeEnd;
         }
-        //else
-        //   Debug.Log("Nope could not understand ledges! ");
+        else
+           Debug.Log("Nope could not understand ledges! ");
         return Vector3.zero;
     }
 
@@ -122,28 +110,41 @@ public partial class FOVRenderer
     /// <param name="previousSample"></param>
     /// <param name="sample"></param>
     /// <returns></returns>
-    private Vector3 GetLedgeCorner(float yAngleIn, Vector3 previousSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
+    private Vector3 GetLedgeCorner(float yAngleIn, float xAngleIn, Vector3 previousSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
     {
-        float approximateY = (sample.normalized * previousSample.magnitude).y;
-        Vector3 approximateCorner = new Vector3(previousSample.x, approximateY, previousSample.z);                                   //Corner position that is on same x and z as real corner but y is on sample vector (raycast vector)
+        //Get initial approximation
+        Vector3 sampleScaled = sample.normalized * previousSample.magnitude;
+        //float approximateY = (sampleScaled).y;
+        //Vector3 approximateCorner = new Vector3(previousSample.x, approximateY, previousSample.z);                                   //Corner position that is on same x and z as real corner but y is on sample vector (raycast vector)
+        Vector3 firstApproximateCorner = new Vector3(previousSample.x, (sampleScaled).y, previousSample.z);
+        //ACylinder(firstApproximateCorner);
+
+        //Use initial approximation to get better approximation
+        float deltaHorizontal = (firstApproximateCorner - sampleScaled).magnitude;
+        float xAngleRad = xAngleIn * Mathf.Deg2Rad;
+        float hypotenuse = deltaHorizontal / Mathf.Cos(xAngleRad);
+        Vector3 approximateCorner = sample.normalized * (sampleScaled.magnitude + hypotenuse);
+        //ACylinder(approximateCorner);
+
+        //Retrieve collider y from better approximation
         //Vector3 direction = Vector3.down + sample.normalized * 0.2f;                                                //Get direction of ledge
         Vector3 direction = Quaternion.Euler(cornerCheckAngle, yAngleIn, 0) * Vector3.forward;
         RaycastHit testRaycastHit;
-        float range = approximateY - previousSample.y + 0.5f;
+        float range = approximateCorner.y - previousSample.y + 0.5f;
         float cornerY = GetSamplePoint(ConvertGlobal(approximateCorner), direction, range, out testRaycastHit).y;       //Raycast almost straight down towards ledge to determine y height
         if (HasNotHit(testRaycastHit))                                                                          //If ray failed, use approximate corner
         {
             Vector3 reTry = GetClosestPointOnCollider(ledgeStartRayCastHit, approximateCorner);
             if(reTry == Vector3.zero)
             {
-                Debug.Log("Corner failed " + approximateY + " " + previousSample.y + " " + range);
+                Debug.Log("Corner failed " + approximateCorner.y + " " + previousSample.y + " " + range);
                 return Vector3.zero;
             }
 
             cornerY = reTry.y;
         }
-
-        return new Vector3(approximateCorner.x, cornerY, approximateCorner.z);
+        //ACylinder(new Vector3(approximateCorner.x, cornerY, approximateCorner.z), Color.green);
+        return new Vector3(firstApproximateCorner.x, cornerY, firstApproximateCorner.z);
     }
 
     private Vector3 GetLedgeEnd(bool isAboveZeroAngle, float yAngleIn, Vector3 sample, RaycastHit previousRayCastHit, Vector3 previousVertex)
@@ -153,7 +154,6 @@ public partial class FOVRenderer
         float cornerRotX = Quaternion.LookRotation(previousVertex.normalized, Vector3.up).eulerAngles.x;
         float xRadCornerAngle = cornerRotX * Mathf.Deg2Rad;     //Calculate x Angle of character looking at corner in radians
         float maxSightRangeOverLedge;
-
 
         if (isAboveZeroAngle)
         {
@@ -174,8 +174,13 @@ public partial class FOVRenderer
     {
         Vector3 sampleScaled = sample.normalized * maxSightRangeOnLedge;
         Vector3 closestOnCollider = GetClosestPointOnColliderWithinYDirection(previousRayCastHit, previousVertex, sampleScaled);
+        //ACylinder(closestOnCollider);
         if (closestOnCollider == Vector3.zero)
+        {
+            Debug.LogWarning("Could not get closest on collider");
             return Vector3.zero;
+        }
+
         RaycastHit lastHit = previousRayCastHit;
         Vector3 vertOffset = new Vector3(0, 0.2f, 0);
         Vector3 firstSample = closestOnCollider + vertOffset;
@@ -213,24 +218,6 @@ public partial class FOVRenderer
         }
 
         return closestOnCollider;
-    }
-
-    private Vector3 ExtraPolateVector(SampleType type, Vector3 previousSample, Vector3 sample, float xAngle)
-    {
-        if (sample == Vector3.zero || previousSample == Vector3.zero)
-            return Vector3.zero;
-
-        switch (type)
-        {
-            case SampleType.FloorToDownFloor:
-                float heightFromSight = 0 - previousSample.y;
-                float xAngleRad = (90f - xAngle) * Mathf.Deg2Rad;
-                float hypotenuse = heightFromSight / Mathf.Cos(xAngleRad);
-                //Debug.Log("Le" + heightFromSight + " " + xAngleRad);
-                return sample.normalized * hypotenuse;
-        }
-
-        return Vector3.zero;
     }
 
 
@@ -286,7 +273,41 @@ public partial class FOVRenderer
 
     #endregion
 
-    #region Zombie code
+#region Zombie code
+#if false
+
+    //NOT USED!
+    private void TryCreateFloorToDownFloorVertex(RaycastHit previousRaycastHit, Vector3 previousSample, Vector3 sample, float xAngle, float yAngle)
+    {
+        Vector3 extraPolatedVec = ExtraPolateVector(SampleType.FloorToDownFloor, previousSample, sample, xAngle);
+        Vector3 cornerDirection = ((ConvertGlobal(previousSample) + Vector3.up * -0.2f) - ConvertGlobal(extraPolatedVec)).normalized;
+        Vector3 cornerSample = ConvertLocal(GetHitPointOnSpecificCollider(extraPolatedVec, cornerDirection, SightRange, previousRaycastHit.collider));
+        if (cornerSample != Vector3.zero)
+        {
+            Vector3 corner = new Vector3(cornerSample.x, previousSample.y, cornerSample.z);
+            AddVertexPoint(corner, SampleType.FloorToDownFloor);
+        }
+    }
+
+
+    // NOT USED       
+    private Vector3 ExtraPolateVector(SampleType type, Vector3 previousSample, Vector3 sample, float xAngle)
+    {
+        if (sample == Vector3.zero || previousSample == Vector3.zero)
+            return Vector3.zero;
+
+        switch (type)
+        {
+            case SampleType.FloorToDownFloor:
+                float heightFromSight = 0 - previousSample.y;
+                float xAngleRad = (90f - xAngle) * Mathf.Deg2Rad;
+                float hypotenuse = heightFromSight / Mathf.Cos(xAngleRad);
+                //Debug.Log("Le" + heightFromSight + " " + xAngleRad);
+                return sample.normalized * hypotenuse;
+        }
+
+        return Vector3.zero;
+    }
 
     private Vector3 TryGetEndOfLedgeIterativeRaycasts(Vector3 corner, float xRadCornerAngle, float maxSightRangeOverLedge)
     {
@@ -382,6 +403,6 @@ public partial class FOVRenderer
        AddVertexPoint(absoluteClosestPoint2, SampleType.FloorToDownFloor);
         */
     //}
-
-    #endregion
+#endif
+#endregion
 }

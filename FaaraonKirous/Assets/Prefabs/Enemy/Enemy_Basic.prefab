@@ -139,10 +139,11 @@ MonoBehaviour:
   impairedSightRange: 0
   impairedFOV: 0
   isDistracted: 0
-  additionalTarget: {x: 0, y: 0, z: 0}
+  possessedGoToTarget: {x: 0, y: 0, z: 0}
   currentDistractionPos: {x: 0, y: 0, z: 0}
   currentDistraction: {fileID: 0}
   chaseTarget: {x: 0, y: 0, z: 0}
+  lastSeenPosition: {x: 0, y: 0, z: 0}
   couldDetectPlayer1: 0
   couldDetectPlayer2: 0
   navMeshAgent: {fileID: 0}
@@ -176,6 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _list: 0
   _type: 0
+  _id: 0
 --- !u!1 &1295752339806913345
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,19 +544,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 1295752339492584506}
   raySamplePoints: []
-  vertexPoints: []
   uv: []
   triangles: 
-  yRayCount: 0
-  xRayCount: 0
-  debugMode: 5
+  yRayCount: 30
+  xRayCount: 30
+  debugMode: 0
   ballMat: {fileID: 2100000, guid: d60f8b1c0f8939a419fc0a739e24bdda, type: 2}
   ballMat2: {fileID: 2100000, guid: ee15538f17310b54d91417a909a98827, type: 2}
+  maxYIterations: 999
   maxXIterations: 999
   debuggingOneFrame: 0
   debuggingLogging: 0
-  disableReSampling: 1
+  disableReSampling: 0
   drawShapesOnIgnoredSamples: 0
+  drawEdges: 0
+  testTime: 0
 --- !u!33 &6024281465610095463
 MeshFilter:
   m_ObjectHideFlags: 0

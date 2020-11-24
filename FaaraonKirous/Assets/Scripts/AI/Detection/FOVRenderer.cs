@@ -68,7 +68,7 @@ public partial class FOVRenderer : MonoBehaviour
     private const float distanceThreshold = 0.5f;
     private const float SlopeTolerance = 0.5f;         //Dotproduct for hitnormal
     private const float vertexYOffset = 0.1f;   //0.1f how much the mesh is raised from the ground
-    private const float mergeDistanceThreshold =1f;
+    private const float mergeDistanceThreshold = 1f;
 
     private enum Looking
     {
@@ -180,11 +180,8 @@ public partial class FOVRenderer : MonoBehaviour
     private void UpdateViewCone()
     {
 #if UNITY_EDITOR
-        if (drawShapesOnIgnoredSamples)
-        {
-            Destroy(randomPointsParent);
-            randomPointsParent = new GameObject("Random test points");
-        }
+        Destroy(randomPointsParent);
+        randomPointsParent = new GameObject("Random test points");
 
         if (testTime)
             timeTester.StopWatch();
@@ -275,8 +272,8 @@ public partial class FOVRenderer : MonoBehaviour
                     vertexPoints[v2Prev].n1 = vertexPoints.Count;
                     vertexPoints[v2Prev].n2 = vertexPoints.Count - 1;
                 }
-                else
-                    Debug.Log("no pair");
+                //else
+                //    Debug.Log("no pair");
             }
         }
     }
@@ -330,7 +327,7 @@ public partial class FOVRenderer : MonoBehaviour
     {
         bool lenght = AreSimilarLenght(v1prev.vertex, v1.vertex, mergeDistanceThreshold) || AreSimilarLenght(v2prev.vertex, v2.vertex, mergeDistanceThreshold);
         bool height = AreSimilarHeight(v1prev.vertex, v1.vertex) && AreSimilarHeight(v2prev.vertex, v2.vertex);
-        Debug.Log("Index: " + i + " Pair: " + v1prev.pairNr + " " + v1.pairNr + " " + v2prev.pairNr + " " +v2.pairNr + " same lenght: " + lenght + " same height: " + height);;
+        //Debug.Log("Index: " + i + " Pair: " + v1prev.pairNr + " " + v1.pairNr + " " + v2prev.pairNr + " " +v2.pairNr + " same lenght: " + lenght + " same height: " + height);;
         return lenght && height;
     }
 
@@ -443,7 +440,7 @@ public partial class FOVRenderer : MonoBehaviour
 
         Vector3[] vertices = new Vector3[arrSize];
         uv = new Vector2[arrSize];
-        uv[0] = Vector2.zero;
+        //uv[0] = Vector2.zero;
         triangles = new int[arrSize * 3];
 
 

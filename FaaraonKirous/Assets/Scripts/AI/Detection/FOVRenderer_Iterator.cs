@@ -66,7 +66,7 @@ public partial class FOVRenderer
 #if UNITY_EDITOR
             reSampleXCorner = disableReSampling ? Vector3.zero : reSampleXCorner;
 #endif
-            if (reSampleXCorner != Vector3.zero)
+            if (reSampleXCorner != Vector3.zero && LastAddedVertexPoint.sampleType == SampleType.Floor)
             {
                 Vector3 reDirection = (ConvertGlobal(reSampleXCorner) - origin + Vector3.up * 0.1f).normalized;
                 float xAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.x;
@@ -75,7 +75,7 @@ public partial class FOVRenderer
                 Vector3 reSample = GetSamplePoint(origin, reDirection, SightRange, out raycastHit, Color.red);
                 //ACylinder(reSample);
 
-                if (AreSimilarHeight(sample, reSample) && LastAddedVertexPoint.sampleType == SampleType.Floor)
+                if (AreSimilarHeight(sample, reSample))
                     ReplaceVertexPointVertex(LastAddedVertexPoint, reSample);
                 //else
                  //   Debug.Log("Did not replace resample: y: " + y + " x: " + xIteration);
@@ -136,7 +136,7 @@ public partial class FOVRenderer
                 InspectFlatSample(yAngleSampled, sample, lastTrueRayCastHit, raycastHit);
                 break;
             case Looking.Up:
-                InspectUpSample(yAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
+                InspectUpSample(yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
                 break;
         }
         return reSampleXCorner;
@@ -172,7 +172,7 @@ public partial class FOVRenderer
 #endif
 
                 //TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSampled, yAngleSampled);
-                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
+                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
             }
             TryCreateFloorVertex(raycastHit, sample);
 
@@ -196,8 +196,9 @@ public partial class FOVRenderer
             if (debuggingLogging) Debug.Log("<b><color=white>Wall to floor calculation</color></b>");
 #endif
             TryCreateWallToFloorCornerVertex(previousSample, sample);
-            if(!AreHittingSameCollider(previousRayCastHit, raycastHit))
-                TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
+
+            if(!AreHittingSameCollider(previousRayCastHit, raycastHit) && !AreSimilarHeight(LastAddedVertex, sample))
+                TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //When going up from floor to wall
         else if (IsFloorToWall(previousRayCastHit, raycastHit))
@@ -209,7 +210,7 @@ public partial class FOVRenderer
             if (!TryCreateFloorToWallCornerVertex(yAngleSampled, previousSample, sample))
             {
                 //Debug.Log("Nope");
-                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
+                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
             }
 
         }
@@ -219,15 +220,15 @@ public partial class FOVRenderer
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=lime>Ledge calculation hitting a wall further away</color></b>");
 #endif
-            reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
+            reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //When ray did not hit floor after climbing a wall
-        else if (lastSampleType == SampleType.FloorToWallCorner && !AreSimilarHeight(previousSample, sample) && !AreVerticallyAligned(previousSample, sample))
+        else if (lastSampleType == SampleType.FloorToWallCorner && !AreSimilarHeight(previousSample, sample) && !AreVerticallyAligned(previousSample, sample) && IsClearlyLonger(previousSample, sample))
         {
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=green>Ledge calculation climbing up and missing floor</color></b>");
 #endif
-            reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
+            reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //If previous hit was on a floor and new sample is reaching max sight while not hitting anything
         else if (!isResampleX && HasHit(previousRayCastHit) && HasNotHit(raycastHit))
@@ -235,12 +236,12 @@ public partial class FOVRenderer
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=olive>Ledge calculation end of sight </color></b>");
 #endif
-            reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
+            reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
 #if UNITY_EDITOR
         else if (!foundSample)
         {
-            if (drawShapesOnIgnoredSamples) ACylinder(sample);
+            if (drawShapesOnIgnoredSamples) APuck(sample);
             if (debuggingLogging) Debug.Log("<b><color=black>Nothing to do with the sample</color></b>");
         }
 #endif
@@ -268,7 +269,7 @@ public partial class FOVRenderer
         }
     }
 
-    private void InspectUpSample(float yAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit, RaycastHit raycastHit)
+    private void InspectUpSample(float yAngleSampled, float xAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit, RaycastHit raycastHit)
     {
         if (!AreVerticallyAligned(previousSample, sample))
         {
@@ -277,12 +278,15 @@ public partial class FOVRenderer
 #if UNITY_EDITOR
                 if (debuggingLogging) Debug.Log("<b><color=magenta>Ledge calculation AT UP ANGLES </color></b>");
 #endif
-                TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, previousSample, sample, previousRayCastHit);
+                TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
             }
 
         }
     }
 
+
+    #region Zombie code
+#if false
     private bool TryReTargetingSamplingAngle(int x, int y, float xAngle, float yAngleIn, RaycastHit raycastHit, ref float yAngleOut, ref Vector3 sampleOut)
     {
         if (y > 0)
@@ -401,4 +405,7 @@ public partial class FOVRenderer
 
         return ret;
     }
+
+#endif
+    #endregion
 }

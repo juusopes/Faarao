@@ -86,7 +86,7 @@ public partial class FOVRenderer
             Color color = GetVertexColor(p.sampleType);
 
             cube.GetComponent<Renderer>().material.color = color;
-            cube.name = i + " n1: " + p.n1 + " n2: " + p.n2 + " Vertex Point: " + p.sampleType + " Pair: " + p.pairNr;
+            cube.name = i + " n1: " + p.n1 + " n2: " + p.n2 + " Vertex Point: " + p.sampleType + " Pair: " + p.pairNr + " y: " + p.y;
 
 
             //yield return new WaitForSeconds(50f / arr.Length);
@@ -134,12 +134,22 @@ public partial class FOVRenderer
         }
     }
 
-    void ACylinder(Vector3 localPos, Color? color = null)
+    void APuck(Vector3 localPos, Color? color = null)
     {
         if (DebugRaypointShapes)
         {
             GameObject sphere = CreatePrimitive(localPos, PrimitiveType.Cylinder, new Vector3(0.25f, 0.03f, 0.25f), randomPointsParent);
             sphere.GetComponent<Renderer>().material.color = color ?? Color.magenta;
+            sphere.name = "Ignored ray point";
+        }
+    }
+
+    void ACylinder(Vector3 localPos, Color? color = null)
+    {
+        if (DebugRaypointShapes)
+        {
+            GameObject sphere = CreatePrimitive(localPos, PrimitiveType.Cylinder, new Vector3(0.25f, 0.1f, 0.25f), randomPointsParent);
+            sphere.GetComponent<Renderer>().material.color = color ?? Color.yellow;
             sphere.name = "Random test point";
         }
     }

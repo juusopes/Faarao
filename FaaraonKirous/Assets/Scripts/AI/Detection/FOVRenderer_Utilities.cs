@@ -37,8 +37,8 @@ public partial class FOVRenderer
         if (DebugRayCasts)
         {
             Color colorDir = AreSimilarFloat(direction.y, 0, 0.01f) ? Color.yellow : Color.green;
-            //if (color.HasValue)
-            //    colorDir = color.Value;
+            if (color.HasValue)
+                colorDir = color.Value;
             Debug.DrawRay(globalStart, direction * range, colorDir, RayTime);
         }
 
@@ -65,6 +65,20 @@ public partial class FOVRenderer
             Debug.LogWarning("No can do closest!" + testRayHit.collider);
             return Vector3.zero;
         }
+        //We cannot use closest point on concave colliders, so use raycasting as a show must go on option 
+        if (testRayHit.collider.GetType() == typeof(MeshCollider))
+        {
+            //Debug.Log(testRayHit.collider.gameObject);
+            Vector3 rayStart = reSampleTest + Vector3.up * -0.2f;
+            //ACylinder(rayStart, Color.black);
+            Vector3 dir = testRayHit.point - ConvertGlobal(reSampleTest);
+            float lenght = dir.magnitude * 1.1f;
+            dir.y = 0;
+            dir = dir.normalized;
+            Vector3 res = ConvertLocal(GetHitPointOnSpecificCollider(reSampleTest, dir, lenght, testRayHit.collider));
+            //ACylinder(res);
+            return res;
+        }
 
         return ConvertLocal(testRayHit.collider.ClosestPoint(ConvertGlobal(reSampleTest)));
     }
@@ -83,22 +97,32 @@ public partial class FOVRenderer
         Vector3 sampleRecalculated = sample.normalized * closestOnCollider.magnitude;
 
         Vector3 closestOnColliderReCalculated = GetClosestPointOnCollider(raycastHit, sampleRecalculated);
+
+        if (AreVerticallyAligned(closestOnCollider, closestOnColliderReCalculated))
+            return new Vector3(closestOnColliderReCalculated.x, previousVertex.y, closestOnColliderReCalculated.z);
+
+        //ACylinder(closestOnColliderReCalculated, Color.blue);
         Vector3 intersection;
         Vector3 testStartPoint1 = new Vector3(closestOnCollider.x, 0, closestOnCollider.z);
         Vector3 testStartPoint2 = Vector3.zero;
         Vector3 testVec1 = (closestOnColliderReCalculated - closestOnCollider) * 10f;
         Vector3 testVec2 = sample;
-        //Debug.Log("hit" + raycastHit.collider);
-        //ACylinder(testVec1, Color.white);
-        //ACylinder(testVec2, Color.white);
-        //ACylinder(testStartPoint1);
-        //ACylinder(testStartPoint2);
         testVec1.y = 0;     //2d
         testVec2.y = 0;     //2d
+        //Debug.Log("hit" + raycastHit.collider);
+        //ACylinder(testVec1, Color.white);
+        //ACylinder(testVec2, Color.yellow);
+        //ACylinder(testStartPoint1, Color.black);
+        //ACylinder(testStartPoint2, Color.cyan);
+
         //Get the 2D flattened intersection of sample and out two last closest points
         if (Math3d.LineLineIntersection(out intersection, testStartPoint1, testVec1, testStartPoint2, testVec2))
         {
             return new Vector3(intersection.x, previousVertex.y, intersection.z);
+        }
+        else
+        {
+            Debug.LogWarning("Could not find intersection");
         }
 
         //Debug.Log("Could not find intersection");
@@ -138,7 +162,7 @@ public partial class FOVRenderer
     private bool CheckColliderExists(Vector3 localSampleStart, Vector3 direction, float range)
     {
         RaycastHit rayCastHit = new RaycastHit();
-        return CheckColliderExists(localSampleStart, direction, range, out rayCastHit);
+        return CheckColliderExists(localSampleStart, direction, range, out rayCastHit, Color.white);
     }
 
     /// <summary>
@@ -147,11 +171,11 @@ public partial class FOVRenderer
     /// <param name="localSampleStart"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    private bool CheckColliderExists(Vector3 localSampleStart, Vector3 direction, float range, out RaycastHit rayCastHitReturn)
+    private bool CheckColliderExists(Vector3 localSampleStart, Vector3 direction, float range, out RaycastHit rayCastHitReturn, Color? color = null)
     {
 #if UNITY_EDITOR
         if (DebugRayCasts)
-            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.blue, RayTime);
+            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, color ?? Color.blue, RayTime);
 #endif
         return Physics.Raycast(ConvertGlobal(localSampleStart), direction, out rayCastHitReturn, range, RayCaster.viewConeLayerMask);
     }
@@ -219,20 +243,20 @@ public partial class FOVRenderer
         return dot > -SlopeTolerance && dot < SlopeTolerance;
     }
 
-    public bool IsClearlyLonger(Vector3 start, Vector3 end, float tolerance = distanceThreshold)
+    public bool IsClearlyLonger(Vector3 sample1, Vector3 sample2, float tolerance = distanceThreshold)
     {
-        return end.magnitude - start.magnitude > tolerance;
+        return sample2.magnitude - sample1.magnitude > tolerance;
     }
 
-    public bool IsClearlyHigher(Vector3 start, Vector3 end, float tolerance = verticalThreshold)
+    public bool IsClearlyHigher(Vector3 sample1, Vector3 sample2, float tolerance = verticalThreshold)
     {
-        return end.y - start.y > tolerance;
+        return sample2.y - sample1.y > tolerance;
     }
 
-    public bool IsClearlyLower(Vector3 start, Vector3 end, float tolerance = verticalThreshold)
+    public bool IsClearlyLower(Vector3 sample1, Vector3 sample2, float tolerance = verticalThreshold)
     {
         //Debug.Log((end.y - start.y < -verticalThreshold) +" " +start.y + "-" + end.y + "=" + (end.y - start.y));
-        return end.y - start.y < -tolerance;
+        return sample2.y - sample1.y < -tolerance;
     }
 
     public bool AreVerticallyAligned(Vector3 sample1, Vector3 sample2, float tolerance = horizontalThreshold)
@@ -270,11 +294,9 @@ public partial class FOVRenderer
 
     public bool AreSimilarYDirection(Vector3 sample1, Vector3 sample2, float tolerance = directionTolerance)
     {
-        sample1 = sample1.normalized;
-        sample2 = sample2.normalized;
         Vector2 test1 = new Vector2(sample1.x, sample1.z);
         Vector2 test2 = new Vector2(sample2.x, sample2.z);
-        Debug.Log("Similarity is " + Vector2.Dot(test1, test2));
+        Debug.Log("Similarity is " + Vector2.Dot(test1.normalized, test2.normalized));
         return Vector2.Dot(test1, test2) > tolerance;
     }
     #endregion
