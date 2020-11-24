@@ -27,7 +27,7 @@ public partial class FOVRenderer
     [SerializeField]
     private bool disableReSampling = true;
     [SerializeField]
-    private bool drawShapesOnIgnoredSamples = false;
+    private bool drawEdges = false;
 
     private bool DebugRayCasts => debugMode == DebugMode.Raycasts || debugMode == DebugMode.All;
     private bool DebugCleanedVertexShapes => debugMode == DebugMode.CleanedVertexShapes || debugMode == DebugMode.AllVertices || debugMode == DebugMode.AllShapes || debugMode == DebugMode.All;
@@ -40,7 +40,7 @@ public partial class FOVRenderer
 
 
 
-    private float rayTime => debuggingOneFrame ? 1000f : 1f;
+    private float RayTime => debuggingOneFrame ? 1000f : 1f;
 
     private enum DebugMode
     {
@@ -68,56 +68,40 @@ public partial class FOVRenderer
         }
     }
 
-    IEnumerator Boxes(Vector4[] arr)
+    IEnumerator Boxes(VertexPoint[] arr)
     {
         yield return new WaitForSeconds(0f);
         Destroy(vertexPointsParent);
         vertexPointsParent = new GameObject("Vertex Points");
-        foreach (Vector4 vert in arr)
+        for (int i = 0; i < arr.Length; i++)
         {
-            GameObject cube = CreatePrimitive(vert, PrimitiveType.Cube, new Vector3(0.2f, 0.2f, 0.2f), vertexPointsParent);
-            Color color;
-            switch (vert.w)
-            {
-                case (float)SampleType.None:
-                    color = Color.black;
-                    break;
-                case (float)SampleType.Floor:
-                    color = Color.blue;
-                    break;
-                case (float)SampleType.FloorToDownFloor:
-                    color = Color.cyan;
-                    break;
-                case (float)SampleType.FloorToWallCorner:
-                    color = new Color(1.0f, 0.64f, 0.0f);
-                    break;
-                case (float)SampleType.LedgeStartCorner:
-                    color = new Color(1.0f, 0.75f, 0.8f);
-                    break;
-                case (float)SampleType.LedgeAtDownAngle:
-                    color = Color.green;
-                    break;
-                case (float)SampleType.LedgeAtUpAngle:
-                    color = Color.magenta;
-                    break;
-                case (float)SampleType.WallToFloorCorner:
-                    color = Color.white;
-                    break;
-                case (float)SampleType.WallToWall:
-                    color = Color.yellow;
-                    break;
-                case (float)SampleType.EndOfSightRange:
-                    color = Color.red;
-                    break;
-                default:
-                    color = Color.gray;
-                    break;
-            }
-
+            VertexPoint p = arr[i];
+            GameObject cube = CreatePrimitive(p.vertex, PrimitiveType.Cube, new Vector3(0.2f, 0.2f, 0.2f), vertexPointsParent);
+            Color color = GetVertexColor(p.sampleType);
 
             cube.GetComponent<Renderer>().material.color = color;
-            cube.name = "Vertex Point: " + (SampleType)vert.w;
-           //yield return new WaitForSeconds(50f / arr.Length);
+            cube.name = i + " n1: " + p.n1 + " n2: " + p.n2 + " Vertex Point: " + p.sampleType + " Pair: " + p.pairNr;
+
+
+            //yield return new WaitForSeconds(50f / arr.Length);
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (drawEdges && Application.isPlaying)
+        {
+            Vector3 offset = Vector3.up * 0.2f;
+            for (int i = 0; i < vertexPoints.Count; i++)
+            {
+                VertexPoint p = vertexPoints[i];
+                if (p.n1 != -1)
+                    Gizmos.DrawLine(ConvertGlobal(p.vertex) + offset, ConvertGlobal(vertexPoints[p.n1].vertex) + offset / 2);
+                if (p.n2 != -1)
+                    Gizmos.DrawLine(ConvertGlobal(p.vertex) + offset, ConvertGlobal(vertexPoints[p.n2].vertex) + offset / 2);
+                if (p.n1 != -1 && p.n2 != -1)
+                    Gizmos.DrawLine(ConvertGlobal(vertexPoints[p.n1].vertex) + offset, ConvertGlobal(vertexPoints[p.n2].vertex) + offset / 2);
+            }
         }
     }
 
@@ -126,50 +110,14 @@ public partial class FOVRenderer
         yield return new WaitForSeconds(0f);
         Destroy(cleanedPointsParent);
         cleanedPointsParent = new GameObject("Cleaned Vertex Points");
-        foreach (Vector4 vert in arr)
+        for (int i = 0; i < arr.Length; i++)
         {
+            Vector4 vert = arr[i];
             GameObject cube = CreatePrimitive(vert, PrimitiveType.Capsule, new Vector3(0.2f, 0.2f, 0.2f), cleanedPointsParent);
-            Color color;
-            switch (vert.w)
-            {
-                case (float)SampleType.None:
-                    color = Color.black;
-                    break;
-                case (float)SampleType.Floor:
-                    color = Color.blue;
-                    break;
-                case (float)SampleType.FloorToDownFloor:
-                    color = Color.cyan;
-                    break;
-                case (float)SampleType.FloorToWallCorner:
-                    color = new Color(1.0f, 0.64f, 0.0f);
-                    break;
-                case (float)SampleType.LedgeStartCorner:
-                    color = new Color(1.0f, 0.75f, 0.8f);
-                    break;
-                case (float)SampleType.LedgeAtDownAngle:
-                    color = Color.green;
-                    break;
-                case (float)SampleType.LedgeAtUpAngle:
-                    color = Color.magenta;
-                    break;
-                case (float)SampleType.WallToFloorCorner:
-                    color = Color.white;
-                    break;
-                case (float)SampleType.WallToWall:
-                    color = Color.yellow;
-                    break;
-                case (float)SampleType.EndOfSightRange:
-                    color = Color.red;
-                    break;
-                default:
-                    color = Color.gray;
-                    break;
-            }
-
+            Color color = GetVertexColor((SampleType)vert.w);
 
             cube.GetComponent<Renderer>().material.color = color;
-            cube.name = "Vertex Point: " + (SampleType)vert.w;
+            cube.name = i + " Vertex Point: " + (SampleType)vert.w;
             //yield return new WaitForSeconds(1f / arr.Length);
         }
     }
@@ -192,6 +140,48 @@ public partial class FOVRenderer
         primitive.transform.localScale = scale;
         primitive.layer = 2;
         return primitive;
+    }
+    private Color GetVertexColor(SampleType st)
+    {
+        Color color;
+        switch (st)
+        {
+            case SampleType.None:
+                color = Color.black;
+                break;
+            case SampleType.Floor:
+                color = Color.blue;
+                break;
+            case SampleType.FloorToDownFloor:
+                color = Color.cyan;
+                break;
+            case SampleType.FloorToWallCorner:
+                color = new Color(1.0f, 0.64f, 0.0f);
+                break;
+            case SampleType.LedgeStartCorner:
+                color = new Color(1.0f, 0.75f, 0.8f);
+                break;
+            case SampleType.LedgeAtDownAngle:
+                color = Color.green;
+                break;
+            case SampleType.LedgeAtUpAngle:
+                color = Color.magenta;
+                break;
+            case SampleType.WallToFloorCorner:
+                color = Color.white;
+                break;
+            case SampleType.WallToWall:
+                color = Color.yellow;
+                break;
+            case SampleType.EndOfSightRange:
+                color = Color.red;
+                break;
+            default:
+                color = Color.gray;
+                break;
+        }
+
+        return color;
     }
 }
 

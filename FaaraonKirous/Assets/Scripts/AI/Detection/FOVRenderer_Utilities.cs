@@ -39,7 +39,7 @@ public partial class FOVRenderer
             Color colorDir = AreSimilarFloat(direction.y, 0, 0.01f) ? Color.yellow : Color.green;
             //if (color.HasValue)
             //    colorDir = color.Value;
-            Debug.DrawRay(globalStart, direction * range, colorDir, rayTime);
+            Debug.DrawRay(globalStart, direction * range, colorDir, RayTime);
         }
 
 #endif
@@ -116,7 +116,7 @@ public partial class FOVRenderer
     {
 #if UNITY_EDITOR
         if (DebugRayCasts)
-            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.cyan, rayTime);
+            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.cyan, RayTime);
 #endif
         if (specificCollider != null)
         {
@@ -151,7 +151,7 @@ public partial class FOVRenderer
     {
 #if UNITY_EDITOR
         if (DebugRayCasts)
-            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.blue, rayTime);
+            Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.blue, RayTime);
 #endif
         return Physics.Raycast(ConvertGlobal(localSampleStart), direction, out rayCastHitReturn, range, RayCaster.viewConeLayerMask);
     }

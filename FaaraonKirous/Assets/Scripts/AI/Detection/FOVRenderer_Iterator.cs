@@ -13,9 +13,10 @@ public partial class FOVRenderer
     private void IterateY()
     {
         float yGlobalAngle = yStartingAngle;
-        for (int y = 0; y < yRayCount; y++)
+        for (yIteration = 0; yIteration < yRayCount; yIteration++)
         {
-            IterateX(y, yGlobalAngle);
+            vertexPair = 0;
+            IterateX(yIteration, yGlobalAngle);
             //Debug.Log(y + " global y " + yGlobalAngle + " " + yStartingAngle + " " + yFOV);
             yGlobalAngle += yAngleIncrease;
         }
@@ -28,16 +29,16 @@ public partial class FOVRenderer
         Vector3 previousSample = Vector3.positiveInfinity;
         //Vector3 previousSample = vertexPoints[0];
         Vector3 secondPreviousSample = Vector3.positiveInfinity;
-        bool hasResampled = false;
+        //bool hasResampled = false;
         RaycastHit lastTrueRayCastHit = new RaycastHit();
 
-        for (int x = 0; x < xRayCount; x++)
+        for (xIteration = 0; xIteration < xRayCount; xIteration++)
         {
             if (xAngleSampled < maxXAngle)       //Negatives are up angle
                 return;
 
 #if UNITY_EDITOR
-            if (x >= maxXIterations)
+            if (xIteration >= maxXIterations)
                 return;
 #endif
 
@@ -48,14 +49,14 @@ public partial class FOVRenderer
             RaycastHit previousRayCastHit;
 
             //if(x > 0)
-            previousRayCastHit = x > 0 ? lastColumnSampleRays[x - 1] : new RaycastHit();
+            previousRayCastHit = xIteration > 0 ? lastColumnSampleRays[xIteration - 1] : new RaycastHit();
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
 
 
             //if (!hasResampled)
             //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSampled, yGlobalAngleIn, raycastHit, ref yAngleSampled, ref sample);
 
-            Vector3 reSampleXCorner = InspectSample(false, x, xAngleSampled, yAngleSampled, previousSample, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
+            Vector3 reSampleXCorner = InspectSample(false, xIteration, xAngleSampled, yAngleSampled, previousSample, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
 
 #if UNITY_EDITOR
             reSampleXCorner = disableReSampling ? Vector3.zero : reSampleXCorner;
@@ -68,7 +69,7 @@ public partial class FOVRenderer
                 Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
                 Vector3 reSample = GetSamplePoint(origin, reDirection, SightRange, out raycastHit, Color.red);
 
-                InspectSample(true, x, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
+                InspectSample(true, xIteration, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
             }
 
             //Save sample info for next iteration
@@ -83,8 +84,8 @@ public partial class FOVRenderer
 #endif
             if (raycastHit.collider != null)
                 lastTrueRayCastHit = raycastHit;
-            lastColumnSamplePoints[x] = sample;
-            lastColumnSampleRays[x] = raycastHit;
+            lastColumnSamplePoints[xIteration] = sample;
+            lastColumnSampleRays[xIteration] = raycastHit;
 
             //CreateTriangle();
 

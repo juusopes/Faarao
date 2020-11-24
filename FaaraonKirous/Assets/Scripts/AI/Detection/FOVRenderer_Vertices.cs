@@ -150,7 +150,7 @@ public partial class FOVRenderer
     {
         Vector3 ledgeEnd;
         //Get ledge vertice
-        float cornerRotX = Quaternion.LookRotation(previousVertex, Vector3.up).eulerAngles.x;
+        float cornerRotX = Quaternion.LookRotation(previousVertex.normalized, Vector3.up).eulerAngles.x;
         float xRadCornerAngle = cornerRotX * Mathf.Deg2Rad;     //Calculate x Angle of character looking at corner in radians
         float maxSightRangeOverLedge;
 
