@@ -278,7 +278,7 @@ public partial class FOVRenderer
 #if UNITY_EDITOR
                 if (debuggingLogging) Debug.Log("<b><color=magenta>Ledge calculation AT UP ANGLES </color></b>");
 #endif
-                TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
+                TryCreateLedgeVertices(lastSampleType, true, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
             }
 
         }

@@ -68,7 +68,7 @@ public partial class FOVRenderer : MonoBehaviour
     private const float distanceThreshold = 0.5f;
     private const float SlopeTolerance = 0.5f;         //Dotproduct for hitnormal
     private const float vertexYOffset = 0.1f;   //0.1f how much the mesh is raised from the ground
-    private const float mergeDistanceThreshold = 1f;
+    private const float mergeDistanceThreshold = 5f;
 
     private enum Looking
     {
