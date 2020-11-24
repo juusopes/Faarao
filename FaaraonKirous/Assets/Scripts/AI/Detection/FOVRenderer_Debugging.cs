@@ -27,6 +27,8 @@ public partial class FOVRenderer
     [SerializeField]
     private bool disableReSampling = true;
     [SerializeField]
+    private bool drawShapesOnIgnoredSamples = false;
+    [SerializeField]
     private bool drawEdges = false;
 
     private bool DebugRayCasts => debugMode == DebugMode.Raycasts || debugMode == DebugMode.All;
