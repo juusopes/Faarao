@@ -32,7 +32,7 @@ public static class UtilsClass
     public static bool EqualsQuaternion(this Quaternion quatA, Quaternion value, float? acceptableRange = null)
     {
         if (!acceptableRange.HasValue)
-            acceptableRange = 1 - Mathf.Epsilon;
+            acceptableRange = Mathf.Epsilon;
         return 1 - Mathf.Abs(Quaternion.Dot(quatA, value)) < acceptableRange.Value;
     }
 

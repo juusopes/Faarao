@@ -34,6 +34,7 @@ public partial class FOVRenderer : MonoBehaviour
     public Character character;
     private Vector3 lastPosition;
     private Quaternion lastRotation;
+    private Quaternion lastLocalRotation;
     private Vector3 origin;
     private float yStartingAngle = 0;
     private float xStartingAngle = 0;
@@ -53,8 +54,8 @@ public partial class FOVRenderer : MonoBehaviour
     //Tweakable values
     public int yRayCount;// = (8) + 1;    // Horizontal angles ODD NUMBER 
     public int xRayCount;// = (8) + 1;    // Vertical angles ODD NUMBER 
-    private const float maxXAngle = (90.0000001f) * -1;   //Negative number is up!
-    private const float ledgeStep = 0.25f;           //How big is the iterative step for searching next floor collider
+    private const float maxXAngle = (40.0000001f) * -1;   //Negative number is up!
+    private const float ledgeStep = 0.3f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;
     private const float enemySightHeight = 2.785f;
     private const float playerHeight = 2.785f;
@@ -66,7 +67,8 @@ public partial class FOVRenderer : MonoBehaviour
     private const float horizontalThreshold = 0.1f;
     private const float distanceThreshold = 0.5f;
     private const float SlopeTolerance = 0.5f;         //Dotproduct for hitnormal
-    private const float vertexYOffset = 0.1f;
+    private const float vertexYOffset = 0.1f;   //0.1f how much the mesh is raised from the ground
+    private const float mergeDistanceThreshold =1f;
 
     private enum Looking
     {
@@ -102,7 +104,7 @@ public partial class FOVRenderer : MonoBehaviour
     }
 
     private float Y_FOV => character.FOV;
-    private float X_FOV => 90f;
+    private float X_FOV => 140f;
     private float SightRange => character.SightRange;
     private float SightRangeCrouching => character.SightRangeCrouching;
     private Vector3 ConvertGlobal(Vector3 inVec) => transform.TransformPoint(inVec);
@@ -149,6 +151,8 @@ public partial class FOVRenderer : MonoBehaviour
 #if UNITY_EDITOR
         if (debuggingOneFrame)
             Invoke("UpdateViewCone", 0.1f);     //Call with delay, so objects can reset trans etc.
+
+        timeTester = new DeltaTimeTester();
 #endif
 
         //SaveAsset();
@@ -160,12 +164,17 @@ public partial class FOVRenderer : MonoBehaviour
         if (debuggingOneFrame)
             return;
 #endif
-
         if (ShouldUpdateViewCone())
             UpdateViewCone();
 
+        RefreshRendReasons();
+    }
+
+    private void RefreshRendReasons()
+    {
         lastPosition = transform.position;
         lastRotation = transform.rotation;
+        lastLocalRotation = transform.localRotation;
     }
 
     private void UpdateViewCone()
@@ -176,6 +185,9 @@ public partial class FOVRenderer : MonoBehaviour
             Destroy(randomPointsParent);
             randomPointsParent = new GameObject("Random test points");
         }
+
+        if (testTime)
+            timeTester.StopWatch();
 #endif
         SetOrigin(transform.position);
         SetAimDirection(transform.forward, Y_FOV, X_FOV);
@@ -184,7 +196,7 @@ public partial class FOVRenderer : MonoBehaviour
 
     private bool ShouldUpdateViewCone()
     {
-        return lastPosition != transform.position || !lastRotation.EqualsQuaternion(lastRotation);
+        return lastPosition != transform.position || !lastRotation.EqualsQuaternion(transform.rotation) || !lastLocalRotation.EqualsQuaternion(transform.localRotation);
     }
 
     public void SetOrigin(Vector3 origin)
@@ -228,7 +240,6 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void AddVertexPoint(Vector3 sample, SampleType sampleType)
     {
-        sample.y = sample.y + vertexYOffset;
 #if UNITY_EDITOR
         if (debuggingLogging) Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>");
 #endif
@@ -241,6 +252,13 @@ public partial class FOVRenderer : MonoBehaviour
         vertNew.sampleType = sampleType;
         vertNew.y = yIteration;
 
+        AddNeighbourVertices(sample, sampleType, vertNew, vertPrev);
+
+        vertexPoints.Add(vertNew);
+    }
+
+    private void AddNeighbourVertices(Vector3 sample, SampleType sampleType, VertexPoint vertNew, VertexPoint vertPrev)
+    {
         if (vertPrev != null && EndingType(sampleType) && AreSimilarHeight(sample, vertPrev.vertex) && StartingType(vertPrev.sampleType))
         {
             vertexPair++;
@@ -257,10 +275,19 @@ public partial class FOVRenderer : MonoBehaviour
                     vertexPoints[v2Prev].n1 = vertexPoints.Count;
                     vertexPoints[v2Prev].n2 = vertexPoints.Count - 1;
                 }
+                else
+                    Debug.Log("no pair");
             }
         }
+    }
 
-        vertexPoints.Add(vertNew);
+    private void ReplaceVertexPointVertex(VertexPoint vertexPoint, Vector3 sample)
+    {
+#if UNITY_EDITOR
+        if (debuggingLogging) Debug.Log("<i><size=10>\t\t\t\t\t\t\tReplaced vertexpoint: " + vertexPoint + " vertex: " + vertexPoint.vertex + " with : <b><size=12>" + sample + "</size></b></size></i>");
+#endif
+        vertexPoint.vertex = sample;
+        vertexPoint.uv = GetVertexUV(yIteration, sample);
     }
 
     private bool GetMathingPairNr(int y, VertexPoint v1, VertexPoint v2, out int v1Prev, out int v2Prev)
@@ -268,7 +295,6 @@ public partial class FOVRenderer : MonoBehaviour
 
         for (int i = vertexPoints.Count - 1; i > 0; i--)
         {
-            Debug.Log(i);
             if (vertexPoints[i].y < y)
                 break;
 
@@ -286,10 +312,9 @@ public partial class FOVRenderer : MonoBehaviour
             if (vertexPoints[i - 1].pairNr != vertexPoints[i].pairNr)
                 continue;
 
-            Debug.Log("MOi" + AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) + " " + AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f));
+            //Debug.Log("MOi" + AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) + " " + AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f));
 
-            if ((AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) || AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f))
-                && AreSimilarHeight(vertexPoints[i - 1].vertex, v1.vertex) && AreSimilarHeight(vertexPoints[i].vertex, v2.vertex))
+            if (ArePairEdges(vertexPoints[i - 1], vertexPoints[i], v1, v2, i))
             {
                 v1Prev = i - 1;
                 v2Prev = i;
@@ -301,8 +326,17 @@ public partial class FOVRenderer : MonoBehaviour
         return false;
     }
 
+    private bool ArePairEdges(VertexPoint v1prev, VertexPoint v2prev, VertexPoint v1, VertexPoint v2, int i)
+    {
+        bool lenght = AreSimilarLenght(v1prev.vertex, v1.vertex, mergeDistanceThreshold) || AreSimilarLenght(v2prev.vertex, v2.vertex, mergeDistanceThreshold);
+        bool height = AreSimilarHeight(v1prev.vertex, v1.vertex) && AreSimilarHeight(v2prev.vertex, v2.vertex);
+        Debug.Log("Index: " + i + " Pair: " + v1prev.pairNr + " " + v1.pairNr + " " + v2prev.pairNr + " " +v2.pairNr + " same lenght: " + lenght + " same height: " + height);;
+        return lenght && height;
+    }
+
     private Vector2 GetVertexUV(int y, Vector3 vertex)
     {
+        vertex.y = 0;
         float uvLenght = Vector3.Magnitude(vertex) / SightRange;
         //Create Cone shaped uvs
         float uvAngle = y * yAngleIncrease;
@@ -415,7 +449,7 @@ public partial class FOVRenderer : MonoBehaviour
 
         for (int i = 0; i < arrSize; i++)
         {
-            vertices[i] = vertexPoints[i].vertex;
+            vertices[i] = vertexPoints[i].vertex + Vector3.up * vertexYOffset;
             CreateTriangle(i);
             uv[i] = vertexPoints[i].uv;
         }
@@ -449,6 +483,9 @@ public partial class FOVRenderer : MonoBehaviour
             StartCoroutine(Boxes(vertexPoints.ToArray()));
         //if (DebugCleanedVertexShapes)
         //    StartCoroutine(Capsules(vertexList.ToArray()));
+
+        if (testTime)
+            timeTester.StopWatch();
 #endif
 
         mesh.vertices = vertices;

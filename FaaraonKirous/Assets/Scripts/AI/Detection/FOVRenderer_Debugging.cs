@@ -19,6 +19,8 @@ public partial class FOVRenderer
     [SerializeField]
     private Material ballMat2;
     [SerializeField]
+    private int maxYIterations = 999;
+    [SerializeField]
     private int maxXIterations = 999;
     [SerializeField]
     private bool debuggingOneFrame;     //Debug only one frame
@@ -30,6 +32,8 @@ public partial class FOVRenderer
     private bool drawShapesOnIgnoredSamples = false;
     [SerializeField]
     private bool drawEdges = false;
+    [SerializeField]
+    private bool testTime = false;
 
     private bool DebugRayCasts => debugMode == DebugMode.Raycasts || debugMode == DebugMode.All;
     private bool DebugCleanedVertexShapes => debugMode == DebugMode.CleanedVertexShapes || debugMode == DebugMode.AllVertices || debugMode == DebugMode.AllShapes || debugMode == DebugMode.All;
@@ -40,7 +44,7 @@ public partial class FOVRenderer
     private GameObject raySamplePointsParent;
     private GameObject randomPointsParent;
 
-
+    private DeltaTimeTester timeTester;
 
     private float RayTime => debuggingOneFrame ? 1000f : 1f;
 
@@ -89,9 +93,15 @@ public partial class FOVRenderer
         }
     }
 
+   /* [ContextMenu("Update view cone")]
+    public void DebugRefereshCone()
+    {
+        UpdateViewCone();
+    }
+   */
     void OnDrawGizmos()
     {
-        if (drawEdges && Application.isPlaying)
+        if (drawEdges && Application.isPlaying && vertexPoints != null)
         {
             Vector3 offset = Vector3.up * 0.2f;
             for (int i = 0; i < vertexPoints.Count; i++)

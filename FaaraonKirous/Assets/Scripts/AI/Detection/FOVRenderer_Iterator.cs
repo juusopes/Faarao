@@ -15,6 +15,11 @@ public partial class FOVRenderer
         float yGlobalAngle = yStartingAngle;
         for (yIteration = 0; yIteration < yRayCount; yIteration++)
         {
+#if UNITY_EDITOR
+            if (yIteration >= maxYIterations)
+                return;
+#endif
+
             vertexPair = 0;
             IterateX(yIteration, yGlobalAngle);
             //Debug.Log(y + " global y " + yGlobalAngle + " " + yStartingAngle + " " + yFOV);
@@ -66,10 +71,15 @@ public partial class FOVRenderer
                 Vector3 reDirection = (ConvertGlobal(reSampleXCorner) - origin + Vector3.up * 0.1f).normalized;
                 float xAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.x;
                 float yAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.y;
-                Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
+                //Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
                 Vector3 reSample = GetSamplePoint(origin, reDirection, SightRange, out raycastHit, Color.red);
+                //ACylinder(reSample);
 
-                InspectSample(true, xIteration, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
+                if (AreSimilarHeight(sample, reSample) && LastAddedVertexPoint.sampleType == SampleType.Floor)
+                    ReplaceVertexPointVertex(LastAddedVertexPoint, reSample);
+                //else
+                 //   Debug.Log("Did not replace resample: y: " + y + " x: " + xIteration);
+                //InspectSample(true, xIteration, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
             }
 
             //Save sample info for next iteration
@@ -107,8 +117,8 @@ public partial class FOVRenderer
                 return true;
 
         //If the first two upsamples have no hit, just give up iteration
-        // if (xAngleSampled < -1 && raycastHit.collider == null && previousRayCastHit.collider == null)
-        //     return true;
+         if (xAngleSampled < -1 && raycastHit.collider == null && previousRayCastHit.collider == null)
+             return true;
 
         return false;
     }
