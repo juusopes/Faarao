@@ -38,15 +38,23 @@ public partial class FOVRenderer
         AddVertexPoint(wallCorner, SampleType.WallToFloorCorner);
     }
 
-    private void TryCreateVertexToEndOfSightRange(SampleType lastType, float yAngleIn, Vector3 sample, RaycastHit lastTrueRayCastHit)
+    private void TryCreateVertexToEndOfSightRange(SampleType lastType, float yAngleIn, float xAngleIn, Vector3 previousSample, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit previousRayCastHit)
     {
-        Vector3 downSample = GetSamplePoint(ConvertGlobal(sample), Vector3.down, playerHeight * 2f);
+        RaycastHit raycastHit;
+        Vector3 downSample = GetSamplePoint(ConvertGlobal(sample), Vector3.down, playerHeight * 2f, out raycastHit);
 
 
         if (sample.y - downSample.y < playerHeight + yTolerance
             && AreSimilarHeight(LastAddedVertex, downSample))
         {
-            AddVertexPoint(downSample, SampleType.EndOfSightRange);
+            if(lastType == SampleType.LedgeAtDownAngle)
+            {
+                Vector3 closestPoint = GetClosestPointOnColliderWithinYDirection(raycastHit, downSample, LastAddedVertex);  //ARE FLIPPED ON PURPOSE!
+                AddVertexPoint(closestPoint, SampleType.LedgeStartCorner);
+                //ACylinder(closestPoint);
+                //TryCreateLedgeVertices(lastSampleType, false, yAngleIn, xAngleIn, previousSample, sample, previousRayCastHit);
+            }
+                AddVertexPoint(downSample, SampleType.EndOfSightRange);
         }
         else if (lastType == SampleType.Floor || lastType == SampleType.FloorToDownFloor) // || lastType == SampleType.WallToFloorCorner)
         {
@@ -59,8 +67,7 @@ public partial class FOVRenderer
     private Vector3 TryCreateLedgeVertices(SampleType lastType, bool isAboveZeroAngle, float yAngleIn, float xAngleIn, Vector3 ledgeStartSample, Vector3 sample, RaycastHit ledgeStartRayCastHit)
     {
         //Get corner or use last corner
-        bool needNewCorner = lastType == SampleType.FloorToWallCorner || lastType == SampleType.LedgeAtUpAngle || lastType == SampleType.LedgeAtDownAngle || lastType == SampleType.WallToWall;
-
+        bool needNewCorner = IsEndingType(lastType);
         //Debug.Log("<b>Try create ledge vertices with extra start corner: </b>" + needNewCorner);
         Vector3 closestCorner = Vector3.zero;
         if (needNewCorner)

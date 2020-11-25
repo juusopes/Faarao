@@ -86,19 +86,22 @@ public partial class FOVRenderer
             Color color = GetVertexColor(p.sampleType);
 
             cube.GetComponent<Renderer>().material.color = color;
-            cube.name = i + " n1: " + p.n1 + " n2: " + p.n2 + " Vertex Point: " + p.sampleType + " Pair: " + p.pairNr + " y: " + p.y;
+            if (p.pairNr == 0)
+                cube.name = "i: " + "\t y: " + p.y + "\t Vertex Point: " + p.sampleType + " ======================================================";
+            else
+                cube.name = "i: " + i + "\t n1: " + p.n1 + "\t n2: " + p.n2 + "\t y: " + p.y + "\t ISLAND: " + p.island + "\t Pair: " + p.pairNr + "\t Vertex Point: " + p.sampleType;
 
 
             //yield return new WaitForSeconds(50f / arr.Length);
         }
     }
 
-   /* [ContextMenu("Update view cone")]
-    public void DebugRefereshCone()
-    {
-        UpdateViewCone();
-    }
-   */
+    /* [ContextMenu("Update view cone")]
+     public void DebugRefereshCone()
+     {
+         UpdateViewCone();
+     }
+    */
     void OnDrawGizmos()
     {
         if (drawEdges && Application.isPlaying && vertexPoints != null)

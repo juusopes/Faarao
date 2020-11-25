@@ -29,7 +29,7 @@ public partial class FOVRenderer
 
     private void IterateX(int y, float yGlobalAngleIn)
     {
-        float xAngleSampled = xStartingAngle;
+        float xAngleSampled;
         float yAngleSampled = yGlobalAngleIn;
         Vector3 previousSample = Vector3.positiveInfinity;
         //Vector3 previousSample = vertexPoints[0];
@@ -39,6 +39,8 @@ public partial class FOVRenderer
 
         for (xIteration = 0; xIteration < xRayCount; xIteration++)
         {
+            xAngleSampled = X_FOV / 2 * xIterationCurve.Evaluate((float)xIteration / (xRayCount - 1));
+
             if (xAngleSampled < maxXAngle)       //Negatives are up angle
                 return;
 
@@ -61,7 +63,7 @@ public partial class FOVRenderer
             //if (!hasResampled)
             //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSampled, yGlobalAngleIn, raycastHit, ref yAngleSampled, ref sample);
 
-            Vector3 reSampleXCorner = InspectSample(false, xIteration, xAngleSampled, yAngleSampled, previousSample, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
+            Vector3 reSampleXCorner = InspectSample(false, xIteration, yAngleSampled, xAngleSampled, previousSample, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
 
 #if UNITY_EDITOR
             reSampleXCorner = disableReSampling ? Vector3.zero : reSampleXCorner;
@@ -102,11 +104,11 @@ public partial class FOVRenderer
             secondPreviousSample = previousSample;
             previousSample = sample;
             vertexIndex++;
-            xAngleSampled -= xAngleIncrease;
+            //xAngleSampled -= xAngleIncrease;
 
 
-            if (ShouldQuitXIteration(xAngleSampled, previousRayCastHit, raycastHit))
-                return;
+            //if (ShouldQuitXIteration(xAngleSampled, previousRayCastHit, raycastHit))
+            //    return;
         }
     }
 
@@ -123,17 +125,17 @@ public partial class FOVRenderer
         return false;
     }
 
-    private Vector3 InspectSample(bool isResample, int x, float xAngleSampled, float yAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit previousRayCastHit, RaycastHit raycastHit)
+    private Vector3 InspectSample(bool isResample, int x, float yAngleSampled, float xAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit previousRayCastHit, RaycastHit raycastHit)
     {
         Vector3 reSampleXCorner = Vector3.zero;
         switch (GetVerticalDirection(xAngleSampled))
         {
             case Looking.Down:
-                reSampleXCorner = InspectDownSample(isResample, x, xAngleSampled, yAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
+                reSampleXCorner = InspectDownSample(isResample, x, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
                 break;
             case Looking.ZeroAngle:
-                InspectFlatSample(yAngleSampled, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
-                reSampleXCorner = InspectDownSample(isResample, x, xAngleSampled, yAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
+                InspectFlatSample(yAngleSampled, xAngleSampled, previousSample, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
+                reSampleXCorner = InspectDownSample(isResample, x, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
                 break;
             case Looking.Up:
                 InspectUpSample(yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
@@ -143,7 +145,7 @@ public partial class FOVRenderer
     }
 
 
-    private Vector3 InspectDownSample(bool isResampleX, int x, float xAngleSampled, float yAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit, RaycastHit raycastHit)
+    private Vector3 InspectDownSample(bool isResampleX, int x, float yAngleSampled, float xAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit, RaycastHit raycastHit)
     {
         // if (!AreVerticallyAligned(previousSample, sample))        //Ignore any hits that are above previous
         //{
@@ -201,7 +203,7 @@ public partial class FOVRenderer
                 TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //When going up from floor to wall
-        else if (IsFloorToWall(previousRayCastHit, raycastHit))
+        else if (IsFloorToWall(previousRayCastHit, raycastHit)) // &&IsClearlyHigher(previousSample, sample))
         {
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=orange>Floor to wall calculation</color></b>");
@@ -231,7 +233,7 @@ public partial class FOVRenderer
             reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //If previous hit was on a floor and new sample is reaching max sight while not hitting anything
-        else if (!isResampleX && HasHit(previousRayCastHit) && HasNotHit(raycastHit) && IsClearlyHigher(previousSample, LastAddedVertex))
+        else if (!isResampleX && HasHit(previousRayCastHit) && HasNotHit(raycastHit))// && IsClearlyHigher(previousSample, LastAddedVertex))
         {
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=olive>Ledge calculation end of sight </color></b>");
@@ -257,8 +259,8 @@ public partial class FOVRenderer
         */
     }
 
-
-    private void InspectFlatSample(float yAngleSampled, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit previousRayCastHit, RaycastHit rayCastHit)
+    //private Vector3 InspectDownSample(bool isResampleX, int x, float xAngleSampled, float yAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit, RaycastHit raycastHit)
+    private void InspectFlatSample(float yAngleSampled, float xAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit previousRayCastHit, RaycastHit rayCastHit)
     {
         if (HasNotHit(rayCastHit))
         {
@@ -268,7 +270,8 @@ public partial class FOVRenderer
             if (HasNotHit(previousRayCastHit) && AreSimilarLenght(LastAddedVertex, SightRange, 0.3f))
                 ReplaceVertexPointVertex(LastAddedVertexPoint, new Vector3(sample.x, LastAddedVertex.y, sample.z));
             else
-                TryCreateVertexToEndOfSightRange(lastSampleType, yAngleSampled, sample, lastTrueRayCastHit);
+                TryCreateVertexToEndOfSightRange(lastSampleType, yAngleSampled, xAngleSampled, previousSample, sample, lastTrueRayCastHit, previousRayCastHit);
+
         }
     }
 

@@ -37,9 +37,7 @@ public partial class FOVRenderer : MonoBehaviour
     private Quaternion lastLocalRotation;
     private Vector3 origin;
     private float yStartingAngle = 0;
-    private float xStartingAngle = 0;
     float yAngleIncrease;
-    float xAngleIncrease;
     public Vector4[] raySamplePoints;
     private Vector3[] lastColumnSamplePoints;
     private RaycastHit[] lastColumnSampleRays;
@@ -49,12 +47,13 @@ public partial class FOVRenderer : MonoBehaviour
     int vertexIndex = 1;
     int triangleIndex = 0;
     SampleType lastSampleType = 0;
-    int yIteration, xIteration, vertexPair;
+    int yIteration, xIteration, vertexPair, island;
 
     //Tweakable values
+    public AnimationCurve xIterationCurve;
     public int yRayCount;// = (8) + 1;    // Horizontal angles ODD NUMBER 
     public int xRayCount;// = (8) + 1;    // Vertical angles ODD NUMBER 
-    private const float maxXAngle = (40.0000001f) * -1;   //Negative number is up!
+    private const float maxXAngle = (400.0000001f) * -1;   //Negative number is up!
     private const float ledgeStep = 0.3f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;
     private const float enemySightHeight = 2.785f;
@@ -100,6 +99,7 @@ public partial class FOVRenderer : MonoBehaviour
         public int n1 = -1; //Neighbours for triangle creation
         public int n2 = -1; //Neighbours for triangle creation
         public int pairNr;
+        public int island;
         public int y;
     }
 
@@ -112,9 +112,10 @@ public partial class FOVRenderer : MonoBehaviour
     private Vector3 LastAddedVertex => vertexPoints.Count > 0 ? LastAddedVertexPoint.vertex : Vector3.positiveInfinity;
     private VertexPoint LastAddedVertexPoint => vertexPoints.Count > 0 ? vertexPoints[vertexPoints.Count - 1] : null;
     private Vector3 FirstVertex => vertexPoints.Count > 0 ? vertexPoints[0].vertex : Vector3.positiveInfinity;
-
     private Vector3 MeshOrigin => Vector3.zero - Vector3.up * playerHeight;
 
+    private bool IsStartingType(SampleType st) => st == SampleType.None || st == SampleType.Floor || st == SampleType.FloorToDownFloor || st == SampleType.WallToFloorCorner || st == SampleType.LedgeStartCorner;
+    private bool IsEndingType(SampleType st) => st == SampleType.EndOfSightRange || st == SampleType.FloorToWallCorner || st == SampleType.LedgeAtDownAngle || st == SampleType.LedgeAtUpAngle || st == SampleType.WallToWall;
 
     #endregion
 
@@ -156,6 +157,20 @@ public partial class FOVRenderer : MonoBehaviour
 #endif
 
         //SaveAsset();
+        /*
+        float[] values = new float[xRayCount];
+        float value, angle;
+        for (int i = 0; i < xRayCount; i++)
+        {
+            float per = (float)i / (xRayCount - 1);
+            //if (i == xRayCount / 2 + 1 )
+            //   value = 0;
+            //else
+            value = xIterationCurve.Evaluate((float)i / (xRayCount - 1));
+            angle = X_FOV / 2 * value;
+            Debug.Log(angle);
+            //Debug.Log(value + " " + per + " " + i);
+        }*/
     }
 
     private void LateUpdate()
@@ -204,9 +219,8 @@ public partial class FOVRenderer : MonoBehaviour
     public void SetAimDirection(Vector3 aimDirection, float yFovIn, float xFovIn)
     {
         yStartingAngle = transform.rotation.eulerAngles.y + yFovIn / -2f;
-        xStartingAngle = xFovIn / 2f;
+        //xStartingAngle = xFovIn / 2f;
         yAngleIncrease = yFovIn / (yRayCount - 1);
-        xAngleIncrease = xFovIn / (xRayCount - 1);
         //Debug.Log(xStartingAngle+" "+   xAngleIncrease);
     }
 
@@ -256,11 +270,14 @@ public partial class FOVRenderer : MonoBehaviour
 
     private void AddNeighbourVertices(Vector3 sample, SampleType sampleType, VertexPoint vertNew, VertexPoint vertPrev)
     {
-        if (vertPrev != null && EndingType(sampleType) && AreSimilarHeight(sample, vertPrev.vertex) && StartingType(vertPrev.sampleType))
+        if (vertPrev != null && IsEndingType(sampleType) && AreSimilarHeight(sample, vertPrev.vertex) && IsStartingType(vertPrev.sampleType))
         {
             vertexPair++;
+            island++;
             vertNew.pairNr = vertexPair + yIteration * xRayCount;
             vertPrev.pairNr = vertexPair + yIteration * xRayCount;
+            vertNew.island = island;
+            vertPrev.island = island;
 
             if (yIteration > 0)
             {
@@ -271,9 +288,13 @@ public partial class FOVRenderer : MonoBehaviour
                     vertexPoints[v1Prev].n2 = vertexPoints.Count - 1;
                     vertexPoints[v2Prev].n1 = vertexPoints.Count;
                     vertexPoints[v2Prev].n2 = vertexPoints.Count - 1;
+                    vertPrev.island = vertexPoints[v1Prev].island;
+                    vertNew.island = vertexPoints[v2Prev].island;
                 }
-                //else
-                //    Debug.Log("no pair");
+                else
+                {
+                    Debug.Log("no pair");
+                }
             }
         }
     }
@@ -289,27 +310,21 @@ public partial class FOVRenderer : MonoBehaviour
 
     private bool GetMathingPairNr(int y, VertexPoint v1, VertexPoint v2, out int v1Prev, out int v2Prev)
     {
-
         for (int i = vertexPoints.Count - 1; i > 0; i--)
         {
             if (vertexPoints[i].y < y)
-                break;
+               break;
 
             if (vertexPoints[i].y > y)
                 continue;
 
-            /*
-            if (vertexPoints[i - 1].y != y || vertexPoints[i].y != y)
+            if (vertexPoints[i].pairNr == 0)
                 continue;
-
-            if (vertexPoints[i].pairNr != 0)
-                continue;
-            */
 
             if (vertexPoints[i - 1].pairNr != vertexPoints[i].pairNr)
                 continue;
 
-            //Debug.Log("MOi" + AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) + " " + AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f));
+            Debug.Log("MOi" + AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) + " " + AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f));
 
             if (ArePairEdges(vertexPoints[i - 1], vertexPoints[i], v1, v2, i))
             {
@@ -382,10 +397,6 @@ public partial class FOVRenderer : MonoBehaviour
 
         triangleIndex += 3;
     }
-
-
-    private bool StartingType(SampleType st) => st == SampleType.None || st == SampleType.Floor || st == SampleType.FloorToDownFloor || st == SampleType.WallToFloorCorner || st == SampleType.LedgeStartCorner;
-    private bool EndingType(SampleType st) => st == SampleType.EndOfSightRange || st == SampleType.FloorToWallCorner || st == SampleType.LedgeAtDownAngle || st == SampleType.LedgeAtUpAngle || st == SampleType.WallToWall;
 
     private bool IsSecondPair(SampleType st1, SampleType st2)
     {
