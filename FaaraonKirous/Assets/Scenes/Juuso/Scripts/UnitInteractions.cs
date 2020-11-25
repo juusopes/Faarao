@@ -44,7 +44,8 @@ public class UnitInteractions : MonoBehaviour
         int allowedAbilities = 0;
         for (int i = 0; i < 11; i++)
         {
-            bool v = GameObject.Find("Pharaoh").GetComponent<PlayerController>().abilityAllowed[i];
+            //bool v = GameObject.Find("Pharaoh").GetComponent<PlayerController>().abilityAllowed[i];
+            bool v = GameManager._instance.Pharaoh.GetComponent<PlayerController>().abilityAllowed[i];
             if (v)
             {
                 //print(allowedAbilities);
@@ -72,7 +73,8 @@ public class UnitInteractions : MonoBehaviour
 
         for (int i = 0; i < 11; i++)
         {
-            bool v = GameObject.Find("Priest").GetComponent<PlayerController>().abilityAllowed[i];
+            //bool v = GameObject.Find("Priest").GetComponent<PlayerController>().abilityAllowed[i];
+            bool v = GameManager._instance.Priest.GetComponent<PlayerController>().abilityAllowed[i];
             if (v)
             {
                 //print(allowedAbilities);
