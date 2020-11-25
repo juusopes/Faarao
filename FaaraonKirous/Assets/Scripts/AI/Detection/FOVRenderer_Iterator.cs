@@ -117,7 +117,7 @@ public partial class FOVRenderer
                 return true;
 
         //If the first two upsamples have no hit, just give up iteration
-         if (xAngleSampled < -1 && raycastHit.collider == null && previousRayCastHit.collider == null)
+         if (xAngleSampled < -5 && raycastHit.collider == null && previousRayCastHit.collider == null)
              return true;
 
         return false;
@@ -132,8 +132,8 @@ public partial class FOVRenderer
                 reSampleXCorner = InspectDownSample(isResample, x, xAngleSampled, yAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
                 break;
             case Looking.ZeroAngle:
+                InspectFlatSample(yAngleSampled, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
                 reSampleXCorner = InspectDownSample(isResample, x, xAngleSampled, yAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
-                InspectFlatSample(yAngleSampled, sample, lastTrueRayCastHit, raycastHit);
                 break;
             case Looking.Up:
                 InspectUpSample(yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
@@ -197,7 +197,7 @@ public partial class FOVRenderer
 #endif
             TryCreateWallToFloorCornerVertex(previousSample, sample);
 
-            if(!AreHittingSameCollider(previousRayCastHit, raycastHit) && !AreSimilarHeight(LastAddedVertex, sample))
+            if (!AreHittingSameCollider(previousRayCastHit, raycastHit) && !AreSimilarHeight(LastAddedVertex, sample))
                 TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //When going up from floor to wall
@@ -231,7 +231,7 @@ public partial class FOVRenderer
             reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //If previous hit was on a floor and new sample is reaching max sight while not hitting anything
-        else if (!isResampleX && HasHit(previousRayCastHit) && HasNotHit(raycastHit))
+        else if (!isResampleX && HasHit(previousRayCastHit) && HasNotHit(raycastHit) && IsClearlyHigher(previousSample, LastAddedVertex))
         {
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=olive>Ledge calculation end of sight </color></b>");
@@ -258,14 +258,17 @@ public partial class FOVRenderer
     }
 
 
-    private void InspectFlatSample(float yAngleSampled, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit rayCastHit)
+    private void InspectFlatSample(float yAngleSampled, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit previousRayCastHit, RaycastHit rayCastHit)
     {
         if (HasNotHit(rayCastHit))
         {
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=red>End of sight calculation</color></b>");
 #endif
-            TryCreateVertexToEndOfSightRange(lastSampleType, yAngleSampled, sample, lastTrueRayCastHit);
+            if (HasNotHit(previousRayCastHit) && AreSimilarLenght(LastAddedVertex, SightRange, 0.3f))
+                ReplaceVertexPointVertex(LastAddedVertexPoint, new Vector3(sample.x, LastAddedVertex.y, sample.z));
+            else
+                TryCreateVertexToEndOfSightRange(lastSampleType, yAngleSampled, sample, lastTrueRayCastHit);
         }
     }
 
