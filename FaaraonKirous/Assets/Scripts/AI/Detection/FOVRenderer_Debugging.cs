@@ -84,7 +84,7 @@ public partial class FOVRenderer
             float angle = X_FOV / 2 * xIterationCurve.Evaluate((float)i / (xRayCount - 1));
             if (angle < maxXAngle)       //Negatives are up angle{
             {
-                Debug.Log("True maximum x iterations: " + i + " at angle: " + angle);
+                Debug.Log("True maximum x iterations: " + i + " at angle: " + angle + " Total max iterations: " + (i * yRayCount));
                 return;
             }
         }

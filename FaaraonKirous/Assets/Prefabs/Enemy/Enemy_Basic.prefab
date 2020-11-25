@@ -515,7 +515,7 @@ GameObject:
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6024281465610095461
 Transform:
   m_ObjectHideFlags: 0
@@ -616,8 +616,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   yRayCount: 40
-  xRayCount: 40
-  debugMode: 7
+  xRayCount: 50
+  debugMode: 0
   ballMat: {fileID: 2100000, guid: d60f8b1c0f8939a419fc0a739e24bdda, type: 2}
   ballMat2: {fileID: 2100000, guid: ee15538f17310b54d91417a909a98827, type: 2}
   maxYIterations: 555
@@ -625,6 +625,7 @@ MonoBehaviour:
   debuggingOneFrame: 0
   debuggingLogging: 0
   disableReSampling: 0
+  disableXIterationLimit: 0
   drawShapesOnIgnoredSamples: 0
   drawEdges: 0
   testTime: 0
