@@ -87,7 +87,10 @@ public partial class FOVRenderer
 
             cube.GetComponent<Renderer>().material.color = color;
             if (p.pairNr == 0)
+            {
                 cube.name = "i: " + i + "\t y: " + p.y + "\t Vertex Point: " + p.sampleType + " ======================================================";
+                cube.transform.localScale = new Vector3(0.2f, 1f, 0.2f);
+            }
             else
                 cube.name = "i: " + i + "\t n1: " + p.n1 + "\t n2: " + p.n2 + "\t y: " + p.y + "\t ISLAND: " + p.island + "\t Pair: " + p.pairNr + "    \tType: " + p.sampleType;
 
