@@ -11,6 +11,9 @@ public class PriestAbilities : MonoBehaviour
     public bool useTeleknesis;
     private float telekinesisTimer;
     private Vector3 telekinesisHeight;
+    //WarpSpell
+    public bool warpSpellActive;
+        
     private Vector3 playerSavePos;
     private Vector3 targetSavePos;
     public GameObject[] indicatorList;
@@ -27,6 +30,7 @@ public class PriestAbilities : MonoBehaviour
     void Update()
     {   
         Telekinesis();
+        WarpPosition();
     }
 
     private void Initialize()
@@ -60,7 +64,7 @@ public class PriestAbilities : MonoBehaviour
             }
             if (target != null)
             {
-                if (telekinesisActive && GetComponent<PlayerController>().abilityNum == 1)
+                if (telekinesisActive && GetComponent<PlayerController>().abilityNum == 6)
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse1))
                     {
@@ -108,6 +112,48 @@ public class PriestAbilities : MonoBehaviour
         }
     }
 
+    public void WarpPosition()
+    {
+        Debug.Log("WARP?");
+        if (GetComponent<PlayerController>().IsCurrentPlayer)
+        {
+            //TempSetActive
+            if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)
+            {
+                warpSpellActive = true;
+                Debug.Log("WARP ACTIVE");
+            }
+            //WarpSpell
+            if (levelControl.targetObject != null)
+            {
+                target = levelControl.targetObject;
+            }
+            else if (!useTeleknesis)
+            {
+                target = null;
+            }
+            if (warpSpellActive && GetComponent<PlayerController>().abilityNum == 1)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse1) && !PointerOverUI())
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit = new RaycastHit();
+                    Vector3 tempV3;
+                    Debug.Log("WARP!");
+                    //DoubleClick Check
+                    if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
+                    {
+                        Debug.Log("MORE WARP!");
+                        tempV3 = hit.point;
+                        this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(tempV3);
+                    }
+                    GetComponent<PlayerController>().abilityActive = false;
+                    GetComponent<PlayerController>().abilityNum = 0;
+                }
+            }
+        }
+    }
+
     private void TelekinesisActivate()
     {
         if (telekinesisActive)
@@ -118,5 +164,10 @@ public class PriestAbilities : MonoBehaviour
         {
             telekinesisActive = false;
         }
+    }
+
+    public bool PointerOverUI()
+    {
+        return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
     }
 }
