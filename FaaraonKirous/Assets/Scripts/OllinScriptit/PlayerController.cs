@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
     //[HideInInspector]
     public bool[] abilityAllowed;
 
+
     //Invisibility
     public bool isInvisible;
 
@@ -132,6 +133,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //bool myBoolArray = abilityAllowed.ToArray();
+
+        //for (int i = 0; i < abilityAllowed.Length; i++)
+        //{
+        //    myBoolArray.Add(abilityAllowed[i]);
+        //}
+
         if (!IsDead)
         {
             Moving();
@@ -617,14 +625,18 @@ public class PlayerController : MonoBehaviour
         {
             UseAbility(1);
         }
-        if (Input.GetKeyDown(KeyCode.W))
+
+        ////////////////swapped!
+        if (Input.GetKeyDown(KeyCode.E))
         {
             UseAbility(2);
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        ////////////////swapped!
+        if (Input.GetKeyDown(KeyCode.W))
         {
             UseAbility(3);
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             UseAbility(4);

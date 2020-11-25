@@ -27,7 +27,6 @@ public class LevelController : MonoBehaviour
     private GameObject[] characters;
     public GameObject currentCharacter => GameManager._instance.CurrentCharacter;
     private int currentCharacterIndex;
-    public GameObject playerOneImage, playerTwoImage;
 
     public GameObject pharaoh => GameManager._instance.Pharaoh;
     public GameObject priest => GameManager._instance.Priest;
@@ -71,7 +70,6 @@ public class LevelController : MonoBehaviour
         mainCam = mainCam.transform.parent.gameObject;
 
         canvas.gameObject.SetActive(true);
-        playerOneImage.SetActive(true);
 
         UpdateAbilities();
         //SetCameraPos
