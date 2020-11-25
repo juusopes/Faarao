@@ -132,46 +132,46 @@ public class AbilityIndicator : MonoBehaviour
 
     private void ChangeAll()
     {
-        if (player.GetComponent<PlayerController>().abilityNum == 1)
+        if (player.GetComponent<PlayerController>().abilityNum > 0)
         {
-            SwitchIndicator(0);
-            SetCircleRange(0);
+            SwitchIndicator(player.GetComponent<PlayerController>().abilityNum);
+            SetCircleRange(player.GetComponent<PlayerController>().abilityNum);
         }
-        if (player.GetComponent<PlayerController>().abilityNum == 2)
-        {
-            SwitchIndicator(1);
-            SetCircleRange(1);
-        }
-        if (player.GetComponent<PlayerController>().abilityNum == 3)
-        {
-            SwitchIndicator(2);
-            SetCircleRange(2);
-        }
-        if (player.GetComponent<PlayerController>().abilityNum == 4)
-        {
-            SwitchIndicator(3);
-            SetCircleRange(3);
-        }
-        if (player.GetComponent<PlayerController>().abilityNum == 5)
-        {
-            SwitchIndicator(7);
-            SetCircleRange(7);
-        }
-        if (player.GetComponent<PlayerController>().abilityNum == 8)
-        {
-            SwitchIndicator(8);
-            SetCircleRange(8);
-        }
-        if (player.GetComponent<PlayerController>().abilityNum == 9)
-        {
-            SwitchIndicator(9);
-            SetCircleRange(9);
-        }
-        if (player.GetComponent<PlayerController>().abilityNum == 10)
-        {
-            SwitchIndicator(10);
-            SetCircleRange(10);
-        }
+        //if (player.GetComponent<PlayerController>().abilityNum == 2)
+        //{
+        //    SwitchIndicator(1);
+        //    SetCircleRange(1);
+        //}
+        //if (player.GetComponent<PlayerController>().abilityNum == 3)
+        //{
+        //    SwitchIndicator(2);
+        //    SetCircleRange(2);
+        //}
+        //if (player.GetComponent<PlayerController>().abilityNum == 4)
+        //{
+        //    SwitchIndicator(3);
+        //    SetCircleRange(3);
+        //}
+        //if (player.GetComponent<PlayerController>().abilityNum == 5)
+        //{
+        //    SwitchIndicator(7);
+        //    SetCircleRange(7);
+        //}
+        //if (player.GetComponent<PlayerController>().abilityNum == 8)
+        //{
+        //    SwitchIndicator(8);
+        //    SetCircleRange(8);
+        //}
+        //if (player.GetComponent<PlayerController>().abilityNum == 9)
+        //{
+        //    SwitchIndicator(9);
+        //    SetCircleRange(9);
+        //}
+        //if (player.GetComponent<PlayerController>().abilityNum == 10)
+        //{
+        //    SwitchIndicator(10);
+        //    SetCircleRange(10);
+        //}
     }
     private void SetCircleRange(int num)
     {
