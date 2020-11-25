@@ -27,7 +27,9 @@ public partial class FOVRenderer
     [SerializeField]
     private bool debuggingLogging;
     [SerializeField]
-    private bool disableReSampling = true;
+    private bool disableReSampling = false;
+    [SerializeField]
+    private bool disableXIterationLimit = false;
     [SerializeField]
     private bool drawShapesOnIgnoredSamples = false;
     [SerializeField]
@@ -58,6 +60,34 @@ public partial class FOVRenderer
         AllVertices,
         AllShapes,
         All
+    }
+
+    private void StartDebug()
+    {
+        if (DebugRaypointShapes)
+        {
+            raySamplePoints = new Vector4[yRayCount * xRayCount + 1];
+            raySamplePoints[0] = Vector3.zero;
+        }
+
+        if (debuggingOneFrame)
+            Invoke("UpdateViewCone", 0.1f);     //Call with delay, so objects can reset trans etc.
+
+        timeTester = new DeltaTimeTester();
+        TestMaxIterations();
+    }
+
+    private void TestMaxIterations()
+    {
+        for (int i = 0; i < xRayCount; i++)
+        {
+            float angle = X_FOV / 2 * xIterationCurve.Evaluate((float)i / (xRayCount - 1));
+            if (angle < maxXAngle)       //Negatives are up angle{
+            {
+                Debug.Log("True maximum x iterations: " + i + " at angle: " + angle);
+                return;
+            }
+        }
     }
 
     IEnumerator Balls(Vector4[] arr)

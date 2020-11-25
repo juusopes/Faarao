@@ -53,7 +53,7 @@ public partial class FOVRenderer : MonoBehaviour
     public AnimationCurve xIterationCurve;
     public int yRayCount;// = (8) + 1;    // Horizontal angles ODD NUMBER 
     public int xRayCount;// = (8) + 1;    // Vertical angles ODD NUMBER 
-    private const float maxXAngle = (400.0000001f) * -1;   //Negative number is up!
+    private const float maxXAngle = (40.0000001f) * -1;   //Negative number is up!
     private const float ledgeStep = 0.3f;           //How big is the iterative step for searching next floor collider
     private const float ledgeSightBlockingHeight = 0.3f;
     private const float enemySightHeight = 2.785f;
@@ -141,37 +141,14 @@ public partial class FOVRenderer : MonoBehaviour
         origin = Vector3.zero;
         lastColumnSamplePoints = new Vector3[xRayCount];
         lastColumnSampleRays = new RaycastHit[xRayCount];
-#if UNITY_EDITOR
-        if (DebugRaypointShapes)
-        {
-            raySamplePoints = new Vector4[yRayCount * xRayCount + 1];
-            raySamplePoints[0] = Vector3.zero;
-        }
-#endif
 
 #if UNITY_EDITOR
-        if (debuggingOneFrame)
-            Invoke("UpdateViewCone", 0.1f);     //Call with delay, so objects can reset trans etc.
-
-        timeTester = new DeltaTimeTester();
+        StartDebug();
 #endif
 
         //SaveAsset();
-        /*
-        float[] values = new float[xRayCount];
-        float value, angle;
-        for (int i = 0; i < xRayCount; i++)
-        {
-            float per = (float)i / (xRayCount - 1);
-            //if (i == xRayCount / 2 + 1 )
-            //   value = 0;
-            //else
-            value = xIterationCurve.Evaluate((float)i / (xRayCount - 1));
-            angle = X_FOV / 2 * value;
-            Debug.Log(angle);
-            //Debug.Log(value + " " + per + " " + i);
-        }*/
     }
+
 
     private void LateUpdate()
     {
@@ -293,7 +270,7 @@ public partial class FOVRenderer : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("no pair");
+                    //Debug.Log("no pair");
                 }
             }
         }
@@ -313,7 +290,7 @@ public partial class FOVRenderer : MonoBehaviour
         for (int i = vertexPoints.Count - 1; i > 0; i--)
         {
             if (vertexPoints[i].y < y)
-               break;
+                break;
 
             if (vertexPoints[i].y > y)
                 continue;

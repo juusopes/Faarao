@@ -75,7 +75,7 @@ public partial class FOVRenderer
                 Vector3 reDirection = (ConvertGlobal(reSampleXCorner) - origin + Vector3.up * 0.1f).normalized;
                 float xAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.x;
                 float yAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.y;
-                Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
+                //Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
                 Vector3 reSample = GetSamplePoint(origin, reDirection, SightRange, out testRayHit, Color.red);
                 //ACylinder(reSample);
 
@@ -87,7 +87,7 @@ public partial class FOVRenderer
                 }
 
                 //else
-                 //   Debug.Log("Did not replace resample: y: " + y + " x: " + xIteration);
+                //   Debug.Log("Did not replace resample: y: " + y + " x: " + xIteration);
                 //InspectSample(true, xIteration, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
             }
 
@@ -114,8 +114,11 @@ public partial class FOVRenderer
             //xAngleSampled -= xAngleIncrease;
 
 
-            //if (ShouldQuitXIteration(xAngleSampled, previousRayCastHit, raycastHit))
-            //    return;
+#if UNITY_EDITOR
+            if (!disableXIterationLimit)
+#endif
+                if (ShouldQuitXIteration(xAngleSampled, previousRayCastHit, raycastHit))
+                    return;
         }
     }
 
@@ -126,8 +129,8 @@ public partial class FOVRenderer
                 return true;
 
         //If the first two upsamples have no hit, just give up iteration
-         if (xAngleSampled < -5 && raycastHit.collider == null && previousRayCastHit.collider == null)
-             return true;
+        if (xAngleSampled < -5 && raycastHit.collider == null && previousRayCastHit.collider == null)
+            return true;
 
         return false;
     }
