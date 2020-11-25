@@ -436,7 +436,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
     public void Attack()
     {
         if (abilityNum == 9)
@@ -532,8 +531,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
-
     public void UseAbility(int tempAbilityNum)
     {
         if (abilityAllowed[tempAbilityNum])

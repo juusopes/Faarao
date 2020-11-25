@@ -3,7 +3,12 @@ guid: d8e0dc9631ee63b4984a09ef4a9b004c
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: 154f73cf1c711a14d8cb1a00fe22f401, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -76,8 +81,699 @@ ModelImporter:
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
-    human: []
-    skeleton: []
+    human:
+    - boneName: Rig:Bnd_Hips
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Up_Leg
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Up_Leg
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Knee
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Knee
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Ankle
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Ankle
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_Spine1
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_Spine2
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Clawicle
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Clawicle
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Shoulder
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Shoulder
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Elbow
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Elbow
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Wrist
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Wrist
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Foot
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Foot
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Thumb_Base
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Thumb_Middle
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Thumb_Tip
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Index_Base
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Index_Middle
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Index_Tip
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Middle_Base
+      humanName: Left Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Middle_Middle
+      humanName: Left Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Middle_Tip
+      humanName: Left Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Ring_Base
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Ring_Middle
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Ring_Tip
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Pinky_Base
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Pinky_Middle
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_L_Pinky_Tip
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Thumb_Base
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Thumb_Middle
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Thumb_Tip
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Index_Base
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Index_Middle
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Index_Tip
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Middle_Base
+      humanName: Right Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Middle_Middle
+      humanName: Right Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Middle_Tip
+      humanName: Right Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Ring_Base
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Ring_Middle
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Ring_Tip
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Pinky_Base
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Pinky_Middle
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_R_Pinky_Tip
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Rig:Bnd_Chest
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: Priest_Mesh(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Priest_Geo
+      parentName: Priest_Mesh(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:GRP_Bnd_Joints
+      parentName: Priest_Mesh(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_Hips
+      parentName: Rig:GRP_Bnd_Joints
+      position: {x: -0, y: 0.93759745, z: 0.012479537}
+      rotation: {x: -0.7071068, y: 0.7071068, z: 4.3297806e-17, w: -4.3297806e-17}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000005}
+    - name: Rig:Bnd_L_Up_Leg
+      parentName: Rig:Bnd_Hips
+      position: {x: 0.069137074, y: 0.09986385, z: 0.010096098}
+      rotation: {x: 0.103252634, y: -0, z: 0.99465525, w: -0.000000029802322}
+      scale: {x: 1, y: 1, z: 1.0000005}
+    - name: Rig:Bnd_L_Knee
+      parentName: Rig:Bnd_L_Up_Leg
+      position: {x: -0.36271775, y: 1.4210854e-16, z: -7.105427e-17}
+      rotation: {x: -0, y: 0.15829434, z: -0.000000029802319, w: 0.98739195}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000002}
+    - name: Rig:Bnd_L_Ankle
+      parentName: Rig:Bnd_L_Knee
+      position: {x: -0.40863028, y: -1.0658141e-16, z: -2.8865798e-17}
+      rotation: {x: -0, y: -0.48158884, z: -0, w: 0.8763973}
+      scale: {x: 0.9999998, y: 1.0000001, z: 1.0000004}
+    - name: Rig:Bnd_L_Foot
+      parentName: Rig:Bnd_L_Ankle
+      position: {x: -0.1049468, y: 1.7763568e-17, z: -1.0658141e-16}
+      rotation: {x: -0, y: -0.3320324, z: -0, w: 0.943268}
+      scale: {x: 1, y: 1.0000001, z: 1.0000002}
+    - name: Rig:Bnd_R_Up_Leg
+      parentName: Rig:Bnd_Hips
+      position: {x: 0.069137536, y: -0.0998639, z: 0.010096096}
+      rotation: {x: 0.99465525, y: 0.000000029802322, z: -0.103252634, w: 0}
+      scale: {x: 1.0000001, y: 1, z: 0.9999998}
+    - name: Rig:Bnd_R_Knee
+      parentName: Rig:Bnd_R_Up_Leg
+      position: {x: 0.36271694, y: -2.3092638e-16, z: 0.00000015175546}
+      rotation: {x: -0.0000000037252903, y: 0.15829436, z: 0.000000024680048, w: 0.987392}
+      scale: {x: 1.0000002, y: 1.0000001, z: 0.99999994}
+    - name: Rig:Bnd_R_Ankle
+      parentName: Rig:Bnd_R_Knee
+      position: {x: 0.40863112, y: -1.9539925e-16, z: 0.000000092949065}
+      rotation: {x: 0.0000000055879354, y: -0.48158887, z: -0.000000038184226, w: 0.8763973}
+      scale: {x: 1.0000002, y: 1, z: 0.99999994}
+    - name: Rig:Bnd_R_Foot
+      parentName: Rig:Bnd_R_Ankle
+      position: {x: 0.10494639, y: -5.3290704e-17, z: 0.0000002394206}
+      rotation: {x: -0.000000020318941, y: 0.33203238, z: -0.000000044801396, w: -0.94326794}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000001}
+    - name: Rig:Bnd_Spine1
+      parentName: Rig:Bnd_Hips
+      position: {x: -0.11449307, y: 0, z: 0}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000005}
+    - name: Rig:Bnd_Spine2
+      parentName: Rig:Bnd_Spine1
+      position: {x: -0.10488934, y: -2.4651903e-34, z: 0}
+      rotation: {x: 6.617444e-24, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000005}
+    - name: Rig:Bnd_Chest
+      parentName: Rig:Bnd_Spine2
+      position: {x: -0.14286876, y: 0, z: 0}
+      rotation: {x: -6.617444e-24, y: -0, z: -0, w: 1}
+      scale: {x: 0.9999996, y: 0.9999996, z: 0.9999991}
+    - name: Rig:Bnd_L_Clawicle
+      parentName: Rig:Bnd_Chest
+      position: {x: -0.091828555, y: 0.031916857, z: -0.021426162}
+      rotation: {x: -0.09033147, y: -0.07721897, z: 0.7547343, w: -0.6451772}
+      scale: {x: 1, y: 1.0000008, z: 1.0000006}
+    - name: Rig:Bnd_L_Shoulder
+      parentName: Rig:Bnd_L_Clawicle
+      position: {x: -0.14367287, y: 2.842171e-16, z: 4.6629366e-17}
+      rotation: {x: -0.0046025664, y: -0.11874916, z: 0.038455218, w: 0.99216866}
+      scale: {x: 1.0000001, y: 0.9999996, z: 0.9999998}
+    - name: Rig:Bnd_L_Elbow
+      parentName: Rig:Bnd_L_Shoulder
+      position: {x: -0.22604942, y: 5.684342e-16, z: 5.8732375e-18}
+      rotation: {x: 5.4611602e-17, y: -9.498165e-16, z: 0.03935133, w: 0.99922544}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Rig:Bnd_L_Wrist
+      parentName: Rig:Bnd_L_Elbow
+      position: {x: -0.2112234, y: -1.1368684e-15, z: -5.862627e-18}
+      rotation: {x: 0.0000000021543924, y: 0.0000000073715123, z: -0.00000002235174, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_L_Index_Base
+      parentName: Rig:Bnd_L_Wrist
+      position: {x: -0.101159304, y: 0.00547545, z: -0.027958784}
+      rotation: {x: 0.020578615, y: -0.09407939, z: -0.09109116, w: 0.9911751}
+      scale: {x: 1, y: 1.0000001, z: 1.0000004}
+    - name: Rig:Bnd_L_Index_Middle
+      parentName: Rig:Bnd_L_Index_Base
+      position: {x: -0.030967824, y: -5.684342e-16, z: -1.0658141e-16}
+      rotation: {x: 0.000000009313226, y: -0.000000074505806, z: -0.0071175382, w: 0.99997467}
+      scale: {x: 1.0000001, y: 0.9999997, z: 0.9999998}
+    - name: Rig:Bnd_L_Index_Tip
+      parentName: Rig:Bnd_L_Index_Middle
+      position: {x: -0.03046404, y: -5.684342e-16, z: -3.5527135e-16}
+      rotation: {x: -0.000000021468841, y: 0.00000005911057, z: -0.03256208, w: 0.9994697}
+      scale: {x: 0.99999994, y: 1.0000002, z: 1.0000001}
+    - name: Rig:Bnd_L_Middle_Base
+      parentName: Rig:Bnd_L_Wrist
+      position: {x: -0.10319403, y: 0.00547545, z: -0.010359208}
+      rotation: {x: 0.006806187, y: -0.05732934, z: -0.10748323, w: 0.9925293}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000002}
+    - name: Rig:Bnd_L_Middle_Middle
+      parentName: Rig:Bnd_L_Middle_Base
+      position: {x: -0.031904645, y: -5.684342e-16, z: -8.881784e-18}
+      rotation: {x: -0.0000000018626451, y: -0.000000011175871, z: -0.041811388, w: 0.9991256}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1.0000002}
+    - name: Rig:Bnd_L_Middle_Tip
+      parentName: Rig:Bnd_L_Middle_Middle
+      position: {x: -0.032651905, y: 8.5265126e-16, z: 1.7763568e-17}
+      rotation: {x: -0.000000001721007, y: 0.000000014929123, z: -0.056076407, w: 0.9984265}
+      scale: {x: 1.0000001, y: 1.0000006, z: 1.0000005}
+    - name: Rig:Bnd_L_Pinky_Base
+      parentName: Rig:Bnd_L_Wrist
+      position: {x: -0.09873486, y: 0.00547545, z: 0.027503962}
+      rotation: {x: -0.029691873, y: 0.015172467, z: -0.06796323, w: 0.99713045}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_L_Pinky_Middle
+      parentName: Rig:Bnd_L_Pinky_Base
+      position: {x: -0.031172186, y: 1.9895197e-15, z: 2.4868996e-16}
+      rotation: {x: 0.0039405795, y: -0.017548643, z: -0.037231, w: 0.9991448}
+      scale: {x: 0.99999994, y: 1.0000002, z: 1.0000002}
+    - name: Rig:Bnd_L_Pinky_Tip
+      parentName: Rig:Bnd_L_Pinky_Middle
+      position: {x: -0.026357073, y: 1.1368684e-15, z: 0}
+      rotation: {x: -0, y: -0, z: 0.0000000016661943, w: 1}
+      scale: {x: 0.99999994, y: 1.0000002, z: 1.0000004}
+    - name: Rig:Bnd_L_Ring_Base
+      parentName: Rig:Bnd_L_Wrist
+      position: {x: -0.10196029, y: 0.00547545, z: 0.010783911}
+      rotation: {x: -1.6473266e-15, y: -9.307647e-16, z: -0.09581235, w: 0.9953994}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_L_Ring_Middle
+      parentName: Rig:Bnd_L_Ring_Base
+      position: {x: -0.032690022, y: 0, z: -5.3290704e-17}
+      rotation: {x: -0.00000003204597, y: -0.000000091548245, z: -0.03787188, w: 0.9992826}
+      scale: {x: 0.99999994, y: 1.0000005, z: 1.0000005}
+    - name: Rig:Bnd_L_Ring_Tip
+      parentName: Rig:Bnd_L_Ring_Middle
+      position: {x: -0.036344472, y: 3.126388e-15, z: 1.3766766e-16}
+      rotation: {x: -0, y: -0, z: -2.8075552e-31, w: 1}
+      scale: {x: 1, y: 1.0000008, z: 1.0000005}
+    - name: Rig:Bnd_L_Thumb_Base
+      parentName: Rig:Bnd_L_Wrist
+      position: {x: -0.036756836, y: 0.010663102, z: -0.03592594}
+      rotation: {x: -0.6469603, y: 0.3824733, z: -0.29731324, w: -0.58886456}
+      scale: {x: 1.0000002, y: 1, z: 1.0000002}
+    - name: Rig:Bnd_L_Thumb_Middle
+      parentName: Rig:Bnd_L_Thumb_Base
+      position: {x: -0.028957743, y: -2.1316282e-16, z: -8.5265126e-16}
+      rotation: {x: -0.07095368, y: -0.0073043685, z: -0.029918693, w: 0.99700403}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    - name: Rig:Bnd_L_Thumb_Tip
+      parentName: Rig:Bnd_L_Thumb_Middle
+      position: {x: -0.022334728, y: 7.105427e-17, z: 5.684342e-16}
+      rotation: {x: 0.0011118577, y: 0.03390423, z: 0.0035499574, w: 0.99941814}
+      scale: {x: 1, y: 1.0000002, z: 1.0000001}
+    - name: Rig:Bnd_Neck
+      parentName: Rig:Bnd_Chest
+      position: {x: -0.12555829, y: -2.4651903e-34, z: 0}
+      rotation: {x: 6.617444e-24, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000005}
+    - name: Rig:Bnd_Head
+      parentName: Rig:Bnd_Neck
+      position: {x: -0.10103515, y: 0, z: 0}
+      rotation: {x: -1.9852333e-23, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_R_Clawicle
+      parentName: Rig:Bnd_Chest
+      position: {x: -0.091831274, y: -0.031916898, z: -0.021426162}
+      rotation: {x: 0.7547343, y: -0.6451772, z: 0.09033147, w: 0.07721897}
+      scale: {x: 1, y: 1.0000001, z: 1.0000002}
+    - name: Rig:Bnd_R_Shoulder
+      parentName: Rig:Bnd_R_Clawicle
+      position: {x: 0.143673, y: 0, z: 0.000000028562544}
+      rotation: {x: -0.0046025664, y: -0.11874916, z: 0.038455218, w: 0.99216866}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Rig:Bnd_R_Elbow
+      parentName: Rig:Bnd_R_Shoulder
+      position: {x: 0.22604932, y: -1.4210854e-15, z: 6.452544e-17}
+      rotation: {x: -1.0855761e-15, y: -2.1719301e-17, z: 0.039351325, w: 0.99922544}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Rig:Bnd_R_Wrist
+      parentName: Rig:Bnd_R_Elbow
+      position: {x: 0.211224, y: -8.5265126e-16, z: 8.189846e-16}
+      rotation: {x: 0.0000000021543936, y: 0.000000007371511, z: -0.00000001862645, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_R_Index_Base
+      parentName: Rig:Bnd_R_Wrist
+      position: {x: 0.101159, y: -0.0054699997, z: 0.027958801}
+      rotation: {x: 0.02057637, y: -0.094072394, z: -0.09107099, w: 0.9911776}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Rig:Bnd_R_Index_Middle
+      parentName: Rig:Bnd_R_Index_Base
+      position: {x: 0.030969666, y: -5.684342e-16, z: 0.00000012875047}
+      rotation: {x: 0.0000000037252903, y: -0.000000014901161, z: -0.0071174502, w: 0.99997467}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_R_Index_Tip
+      parentName: Rig:Bnd_R_Index_Middle
+      position: {x: 0.030463027, y: 0.0000035605422, z: -2.1316282e-16}
+      rotation: {x: -0.00000001011347, y: 0.00000004450342, z: -0.03256215, w: 0.9994697}
+      scale: {x: 1.0000001, y: 0.99999994, z: 1.0000001}
+    - name: Rig:Bnd_R_Middle_Base
+      parentName: Rig:Bnd_R_Wrist
+      position: {x: 0.103194, y: -0.0054699997, z: 0.0103592}
+      rotation: {x: 0.0068048313, y: -0.05732719, z: -0.10745647, w: 0.9925323}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Rig:Bnd_R_Middle_Middle
+      parentName: Rig:Bnd_R_Middle_Base
+      position: {x: 0.031906493, y: -1.7053025e-15, z: 0.00000009351672}
+      rotation: {x: 9.3132246e-10, y: -0.00000001117587, z: -0.04181137, w: 0.99912554}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1}
+    - name: Rig:Bnd_R_Middle_Tip
+      parentName: Rig:Bnd_R_Middle_Middle
+      position: {x: 0.032649405, y: -8.5265126e-16, z: -7.9936054e-17}
+      rotation: {x: -0.0000000017080388, y: 0.0000000035872003, z: -0.056076396, w: 0.99842644}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_R_Pinky_Base
+      parentName: Rig:Bnd_R_Wrist
+      position: {x: 0.098735, y: -0.0054699997, z: -0.027504}
+      rotation: {x: -0.029689461, y: 0.0151676675, z: -0.06794427, w: 0.99713194}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Rig:Bnd_R_Pinky_Middle
+      parentName: Rig:Bnd_R_Pinky_Base
+      position: {x: 0.031174188, y: -1.1368684e-15, z: 0}
+      rotation: {x: 0.003940531, y: -0.017546512, z: -0.037226435, w: 0.99914503}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_R_Pinky_Tip
+      parentName: Rig:Bnd_R_Pinky_Middle
+      position: {x: 0.026353534, y: -1.9895197e-15, z: 0.00000010685273}
+      rotation: {x: -4.656613e-10, y: -0, z: 0.00000000136788, w: 1}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Rig:Bnd_R_Ring_Base
+      parentName: Rig:Bnd_R_Wrist
+      position: {x: 0.101959996, y: -0.0054699997, z: -0.0107839}
+      rotation: {x: -8.854713e-17, y: -6.258091e-18, z: -0.095812365, w: 0.9953994}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig:Bnd_R_Ring_Middle
+      parentName: Rig:Bnd_R_Ring_Base
+      position: {x: 0.03269106, y: 2.2737367e-15, z: -1.6431301e-16}
+      rotation: {x: -0.000000004767583, y: 0.00000028312374, z: -0.03791662, w: 0.9992809}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Rig:Bnd_R_Ring_Tip
+      parentName: Rig:Bnd_R_Ring_Middle
+      position: {x: 0.036342856, y: 0.0000030886206, z: -4.5741187e-16}
+      rotation: {x: -0, y: -0, z: -2.1650837e-32, w: 1}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Rig:Bnd_R_Thumb_Base
+      parentName: Rig:Bnd_R_Wrist
+      position: {x: 0.036755677, y: -0.010663595, z: 0.0359259}
+      rotation: {x: 0.6469583, y: -0.38245273, z: 0.29732132, w: 0.58887595}
+      scale: {x: 1.0000001, y: 1, z: 1.0000002}
+    - name: Rig:Bnd_R_Thumb_Middle
+      parentName: Rig:Bnd_R_Thumb_Base
+      position: {x: 0.028958254, y: -6.3948843e-16, z: 0.00000084404047}
+      rotation: {x: -0.07095694, y: -0.007313638, z: -0.029920127, w: 0.9970038}
+      scale: {x: 1.0000002, y: 0.99999994, z: 1.0000001}
+    - name: Rig:Bnd_R_Thumb_Tip
+      parentName: Rig:Bnd_R_Thumb_Middle
+      position: {x: 0.022336774, y: -7.105427e-17, z: 0}
+      rotation: {x: 0.0011117904, y: 0.033904277, z: 0.0035499912, w: 0.99941814}
+      scale: {x: 1, y: 0.99999994, z: 1.0000001}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
