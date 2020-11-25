@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 position;
 
     //Running
-    [HideInInspector]
+    [SerializeField]
     private bool _isRunning;
     public bool IsRunning 
     { 
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     private bool lineOfSight;
 
     //Crouch
-    [HideInInspector]
+    [SerializeField]
     private bool _isCrouching;
     public bool IsCrouching
     {
@@ -85,6 +85,8 @@ public class PlayerController : MonoBehaviour
     public GameObject visibleInd;
     public int abilityNum;
     public bool inRange;
+    public bool searchingForSight;
+    public bool abilityClicked;
     //[HideInInspector]
     public bool[] abilityAllowed;
 
@@ -124,6 +126,10 @@ public class PlayerController : MonoBehaviour
     public InGameMenu menu;
 
     public bool startDead;
+
+    //Animations
+    public Animator anim;
+    private Vector3 movingCheck;
     private void Awake()
     {
         Initialize();
@@ -143,7 +149,6 @@ public class PlayerController : MonoBehaviour
             {
                 TestOffLink();
             }
-            
             Attack();
             Respawn();
             Interact();
@@ -158,6 +163,11 @@ public class PlayerController : MonoBehaviour
             abilityActive = false;
         }
         SetIndicator();
+        if (!IsCurrentPlayer)
+        {
+            abilityActive = false;
+        }
+        Animations();
     }
     private void Initialize()
     {
@@ -426,7 +436,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
     public void Attack()
     {
         if (abilityNum == 9)
@@ -522,8 +531,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
-
     public void UseAbility(int tempAbilityNum)
     {
         if (abilityAllowed[tempAbilityNum])
@@ -543,11 +550,7 @@ public class PlayerController : MonoBehaviour
                 abilityActive = false;
                 abilityNum = 0;
             }
-        } else
-        {
-            Debug.Log(tempAbilityNum);
         }
-
     }
     private void TestOffLink()
     {
@@ -590,6 +593,32 @@ public class PlayerController : MonoBehaviour
         navMeshAgent.ResetPath();
     }
 
+    private void Animations()
+    {
+        if (IsCrouching)
+        {
+            anim.SetBool("IsCrouching", true);
+        } else
+        {
+            anim.SetBool("IsCrouching", false);
+        }
+        if (IsRunning)
+        {
+            anim.SetBool("IsRunning", true);
+        }
+        else
+        {
+            anim.SetBool("IsRunning", false);
+        }
+        if (movingCheck == transform.position)
+        {
+            anim.SetBool("IsWalking", false);
+        } else
+        {
+            anim.SetBool("IsWalking", true);
+            movingCheck = transform.position;
+        }
+    }
     private void KeyControls()
     {
         if (Input.GetKeyDown(KeyCode.Space))
