@@ -252,7 +252,7 @@ public partial class FOVRenderer : MonoBehaviour
     private void AddVertexPoint(Vector3 sample, SampleType sampleType)
     {
 #if UNITY_EDITOR
-        if (debuggingLogging) Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>");
+        if (debuggingLogging) Debug.Log("<i><size=10>\t\t\t\t\t\t\tAdded vertex: " + sample + " with type: <b><size=12>" + sampleType + "</size></b></size></i>" + " with index: " + vertexPoints.Count);
 #endif
         lastSampleType = sampleType;
 
@@ -324,7 +324,7 @@ public partial class FOVRenderer : MonoBehaviour
             if (vertexPoints[i - 1].pairNr != vertexPoints[i].pairNr)
                 continue;
 
-            Debug.Log("MOi" + AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) + " " + AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f));
+            //Debug.Log("MOi" + AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) + " " + AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f));
 
             if (ArePairEdges(vertexPoints[i - 1], vertexPoints[i], v1, v2, i))
             {

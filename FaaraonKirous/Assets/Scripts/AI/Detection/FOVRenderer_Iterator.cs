@@ -68,17 +68,24 @@ public partial class FOVRenderer
 #if UNITY_EDITOR
             reSampleXCorner = disableReSampling ? Vector3.zero : reSampleXCorner;
 #endif
+            //Re adjust the floor if needed
             if (reSampleXCorner != Vector3.zero && LastAddedVertexPoint.sampleType == SampleType.Floor)
             {
+                RaycastHit testRayHit;
                 Vector3 reDirection = (ConvertGlobal(reSampleXCorner) - origin + Vector3.up * 0.1f).normalized;
                 float xAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.x;
                 float yAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.y;
-                //Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
-                Vector3 reSample = GetSamplePoint(origin, reDirection, SightRange, out raycastHit, Color.red);
+                Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
+                Vector3 reSample = GetSamplePoint(origin, reDirection, SightRange, out testRayHit, Color.red);
                 //ACylinder(reSample);
 
-                if (AreSimilarHeight(sample, reSample))
+                if (AreSimilarHeight(sample, reSample) && HitPointIsUpFacing(testRayHit))
+                {
+                    sample = reSample;
+                    raycastHit = testRayHit;
                     ReplaceVertexPointVertex(LastAddedVertexPoint, reSample);
+                }
+
                 //else
                  //   Debug.Log("Did not replace resample: y: " + y + " x: " + xIteration);
                 //InspectSample(true, xIteration, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
