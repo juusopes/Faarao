@@ -54,22 +54,19 @@ public class ObjectiveCounter: MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (((other.gameObject.tag == "Player" && !pharaohOnly && !priestOnly) || (other.gameObject == pharaoh && pharaohOnly) || (other.gameObject == priest && priestOnly)) && objNum > 0 && !objectiveDone)
-        //{
-        //    objectiveDone = true;
-        //    objectiveDoneMark.SetActive(true);
-
-        //    objectiveContoller.objectiveDone[objNum - 1] = true;
-
-        //    rewards.UpdateObjectives();
-
-        //    this.gameObject.SetActive(false);
-        //}
-
         if (other.gameObject.tag == "Player" && objNum == 0)
         {
             objectiveContoller.playersInside++;
             inEndPoint = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player" && objNum == 0)
+        {
+            objectiveContoller.playersInside--;
+            inEndPoint = false;
         }
     }
 }
