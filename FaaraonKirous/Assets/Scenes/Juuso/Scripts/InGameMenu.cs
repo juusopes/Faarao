@@ -24,6 +24,7 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
+    [SerializeField]
     public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     public GameObject gameplayButton, audioButton, controlsButton, videoButton;
