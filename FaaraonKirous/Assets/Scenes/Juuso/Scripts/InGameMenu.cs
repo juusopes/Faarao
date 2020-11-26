@@ -24,16 +24,20 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
-    [SerializeField]
+    [HideInInspector]
     public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
+    [HideInInspector]
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
+    [HideInInspector]
     public GameObject gameplayButton, audioButton, controlsButton, videoButton;
 
     // TODO: For testing
     public GameObject objectivePanel;
 
     public int savedLevel;
+    [HideInInspector]
     public float lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ;
+    [HideInInspector]
     public float lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2;
 
     public Text timeText;

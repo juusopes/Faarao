@@ -8,11 +8,14 @@ public class UnitInteractions : MonoBehaviour
     public float cooldownTime;
     public float nextFireTime;
     public bool isStanding = true;
+    public bool isStanding2 = true;
     public bool onCooldown = false;
 
     //public Texture2D cursor, cursorInteract, cursorAttack;
     public bool checkbox;
     public GameObject standing, crouching;
+    public GameObject standing2, crouching2;
+
     //public Image imageCooldown;
 
     public GameObject character1, character2;
@@ -29,182 +32,134 @@ public class UnitInteractions : MonoBehaviour
     public PlayerController ActiveAbilities;
     public PlayerController ActiveAbilities2;
 
+    public int activeCharacter;
+
 
 
     private void Start()
     {
         crouching.SetActive(false);
+
+        // TODO
+        activeCharacter = 1;
     }
 
     private void Update()
     {
+        AllowedAbilities();
+    }
+
+    public void AllowedAbilities()
+    {
         bool menuActivated = GetComponent<InGameMenu>().menuActive;
-        //bool allowedAbilities = GetComponent<PlayerController>().abilityAllowed[];
 
         int allowedAbilities = 0;
-        for (int i = 0; i < 11; i++)
-        {
-            bool v = GameObject.Find("Pharaoh").GetComponent<PlayerController>().abilityAllowed[i];
-            if (v)
-            {
-                //print(allowedAbilities);
-                if(allowedAbilities == 10)
-                {
-                    skillR1.SetActive(true);
-                }
-                if (allowedAbilities == 1)
-                {
-                    skillQ1.SetActive(true);
-                }
-                if (allowedAbilities == 3)
-                {
-                    skillW1.SetActive(true);
-                }
-                if (allowedAbilities == 5)
-                {
-                    skillE1.SetActive(true);
-                }
-            }
-            allowedAbilities++;
-        }
-
-        allowedAbilities = 0;
-
-        for (int i = 0; i < 11; i++)
-        {
-            bool v = GameObject.Find("Priest").GetComponent<PlayerController>().abilityAllowed[i];
-            if (v)
-            {
-                //print(allowedAbilities);
-                if (allowedAbilities == 1)
-                {
-                    skillQ2.SetActive(true);
-                }
-                if (allowedAbilities == 2)
-                {
-                    skillW2.SetActive(true);
-                }
-                if (allowedAbilities == 3)
-                {
-                    skillE2.SetActive(true);
-                }
-            }
-            allowedAbilities++;
-        }
-
-
-
-        //for(each item in the list)
-        //{
-        //    if (item[i])
-        //        trueItem = i;
-        //}
-
-        //for(each item in the list)
-        //{
-        //    if (i != trueItem)
-        //        item[i] = false;
-        //}
-
-        //int currentCharacter2 = GetComponent<PlayerController>().abilityAllowed[];
-        //print(currentCharacter2 + " is currently controlled");
 
         bool isDead11 = isDead1.isDead;
         bool isDead22 = isDead2.isDead;
 
-        //if(isDead11)
-        //{
-        //    skillGroup1.SetActive(false);
-        //}
-        //if (isDead22)
-        //{
-        //    skillGroup2.SetActive(false);
-        //}
-
-        //print("pharaoh is dead = " + isDead11);
-        //print("priest is dead = " + isDead22);
-
         // cannot use abilities etc. if menu is active
         if (!menuActivated)
         {
+            for (int i = 0; i < 11; i++)
+            {
+                bool v = GameManager._instance.Pharaoh.GetComponent<PlayerController>().abilityAllowed[i];
+                if (v)
+                {
+                    if (allowedAbilities == 10)
+                    {
+                        skillR1.SetActive(true);
+                    }
+                    if (allowedAbilities == 1)
+                    {
+                        skillQ1.SetActive(true);
+                    }
+                    if (allowedAbilities == 3)
+                    {
+                        skillW1.SetActive(true);
+                    }
+                    if (allowedAbilities == 2)
+                    {
+                        skillE1.SetActive(true);
+                    }
+                }
+                allowedAbilities++;
+            }
+
+            allowedAbilities = 0;
+
+            for (int i = 0; i < 11; i++)
+            {
+                bool v = GameManager._instance.Priest.GetComponent<PlayerController>().abilityAllowed[i];
+                if (v)
+                {
+                    if (allowedAbilities == 1)
+                    {
+                        skillQ2.SetActive(true);
+                    }
+                    if (allowedAbilities == 3)
+                    {
+                        skillW2.SetActive(true);
+                    }
+                    if (allowedAbilities == 2)
+                    {
+                        skillE2.SetActive(true);
+                    }
+                }
+                allowedAbilities++;
+            }
+            allowedAbilities = 0;
+
             if (Input.GetButtonDown("Stance"))
             {
-                if (isStanding)
+                if (isStanding && activeCharacter == 1 && !isDead11)
                 {
-                    print("Unit is now crouching");
                     standing.SetActive(false);
                     crouching.SetActive(true);
                     isStanding = false;
                 }
-                else
+                else if (!isStanding && activeCharacter == 1 && !isDead11)
                 {
-                    print("Unit is now standing");
                     standing.SetActive(true);
                     crouching.SetActive(false);
                     isStanding = true;
+                }
+
+                if (isStanding2 && activeCharacter == 2 && !isDead22)
+                {
+                    standing2.SetActive(false);
+                    crouching2.SetActive(true);
+                    isStanding2 = false;
+                }
+                else if (!isStanding2 && activeCharacter == 2 && !isDead22)
+                {
+                    standing2.SetActive(true);
+                    crouching2.SetActive(false);
+                    isStanding2 = true;
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
+                activeCharacter = 1;
+
                 character1.SetActive(true);
                 character2.SetActive(false);
 
-                if (!isDead11)
-                {
-                    skillGroup1.SetActive(true);
-                }
+                skillGroup1.SetActive(true);
                 skillGroup2.SetActive(false);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
+                activeCharacter = 2;
+
                 character1.SetActive(false);
                 character2.SetActive(true);
 
-                if (!isDead22)
-                {
-                    skillGroup2.SetActive(true);
-                }
                 skillGroup1.SetActive(false);
+                skillGroup2.SetActive(true);
             }
         }
-
-
-        //if (Input.GetButton("Attack"))
-        //{
-        //    Cursor.SetCursor(cursorAttack, Vector2.zero, CursorMode.ForceSoftware);
-        //}
-        //else if (Input.GetButton("Interact"))
-        //{
-        //    Cursor.SetCursor(cursorInteract, Vector2.zero, CursorMode.ForceSoftware);
-        //}
-        //else
-        //{
-        //    Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
-        //}
-
-        //if (Time.time > nextFireTime)
-        //{
-        //    onCooldown = false;
-        //    imageCooldown.fillAmount = 1;
-
-        //    if (Input.GetButtonDown("Ability"))
-        //    {
-        //        cooldownTime = 5;
-        //        onCooldown = true;
-
-        //        nextFireTime = Time.time + cooldownTime;
-        //    }
-        //}
-
-        //if (onCooldown)
-        //{
-        //    imageCooldown.fillAmount -= 1 / cooldownTime * Time.deltaTime;
-        //}
-        //if (!onCooldown)
-        //{
-        //    imageCooldown.fillAmount = 0;
-        //}
     }
 }
