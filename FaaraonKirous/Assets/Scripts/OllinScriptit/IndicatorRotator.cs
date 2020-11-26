@@ -7,9 +7,6 @@ public class IndicatorRotator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(transform.GetChild(0).gameObject);
-        Debug.Log(transform.GetChild(1).gameObject);
-        Debug.Log(transform.GetChild(2).gameObject);
     }
 
     // Update is called once per frame
