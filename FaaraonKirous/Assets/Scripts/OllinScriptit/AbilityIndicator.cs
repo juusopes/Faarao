@@ -18,6 +18,7 @@ public class AbilityIndicator : MonoBehaviour
     public Vector3 endPoint;
     private float range;
     private bool abilityClicked;
+    private int previousAbilityNum;
 
     private bool calculateNeeded;
     //AbilityTargets
@@ -50,6 +51,7 @@ public class AbilityIndicator : MonoBehaviour
         line = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
         line.transform.parent = null;
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
+        previousAbilityNum = 0;
     }
     private void MoveInd()
     {
@@ -132,10 +134,15 @@ public class AbilityIndicator : MonoBehaviour
 
     private void ChangeAll()
     {
-        if (player.GetComponent<PlayerController>().abilityNum > 0)
+        if (player.GetComponent<PlayerController>().abilityNum > 0 && previousAbilityNum != player.GetComponent<PlayerController>().abilityNum)
         {
             SwitchIndicator(player.GetComponent<PlayerController>().abilityNum);
             SetCircleRange(player.GetComponent<PlayerController>().abilityNum);
+            previousAbilityNum = player.GetComponent<PlayerController>().abilityNum;
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 0)
+        {
+            previousAbilityNum = 0;
         }
         //if (player.GetComponent<PlayerController>().abilityNum == 2)
         //{
