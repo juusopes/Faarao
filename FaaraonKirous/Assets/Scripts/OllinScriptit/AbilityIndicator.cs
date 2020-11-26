@@ -240,7 +240,7 @@ public class AbilityIndicator : MonoBehaviour
                     lineOfSightPoint = hit.transform.position;
                     lineOfSightPoint.y += 0.3f;
                     lineOfSightPointBool = true;
-                    hitPos.y = playerPos.y;
+                    //hitPos.y = playerPos.y;
                     float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
                     //LineOfSightCheck
                     if (Physics.Raycast(player.transform.position, lineOfSightPoint - player.transform.position, out hit, Vector3.Distance(player.transform.position, lineOfSightPoint) - 0.3f, RayCaster.attackLayerMask))
@@ -312,7 +312,7 @@ public class AbilityIndicator : MonoBehaviour
         else
         {
             playerPos = player.GetComponent<PlayerController>().GetPosition();
-            lineOfSightPoint.y = playerPos.y;
+           // lineOfSightPoint.y = playerPos.y;
             lineOfSightPoint.y += 0.3f;
             float distance = (Vector3.Distance(playerPos, lineOfSightPoint)) / 4;
             if (distance <= range + range * 0.1)

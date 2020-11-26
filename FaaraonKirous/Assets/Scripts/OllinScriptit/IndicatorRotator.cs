@@ -7,7 +7,9 @@ public class IndicatorRotator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log(transform.GetChild(0).gameObject);
+        Debug.Log(transform.GetChild(1).gameObject);
+        Debug.Log(transform.GetChild(2).gameObject);
     }
 
     // Update is called once per frame
@@ -22,7 +24,7 @@ public class IndicatorRotator : MonoBehaviour
         {
             transform.GetChild(0).transform.Rotate(0, 0, 25f * Time.deltaTime);
             transform.GetChild(1).transform.Rotate(0, 0, -25f * Time.deltaTime);
-            transform.GetChild(2).transform.Rotate(0, 0, 25 * Time.deltaTime);
+            transform.GetChild(2).transform.Rotate(0, 0, 25f * Time.deltaTime);
         }
     }
 }

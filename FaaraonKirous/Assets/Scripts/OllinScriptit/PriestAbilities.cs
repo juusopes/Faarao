@@ -13,7 +13,8 @@ public class PriestAbilities : MonoBehaviour
     private Vector3 telekinesisHeight;
     //WarpSpell
     public bool warpSpellActive;
-        
+    private Vector3 warpPosition;    
+
     private Vector3 playerSavePos;
     private Vector3 targetSavePos;
     public GameObject[] indicatorList;
@@ -114,14 +115,12 @@ public class PriestAbilities : MonoBehaviour
 
     public void WarpPosition()
     {
-        Debug.Log("WARP?");
         if (GetComponent<PlayerController>().IsCurrentPlayer)
         {
             //TempSetActive
             if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)
             {
                 warpSpellActive = true;
-                Debug.Log("WARP ACTIVE");
             }
             //WarpSpell
             if (levelControl.targetObject != null)
@@ -138,17 +137,20 @@ public class PriestAbilities : MonoBehaviour
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit = new RaycastHit();
-                    Vector3 tempV3;
                     Debug.Log("WARP!");
                     //DoubleClick Check
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                     {
                         Debug.Log("MORE WARP!");
-                        tempV3 = hit.point;
-                        this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(tempV3);
+                        warpPosition = hit.point;
                     }
-                    GetComponent<PlayerController>().abilityActive = false;
-                    GetComponent<PlayerController>().abilityNum = 0;
+                }
+                if (GetComponent<PlayerController>().inRange && GetComponent<PlayerController>().abilityClicked && !GetComponent<PlayerController>().searchingForSight)
+                {
+                    this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
+                    warpPosition = transform.position;
+                    //GetComponent<PlayerController>().abilityActive = false;
+                    //GetComponent<PlayerController>().abilityNum = 0;
                 }
             }
         }
