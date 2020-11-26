@@ -39,12 +39,11 @@ public class AbilityController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             abilityActivated = true;
-            Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
-                 + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
+            //Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
+            //     + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
         }
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
-        Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
-                + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
+              
 
         if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange && abilityActivated && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight)
         {
@@ -108,7 +107,7 @@ public class AbilityController : MonoBehaviour
     private void UseAbility(RaycastHit hit)
     {
         //TODO: Lazy ? no : object pooling...
-        Debug.Log(abilityOption);
+        //Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)
             Destroy(lastSpawnedAbility);
 
