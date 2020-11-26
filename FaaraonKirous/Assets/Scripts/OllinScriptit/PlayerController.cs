@@ -131,6 +131,7 @@ public class PlayerController : MonoBehaviour
     //Animations
     public Animator anim;
     private Vector3 movingCheck;
+
     private void Awake()
     {
         Initialize();
@@ -692,6 +693,32 @@ public class PlayerController : MonoBehaviour
     public bool PointerOverUI()
     {
         return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void CooldownCheck()
+    {
+        //if (Time.time > nextFireTime)
+        //{
+        //    onCooldown = false;
+        //    imageCooldown.fillAmount = 1;
+
+        //    if (Input.GetButtonDown("Ability"))
+        //    {
+        //        cooldownTime = 5;
+        //        onCooldown = true;
+
+        //        nextFireTime = Time.time + cooldownTime;
+        //    }
+        //}
+
+        //if (onCooldown)
+        //{
+        //    imageCooldown.fillAmount -= 1 / cooldownTime * Time.deltaTime;
+        //}
+        //if (!onCooldown)
+        //{
+        //    imageCooldown.fillAmount = 0;
+        //}
     }
 }
 
