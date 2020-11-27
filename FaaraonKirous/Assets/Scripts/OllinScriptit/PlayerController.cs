@@ -134,6 +134,8 @@ public class PlayerController : MonoBehaviour
     //Ability Limits
     public int[] abilityLimits;
 
+    public UnitInteractions unitInteractions;
+
     private void Awake()
     {
         Initialize();
@@ -648,6 +650,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Crouch();
+            UpdateUI();
         }
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -734,6 +737,11 @@ public class PlayerController : MonoBehaviour
         //{
         //    imageCooldown.fillAmount = 0;
         //}
+    }
+
+    public void UpdateUI()
+    {
+        unitInteractions.StanceCheck();
     }
 }
 

@@ -42,13 +42,11 @@ public class ObjController : MonoBehaviour
     {
         if (playersInside < 0)
         {
-            Debug.Log("TOO FEW!");
             playersInside = 0;
         }
         if (playersInside > 2)
         {
             playersInside = 2;
-            Debug.Log("TOO MANY!");
         }
         if (playersInside == 2)
         {

@@ -39,6 +39,11 @@ public class ObjectiveCounter: MonoBehaviour
 
     public void Update()
     {
+        CheckIfDone();
+    }
+
+    public void CheckIfDone()
+    {
         if (activated.activated == true)
         {
             objectiveDone = true;

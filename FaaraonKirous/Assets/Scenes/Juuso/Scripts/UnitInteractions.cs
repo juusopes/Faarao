@@ -27,8 +27,6 @@ public class UnitInteractions : MonoBehaviour
     [HideInInspector]
     public GameObject skillQ2, skillW2, skillE2;
 
-    public DeathScript isDead1, isDead2;
-
     //public GameManager currentCharacter;
     public PlayerController ActiveAbilities;
     public PlayerController ActiveAbilities2;
@@ -58,9 +56,6 @@ public class UnitInteractions : MonoBehaviour
         bool menuActivated = GetComponent<InGameMenu>().menuActive;
 
         int allowedAbilities = 0;
-
-        bool isDead11 = isDead1.isDead;
-        bool isDead22 = isDead2.isDead;
 
         // cannot use abilities etc. if menu is active
         if (!menuActivated)
@@ -113,49 +108,49 @@ public class UnitInteractions : MonoBehaviour
                 allowedAbilities++;
             }
             allowedAbilities = 0;
+        }
+    }
 
-            if (Input.GetButtonDown("Stance"))
-            {
-                if (isStanding && activeCharacter == 1 && !isDead11)
-                {
-                    standing.SetActive(false);
-                    crouching.SetActive(true);
-                    isStanding = false;
-                }
-                else if (!isStanding && activeCharacter == 1 && !isDead11)
-                {
-                    standing.SetActive(true);
-                    crouching.SetActive(false);
-                    isStanding = true;
-                }
+    public void StanceCheck()
+    {
+        if (isStanding && activeCharacter == 1)
+        {
+            standing.SetActive(false);
+            crouching.SetActive(true);
+            isStanding = false;
+        }
+        else if (!isStanding && activeCharacter == 1)
+        {
+            standing.SetActive(true);
+            crouching.SetActive(false);
+            isStanding = true;
+        }
 
-                if (isStanding2 && activeCharacter == 2 && !isDead22)
-                {
-                    standing2.SetActive(false);
-                    crouching2.SetActive(true);
-                    isStanding2 = false;
-                }
-                else if (!isStanding2 && activeCharacter == 2 && !isDead22)
-                {
-                    standing2.SetActive(true);
-                    crouching2.SetActive(false);
-                    isStanding2 = true;
-                }
-            }
+        if (isStanding2 && activeCharacter == 2)
+        {
+            standing2.SetActive(false);
+            crouching2.SetActive(true);
+            isStanding2 = false;
+        }
+        else if (!isStanding2 && activeCharacter == 2)
+        {
+            standing2.SetActive(true);
+            crouching2.SetActive(false);
+            isStanding2 = true;
         }
     }
 
     public void SelectPharaohUI()
     {
-            activeCharacter = 1;
+        activeCharacter = 1;
 
-            generalSkillGroup.SetActive(true);
+        generalSkillGroup.SetActive(true);
 
-            character1.SetActive(true);
-            character2.SetActive(false);
+        character1.SetActive(true);
+        character2.SetActive(false);
 
-            skillGroup1.SetActive(true);
-            skillGroup2.SetActive(false);
+        skillGroup1.SetActive(true);
+        skillGroup2.SetActive(false);
     }
 
     public void SelectPriestUI()

@@ -44,7 +44,7 @@ public class LevelController : MonoBehaviour
     public bool[] priestAbilities;
     public bool[] pharaohAbilities;
 
-    public UnitInteractions sn;
+    public UnitInteractions unitInteractions;
     
 
 
@@ -129,7 +129,7 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.SelectCharacter(ObjectType.priest);
-                sn.SelectPriestUI();
+                unitInteractions.SelectPriestUI();
             }
             else
             {
@@ -145,7 +145,7 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.SelectCharacter(ObjectType.pharaoh);
-                sn.SelectPharaohUI();
+                unitInteractions.SelectPharaohUI();
             }
             else
             {
@@ -161,7 +161,7 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.UnselectCharacter();
-                sn.UnselectCharacter();
+                unitInteractions.UnselectCharacter();
             }
             else
             {

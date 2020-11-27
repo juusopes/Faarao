@@ -317,9 +317,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 3.5291667
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.76458335, z: 0}
 --- !u!195 &5706328075926723927
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -368,6 +368,7 @@ MonoBehaviour:
   searchingForSight: 0
   abilityClicked: 0
   abilityAllowed: 0101010101010101010101
+  abilityCooldowns: []
   isInvisible: 0
   interactObject: {fileID: 0}
   targetEnemy: {fileID: 0}
@@ -376,6 +377,7 @@ MonoBehaviour:
   startDead: 0
   anim: {fileID: 7075264971444562899}
   abilityLimits: 
+  unitInteractions: {fileID: 0}
 --- !u!114 &2795708155777838719
 MonoBehaviour:
   m_ObjectHideFlags: 0
