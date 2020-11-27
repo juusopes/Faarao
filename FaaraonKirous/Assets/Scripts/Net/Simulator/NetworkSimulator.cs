@@ -41,7 +41,7 @@ public class NetworkSimulator
         lock (_lock)
         {
             long scheduledTime = DateTime.Now.Ticks
-                + (TimeSpan.TicksPerMillisecond * _rand.Next(_config.MinLatency, _config.MaxLatency + 1));
+                + TimeSpan.TicksPerMillisecond * _rand.Next(_config.MinLatency, _config.MaxLatency + 1);
             _packets.Enqueue(new OutgoingPacket()
             {
                 EndPoint = endPoint,

@@ -57,7 +57,7 @@ class OffMeshLinkMovement
 
         Vector3[] route = new Vector3[] {
                 charTransform.position,
-                data.endPos + (Vector3.up * navMeshAgent.baseOffset)
+                data.endPos + Vector3.up * navMeshAgent.baseOffset
                 };
 
         OffMeshLinkRoute linkRoute = new OffMeshLinkRoute();
@@ -77,8 +77,8 @@ class OffMeshLinkMovement
             return null;
         Vector3[] route = new Vector3[] {
                 charTransform.position,
-                ((charTransform.position + data.endPos) / 2) + (Vector3.up * charJumpHeight),
-                data.endPos + (Vector3.up * navMeshAgent.baseOffset)
+                (charTransform.position + data.endPos) / 2 + Vector3.up * charJumpHeight,
+                data.endPos + Vector3.up * navMeshAgent.baseOffset
                 };
 
         OffMeshLinkRoute linkRoute = new OffMeshLinkRoute();
@@ -111,15 +111,15 @@ class OffMeshLinkMovement
         if (Physics.Raycast(lowerPos + Vector3.up, faceDirection, out hit, 1f, RayCaster.ladderLayerMask))
             wallPos = hit.point;
         else
-            wallPos = lowerPos + (faceDirection / 2);
+            wallPos = lowerPos + faceDirection / 2;
 
-        xzPos = wallPos - (faceDirection.normalized * charRadius);
+        xzPos = wallPos - faceDirection.normalized * charRadius;
 
 
         Vector3 ladder_bottom = new Vector3(xzPos.x, lowerPos.y + navMeshAgent.baseOffset, xzPos.z);
         Vector3 ladder_top = new Vector3(xzPos.x, higherPos.y + navMeshAgent.baseOffset, xzPos.z);
         //Vector3 ledge_top = higherPos + Vector3.up * CharHeight;
-        Vector3 ledge_top = ladder_top + (faceDirection * (1 + charRadius));
+        Vector3 ledge_top = ladder_top + faceDirection * (1 + charRadius);
 
         if (goingUp)
             route = new Vector3[] {
@@ -217,7 +217,7 @@ class OffMeshLinkMovement
         navMeshAgent.updateRotation = false;
 
         Vector3 startPos = navMeshAgent.transform.position;
-        Vector3 endPos = data.endPos + (Vector3.up * navMeshAgent.baseOffset);
+        Vector3 endPos = data.endPos + Vector3.up * navMeshAgent.baseOffset;
         float duration = (endPos - startPos).magnitude / navMeshAgent.speed;
         float t = 0.0f;
         float tStep = 1.0f / duration;

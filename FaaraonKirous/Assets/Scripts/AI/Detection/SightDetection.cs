@@ -92,11 +92,11 @@ public class SightDetection
         {
             scalingDirection = CanSeeObject ? 1 : -1;
             float lineSpeedScale = scalingDirection == 1 ? lineSpeed : lineSpeed * lineShrinkSpeedMultiplier;
-            lineSpeedScale = lineSpeedScale + (lineSpeedRangeMultiplier * linePercentage);
+            lineSpeedScale = lineSpeedScale + lineSpeedRangeMultiplier * linePercentage;
             //TODO: Fix speed when AI is moving -> solution STOP AI MOVING WOOOOWW
-            lineLenght = CurrentLineLenght + (scalingDirection * lineSpeedScale * Time.deltaTime);
+            lineLenght = CurrentLineLenght + scalingDirection * lineSpeedScale * Time.deltaTime;
             
-            endPoint = OwnPosition + (TargetDirection * lineLenght);
+            endPoint = OwnPosition + TargetDirection * lineLenght;
             //Debug.Log(Vector3.Distance(end, OwnPosition), parentObject);
 
             UpdateLineColor();

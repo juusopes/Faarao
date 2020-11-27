@@ -74,7 +74,7 @@ public class Book : MonoBehaviour {
     {
         float scaleFactor = 1;
         if (canvas) scaleFactor = canvas.scaleFactor;
-        float pageWidth = ((BookPanel.rect.width* scaleFactor) - 1) / 2;
+        float pageWidth = (BookPanel.rect.width* scaleFactor - 1) / 2;
         float pageHeight = BookPanel.rect.height* scaleFactor;
         Left.gameObject.SetActive(false);
         Right.gameObject.SetActive(false);
@@ -90,11 +90,11 @@ public class Book : MonoBehaviour {
         radius1 = Vector2.Distance(sb, ebr);
         float scaledPageWidth = pageWidth / scaleFactor;
         float scaledPageHeight = pageHeight / scaleFactor;
-        radius2 = Mathf.Sqrt((scaledPageWidth * scaledPageWidth) + (scaledPageHeight * scaledPageHeight));
-        ClippingPlane.rectTransform.sizeDelta = new Vector2(scaledPageWidth*2, scaledPageHeight + (scaledPageWidth * 2));
-        Shadow.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + (scaledPageWidth * 0.6f));
-        ShadowLTR.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + (scaledPageWidth * 0.6f));
-        NextPageClip.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + (scaledPageWidth * 0.6f));
+        radius2 = Mathf.Sqrt(scaledPageWidth * scaledPageWidth + scaledPageHeight * scaledPageHeight);
+        ClippingPlane.rectTransform.sizeDelta = new Vector2(scaledPageWidth*2, scaledPageHeight + scaledPageWidth * 2);
+        Shadow.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + scaledPageWidth * 0.6f);
+        ShadowLTR.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + scaledPageWidth * 0.6f);
+        NextPageClip.rectTransform.sizeDelta = new Vector2(scaledPageWidth, scaledPageHeight + scaledPageWidth * 0.6f);
     }
     public Vector3 transformPoint(Vector3 global)
     {
@@ -197,7 +197,7 @@ public class Book : MonoBehaviour {
         float T0_CORNER_Angle = Mathf.Atan2(T0_CORNER_dy, T0_CORNER_dx);
         float T0_T1_Angle = 90 - T0_CORNER_Angle;
         
-        float T1_X = t0.x - (T0_CORNER_dy * Mathf.Tan(T0_CORNER_Angle));
+        float T1_X = t0.x - T0_CORNER_dy * Mathf.Tan(T0_CORNER_Angle);
         T1_X = normalizeT1X(T1_X, bookCorner, sb);
         t1 = new Vector3(T1_X, sb.y, 0);
         ////////////////////////////////////////////////
