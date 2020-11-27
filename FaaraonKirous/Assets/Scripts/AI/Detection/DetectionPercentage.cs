@@ -26,9 +26,9 @@ class DetectionPercentageCalculator
             {
                 scalingDirection = CanSeeObject ? 1 : -1;
                 float lineSpeedScale = scalingDirection == 1 ? lineSpeed : lineSpeed * lineShrinkSpeedMultiplier;
-                lineSpeedScale = lineSpeedScale + lineSpeedRangeMultiplier * sightPercentage;
+                lineSpeedScale = lineSpeedScale + (lineSpeedRangeMultiplier * sightPercentage);
 
-                lineLenght = Mathf.Min(lineLenght + scalingDirection * lineSpeedScale * Time.deltaTime, maxLenght);
+                lineLenght = Mathf.Min(lineLenght + (scalingDirection * lineSpeedScale * Time.deltaTime), maxLenght);
 
                 sightPercentage = lineLenght / maxLenght;
 
