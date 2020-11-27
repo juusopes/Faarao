@@ -100,10 +100,10 @@ public class Waypoint : MonoBehaviour
     private void DrawHarc(float lenght, Vector3 offset, Color color)
     {
         Quaternion rotation1 = Quaternion.AngleAxis(-horizontalArc, Vector3.up);
-        Vector3 targetPos1 = rotation1 * transform.forward * lenght + transform.position;
+        Vector3 targetPos1 = (rotation1 * transform.forward * lenght) + transform.position;
 
         Quaternion rotation2 = Quaternion.AngleAxis(horizontalArc, Vector3.up);
-        Vector3 targetPos2 = rotation2 * transform.forward * lenght + transform.position;
+        Vector3 targetPos2 = (rotation2 * transform.forward * lenght) + transform.position;
 
         Gizmos.color = color;
         Gizmos.DrawLine(transform.position + offset, targetPos1 + offset);
@@ -112,7 +112,7 @@ public class Waypoint : MonoBehaviour
 
     private void DrawWalkPast(float lenght, Vector3 offset, Color color)
     {
-        Vector3 vectorInFront = transform.position + transform.forward * lenght;
+        Vector3 vectorInFront = transform.position + (transform.forward * lenght);
 
         Gizmos.color = color;
         Gizmos.DrawLine(transform.position + offset, vectorInFront + offset);
