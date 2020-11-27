@@ -167,7 +167,7 @@ public class LevelController : MonoBehaviour
             {
                 if (NetworkManager._instance.ShouldSendToServer)
                 {
-                    ClientSend.UnselectCharacter();
+                    ClientSend.UnselectCharacterRequest();
                 }
             }
         }
