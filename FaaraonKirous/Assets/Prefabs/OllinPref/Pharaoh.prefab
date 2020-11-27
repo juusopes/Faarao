@@ -411,6 +411,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  abilityLimitList: 
   lineActive: 
 --- !u!114 &-2370286539409642136
 MonoBehaviour:
@@ -509,6 +510,18 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 3db06f332ce0c494e99012fae8c3847b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3db06f332ce0c494e99012fae8c3847b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3db06f332ce0c494e99012fae8c3847b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3db06f332ce0c494e99012fae8c3847b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3db06f332ce0c494e99012fae8c3847b, type: 3}
       propertyPath: m_Name

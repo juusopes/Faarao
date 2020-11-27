@@ -11,6 +11,7 @@ public class PharaohAbilities : MonoBehaviour
     private float invisibilityTimer;
     public GameObject[] indicatorList;
     public float[] rangeList;
+    public int[] abilityLimitList;
     public bool[] lineActive;
 
     // Start is called before the first frame update
