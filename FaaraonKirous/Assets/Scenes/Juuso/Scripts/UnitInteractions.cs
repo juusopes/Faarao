@@ -47,7 +47,11 @@ public class UnitInteractions : MonoBehaviour
 
     private void Update()
     {
-        AllowedAbilities();
+        if (GameManager._instance.IsFullyLoaded)
+        {
+            AllowedAbilities();
+        }
+        
         SelectCharacter();
         UnselectCharacter();
 

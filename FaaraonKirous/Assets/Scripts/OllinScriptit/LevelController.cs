@@ -124,7 +124,6 @@ public class LevelController : MonoBehaviour
         {
             if (NetworkManager._instance.IsHost)
             {
-                
                 GameManager._instance.SelectCharacter(ObjectType.priest);
             }
             else
@@ -161,7 +160,7 @@ public class LevelController : MonoBehaviour
             {
                 if (NetworkManager._instance.ShouldSendToServer)
                 {
-                    ClientSend.UnselectCharacter();
+                    ClientSend.UnselectCharacterRequest();
                 }
             }
         }

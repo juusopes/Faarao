@@ -219,6 +219,40 @@ public class Packet : IDisposable
     }
     #endregion
 
+    #region Insert Data
+
+    public void Insert(int index, byte value)
+    {
+        _buffer.Insert(index, value);
+    }
+
+    public void Insert(int index, int value)
+    {
+        _buffer.InsertRange(index, BitConverter.GetBytes(value));
+    }
+
+    public void Insert(int index, Vector3 value)
+    {
+        Insert(index, value.x);
+        Insert(index += Constants.floatLengthInBytes, value.y);
+        Insert(index += Constants.floatLengthInBytes, value.z);
+    }
+
+    public void Insert(int index, Quaternion value)
+    {
+        Insert(index, value.x);
+        Insert(index += Constants.floatLengthInBytes, value.y);
+        Insert(index += Constants.floatLengthInBytes, value.z);
+        Insert(index += Constants.floatLengthInBytes, value.w);
+    }
+
+    public void Insert(int index, float value)
+    {
+        _buffer.InsertRange(index, BitConverter.GetBytes(value));
+    }
+
+    #endregion
+
     #region Read Data
     /// <summary>Reads a byte from the packet.</summary>
     /// <param name="moveReadPos">Whether or not to move the buffer's read position.</param>
