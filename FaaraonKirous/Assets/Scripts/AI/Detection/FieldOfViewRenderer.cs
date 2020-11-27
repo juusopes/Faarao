@@ -93,12 +93,12 @@ public class FieldOfViewRenderer : MonoBehaviour
 
             if (Physics.Raycast(origin, direction, out raycastHit, SightRange, RayCaster.viewConeLayerMask))
             {
-                vertex = transform.InverseTransformPoint(origin + (direction * raycastHit.distance));
+                vertex = transform.InverseTransformPoint(origin + direction * raycastHit.distance);
                 uvLenght = raycastHit.distance / SightRange;
             }
             else
             {
-                vertex = transform.InverseTransformPoint(origin + (direction * SightRange));
+                vertex = transform.InverseTransformPoint(origin + direction * SightRange);
                 uvLenght = 1;
             }
 
@@ -144,7 +144,7 @@ public class FieldOfViewRenderer : MonoBehaviour
 
     public void SetAimDirection(Vector3 aimDirection, float fovIn)
     {
-        startingAngle = transform.rotation.eulerAngles.y + (fovIn / 2f) - 90f;
+        startingAngle = transform.rotation.eulerAngles.y + fovIn / 2f - 90f;
         angleIncrease = fovIn / rayCount;
     }
 
