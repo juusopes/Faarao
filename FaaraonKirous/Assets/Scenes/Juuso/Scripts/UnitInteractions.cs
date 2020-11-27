@@ -48,9 +48,7 @@ public class UnitInteractions : MonoBehaviour
     private void Update()
     {
         AllowedAbilities();
-        SelectCharacter();
-        UnselectCharacter();
-
+        //UnselectCharacter();
     }
 
     public void AllowedAbilities()
@@ -145,10 +143,8 @@ public class UnitInteractions : MonoBehaviour
         }
     }
 
-    public void SelectCharacter()
+    public void SelectPharaohUI()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
             activeCharacter = 1;
 
             generalSkillGroup.SetActive(true);
@@ -158,34 +154,31 @@ public class UnitInteractions : MonoBehaviour
 
             skillGroup1.SetActive(true);
             skillGroup2.SetActive(false);
-        }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            activeCharacter = 2;
+    public void SelectPriestUI()
+    {
+        activeCharacter = 2;
 
-            generalSkillGroup.SetActive(true);
+        generalSkillGroup.SetActive(true);
 
-            character1.SetActive(false);
-            character2.SetActive(true);
+        character1.SetActive(false);
+        character2.SetActive(true);
 
-            skillGroup1.SetActive(false);
-            skillGroup2.SetActive(true);
-        }
+        skillGroup1.SetActive(false);
+        skillGroup2.SetActive(true);
     }
 
     public void UnselectCharacter()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            activeCharacter = 0;
+        activeCharacter = 0;
 
-            character1.SetActive(false);
-            character2.SetActive(false);
+        character1.SetActive(false);
+        character2.SetActive(false);
 
-            skillGroup1.SetActive(false);
-            skillGroup2.SetActive(false);
-            generalSkillGroup.SetActive(false);
-        }
+        skillGroup1.SetActive(false);
+        skillGroup2.SetActive(false);
+        generalSkillGroup.SetActive(false);
+
     }
 }
