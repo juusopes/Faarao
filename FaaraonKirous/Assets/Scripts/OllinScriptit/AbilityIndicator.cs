@@ -327,7 +327,7 @@ public class AbilityIndicator : MonoBehaviour
             // lineOfSightPoint.y = playerPos.y;
             lineOfSightPoint.y += 0.3f;
             float distance = (Vector3.Distance(playerPos, lineOfSightPoint)) / 4;
-            if (distance <= range + (range * 0.1))
+            if (distance <= range + range * 0.1)
             {
                 //endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance - range) * 4));
                 //player.GetComponent<PlayerController>().GiveDestination(endPoint);
