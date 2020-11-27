@@ -146,29 +146,24 @@ public class PriestAbilities : MonoBehaviour
                         warpPosition = hit.point;
                     }
                 }
-                if (GetComponent<PlayerController>().inRange && GetComponent<PlayerController>().abilityClicked && !GetComponent<PlayerController>().searchingForSight)
+                if (GetComponent<PlayerController>().inRange
+                    && GetComponent<PlayerController>().abilityClicked
+                    && !GetComponent<PlayerController>().searchingForSight
+                    && GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum] > 0
+                    && (warpPosition.x > this.gameObject.transform.position.x + 0.5f || warpPosition.x < this.gameObject.transform.position.x - 0.5f)
+                     && (warpPosition.y > this.gameObject.transform.position.y + 0.5f || warpPosition.y < this.gameObject.transform.position.y - 0.5f)
+                      && (warpPosition.z > this.gameObject.transform.position.z + 0.5f || warpPosition.z < this.gameObject.transform.position.z - 0.5f))
                 {
                     if (warpPosition.y < this.gameObject.transform.position.y + 5f)
                     {
                         this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
                         warpPosition = transform.position;
+                        GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]--;
                     }
                     //GetComponent<PlayerController>().abilityActive = false;
                     //GetComponent<PlayerController>().abilityNum = 0;
                 }
             }
-        }
-    }
-
-    private void TelekinesisActivate()
-    {
-        if (telekinesisActive)
-        {
-            telekinesisActive = false;
-        }
-        else
-        {
-            telekinesisActive = false;
         }
     }
 
