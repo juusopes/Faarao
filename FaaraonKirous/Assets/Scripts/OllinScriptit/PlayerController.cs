@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
     public bool abilityClicked;
     //[HideInInspector]
     public bool[] abilityAllowed;
-
+    public float[] abilityCooldowns;
 
     //Invisibility
     public bool isInvisible;
