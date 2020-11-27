@@ -30,7 +30,7 @@ public class PriestAbilities : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        Telekinesis();
+        //Telekinesis();
         WarpPosition();
     }
 
@@ -41,77 +41,77 @@ public class PriestAbilities : MonoBehaviour
         telekinesisTimer = 5;
     }
 
-    public void Telekinesis()
-    {
-        if (GetComponent<PlayerController>().IsCurrentPlayer)
-        {
-            //TempSetActive
-            if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)
-            {
-                telekinesisActive = true;
-                if (GetComponent<PlayerController>().visibleInd != null)
-                {
-                    GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "TargetableObject";
-                }
-            }
+    //public void Telekinesis()
+    //{
+    //    if (GetComponent<PlayerController>().IsCurrentPlayer)
+    //    {
+    //        //TempSetActive
+    //        if (GetComponent<PlayerController>().abilityActive && GetComponent<PlayerController>().abilityNum == 1)
+    //        {
+    //            telekinesisActive = true;
+    //            if (GetComponent<PlayerController>().visibleInd != null)
+    //            {
+    //                GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = "TargetableObject";
+    //            }
+    //        }
 
-            //TelekinesisSpell
-            if (levelControl.targetObject != null)
-            {
-                target = levelControl.targetObject;
-            } else if (!useTeleknesis)
-            {
-                target = null;
-            }
-            if (target != null)
-            {
-                if (telekinesisActive && GetComponent<PlayerController>().abilityNum == 6)
-                {
-                    if (Input.GetKeyDown(KeyCode.Mouse1))
-                    {
-                        if (target.tag == "TargetableObject")
-                        {
-                            telekinesisTimer = 0;
-                            useTeleknesis = true;
+    //        //TelekinesisSpell
+    //        if (levelControl.targetObject != null)
+    //        {
+    //            target = levelControl.targetObject;
+    //        } else if (!useTeleknesis)
+    //        {
+    //            target = null;
+    //        }
+    //        if (target != null)
+    //        {
+    //            if (telekinesisActive && GetComponent<PlayerController>().abilityNum == 6)
+    //            {
+    //                if (Input.GetKeyDown(KeyCode.Mouse1))
+    //                {
+    //                    if (target.tag == "TargetableObject")
+    //                    {
+    //                        telekinesisTimer = 0;
+    //                        useTeleknesis = true;
 
-                            target.GetComponent<Rigidbody>().isKinematic = true;
-                            GetComponent<PlayerController>().abilityActive = false;
-                            GetComponent<PlayerController>().abilityNum = 0;
-                            GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
-                        }
-                    }
-                }
-            }
-        }
-        if (telekinesisTimer <= 4)
-        {
-            telekinesisTimer += Time.deltaTime;
-        }
-        if (telekinesisTimer < 1)
-        {
-            float yAxisValue = 0.01f;
-            target.transform.Translate(new Vector3(0, yAxisValue, 0));
-        }
-        else if (telekinesisTimer > 1 && telekinesisTimer < 2)
-        {
-            telekinesisHeight = target.transform.position;
-            playerSavePos = transform.position;
-            targetSavePos = target.transform.position;
-            telekinesisTimer = 2;
-        }
-        else if (telekinesisTimer >= 2 && telekinesisTimer < 4)
-        {
-            target.transform.Translate((playerSavePos - targetSavePos).normalized * Time.deltaTime * 5);
-            target.transform.position = new Vector3(target.transform.position.x, telekinesisHeight.y, target.transform.position.z);
-        }
-        if (telekinesisTimer >= 4 && useTeleknesis)
-        {
-            target.GetComponent<Rigidbody>().isKinematic = false;
-            telekinesisActive = false;
-            useTeleknesis = false;
-            target = null;
-        }
-    }
+    //                        target.GetComponent<Rigidbody>().isKinematic = true;
+    //                        GetComponent<PlayerController>().abilityActive = false;
+    //                        GetComponent<PlayerController>().abilityNum = 0;
+    //                        GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //    if (telekinesisTimer <= 4)
+    //    {
+    //        telekinesisTimer += Time.deltaTime;
+    //    }
+    //    if (telekinesisTimer < 1)
+    //    {
+    //        float yAxisValue = 0.01f;
+    //        target.transform.Translate(new Vector3(0, yAxisValue, 0));
+    //    }
+    //    else if (telekinesisTimer > 1 && telekinesisTimer < 2)
+    //    {
+    //        telekinesisHeight = target.transform.position;
+    //        playerSavePos = transform.position;
+    //        targetSavePos = target.transform.position;
+    //        telekinesisTimer = 2;
+    //    }
+    //    else if (telekinesisTimer >= 2 && telekinesisTimer < 4)
+    //    {
+    //        target.transform.Translate((playerSavePos - targetSavePos).normalized * Time.deltaTime * 5);
+    //        target.transform.position = new Vector3(target.transform.position.x, telekinesisHeight.y, target.transform.position.z);
+    //    }
+    //    if (telekinesisTimer >= 4 && useTeleknesis)
+    //    {
+    //        target.GetComponent<Rigidbody>().isKinematic = false;
+    //        telekinesisActive = false;
+    //        useTeleknesis = false;
+    //        target = null;
+    //    }
+    //}
 
     public void WarpPosition()
     {
@@ -147,8 +147,11 @@ public class PriestAbilities : MonoBehaviour
                 }
                 if (GetComponent<PlayerController>().inRange && GetComponent<PlayerController>().abilityClicked && !GetComponent<PlayerController>().searchingForSight)
                 {
-                    this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
-                    warpPosition = transform.position;
+                    if (warpPosition.y < this.gameObject.transform.position.y + 5f)
+                    {
+                        this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
+                        warpPosition = transform.position;
+                    }
                     //GetComponent<PlayerController>().abilityActive = false;
                     //GetComponent<PlayerController>().abilityNum = 0;
                 }
