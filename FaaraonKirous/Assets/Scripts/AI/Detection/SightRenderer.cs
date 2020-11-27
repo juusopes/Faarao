@@ -83,7 +83,7 @@ public class SightRenderer
         SetLineMaterial(lineType);
 
         Vector3 targetDirection = (target.transform.position - OwnPosition).normalized; 
-        endPoint = OwnPosition + (targetDirection * maxLenght * sightPercentage);
+        endPoint = OwnPosition + targetDirection * maxLenght * sightPercentage;
         //endPoint = OwnPosition + parentObject.transform.forward * maxLenght * sightPercentage;
 
         DrawLine(OwnPosition, endPoint);
