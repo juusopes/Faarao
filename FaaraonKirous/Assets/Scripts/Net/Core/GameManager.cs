@@ -208,7 +208,7 @@ public class GameManager : MonoBehaviour
         {
             // We must reset all object collections but we don't need to destroy them
             // Objects are instead destroyed implictly
-            ResetAll();
+            ClearAllObjects(true);  // Just to be sure
             StartCoroutine(LoadSceneAsynchronously(sceneIndex));
         }
         else
@@ -427,7 +427,7 @@ public class GameManager : MonoBehaviour
         Pharaoh = null;
     }
 
-    public void ClearAllObjects()
+    public void ClearAllObjects(bool forceDestroy = false)
     {
         // Objects
         foreach (KeyValuePair<ObjectList, Dictionary<int, ObjectManager>> listEntry in _objectLists)
@@ -435,15 +435,22 @@ public class GameManager : MonoBehaviour
             foreach (KeyValuePair<int, ObjectManager> objectEntry in listEntry.Value.ToList())
             {
                 ObjectManager netManager = objectEntry.Value;
-                if (netManager.Delete()) listEntry.Value.Remove(objectEntry.Key);
+                if (netManager.Delete(forceDestroy)) listEntry.Value.Remove(objectEntry.Key);
             }
         }
 
-        // Controlled characters
-        ResetControlledCharacters();
+        if (forceDestroy)
+        {
+            ResetAll();
+        }
+        else
+        {
+            // Controlled characters
+            ResetControlledCharacters();
 
-        // Counters
-        _counters.Clear();
+            // Counters
+            _counters.Clear();
+        }
     }
 
     public void ResetControlledCharacters()

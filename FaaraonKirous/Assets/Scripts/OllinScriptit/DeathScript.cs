@@ -20,13 +20,8 @@ public class DeathScript : MonoBehaviour
     {
         if (NetworkManager._instance.IsHost)
         {
-            if (!isDead)
-            {
-                DeathCheck();
-            } else
-            {
-                AliveCheck();
-            }
+            DeathCheck();
+            AliveCheck();
         }
     }
 
@@ -84,7 +79,7 @@ public class DeathScript : MonoBehaviour
 
             if (NetworkManager._instance.ShouldSendToClient)
             {
-                ServerSend.CharacterDied(CharacterNetManager.List, CharacterNetManager.Id);
+                // TODO: Character revived
             }
         }
     }

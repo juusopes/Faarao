@@ -136,9 +136,9 @@ public class ObjectManager : MonoBehaviour
         return true;
     }
 
-    public bool Delete()
+    public bool Delete(bool forceDestroy = false)
     {
-        if (IsStatic) return false;
+        if (!forceDestroy && IsStatic) return false;
 
         Destroy(gameObject);
 

@@ -348,18 +348,18 @@ public class AbilityIndicator : MonoBehaviour
         {
             mouseHitPos = hit.transform.position;
         }
-        Debug.Log(player);
+        //Debug.Log(player);
         playerPos = player.GetComponent<PlayerController>().GetPosition();
         playerPos.y += 0.2f;
         if (Physics.Raycast(playerPos, mouseHitPos, out hit, Vector3.Distance(player.transform.position, mouseHitPos) - 0.3f, RayCaster.attackLayerMask))
         {
             tempLineOfSight = false;
-            Debug.Log(hit.collider.gameObject);
+            //Debug.Log(hit.collider.gameObject);
         }
         else
         {
             tempLineOfSight = true;
-            Debug.Log("LineOfSight: true");
+            //Debug.Log("LineOfSight: true");
         }
         playerPos = player.GetComponent<PlayerController>().GetPosition();
         float distance = (Vector3.Distance(playerPos, mouseHitPos)) / 4;
