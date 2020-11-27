@@ -6,6 +6,8 @@ public class DynamicObjectManager : ObjectManager
 {
     public float LatestTransformTimestamp { get; set; } = 0;
 
+    //private Packet _movementPacket = new Packet((int)ServerPackets.updateObjectTransform);
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();  // TODO: Are we calling fixed update a second time?
