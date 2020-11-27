@@ -61,12 +61,18 @@ public class PharaohAbilities : MonoBehaviour
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse1))
                     {
-                        target.GetComponent<PlayerController>().isInvisible = true;
-                        invisibilityTimer = 0;
-                        useInvisibility = true;
-                        GetComponent<PlayerController>().abilityActive = false;
-                        GetComponent<PlayerController>().abilityNum = 0;
-                        GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
+                        if (GetComponent<PlayerController>().inRange
+                        && GetComponent<PlayerController>().abilityClicked
+                        && !GetComponent<PlayerController>().searchingForSight
+                        && GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum] > 0)
+                        {
+                            target.GetComponent<PlayerController>().isInvisible = true;
+                            invisibilityTimer = 0;
+                            useInvisibility = true;
+                            GetComponent<PlayerController>().abilityActive = false;
+                            GetComponent<PlayerController>().abilityNum = 0;
+                            GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
+                        }
                     }
                 }
             }

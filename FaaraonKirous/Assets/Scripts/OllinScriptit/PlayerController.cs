@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour
     // Managers
     private PlayerObjectManager PlayerNetManager { get; set; }
 
-
     //Which Player
     public bool playerOne;
 
@@ -89,7 +88,7 @@ public class PlayerController : MonoBehaviour
     public bool abilityClicked;
     //[HideInInspector]
     public bool[] abilityAllowed;
-
+    public float[] abilityCooldowns;
 
     //Invisibility
     public bool isInvisible;
@@ -131,6 +130,9 @@ public class PlayerController : MonoBehaviour
     //Animations
     public Animator anim;
     private Vector3 movingCheck;
+
+    //Ability Limits
+    public int[] abilityLimits;
 
     private void Awake()
     {
@@ -211,6 +213,8 @@ public class PlayerController : MonoBehaviour
         {
             death.damage = 10;
         }
+        //AbilityLimits
+        ResetAbilityLimits();
     }
     public void Moving()
     {
@@ -559,6 +563,17 @@ public class PlayerController : MonoBehaviour
                 abilityActive = false;
                 abilityNum = 0;
             }
+        }
+    }
+    public void ResetAbilityLimits()
+    {
+        if (playerOne)
+        {
+            abilityLimits = GetComponent<PharaohAbilities>().abilityLimitList;
+        }
+        else
+        {
+            abilityLimits = GetComponent<PriestAbilities>().abilityLimitList;
         }
     }
     private void TestOffLink()

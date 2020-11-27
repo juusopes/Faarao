@@ -45,7 +45,11 @@ public class AbilityController : MonoBehaviour
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
               
 
-        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange && abilityActivated && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight)
+        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange 
+            && abilityActivated
+            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked
+            && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight
+            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0)
         {
             PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
             if (caster.abilityNum == 2 && !caster.playerOne)
@@ -85,6 +89,8 @@ public class AbilityController : MonoBehaviour
             //Ability Ender
             if (caster.abilityNum != 7 || (caster.abilityNum == 7 && click == 1))
             {
+                caster.abilityLimits[caster.abilityNum]--;
+
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
                 caster.inRange = false;
@@ -100,6 +106,7 @@ public class AbilityController : MonoBehaviour
         }
         else
         {
+            abilityActivated = false;
             return;
         }
     }
