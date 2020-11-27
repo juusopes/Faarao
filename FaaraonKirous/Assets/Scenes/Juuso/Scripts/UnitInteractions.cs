@@ -20,6 +20,7 @@ public class UnitInteractions : MonoBehaviour
 
     public GameObject character1, character2;
     public GameObject skillGroup1, skillGroup2;
+    public GameObject generalSkillGroup;
 
     [HideInInspector]
     public GameObject skillR1, skillQ1, skillW1, skillE1;
@@ -46,7 +47,10 @@ public class UnitInteractions : MonoBehaviour
 
     private void Update()
     {
-        AllowedAbilities();
+        if (GameManager._instance.IsFullyLoaded)
+        {
+            AllowedAbilities();
+        }
     }
 
     public void AllowedAbilities()
@@ -138,28 +142,45 @@ public class UnitInteractions : MonoBehaviour
                     isStanding2 = true;
                 }
             }
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                activeCharacter = 1;
-
-                character1.SetActive(true);
-                character2.SetActive(false);
-
-                skillGroup1.SetActive(true);
-                skillGroup2.SetActive(false);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                activeCharacter = 2;
-
-                character1.SetActive(false);
-                character2.SetActive(true);
-
-                skillGroup1.SetActive(false);
-                skillGroup2.SetActive(true);
-            }
         }
+    }
+
+    public void SelectPharaohUI()
+    {
+            activeCharacter = 1;
+
+            generalSkillGroup.SetActive(true);
+
+            character1.SetActive(true);
+            character2.SetActive(false);
+
+            skillGroup1.SetActive(true);
+            skillGroup2.SetActive(false);
+    }
+
+    public void SelectPriestUI()
+    {
+        activeCharacter = 2;
+
+        generalSkillGroup.SetActive(true);
+
+        character1.SetActive(false);
+        character2.SetActive(true);
+
+        skillGroup1.SetActive(false);
+        skillGroup2.SetActive(true);
+    }
+
+    public void UnselectCharacter()
+    {
+        activeCharacter = 0;
+
+        character1.SetActive(false);
+        character2.SetActive(false);
+
+        skillGroup1.SetActive(false);
+        skillGroup2.SetActive(false);
+        generalSkillGroup.SetActive(false);
+
     }
 }
