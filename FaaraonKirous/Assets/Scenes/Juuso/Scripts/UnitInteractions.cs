@@ -34,8 +34,6 @@ public class UnitInteractions : MonoBehaviour
 
     public int activeCharacter;
 
-
-
     private void Start()
     {
         crouching.SetActive(false);
@@ -46,7 +44,10 @@ public class UnitInteractions : MonoBehaviour
 
     private void Update()
     {
-        AllowedAbilities();
+        if (GameManager._instance.IsFullyLoaded)
+        {
+            AllowedAbilities();
+        }
     }
 
     public void AllowedAbilities()
