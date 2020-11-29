@@ -18,6 +18,7 @@ public class AbilityIndicator : MonoBehaviour
     public Vector3 endPoint;
     private float range;
     private bool abilityClicked;
+    private int previousAbilityNum;
 
     private bool calculateNeeded;
     //AbilityTargets
@@ -28,6 +29,10 @@ public class AbilityIndicator : MonoBehaviour
     private bool lineOfSightPointBool;
     private bool allOk;
 
+
+    private bool tempLineOfSight = false;
+    private bool tempInRange = false;
+    Vector3 mouseHitPos;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +46,7 @@ public class AbilityIndicator : MonoBehaviour
         TargetTags();
         ChangeAll();
         AbilityCastingConditions();
+        LineColorChanger();
 
         //Position
         circle.transform.position = player.transform.position;
@@ -50,6 +56,7 @@ public class AbilityIndicator : MonoBehaviour
         line = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
         line.transform.parent = null;
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
+        previousAbilityNum = 0;
     }
     private void MoveInd()
     {
@@ -124,7 +131,8 @@ public class AbilityIndicator : MonoBehaviour
         {
             targetTag = "TargetableObject";
             calculateNeeded = false;
-        } else
+        }
+        else
         {
             calculateNeeded = true;
         }
@@ -132,10 +140,15 @@ public class AbilityIndicator : MonoBehaviour
 
     private void ChangeAll()
     {
-        if (player.GetComponent<PlayerController>().abilityNum > 0)
+        if (player.GetComponent<PlayerController>().abilityNum > 0 && previousAbilityNum != player.GetComponent<PlayerController>().abilityNum)
         {
             SwitchIndicator(player.GetComponent<PlayerController>().abilityNum);
             SetCircleRange(player.GetComponent<PlayerController>().abilityNum);
+            previousAbilityNum = player.GetComponent<PlayerController>().abilityNum;
+        }
+        if (player.GetComponent<PlayerController>().abilityNum == 0)
+        {
+            previousAbilityNum = 0;
         }
         //if (player.GetComponent<PlayerController>().abilityNum == 2)
         //{
@@ -208,7 +221,8 @@ public class AbilityIndicator : MonoBehaviour
             indicatorArea.transform.GetChild(2).gameObject.transform.rotation = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.rotation;
             indicatorArea.transform.GetChild(2).gameObject.transform.localScale = player.GetComponent<PharaohAbilities>().indicatorList[num].transform.GetChild(2).gameObject.transform.localScale;
 
-        } else
+        }
+        else
         {
             indicatorArea.transform.localScale = player.GetComponent<PriestAbilities>().indicatorList[num].transform.localScale;
             //Switch Background
@@ -226,9 +240,10 @@ public class AbilityIndicator : MonoBehaviour
     }
     private void AbilityCastingConditions()
     {
-        if (calculateNeeded) { 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit = new RaycastHit();
+        if (calculateNeeded)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit = new RaycastHit();
             //RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.attackLayerMask);
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
             {
@@ -240,7 +255,7 @@ public class AbilityIndicator : MonoBehaviour
                     lineOfSightPoint = hit.transform.position;
                     lineOfSightPoint.y += 0.3f;
                     lineOfSightPointBool = true;
-                    hitPos.y = playerPos.y;
+                    //hitPos.y = playerPos.y;
                     float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
                     //LineOfSightCheck
                     if (Physics.Raycast(player.transform.position, lineOfSightPoint - player.transform.position, out hit, Vector3.Distance(player.transform.position, lineOfSightPoint) - 0.3f, RayCaster.attackLayerMask))
@@ -258,7 +273,6 @@ public class AbilityIndicator : MonoBehaviour
                         player.GetComponent<PlayerController>().GiveDestination(hitPos);
                         player.GetComponent<PlayerController>().searchingForSight = true;
                         player.GetComponent<PlayerController>().inRange = false;
-                        Debug.Log("CASE1");
                     }
                     else if (distance > range)
                     {
@@ -266,17 +280,15 @@ public class AbilityIndicator : MonoBehaviour
                         player.GetComponent<PlayerController>().GiveDestination(endPoint);
                         player.GetComponent<PlayerController>().inRange = false;
                         player.GetComponent<PlayerController>().searchingForSight = false;
-                        Debug.Log("CASE2");
                     }
                     else
                     {
                         player.GetComponent<PlayerController>().inRange = true;
                         player.GetComponent<PlayerController>().searchingForSight = false;
-                        Debug.Log("CASE3");
                     }
                     player.GetComponent<PlayerController>().abilityClicked = true;
 
-                    Debug.Log("In Range: " + player.GetComponent<PlayerController>().inRange + ", Sight: " + player.GetComponent<PlayerController>().searchingForSight);
+                   // Debug.Log("In Range: " + player.GetComponent<PlayerController>().inRange + ", Sight: " + player.GetComponent<PlayerController>().searchingForSight);
                 }
             }
         }
@@ -312,10 +324,9 @@ public class AbilityIndicator : MonoBehaviour
         else
         {
             playerPos = player.GetComponent<PlayerController>().GetPosition();
-            lineOfSightPoint.y = playerPos.y;
+            // lineOfSightPoint.y = playerPos.y;
             lineOfSightPoint.y += 0.3f;
             float distance = (Vector3.Distance(playerPos, lineOfSightPoint)) / 4;
-            Debug.Log("Range: " + range + ", Distance: " + distance);
             if (distance <= range + range * 0.1)
             {
                 //endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance - range) * 4));
@@ -327,6 +338,48 @@ public class AbilityIndicator : MonoBehaviour
                     player.GetComponent<PlayerController>().Stay();
                 }
             }
+        }
+    }
+    private void LineColorChanger()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit = new RaycastHit();
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
+        {
+            mouseHitPos = hit.transform.position;
+        }
+        //Debug.Log(player);
+        playerPos = player.GetComponent<PlayerController>().GetPosition();
+        playerPos.y += 0.2f;
+        if (Physics.Raycast(playerPos, mouseHitPos, out hit, Vector3.Distance(player.transform.position, mouseHitPos) - 0.3f, RayCaster.attackLayerMask))
+        {
+            tempLineOfSight = false;
+            //Debug.Log(hit.collider.gameObject);
+        }
+        else
+        {
+            tempLineOfSight = true;
+            //Debug.Log("LineOfSight: true");
+        }
+        playerPos = player.GetComponent<PlayerController>().GetPosition();
+        float distance = (Vector3.Distance(playerPos, mouseHitPos)) / 4;
+        if (distance <= range)
+        {
+            tempInRange = true;
+            Debug.Log("Range: true");
+        } else
+        {
+            tempInRange = false;
+            //Debug.Log(distance + ", " + range);
+        }
+        if (!tempLineOfSight || !tempInRange)
+        {
+            line.startColor = Color.red;
+            line.endColor = Color.red;
+        } else
+        {
+            line.startColor = Color.green;
+            line.endColor = Color.green;
         }
     }
 }

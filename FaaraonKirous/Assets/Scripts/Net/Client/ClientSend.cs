@@ -68,7 +68,7 @@ public class ClientSend
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
 
-    public static void UnselectCharacter()
+    public static void UnselectCharacterRequest()
     {
         var packet = new Packet((int)ClientPackets.unselectCharacterRequest);
 

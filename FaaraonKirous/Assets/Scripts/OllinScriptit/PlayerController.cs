@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour
     // Managers
     private PlayerObjectManager PlayerNetManager { get; set; }
 
-
     //Which Player
     public bool playerOne;
 
@@ -89,7 +88,7 @@ public class PlayerController : MonoBehaviour
     public bool abilityClicked;
     //[HideInInspector]
     public bool[] abilityAllowed;
-
+    public float[] abilityCooldowns;
 
     //Invisibility
     public bool isInvisible;
@@ -131,6 +130,12 @@ public class PlayerController : MonoBehaviour
     //Animations
     public Animator anim;
     private Vector3 movingCheck;
+
+    //Ability Limits
+    public int[] abilityLimits;
+
+    public UnitInteractions unitInteractions;
+
     private void Awake()
     {
         Initialize();
@@ -210,6 +215,8 @@ public class PlayerController : MonoBehaviour
         {
             death.damage = 10;
         }
+        //AbilityLimits
+        ResetAbilityLimits();
     }
     public void Moving()
     {
@@ -560,6 +567,17 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    public void ResetAbilityLimits()
+    {
+        if (playerOne)
+        {
+            abilityLimits = GetComponent<PharaohAbilities>().abilityLimitList;
+        }
+        else
+        {
+            abilityLimits = GetComponent<PriestAbilities>().abilityLimitList;
+        }
+    }
     private void TestOffLink()
     {
         if (navMeshAgent.isOnOffMeshLink && linkMovement.CanStartLink())
@@ -632,6 +650,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Crouch();
+            UpdateUI();
         }
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -694,6 +713,37 @@ public class PlayerController : MonoBehaviour
         if (UnityEngine.EventSystems.EventSystem.current == null)
             return false;
         return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void CooldownCheck()
+    {
+        //if (Time.time > nextFireTime)
+        //{
+        //    onCooldown = false;
+        //    imageCooldown.fillAmount = 1;
+
+        //    if (Input.GetButtonDown("Ability"))
+        //    {
+        //        cooldownTime = 5;
+        //        onCooldown = true;
+
+        //        nextFireTime = Time.time + cooldownTime;
+        //    }
+        //}
+
+        //if (onCooldown)
+        //{
+        //    imageCooldown.fillAmount -= 1 / cooldownTime * Time.deltaTime;
+        //}
+        //if (!onCooldown)
+        //{
+        //    imageCooldown.fillAmount = 0;
+        //}
+    }
+
+    public void UpdateUI()
+    {
+        unitInteractions.StanceCheck();
     }
 }
 

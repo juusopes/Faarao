@@ -44,6 +44,10 @@ public class LevelController : MonoBehaviour
     public bool[] priestAbilities;
     public bool[] pharaohAbilities;
 
+    public UnitInteractions unitInteractions;
+    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -124,8 +128,8 @@ public class LevelController : MonoBehaviour
         {
             if (NetworkManager._instance.IsHost)
             {
-                
                 GameManager._instance.SelectCharacter(ObjectType.priest);
+                unitInteractions.SelectPriestUI();
             }
             else
             {
@@ -141,6 +145,7 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.SelectCharacter(ObjectType.pharaoh);
+                unitInteractions.SelectPharaohUI();
             }
             else
             {
@@ -151,17 +156,18 @@ public class LevelController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.Backspace))
         {
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.UnselectCharacter();
+                unitInteractions.UnselectCharacter();
             }
             else
             {
                 if (NetworkManager._instance.ShouldSendToServer)
                 {
-                    ClientSend.UnselectCharacter();
+                    ClientSend.UnselectCharacterRequest();
                 }
             }
         }

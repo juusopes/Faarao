@@ -39,14 +39,17 @@ public class AbilityController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             abilityActivated = true;
-            Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
-                 + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
+            //Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
+            //     + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
         }
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
-        Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
-                + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
+              
 
-        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange && abilityActivated && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight)
+        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange 
+            && abilityActivated
+            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked
+            && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight
+            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0)
         {
             PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
             if (caster.abilityNum == 2 && !caster.playerOne)
@@ -86,6 +89,8 @@ public class AbilityController : MonoBehaviour
             //Ability Ender
             if (caster.abilityNum != 7 || (caster.abilityNum == 7 && click == 1))
             {
+                caster.abilityLimits[caster.abilityNum]--;
+
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
                 caster.inRange = false;
@@ -101,6 +106,7 @@ public class AbilityController : MonoBehaviour
         }
         else
         {
+            abilityActivated = false;
             return;
         }
     }
@@ -108,7 +114,7 @@ public class AbilityController : MonoBehaviour
     private void UseAbility(RaycastHit hit)
     {
         //TODO: Lazy ? no : object pooling...
-        Debug.Log(abilityOption);
+        //Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)
             Destroy(lastSpawnedAbility);
 

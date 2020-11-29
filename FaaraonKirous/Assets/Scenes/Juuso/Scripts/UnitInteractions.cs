@@ -8,205 +8,174 @@ public class UnitInteractions : MonoBehaviour
     public float cooldownTime;
     public float nextFireTime;
     public bool isStanding = true;
+    public bool isStanding2 = true;
     public bool onCooldown = false;
 
     //public Texture2D cursor, cursorInteract, cursorAttack;
     public bool checkbox;
     public GameObject standing, crouching;
+    public GameObject standing2, crouching2;
+
     //public Image imageCooldown;
 
     public GameObject character1, character2;
     public GameObject skillGroup1, skillGroup2;
+    public GameObject generalSkillGroup;
 
     [HideInInspector]
     public GameObject skillR1, skillQ1, skillW1, skillE1;
     [HideInInspector]
     public GameObject skillQ2, skillW2, skillE2;
 
-    public DeathScript isDead1, isDead2;
-
     //public GameManager currentCharacter;
     public PlayerController ActiveAbilities;
     public PlayerController ActiveAbilities2;
+
+    public int activeCharacter;
 
 
 
     private void Start()
     {
         crouching.SetActive(false);
+
+        // TODO
+        activeCharacter = 1;
     }
 
     private void Update()
     {
+        if (GameManager._instance.IsFullyLoaded)
+        {
+            AllowedAbilities();
+        }
+    }
+
+    public void AllowedAbilities()
+    {
         bool menuActivated = GetComponent<InGameMenu>().menuActive;
-        //bool allowedAbilities = GetComponent<PlayerController>().abilityAllowed[];
 
         int allowedAbilities = 0;
-        for (int i = 0; i < 11; i++)
-        {
-            //bool v = GameObject.Find("Pharaoh").GetComponent<PlayerController>().abilityAllowed[i];
-            bool v = GameManager._instance.Pharaoh.GetComponent<PlayerController>().abilityAllowed[i];
-            if (v)
-            {
-                //print(allowedAbilities);
-                if(allowedAbilities == 10)
-                {
-                    skillR1.SetActive(true);
-                }
-                if (allowedAbilities == 1)
-                {
-                    skillQ1.SetActive(true);
-                }
-                if (allowedAbilities == 3)
-                {
-                    skillW1.SetActive(true);
-                }
-                if (allowedAbilities == 5)
-                {
-                    skillE1.SetActive(true);
-                }
-            }
-            allowedAbilities++;
-        }
-
-        allowedAbilities = 0;
-
-        for (int i = 0; i < 11; i++)
-        {
-            //bool v = GameObject.Find("Priest").GetComponent<PlayerController>().abilityAllowed[i];
-            bool v = GameManager._instance.Priest.GetComponent<PlayerController>().abilityAllowed[i];
-            if (v)
-            {
-                //print(allowedAbilities);
-                if (allowedAbilities == 1)
-                {
-                    skillQ2.SetActive(true);
-                }
-                if (allowedAbilities == 2)
-                {
-                    skillW2.SetActive(true);
-                }
-                if (allowedAbilities == 3)
-                {
-                    skillE2.SetActive(true);
-                }
-            }
-            allowedAbilities++;
-        }
-
-
-
-        //for(each item in the list)
-        //{
-        //    if (item[i])
-        //        trueItem = i;
-        //}
-
-        //for(each item in the list)
-        //{
-        //    if (i != trueItem)
-        //        item[i] = false;
-        //}
-
-        //int currentCharacter2 = GetComponent<PlayerController>().abilityAllowed[];
-        //print(currentCharacter2 + " is currently controlled");
-
-        bool isDead11 = isDead1.isDead;
-        bool isDead22 = isDead2.isDead;
-
-        //if(isDead11)
-        //{
-        //    skillGroup1.SetActive(false);
-        //}
-        //if (isDead22)
-        //{
-        //    skillGroup2.SetActive(false);
-        //}
-
-        //print("pharaoh is dead = " + isDead11);
-        //print("priest is dead = " + isDead22);
 
         // cannot use abilities etc. if menu is active
         if (!menuActivated)
         {
-            if (Input.GetButtonDown("Stance"))
+            for (int i = 0; i < 11; i++)
             {
-                if (isStanding)
+                bool v = GameManager._instance.Pharaoh.GetComponent<PlayerController>().abilityAllowed[i];
+                if (v)
                 {
-                    print("Unit is now crouching");
-                    standing.SetActive(false);
-                    crouching.SetActive(true);
-                    isStanding = false;
+                    if (allowedAbilities == 10)
+                    {
+                        skillR1.SetActive(true);
+                    }
+                    if (allowedAbilities == 1)
+                    {
+                        skillQ1.SetActive(true);
+                    }
+                    if (allowedAbilities == 3)
+                    {
+                        skillW1.SetActive(true);
+                    }
+                    if (allowedAbilities == 2)
+                    {
+                        skillE1.SetActive(true);
+                    }
                 }
-                else
-                {
-                    print("Unit is now standing");
-                    standing.SetActive(true);
-                    crouching.SetActive(false);
-                    isStanding = true;
-                }
+                allowedAbilities++;
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            allowedAbilities = 0;
+
+            for (int i = 0; i < 11; i++)
             {
-                character1.SetActive(true);
-                character2.SetActive(false);
-
-                if (!isDead11)
+                bool v = GameManager._instance.Priest.GetComponent<PlayerController>().abilityAllowed[i];
+                if (v)
                 {
-                    skillGroup1.SetActive(true);
+                    if (allowedAbilities == 1)
+                    {
+                        skillQ2.SetActive(true);
+                    }
+                    if (allowedAbilities == 3)
+                    {
+                        skillW2.SetActive(true);
+                    }
+                    if (allowedAbilities == 2)
+                    {
+                        skillE2.SetActive(true);
+                    }
                 }
-                skillGroup2.SetActive(false);
+                allowedAbilities++;
             }
+            allowedAbilities = 0;
+        }
+    }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                character1.SetActive(false);
-                character2.SetActive(true);
-
-                if (!isDead22)
-                {
-                    skillGroup2.SetActive(true);
-                }
-                skillGroup1.SetActive(false);
-            }
+    public void StanceCheck()
+    {
+        if (isStanding && activeCharacter == 1)
+        {
+            standing.SetActive(false);
+            crouching.SetActive(true);
+            isStanding = false;
+        }
+        else if (!isStanding && activeCharacter == 1)
+        {
+            standing.SetActive(true);
+            crouching.SetActive(false);
+            isStanding = true;
         }
 
+        if (isStanding2 && activeCharacter == 2)
+        {
+            standing2.SetActive(false);
+            crouching2.SetActive(true);
+            isStanding2 = false;
+        }
+        else if (!isStanding2 && activeCharacter == 2)
+        {
+            standing2.SetActive(true);
+            crouching2.SetActive(false);
+            isStanding2 = true;
+        }
+    }
 
-        //if (Input.GetButton("Attack"))
-        //{
-        //    Cursor.SetCursor(cursorAttack, Vector2.zero, CursorMode.ForceSoftware);
-        //}
-        //else if (Input.GetButton("Interact"))
-        //{
-        //    Cursor.SetCursor(cursorInteract, Vector2.zero, CursorMode.ForceSoftware);
-        //}
-        //else
-        //{
-        //    Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
-        //}
+    public void SelectPharaohUI()
+    {
+        activeCharacter = 1;
 
-        //if (Time.time > nextFireTime)
-        //{
-        //    onCooldown = false;
-        //    imageCooldown.fillAmount = 1;
+        generalSkillGroup.SetActive(true);
 
-        //    if (Input.GetButtonDown("Ability"))
-        //    {
-        //        cooldownTime = 5;
-        //        onCooldown = true;
+        character1.SetActive(true);
+        character2.SetActive(false);
 
-        //        nextFireTime = Time.time + cooldownTime;
-        //    }
-        //}
+        skillGroup1.SetActive(true);
+        skillGroup2.SetActive(false);
+    }
 
-        //if (onCooldown)
-        //{
-        //    imageCooldown.fillAmount -= 1 / cooldownTime * Time.deltaTime;
-        //}
-        //if (!onCooldown)
-        //{
-        //    imageCooldown.fillAmount = 0;
-        //}
+    public void SelectPriestUI()
+    {
+        activeCharacter = 2;
+
+        generalSkillGroup.SetActive(true);
+
+        character1.SetActive(false);
+        character2.SetActive(true);
+
+        skillGroup1.SetActive(false);
+        skillGroup2.SetActive(true);
+    }
+
+    public void UnselectCharacter()
+    {
+        activeCharacter = 0;
+
+        character1.SetActive(false);
+        character2.SetActive(false);
+
+        skillGroup1.SetActive(false);
+        skillGroup2.SetActive(false);
+        generalSkillGroup.SetActive(false);
+
     }
 }
