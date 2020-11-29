@@ -691,6 +691,8 @@ public class PlayerController : MonoBehaviour
     }
     public bool PointerOverUI()
     {
+        if (UnityEngine.EventSystems.EventSystem.current == null)
+            return false;
         return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
     }
 }

@@ -50,6 +50,9 @@ public partial class FOVRenderer
             if(lastType == SampleType.LedgeAtDownAngle)
             {
                 Vector3 closestPoint = GetClosestPointOnColliderWithinYDirection(raycastHit, downSample, LastAddedVertex);  //ARE FLIPPED ON PURPOSE!
+                if (closestPoint == Vector3.zero)
+                    Debug.Log("Warning did not find closest point!");
+                else
                 AddVertexPoint(closestPoint, SampleType.LedgeStartCorner);
                 //ACylinder(closestPoint);
                 //TryCreateLedgeVertices(lastSampleType, false, yAngleIn, xAngleIn, previousSample, sample, previousRayCastHit);

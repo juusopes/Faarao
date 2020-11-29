@@ -75,7 +75,7 @@ public partial class FOVRenderer
             float lenght = dir.magnitude * 1.1f;
             dir.y = 0;
             dir = dir.normalized;
-            Vector3 res = ConvertLocal(GetHitPointOnSpecificCollider(reSampleTest, dir, lenght, testRayHit.collider));
+            Vector3 res = ConvertLocal(GetHitPointOnSpecificCollider(rayStart, dir, lenght, testRayHit.collider));
             //ACylinder(res);
             return res;
         }
@@ -87,6 +87,11 @@ public partial class FOVRenderer
     {
         sample.y = previousVertex.y;
         Vector3 closestOnCollider = GetClosestPointOnCollider(raycastHit, sample);
+        if(closestOnCollider == Vector3.zero)
+        {
+            Debug.Log("Warning did not find closest point!");
+            return Vector3.zero;
+        }
         //ACylinder(closestOnCollider, Color.blue);
         //if the first approximation was good enough, just let it be let it be let it be
         if (AreVerticallyAligned(sample.normalized * closestOnCollider.magnitude, closestOnCollider)
@@ -97,6 +102,12 @@ public partial class FOVRenderer
         Vector3 sampleRecalculated = sample.normalized * closestOnCollider.magnitude;
 
         Vector3 closestOnColliderReCalculated = GetClosestPointOnCollider(raycastHit, sampleRecalculated);
+
+        if (closestOnColliderReCalculated == Vector3.zero)
+        {
+            Debug.Log("Warning did not find closest point!");
+            return Vector3.zero;
+        }
 
         if (AreVerticallyAligned(closestOnCollider, closestOnColliderReCalculated))
             return new Vector3(closestOnColliderReCalculated.x, previousVertex.y, closestOnColliderReCalculated.z);
@@ -142,13 +153,20 @@ public partial class FOVRenderer
         if (DebugRayCasts)
             Debug.DrawRay(ConvertGlobal(localSampleStart), direction * range, Color.cyan, RayTime);
 #endif
+        if (direction == Vector3.zero)
+        {
+            Debug.LogWarning("Direction vector was zero!");
+            return Vector3.zero;
+        }
+
         if (specificCollider != null)
         {
             Ray ray = new Ray(ConvertGlobal(localSampleStart), direction);
             RaycastHit hit;
             specificCollider.Raycast(ray, out hit, range);
             if (hit.collider)
-                return hit.point;
+                return 
+                    hit.point;
         }
         return Vector3.zero;
     }
