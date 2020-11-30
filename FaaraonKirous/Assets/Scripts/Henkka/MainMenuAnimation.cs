@@ -85,7 +85,6 @@ public class MainMenuAnimation : MonoBehaviour
             yield return new WaitForSeconds(3f);
 
             StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] {1.2f, 0.4f }, 0.05f / hieroglyphAnimationSpeed));
-            fallingDust.Stop();
             yield return new WaitForSeconds(1f);
             ResetValues();
             yield return new WaitForSeconds(4f);
@@ -94,6 +93,8 @@ public class MainMenuAnimation : MonoBehaviour
 
     private void ResetValues()
     {
+        blood.SetActive(false);
+        fallingDust.Stop();
         blood.SetActive(false);
         lightOpacity = 0.98f;
         hieroglyphSaturation = 0.4f;
