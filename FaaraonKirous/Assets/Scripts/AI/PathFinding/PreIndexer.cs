@@ -10,7 +10,7 @@ public class PreIndexer : MonoBehaviour
     public static PreIndexer Instance { get { return _instance; } }
 
     [SerializeField]
-    private ActivatableObjectManager[] activatableObjects;
+    private ActivatorScript[] activatableObjects;
     [SerializeField]
     private WaypointGroupManager[] waypointGroups;
     [SerializeField]
@@ -46,11 +46,11 @@ public class PreIndexer : MonoBehaviour
     private void UpdateIndexes()
     {
         // Preindex activatable objects
-        activatableObjects = FindObjectsOfType<ActivatableObjectManager>();
+        activatableObjects = FindObjectsOfType<ActivatorScript>();
         for (int i = 0; i < activatableObjects.Length; ++i)
         {
-            activatableObjects[i].Id = i;
-            EditorUtility.SetDirty(activatableObjects[i]);
+            //activatableObjects[i].Id = i;
+            //EditorUtility.SetDirty(activatableObjects[i]);
         }
 
         // Preindex waypoints
