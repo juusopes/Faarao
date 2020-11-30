@@ -36,7 +36,9 @@ public class AbilityController : MonoBehaviour
         if (!levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityActive)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse1)
+            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0 
+            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityCooldowns[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0)
         {
             abilityActivated = true;
             //Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
@@ -49,7 +51,8 @@ public class AbilityController : MonoBehaviour
             && abilityActivated
             && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked
             && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0)
+            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0
+            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityCooldowns[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0)
         {
             PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
             if (caster.abilityNum == 2 && !caster.playerOne)
@@ -87,9 +90,9 @@ public class AbilityController : MonoBehaviour
             }
 
             //Ability Ender
-            if (caster.abilityNum != 7 || (caster.abilityNum == 7 && click == 1))
+            if (caster.abilityNum != 7 && ((caster.abilityNum != 1 && caster.playerOne) || !caster.playerOne) && (caster.abilityNum != 1 && !caster.playerOne || caster.playerOne) || (caster.abilityNum == 7 && click == 1) || (caster.abilityNum == 1 && caster.playerOne && caster.gameObject.GetComponent<PharaohAbilities>().useInvisibility) || (!caster.playerOne && caster.abilityNum == 1 && caster.gameObject.GetComponent<PriestAbilities>().warped))
             {
-                caster.abilityLimits[caster.abilityNum]--;
+                caster.abilityLimitUsed = caster.abilityNum;
 
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
@@ -106,7 +109,9 @@ public class AbilityController : MonoBehaviour
         }
         else
         {
-            abilityActivated = false;
+            //abilityActivated = false;
+            PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
+            //caster.abilityClicked = false;
             return;
         }
     }
