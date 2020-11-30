@@ -45,7 +45,6 @@ public class LevelController : MonoBehaviour
     public bool[] pharaohAbilities;
 
     public UnitInteractions sn;
-    
 
 
     // Start is called before the first frame update

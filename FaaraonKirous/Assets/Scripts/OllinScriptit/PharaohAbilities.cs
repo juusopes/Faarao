@@ -15,6 +15,7 @@ public class PharaohAbilities : MonoBehaviour
     public float[] abilityCDList;
     public bool[] lineActive;
     private bool invisibilityClicked;
+    private GameObject invisibilityTarget;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,7 @@ public class PharaohAbilities : MonoBehaviour
     {
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         invisibilityActive = false;
-        invisibilityTimer = 5;
+        invisibilityTimer = 10;
     }
 
     public void Invisibility()
@@ -60,7 +61,6 @@ public class PharaohAbilities : MonoBehaviour
             }
             if (invisibilityActive && GetComponent<PlayerController>().abilityNum == 1)
             {
-                Debug.Log("ACTIVE");
                 if (Input.GetKeyDown(KeyCode.Mouse1))
                 {
                     invisibilityClicked = true;
@@ -82,6 +82,7 @@ public class PharaohAbilities : MonoBehaviour
                         GetComponent<PlayerController>().Stay();
                         //GetComponent<PlayerController>().abilityActive = false;
                         //GetComponent<PlayerController>().abilityNum = 0;
+                        invisibilityTarget = target;
                         GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
                         invisibilityClicked = false;
                     }
@@ -94,25 +95,23 @@ public class PharaohAbilities : MonoBehaviour
                 }
             }
         }
-        if (invisibilityTimer <= 4)
+        if (invisibilityTimer <= 7)
         {
             invisibilityTimer += Time.deltaTime;
         }
-        if (invisibilityTimer >= 4 && useInvisibility)
+        if (invisibilityTimer >= 7 && useInvisibility)
         {
-            if (target != null)
+            Debug.Log("HERE WE ARE!0");
+            if (invisibilityTarget != null)
             {
-                target.GetComponent<PlayerController>().isInvisible = false;
+                invisibilityTarget.GetComponent<PlayerController>().isInvisible = false;
+                invisibilityTarget = null;
                 invisibilityActive = false;
                 useInvisibility = false;
-                target = null;
-            } else
-            {
-                GetComponent<PlayerController>().isInvisible = false;
-                priest.GetComponent<PlayerController>().isInvisible = false;
-                invisibilityActive = false;
-                useInvisibility = false;
-                target = null;
+                if (target != null)
+                {
+                    target = null;
+                }
             }
         }
     }

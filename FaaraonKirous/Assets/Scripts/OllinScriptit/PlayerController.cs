@@ -150,13 +150,19 @@ public class PlayerController : MonoBehaviour
         //    myBoolArray.Add(abilityAllowed[i]);
         //}
         CooldownCheck();
+        Die();
         if (!IsDead)
         {
             Moving();
             LineOfSight();
-            KeyControls();          
+            if (!menu.menuActive)
+            {
+                KeyControls();
+            } else
+            {
+                abilityActive = false;
+            }
             Invisibility();  // TODO: Does not work in multiplayer
-
             if (NetworkManager._instance.IsHost)
             {
                 TestOffLink();
@@ -332,7 +338,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Crouch()
     {
-        if (IsCurrentPlayer)
+        if (IsCurrentPlayer && !IsDead)
         {
             if (IsRunning)
             {
@@ -801,6 +807,18 @@ public class PlayerController : MonoBehaviour
         //{
         //    imageCooldown.fillAmount = 0;
         //}
+    }
+    private void Die()
+    {
+        if (IsDead)
+        {
+            transform.GetChild(0).gameObject.SetActive(false);
+            transform.GetChild(1).gameObject.SetActive(true);
+        } else
+        {
+            transform.GetChild(1).gameObject.SetActive(false);
+            transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
 }
 

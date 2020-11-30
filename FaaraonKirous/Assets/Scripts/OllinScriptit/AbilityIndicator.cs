@@ -318,7 +318,6 @@ public class AbilityIndicator : MonoBehaviour
                 {
                     hasLineOfSight = false;
                     player.GetComponent<PlayerController>().searchingForSight = true;
-                    Debug.Log(hit.collider.gameObject);
                 }
             }
             else

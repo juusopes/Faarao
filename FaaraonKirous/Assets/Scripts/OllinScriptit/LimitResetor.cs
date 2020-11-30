@@ -21,7 +21,6 @@ public class LimitResetor : MonoBehaviour
         if (other.tag == "Player")
         {
             other.GetComponent<PlayerController>().ResetAbilityLimits();
-            Debug.Log("RESET");
         }
     }
 }

@@ -13,7 +13,8 @@ public class PriestAbilities : MonoBehaviour
     private Vector3 telekinesisHeight;
     //WarpSpell
     public bool warpSpellActive;
-    private Vector3 warpPosition;    
+    private Vector3 warpPosition;
+    public bool warped;
     //private Vector3 playerSavePos;
     //private Vector3 targetSavePos;
     public GameObject[] indicatorList;
@@ -156,6 +157,7 @@ public class PriestAbilities : MonoBehaviour
                     {
                         this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
                         warpSpellActive = false;
+                        warped = true;
                         //GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]--;
                     }
                     //GetComponent<PlayerController>().abilityActive = false;
