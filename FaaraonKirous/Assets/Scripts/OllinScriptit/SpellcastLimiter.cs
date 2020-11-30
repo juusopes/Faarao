@@ -33,7 +33,10 @@ public class SpellcastLimiter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CalculateLimits();
+        if (GameManager._instance.IsFullyLoaded)
+        {
+            CalculateLimits();
+        }
     }
 
     private void SetIcons()

@@ -49,7 +49,8 @@ public enum ClientPackets
     disconnecting,
     activateObject,
     stay,
-    revive
+    revive,
+    warp
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

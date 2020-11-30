@@ -20,83 +20,88 @@ public class PostProcessingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CamAdjustments();
+        if (GameManager._instance.IsFullyLoaded)
+        {
+            CamAdjustments();
+        }
     }
 
     private void CamAdjustments()
     {
-        if (levelController.currentCharacter.GetComponent<PlayerController>().IsDead)
+        if (levelController.currentCharacter != null)
         {
-            if (volume.profile.TryGet<ColorAdjustments>(out cA))
+            if (levelController.currentCharacter.GetComponent<PlayerController>().IsDead)
             {
-                if (cA.saturation.value > -100)
+                if (volume.profile.TryGet<ColorAdjustments>(out cA))
                 {
-                    cA.saturation.value -= Time.deltaTime * 100;
-                }
-                else
-                {
-                    cA.saturation.value = -100;
+                    if (cA.saturation.value > -100)
+                    {
+                        cA.saturation.value -= Time.deltaTime * 100;
+                    }
+                    else
+                    {
+                        cA.saturation.value = -100;
+                    }
                 }
             }
-        }
-        if (!levelController.currentCharacter.GetComponent<PlayerController>().IsDead)
-        {
-            if (volume.profile.TryGet<ColorAdjustments>(out cA))
+            if (!levelController.currentCharacter.GetComponent<PlayerController>().IsDead)
             {
-                if (cA.saturation.value < 0)
+                if (volume.profile.TryGet<ColorAdjustments>(out cA))
                 {
-                    cA.saturation.value += Time.deltaTime * 100;
-                }
-                else
-                {
-                    cA.saturation.value = 0;
+                    if (cA.saturation.value < 0)
+                    {
+                        cA.saturation.value += Time.deltaTime * 100;
+                    }
+                    else
+                    {
+                        cA.saturation.value = 0;
+                    }
                 }
             }
-        }
-        if (levelController.currentCharacter.GetComponent<PlayerController>().isInvisible)
-        {
-            if (volume.profile.TryGet<ColorAdjustments>(out cA))
+            if (levelController.currentCharacter.GetComponent<PlayerController>().isInvisible)
             {
-                if (cA.hueShift.value < 180)
+                if (volume.profile.TryGet<ColorAdjustments>(out cA))
                 {
-                    cA.hueShift.value += Time.deltaTime * 100;
-                }
-                else
-                {
-                    cA.hueShift.value = 180;
-                }
-                if (cA.saturation.value < 100)
-                {
-                    cA.saturation.value += Time.deltaTime * 100;
-                }
-                else
-                {
-                    cA.saturation.value = 100;
+                    if (cA.hueShift.value < 180)
+                    {
+                        cA.hueShift.value += Time.deltaTime * 100;
+                    }
+                    else
+                    {
+                        cA.hueShift.value = 180;
+                    }
+                    if (cA.saturation.value < 100)
+                    {
+                        cA.saturation.value += Time.deltaTime * 100;
+                    }
+                    else
+                    {
+                        cA.saturation.value = 100;
+                    }
                 }
             }
-        }
-        if (!levelController.currentCharacter.GetComponent<PlayerController>().isInvisible && !levelController.currentCharacter.GetComponent<PlayerController>().IsDead)
-        {
-            if (volume.profile.TryGet<ColorAdjustments>(out cA))
+            if (!levelController.currentCharacter.GetComponent<PlayerController>().isInvisible && !levelController.currentCharacter.GetComponent<PlayerController>().IsDead)
             {
-                if (cA.hueShift.value > 0)
+                if (volume.profile.TryGet<ColorAdjustments>(out cA))
                 {
-                    cA.hueShift.value -= Time.deltaTime * 100;
-                }
-                else
-                {
-                    cA.hueShift.value = 0;
-                }
-                if (cA.saturation.value > 0)
-                {
-                    cA.saturation.value -= Time.deltaTime * 100;
-                }
-                else
-                {
-                    cA.saturation.value = 0;
+                    if (cA.hueShift.value > 0)
+                    {
+                        cA.hueShift.value -= Time.deltaTime * 100;
+                    }
+                    else
+                    {
+                        cA.hueShift.value = 0;
+                    }
+                    if (cA.saturation.value > 0)
+                    {
+                        cA.saturation.value -= Time.deltaTime * 100;
+                    }
+                    else
+                    {
+                        cA.saturation.value = 0;
+                    }
                 }
             }
         }
     }
-
 }

@@ -126,6 +126,15 @@ public class ClientSend
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
+
+    public static void Warp(ObjectType character, Vector3 position)
+    {
+        var packet = new Packet((int)ClientPackets.warp);
+        packet.Write((short)character);
+        packet.Write(position);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
     #endregion
 
     #region Activatable
