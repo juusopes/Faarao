@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour
     public int[] abilityLimits;
     public float[] abilityCooldowns;
 
+    public UnitInteractions unitInteractions;
     private void Awake()
     {
         Initialize();
@@ -304,20 +305,25 @@ public class PlayerController : MonoBehaviour
     }
     public void Crouch()
     {
-        if (IsCurrentPlayer && !IsDead)
+        if(!IsDead)
         {
-            if (!IsCrouching)
-            {
-                if (IsRunning)
-                {
-                    SetRunning(false);
-                }
+            unitInteractions.StanceCheck();
 
-                SetCrouching(true);
-            }
-            else
+            if (IsCurrentPlayer && !IsDead)
             {
-                SetCrouching(false);
+                if (!IsCrouching)
+                {
+                    if (IsRunning)
+                    {
+                        SetRunning(false);
+                    }
+
+                    SetCrouching(true);
+                }
+                else
+                {
+                    SetCrouching(false);
+                }
             }
         }
     }
