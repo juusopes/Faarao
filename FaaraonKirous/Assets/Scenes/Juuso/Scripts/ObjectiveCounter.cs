@@ -22,7 +22,7 @@ public class ObjectiveCounter: MonoBehaviour
 
     public ActivatorScript activated, activated2, activated3, activated4, activated5;
 
-    private void Start()
+    private void Awake()
     {
         //Set All Objectives To False
         objectiveDone = false;

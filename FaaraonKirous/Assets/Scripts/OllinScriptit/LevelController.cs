@@ -44,8 +44,7 @@ public class LevelController : MonoBehaviour
     public bool[] priestAbilities;
     public bool[] pharaohAbilities;
 
-    public UnitInteractions unitInteractions;
-    
+    public UnitInteractions sn;
 
 
     // Start is called before the first frame update
@@ -63,6 +62,7 @@ public class LevelController : MonoBehaviour
     void Update()
     {
         KeyBoardControls();
+        InivsibilityView();
         // TODO: Doesn't work if no activeCharacter
         //InivsibilityView();
     }
@@ -82,22 +82,22 @@ public class LevelController : MonoBehaviour
 
     private void InivsibilityView()
     {
-        if (currentCharacter.GetComponent<PlayerController>().isInvisible)
-        {
-            if (postProcessWeight <= 1)
-            {
-                postProcessWeight += Time.deltaTime;
-            }
-        } else
-        {
-            if (postProcessWeight >= 0)
-            {
-                postProcessWeight -= Time.deltaTime;
-            }
-        }
-        mainCam.transform.GetChild(0).GetComponent<PostProcessVolume>().weight = postProcessWeight;
+        //if (currentCharacter.GetComponent<PlayerController>().isInvisible)
+        //{
+        //    if (postProcessWeight <= 1)
+        //    {
+        //        postProcessWeight += Time.deltaTime;
+        //    }
+        //}
+        //else
+        //{
+        //    if (postProcessWeight >= 0)
+        //    {
+        //        postProcessWeight -= Time.deltaTime;
+        //    }
+        //}
+        //mainCam.transform.GetChild(0).GetComponent<PostProcessVolume>().weight = postProcessWeight;
     }
-    
 
     //ButtonInterface
     public void ActiveCharacterAttack()
@@ -129,7 +129,6 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.SelectCharacter(ObjectType.priest);
-                unitInteractions.SelectPriestUI();
             }
             else
             {
@@ -145,7 +144,6 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.SelectCharacter(ObjectType.pharaoh);
-                unitInteractions.SelectPharaohUI();
             }
             else
             {
@@ -161,7 +159,6 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.UnselectCharacter();
-                unitInteractions.UnselectCharacter();
             }
             else
             {

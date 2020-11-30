@@ -31,4 +31,8 @@ public class Constants
     public const float maxSceneLoadProgress = .9f;
 
     public const int sioUdpConnectionReset = -1744830452;
+
+    public const float messageLifetimeInSeconds = 10;
+    public const float messageStartFadeoutAfterSeconds = 5;
+    public const float messageFadeoutTimespan = messageLifetimeInSeconds - messageStartFadeoutAfterSeconds;
 }
