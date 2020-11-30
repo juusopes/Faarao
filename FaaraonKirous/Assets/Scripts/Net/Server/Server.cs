@@ -234,7 +234,8 @@ public sealed class Server : NetworkHandler
             { (int)ClientPackets.disconnecting, ServerHandle.Disconnecting },
             { (int)ClientPackets.activateObject, ServerHandle.ActivateObject },
             { (int)ClientPackets.stay, ServerHandle.Stay },
-            { (int)ClientPackets.revive, ServerHandle.Revive }
+            { (int)ClientPackets.revive, ServerHandle.Revive },
+            { (int)ClientPackets.warp, ServerHandle.Warp }
         };
 
         // Initialize connections

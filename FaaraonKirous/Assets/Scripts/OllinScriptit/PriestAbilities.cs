@@ -155,7 +155,17 @@ public class PriestAbilities : MonoBehaviour
                 {
                     if (warpPosition.y < this.gameObject.transform.position.y + 5f)
                     {
-                        this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
+                        if (NetworkManager._instance.IsHost)
+                        {
+                            GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
+                        }
+                        else
+                        {
+                            if (NetworkManager._instance.ShouldSendToServer)
+                            {
+                                ClientSend.Warp(GetComponent<PlayerObjectManager>().Type, warpPosition);
+                            }
+                        }
                         warpSpellActive = false;
                         warped = true;
                         //GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]--;
