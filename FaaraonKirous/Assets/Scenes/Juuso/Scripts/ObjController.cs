@@ -69,13 +69,8 @@ public class ObjController : MonoBehaviour
         if (tempBoolCounter >= objectivesNeeded)
         {
             fadeToBlack.SetActive(true);
-            LoadNextScene();
+            StartCoroutine(WaitForSeconds2());
         }
-    }
-
-    public void LoadNextScene()
-    {
-        StartCoroutine(WaitForSeconds2());
     }
 
     public IEnumerator WaitForSeconds2()

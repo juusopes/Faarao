@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 public class ObjectiveCounter: MonoBehaviour
 {
-    public bool objectiveDone;
+    //public bool objectiveDone;
     public bool inEndPoint;
 
     public bool pharaohOnly, priestOnly;
@@ -25,7 +25,7 @@ public class ObjectiveCounter: MonoBehaviour
     private void Start()
     {
         //Set All Objectives To False
-        objectiveDone = false;
+        //objectiveDone = false;
         if (objNum > 0)
         {
             objectiveDoneMark.SetActive(false);
@@ -40,20 +40,26 @@ public class ObjectiveCounter: MonoBehaviour
     public void Update()
     {
         CheckIfDone();
+        UpdateUI();
     }
 
     public void CheckIfDone()
     {
         if (activated.activated == true)
         {
-            objectiveDone = true;
-            objectiveDoneMark.SetActive(true);
-
             objectiveContoller.objectiveDone[objNum - 1] = true;
 
             rewards.UpdateObjectives();
 
             this.gameObject.SetActive(false);
+        }
+    }
+
+    public void UpdateUI()
+    {
+        if (objNum > 0 && objectiveContoller.objectiveDone[objNum - 1] == true)
+        {
+            objectiveDoneMark.SetActive(true);
         }
     }
 
