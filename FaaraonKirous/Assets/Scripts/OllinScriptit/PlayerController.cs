@@ -104,19 +104,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //bool myBoolArray = abilityAllowed.ToArray();
-
-        //for (int i = 0; i < abilityAllowed.Length; i++)
-        //{
-        //    myBoolArray.Add(abilityAllowed[i]);
-        //}
         CooldownCheck();
         Die();
         if (!IsDead)
         {
             Moving();
             LineOfSight();
-            if (!menu.menuActive)
+            if (!menu.menuActive && IsCurrentPlayer)
             {
                 KeyControls();
             } else
@@ -307,7 +301,7 @@ public class PlayerController : MonoBehaviour
     {
         if(!IsDead)
         {
-            unitInteractions.StanceCheck();
+            unitInteractions.StanceCheckUI();
 
             if (IsCurrentPlayer && !IsDead)
             {
@@ -808,28 +802,6 @@ public class PlayerController : MonoBehaviour
                 abilityCooldowns[x] = 0;
             }
         }
-        //if (Time.time > nextFireTime)
-        //{
-        //    onCooldown = false;
-        //    imageCooldown.fillAmount = 1;
-
-        //    if (Input.GetButtonDown("Ability"))
-        //    {
-        //        cooldownTime = 5;
-        //        onCooldown = true;
-
-        //        nextFireTime = Time.time + cooldownTime;
-        //    }
-        //}
-
-        //if (onCooldown)
-        //{
-        //    imageCooldown.fillAmount -= 1 / cooldownTime * Time.deltaTime;
-        //}
-        //if (!onCooldown)
-        //{
-        //    imageCooldown.fillAmount = 0;
-        //}
     }
     private void Die()
     {

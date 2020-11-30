@@ -128,7 +128,7 @@ public class UnitInteractions : MonoBehaviour
         }
     }
 
-    public void StanceCheck()
+    public void StanceCheckUI()
     {
         if (isStanding && activeCharacter == 1)
         {
