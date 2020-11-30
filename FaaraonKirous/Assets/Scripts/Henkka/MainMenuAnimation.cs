@@ -27,7 +27,7 @@ public class MainMenuAnimation : MonoBehaviour
     public GameObject mid;
     public GameObject end;
     public GameObject goon;
-    public GameObject fallingDust;
+    public ParticleSystem fallingDust;
     public GameObject blood;
     public SkinnedMeshRenderer goon_shadow;
     public GameObject ghost;
@@ -36,7 +36,7 @@ public class MainMenuAnimation : MonoBehaviour
 
     private void Start()
     {
-        fallingDust.SetActive(false);
+        fallingDust.Stop();
         blood.SetActive(false);
         ghost.transform.localScale = Vector3.zero;
         StartCoroutine(MenuAnimation());
@@ -73,8 +73,8 @@ public class MainMenuAnimation : MonoBehaviour
             yield return new WaitForSeconds(2f);
             StartCoroutine(GoonMovement(goon, 6.0f));
             yield return new WaitForSeconds(3f);
-            fallingDust.SetActive(true);
-            yield return StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] { 0.4f, 1f, 0.8f, 1.2f, 0.8f, 1.2f, 0.8f, 1.2f, 0.8f, 1.2f, 0.8f, 1.2f }, 0.05f / hieroglyphAnimationSpeed));
+            fallingDust.Play();
+            yield return StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] { 0.4f, 1f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f }, 0.05f / hieroglyphAnimationSpeed));
             yield return new WaitForSeconds(0.2f);
             StartCoroutine(ScaleOverSeconds(ghost, new Vector3(30f, 30f, 30f), 6.0f));
             yield return new WaitForSeconds(5f);
@@ -85,17 +85,16 @@ public class MainMenuAnimation : MonoBehaviour
             yield return new WaitForSeconds(3f);
 
             StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] {1.2f, 0.4f }, 0.05f / hieroglyphAnimationSpeed));
-
-            blood.SetActive(false);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             ResetValues();
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(4f);
         }
     }
 
     private void ResetValues()
     {
-        fallingDust.SetActive(false);
+        blood.SetActive(false);
+        fallingDust.Stop();
         blood.SetActive(false);
         lightOpacity = 0.98f;
         hieroglyphSaturation = 0.4f;
@@ -110,7 +109,7 @@ public class MainMenuAnimation : MonoBehaviour
         {
             float percentage = elapsedTime / seconds;
             //Fake depth write for shadow
-            if (percentage < 0.4 || percentage > 0.95f)
+            if (percentage < 0.2 || percentage > 0.73f)
                 goon_shadow.enabled = false;
             else
                 goon_shadow.enabled = true;
