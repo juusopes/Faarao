@@ -103,9 +103,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 3.4249616
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.7124808, z: 0}
 --- !u!195 &1274679408148448375
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -144,8 +144,6 @@ MonoBehaviour:
   movementSpeed: 10
   doubleClickTimer: 0
   navMeshAgent: {fileID: 0}
-  _isRunning: 0
-  _isCrouching: 0
   abilityActive: 0
   indicator: {fileID: 5642665167690723842, guid: 608c7c670fc8a4347b2c9cdb6f954bde, type: 3}
   visibleInd: {fileID: 0}
@@ -164,6 +162,7 @@ MonoBehaviour:
   abilityLimitUsed: 0
   abilityLimits: 
   abilityCooldowns: []
+  unitInteractions: {fileID: 0}
 --- !u!114 &8668365835249963842
 MonoBehaviour:
   m_ObjectHideFlags: 0
