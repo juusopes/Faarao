@@ -25,6 +25,15 @@ public class PlayerObjectManager : CharacterObjectManager
                 if (value.Value == GameManager._instance.CurrentPlayerId)
                 {
                     PlayerController.IsCurrentPlayer = true;
+
+                    if (Type == ObjectType.pharaoh)
+                    {
+                        UnitInteractions._instance.SelectPharaohUI();
+                    }
+                    else
+                    {
+                        UnitInteractions._instance.SelectPriestUI();
+                    }
                 }
             }
             else
@@ -40,6 +49,9 @@ public class PlayerObjectManager : CharacterObjectManager
                 if (PlayerController.IsCurrentPlayer)
                 {
                     PlayerController.IsCurrentPlayer = false;
+
+                    // Update UI
+                    UnitInteractions._instance.UnselectCharacter();
                 }
             }
 
@@ -73,6 +85,27 @@ public class PlayerObjectManager : CharacterObjectManager
         packet.Write(PlayerController.IsRunning);
         packet.Write(PlayerController.IsCrouching);
 
+        // Allowed abilities
+        packet.Write(PlayerController.abilityAllowed.Length);
+        for (int i = 0; i < PlayerController.abilityAllowed.Length; ++i)
+        {
+            packet.Write(PlayerController.abilityAllowed[i]);
+        }
+
+        // Ability cooldowns
+        packet.Write(PlayerController.abilityCooldowns.Length);
+        for (int i = 0; i < PlayerController.abilityCooldowns.Length; ++i)
+        {
+            packet.Write(PlayerController.abilityCooldowns[i]);
+        }
+
+        // Ability limits
+        packet.Write(PlayerController.abilityLimits.Length);
+        for (int i = 0; i < PlayerController.abilityLimits.Length; ++i)
+        {
+            packet.Write(PlayerController.abilityLimits[i]);
+        }
+
         // Controller
         if (Controller.HasValue)
         {
@@ -91,6 +124,27 @@ public class PlayerObjectManager : CharacterObjectManager
         // Movement states
         PlayerController.IsRunning = packet.ReadBool();
         PlayerController.IsCrouching = packet.ReadBool();
+
+        // Allowed abilities
+        int abilityAllowedLength = packet.ReadInt();
+        for (int i = 0; i < abilityAllowedLength; ++i)
+        {
+            PlayerController.abilityAllowed[i] = packet.ReadBool();
+        }
+
+        // Ability cooldowns
+        int abilityCooldownsLength = packet.ReadInt();
+        for (int i = 0; i < abilityCooldownsLength; ++i)
+        {
+            PlayerController.abilityCooldowns[i] = packet.ReadFloat();
+        }
+
+        // Ability limits
+        int abilityLimitsLength = packet.ReadInt();
+        for (int i = 0; i < abilityLimitsLength; ++i)
+        {
+            PlayerController.abilityLimits[i] = packet.ReadInt();
+        }
 
         // Controller
         int controller = packet.ReadInt();
@@ -119,6 +173,8 @@ public class PlayerObjectManager : CharacterObjectManager
     public override void ReadState(Packet dataPacket)
     {
         base.ReadState(dataPacket);
+
+        // Set pos
         PlayerController.navMeshAgent.Warp(Transform.position);
         PlayerController.Stay();
     }

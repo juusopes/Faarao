@@ -129,7 +129,6 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.SelectCharacter(ObjectType.priest);
-                unitInteractions.SelectPriestUI();
             }
             else
             {
@@ -145,7 +144,6 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.SelectCharacter(ObjectType.pharaoh);
-                unitInteractions.SelectPharaohUI();
             }
             else
             {
@@ -161,7 +159,6 @@ public class LevelController : MonoBehaviour
             if (NetworkManager._instance.IsHost)
             {
                 GameManager._instance.UnselectCharacter();
-                unitInteractions.UnselectCharacter();
             }
             else
             {

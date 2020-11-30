@@ -231,7 +231,10 @@ public sealed class Server : NetworkHandler
             { (int)ClientPackets.killEnemy, ServerHandle.KillEnemy },
             { (int)ClientPackets.crouching, ServerHandle.Crouching },
             { (int)ClientPackets.running, ServerHandle.Running },
-            { (int)ClientPackets.disconnecting, ServerHandle.Disconnecting }
+            { (int)ClientPackets.disconnecting, ServerHandle.Disconnecting },
+            { (int)ClientPackets.activateObject, ServerHandle.ActivateObject },
+            { (int)ClientPackets.stay, ServerHandle.Stay },
+            { (int)ClientPackets.revive, ServerHandle.Revive }
         };
 
         // Initialize connections

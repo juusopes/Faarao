@@ -162,11 +162,25 @@ public class ClientHandle
     {
         ObjectList list = (ObjectList)packet.ReadByte();
         int id = packet.ReadInt();
+        bool doMessage = packet.ReadBool();
 
         if (GameManager._instance.TryGetObject(list, id, out ObjectManager netManager))
         {
             CharacterObjectManager characterNetManager = (CharacterObjectManager)netManager;
-            characterNetManager.DeathScript.isDead = true;
+            characterNetManager.DeathScript.Die(doMessage);
+        }
+    }
+
+    public static void CharacterRevived(int connection, Packet packet)
+    {
+        ObjectList list = (ObjectList)packet.ReadByte();
+        int id = packet.ReadInt();
+        bool doMessage = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(list, id, out ObjectManager netManager))
+        {
+            CharacterObjectManager characterNetManager = (CharacterObjectManager)netManager;
+            characterNetManager.DeathScript.Revive(doMessage);
         }
     }
     #endregion
@@ -281,5 +295,20 @@ public class ClientHandle
     }
     #endregion
 
+    #region Activatable
+
+    public static void ActivationStateChanged(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.activatable, id, out ObjectManager objectManager))
+        {
+            ActivatableObjectManager activatableObjectManager = (ActivatableObjectManager)objectManager;
+            activatableObjectManager.ActivatorScript.activated = state;
+        }
+    }
+
+    #endregion
 }
 

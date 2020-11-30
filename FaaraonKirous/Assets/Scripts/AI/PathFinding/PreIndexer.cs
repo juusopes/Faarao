@@ -10,9 +10,12 @@ public class PreIndexer : MonoBehaviour
     public static PreIndexer Instance { get { return _instance; } }
 
     [SerializeField]
+    private ActivatableObjectManager[] activatableObjects;
+    [SerializeField]
     private WaypointGroupManager[] waypointGroups;
     [SerializeField]
     private EnemyObjectManager[] enemies;
+    
 
     void Awake()
     {
@@ -26,15 +29,15 @@ public class PreIndexer : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
-            UpdateIndexes();
-        }
+        //if (!Application.isPlaying)
+        //{
+        //    UpdateIndexes();
+        //}
 #else
-        if (Application.isPlaying)
-        {
-            Destroy(this.gameObject);
-        }
+        //if (Application.isPlaying)
+        //{
+        //    Destroy(this.gameObject);
+        //}
 #endif
     }
 
@@ -42,6 +45,14 @@ public class PreIndexer : MonoBehaviour
     [ContextMenu("Update Indexing")]
     private void UpdateIndexes()
     {
+        // Preindex activatable objects
+        activatableObjects = FindObjectsOfType<ActivatableObjectManager>();
+        for (int i = 0; i < activatableObjects.Length; ++i)
+        {
+            activatableObjects[i].Id = i;
+            EditorUtility.SetDirty(activatableObjects[i]);
+        }
+
         // Preindex waypoints
         waypointGroups = FindObjectsOfType<WaypointGroupManager>();
         for (int i = 0; i < waypointGroups.Length; ++i)
