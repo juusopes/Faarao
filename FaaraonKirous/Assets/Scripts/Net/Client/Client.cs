@@ -100,9 +100,7 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.syncPlayers, ClientHandle.SyncPlayers },
             { (int)ServerPackets.playerConnected, ClientHandle.PlayerConnected },
             { (int)ServerPackets.playerDisconnected, ClientHandle.PlayerDisconnected },
-            { (int)ServerPackets.serverStopped, ClientHandle.ServerStopped },
-            { (int)ServerPackets.activationStateChanged, ClientHandle.ActivationStateChanged },
-            { (int)ServerPackets.characterRevived, ClientHandle.CharacterRevived }
+            { (int)ServerPackets.serverStopped, ClientHandle.ServerStopped }
         };
 
         // Initialize connection

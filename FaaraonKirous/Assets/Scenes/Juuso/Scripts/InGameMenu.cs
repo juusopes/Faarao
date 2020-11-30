@@ -83,7 +83,6 @@ public class InGameMenu : MonoBehaviour
                 menuActive = true;
 
                 menuPanel.SetActive(true);
-                objectivePanel.SetActive(false);
 
                 continueButton.SetActive(true);
                 loadButton.SetActive(true);

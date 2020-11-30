@@ -93,14 +93,6 @@ public class ClientSend
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
 
-    public static void Revive(int id)
-    {
-        var packet = new Packet((int)ClientPackets.revive);
-        packet.Write(id);
-
-        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
-    }
-
     public static void Crouching(ObjectType character, bool state)
     {
         var packet = new Packet((int)ClientPackets.crouching);
@@ -118,33 +110,5 @@ public class ClientSend
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
-
-    public static void Stay(ObjectType character)
-    {
-        var packet = new Packet((int)ClientPackets.stay);
-        packet.Write((short)character);
-
-        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
-    }
-
-    public static void Warp(ObjectType character, Vector3 position)
-    {
-        var packet = new Packet((int)ClientPackets.warp);
-        packet.Write((short)character);
-        packet.Write(position);
-
-        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
-    }
-    #endregion
-
-    #region Activatable
-    public static void ActivateObject(int id)
-    {
-        var packet = new Packet((int)ClientPackets.activateObject);
-        packet.Write(id);
-
-        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
-    }
-
     #endregion
 }

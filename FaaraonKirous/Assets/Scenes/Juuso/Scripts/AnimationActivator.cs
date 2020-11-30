@@ -10,15 +10,12 @@ public class AnimationActivator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager._instance.IsFullyLoaded)
+        bool activated = opener.GetComponent<ActivatorScript>().activated;
+
+        if (activated)
         {
-            bool activated = opener.GetComponent<ActivatorScript>().activated;
-
-            if (activated)
-            {
-
-                animator.enabled = true;
-            }
+            
+            animator.enabled = true;
         }
     }
 }

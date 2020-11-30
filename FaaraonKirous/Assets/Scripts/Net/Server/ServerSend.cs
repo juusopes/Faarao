@@ -175,22 +175,11 @@ public class ServerSend
     #endregion
 
     #region Character
-    public static void CharacterDied(ObjectList list, int id, bool doMessage)
+    public static void CharacterDied(ObjectList list, int id)
     {
         var packet = new Packet((int)ServerPackets.characterDied);
         packet.Write((byte)list);
         packet.Write(id);
-        packet.Write(doMessage);
-
-        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
-    }
-
-    public static void CharacterRevived(ObjectList list, int id, bool doMessage)
-    {
-        var packet = new Packet((int)ServerPackets.characterRevived);
-        packet.Write((byte)list);
-        packet.Write(id);
-        packet.Write(doMessage);
 
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
     }
@@ -299,19 +288,6 @@ public class ServerSend
             Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
         }
     }
-    #endregion
-
-    #region Activatable
-
-    public static void ActivationStateChanged(int id, bool state)
-    {
-        var packet = new Packet((int)ServerPackets.activationStateChanged);
-        packet.Write(id);
-        packet.Write(state);
-
-        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
-    }
-
     #endregion
 }
 

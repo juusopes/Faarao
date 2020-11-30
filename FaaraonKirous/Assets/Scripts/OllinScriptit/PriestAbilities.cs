@@ -13,14 +13,13 @@ public class PriestAbilities : MonoBehaviour
     private Vector3 telekinesisHeight;
     //WarpSpell
     public bool warpSpellActive;
-    private Vector3 warpPosition;
-    public bool warped;
-    //private Vector3 playerSavePos;
-    //private Vector3 targetSavePos;
+    private Vector3 warpPosition;    
+
+    private Vector3 playerSavePos;
+    private Vector3 targetSavePos;
     public GameObject[] indicatorList;
     public float[] rangeList;
     public int[] abilityLimitList;
-    public float[] abilityCDList;
     public bool[] lineActive;
 
     // Start is called before the first frame update
@@ -139,8 +138,11 @@ public class PriestAbilities : MonoBehaviour
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit = new RaycastHit();
+                    Debug.Log("WARP!");
+                    //DoubleClick Check
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                     {
+                        Debug.Log("MORE WARP!");
                         warpPosition = hit.point;
                     }
                 }
@@ -148,27 +150,15 @@ public class PriestAbilities : MonoBehaviour
                     && GetComponent<PlayerController>().abilityClicked
                     && !GetComponent<PlayerController>().searchingForSight
                     && GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum] > 0
-                    && GetComponent<PlayerController>().abilityCooldowns[GetComponent<PlayerController>().abilityNum] == 0
                     && (warpPosition.x > this.gameObject.transform.position.x + 0.5f || warpPosition.x < this.gameObject.transform.position.x - 0.5f)
                      && (warpPosition.y > this.gameObject.transform.position.y + 0.5f || warpPosition.y < this.gameObject.transform.position.y - 0.5f)
                       && (warpPosition.z > this.gameObject.transform.position.z + 0.5f || warpPosition.z < this.gameObject.transform.position.z - 0.5f))
                 {
                     if (warpPosition.y < this.gameObject.transform.position.y + 5f)
                     {
-                        if (NetworkManager._instance.IsHost)
-                        {
-                            GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
-                        }
-                        else
-                        {
-                            if (NetworkManager._instance.ShouldSendToServer)
-                            {
-                                ClientSend.Warp(GetComponent<PlayerObjectManager>().Type, warpPosition);
-                            }
-                        }
-                        warpSpellActive = false;
-                        warped = true;
-                        //GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]--;
+                        this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
+                        warpPosition = transform.position;
+                        GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]--;
                     }
                     //GetComponent<PlayerController>().abilityActive = false;
                     //GetComponent<PlayerController>().abilityNum = 0;
