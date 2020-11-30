@@ -69,6 +69,16 @@ public static class OnNavMesh
         return center;
     }
 
+    public static Vector3 GetClosestPointOnNavmesh(Vector3 start)
+    {
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(start, out hit, 1.0f, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+        return start;
+    }
+
     /// <summary>
     /// Returns true if navObject can traverse exactly to testPosition with any means.
     /// </summary>

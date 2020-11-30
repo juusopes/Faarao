@@ -16,7 +16,6 @@ public class DetectionState : State
 
     public override void OnStateEnter()
     {
-        Debug.Log("Dete");
         searchTimer = 0;
         character.StopNavigation();
     }

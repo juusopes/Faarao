@@ -10,8 +10,6 @@ public class ObjectiveCounter: MonoBehaviour
 
     public bool pharaohOnly, priestOnly;
 
-    private GameObject pharaoh, priest;
-
     public int objNum;
 
     public GameObject objectiveDoneMark;
@@ -31,8 +29,6 @@ public class ObjectiveCounter: MonoBehaviour
             objectiveDoneMark.SetActive(false);
         }
 
-        priest = GameObject.Find("Priest");
-        pharaoh = GameObject.Find("Pharaoh");
         rewards = GameObject.FindGameObjectWithTag("LevelController").GetComponent<RewardController>();
         objectiveContoller = transform.parent.gameObject.GetComponent<ObjController>();
     }

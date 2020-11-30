@@ -168,6 +168,8 @@ public class Detector
     {
         if (IsPlayerDeadOrInvisible(playerController))   //Call this first so we dont mark targets
             return false;
+        if (IsPlayerCrouchingAboveSightLevel(player, playerController))
+            return false;
         if (character.isPosessed)
             return false;
         float testRange = playerController != null && playerController.IsCrouching ? SightRangeCrouching : SightRange;
@@ -179,6 +181,16 @@ public class Detector
         if (playerController == null)
             return true;
         if (playerController.IsDead || playerController.isInvisible)
+            return true;
+
+        return false;
+    }
+
+    private bool IsPlayerCrouchingAboveSightLevel(GameObject player, PlayerController playerController)
+    {
+        if (playerController == null)
+            return true;
+        if (playerController.IsCrouching && player.transform.position.y > character.fieldOfViewGO.transform.position.y)
             return true;
 
         return false;
