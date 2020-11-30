@@ -49,17 +49,48 @@ public class DeathScript : MonoBehaviour
         }
         if (hp == 0 && !isDead)
         {
-            isDead = true;
-
-            if (NetworkManager._instance.ShouldSendToClient)
-            {
-                ServerSend.CharacterDied(CharacterNetManager.List, CharacterNetManager.Id);
-            }
+            Die();
         }
         //if (isDead)
         //{
         //    Debug.Log(this.gameObject + "Is Dead!");
         //}
+    }
+
+    public void Die(bool doMessage = true)
+    {
+        isDead = true;
+        hp = 0;
+
+        if (doMessage && CharacterNetManager.List == ObjectList.player)
+        {
+            MessageLog.Instance.AddMessage(
+                $"{Tools.TypeToString(CharacterNetManager.Type)} died",
+                Color.red);
+        }
+
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.CharacterDied(CharacterNetManager.List, CharacterNetManager.Id, doMessage);
+        }
+    }
+
+    public void Revive(bool doMessage = true)
+    {
+        isDead = false;
+        hp = 1;
+
+        if (doMessage && CharacterNetManager.List == ObjectList.player)
+        {
+            MessageLog.Instance.AddMessage(
+                $"{Tools.TypeToString(CharacterNetManager.Type)} was revived", 
+                Color.green);
+        }
+
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.CharacterRevived(CharacterNetManager.List, CharacterNetManager.Id, doMessage);
+        }
     }
 
     private void AliveCheck()
@@ -73,14 +104,9 @@ public class DeathScript : MonoBehaviour
             }
             heal = 0;
         }
-        if (hp > 0)
+        if (hp > 0 && isDead)
         {
-            isDead = false;
-
-            if (NetworkManager._instance.ShouldSendToClient)
-            {
-                // TODO: Character revived
-            }
+            Revive();
         }
     }
 }

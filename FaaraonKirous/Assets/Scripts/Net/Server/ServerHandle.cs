@@ -10,9 +10,8 @@ public class ServerHandle
     {
         Debug.Log($"{GameManager._instance.Players.Count} Join request received!");
 
-        // TODO: Call connect client
         Server.Instance.SetConnectionFlags(connection, ConnectionState.Connected);
-        GameManager._instance.PlayerConnected(connection, "Placeholder: Please fix");
+        GameManager._instance.PlayerConnected(connection, "placeholder");
         
         // Send connection accepted message
         ServerSend.ConnectionAccepted(connection);
@@ -126,7 +125,20 @@ public class ServerHandle
         if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
         {
             EnemyObjectManager enemyNetManager = (EnemyObjectManager)netManager;
-            enemyNetManager.DeathScript.damage = 1;
+            enemyNetManager.DeathScript.Die();
+        }
+    }
+
+    public static void Revive(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, id, out ObjectManager objectManager))
+        {
+            PlayerObjectManager playerObjectManager = (PlayerObjectManager)objectManager;
+            playerObjectManager.DeathScript.Revive();
         }
     }
 
@@ -161,5 +173,37 @@ public class ServerHandle
             ServerSend.Running(character, state, connection);
         }
     }
+
+    public static void Stay(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager objectManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)objectManager;
+            playerNetManager.PlayerController.Stay();
+        }
+    }
+
+    #endregion
+
+    #region Activatable
+
+    public static void ActivateObject(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        int id = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.activatable, id, out ObjectManager objectManager))
+        {
+            ActivatableObjectManager activatableObjectManager = (ActivatableObjectManager)objectManager;
+            activatableObjectManager.ActivatorScript.Activate();
+        }
+    }
+
+
     #endregion
 }

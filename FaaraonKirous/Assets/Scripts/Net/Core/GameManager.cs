@@ -17,6 +17,7 @@ public enum ObjectList : byte
     enemy,
     player,
     waypointGroup,
+    activatable,
     count
 }
 
@@ -25,7 +26,8 @@ public enum ObjectType : short
     enemy,
     pharaoh,
     priest,
-    waypointGroup
+    waypointGroup,
+    activatable
 }
 
 public class GameManager : MonoBehaviour
@@ -151,11 +153,6 @@ public class GameManager : MonoBehaviour
 
     public void StartLoading(bool willLoadSave = false)
     {
-        if (NetworkManager._instance.ShouldSendToClient)
-        {
-            ServerSend.StartLoading();
-        }
-        
         Time.timeScale = 0;
 
         // Set everything to "not loaded" initially
@@ -165,6 +162,11 @@ public class GameManager : MonoBehaviour
         if (willLoadSave)
         {
             WillLoadSave = true;
+        }
+
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.StartLoading();
         }
     }
 
@@ -565,6 +567,8 @@ public class GameManager : MonoBehaviour
             ControlledCharacter = null
         });
 
+        MessageLog.Instance.AddMessage($"{name} connected", Color.blue);
+
         if (NetworkManager._instance.ShouldSendToClient)
         {
             ServerSend.PlayerConnected(id, name);
@@ -574,6 +578,8 @@ public class GameManager : MonoBehaviour
     public void PlayerDisconnected(int id)
     {
         Debug.Log($"{Players[id].Name} disconnected");
+
+        MessageLog.Instance.AddMessage($"{Players[id].Name} disconnected", Color.blue);
 
         if (NetworkManager._instance.IsHost)
         {

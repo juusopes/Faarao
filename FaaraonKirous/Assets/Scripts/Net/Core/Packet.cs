@@ -27,7 +27,9 @@ public enum ServerPackets
     syncPlayers,
     playerConnected,
     playerDisconnected,
-    serverStopped
+    serverStopped,
+    activationStateChanged,
+    characterRevived
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -44,7 +46,10 @@ public enum ClientPackets
     killEnemy,
     crouching,
     running,
-    disconnecting
+    disconnecting,
+    activateObject,
+    stay,
+    revive
 }
 
 public delegate void PacketHandler(int connection, Packet packet);
