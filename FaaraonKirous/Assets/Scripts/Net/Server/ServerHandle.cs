@@ -187,6 +187,20 @@ public class ServerHandle
         }
     }
 
+    public static void Warp(int connection, Packet packet)
+    {
+        if (!Server.Instance.IsSynced(connection)) return;
+
+        ObjectType character = (ObjectType)packet.ReadShort();
+        Vector3 position = packet.ReadVector3();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager objectManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)objectManager;
+            playerNetManager.PlayerController.navMeshAgent.Warp(position);
+        }
+    }
+
     #endregion
 
     #region Activatable
