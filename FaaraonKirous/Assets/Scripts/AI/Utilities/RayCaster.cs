@@ -22,7 +22,7 @@ public static class RayCaster
     public static readonly LayerMask defaultLayerMask = ~(1 << 2);   //~() means all other than what is inside
 
     public static readonly int LayerListStructures = layerDefault;
-    public static readonly int LayerListDefaultIgnore = layerIgnoreRay | layerEditor;
+    public static readonly int LayerListDefaultIgnore = layerIgnoreRay | layerTrans | layerEditor;
     public static readonly int LayerListCharacters = layerPlayer | layerEnemy;
     public static readonly int LayerListRaycastable = layerLadder | layerDistraction | layerClickSelector;
     public static readonly int LayerListObjects = LayerListCharacters | LayerListRaycastable;
@@ -45,6 +45,14 @@ public static class RayCaster
         Vector3 startToTarget = target.transform.position - start.transform.position;
         //Debug.DrawRay(start.transform.position, startToTarget, Color.red, 1f);
         Physics.Raycast(start.transform.position, startToTarget, out hit, range, layerMask);
+
+        return hit;
+    }
+
+    public static RaycastHit ToDirection(Vector3 origin, Vector3 direction, float range, LayerMask layerMask)
+    {
+        RaycastHit hit;
+        Physics.Raycast(origin, direction, out hit, range, layerMask);
 
         return hit;
     }

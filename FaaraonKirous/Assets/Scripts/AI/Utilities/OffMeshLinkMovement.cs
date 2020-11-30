@@ -10,6 +10,7 @@ class OffMeshLinkMovement
     private bool MoveAcrossNavMeshesStarted = false;
     private float charRadius;
     private float charJumpHeight;
+    private float rotateMultiplier = 3f;
     private float CharHeight => navMeshAgent.baseOffset;
 
 
@@ -179,7 +180,7 @@ class OffMeshLinkMovement
                 //Match rotation
                 if (i == 1 && linkRoute.RotationType == OffMeshRotationType.RotateMoving)
                 {
-                    charTransform.rotation = Quaternion.Lerp(startRotation, newRotation, t * 10);
+                    charTransform.rotation = Quaternion.Lerp(startRotation, newRotation, t * rotateMultiplier);
                 }
                 //navMeshAgent.destination = charTransform.position;
                 t += tStep * Time.deltaTime;
