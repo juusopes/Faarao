@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 24981099}
   - component: {fileID: 24981100}
   - component: {fileID: 24981103}
+  - component: {fileID: 8732760388653873731}
+  - component: {fileID: 696797729811367570}
   m_Layer: 0
   m_Name: Breakable Door 1
   m_TagString: TargetableObject
@@ -135,6 +137,34 @@ MonoBehaviour:
   _list: 3
   _type: 4
   _id: 0
+--- !u!114 &8732760388653873731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765987238313109130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dc368f13aa39bc43aac69de064974f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  opener: {fileID: 765987238313109130}
+  animator: {fileID: 459433699810117531}
+--- !u!114 &696797729811367570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765987238313109130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dc368f13aa39bc43aac69de064974f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  opener: {fileID: 765987238313109130}
+  animator: {fileID: 459433699810117531}
 --- !u!1 &2713242485980738252
 GameObject:
   m_ObjectHideFlags: 0
