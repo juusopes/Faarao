@@ -5,6 +5,23 @@ using UnityEngine.UI;
 
 public class UnitInteractions : MonoBehaviour
 {
+    public static UnitInteractions _instance;
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else if (_instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+            return;
+        }
+    }
+
+
     public float cooldownTime;
     public float nextFireTime;
     public bool isStanding = true;
@@ -37,10 +54,10 @@ public class UnitInteractions : MonoBehaviour
 
     private void Start()
     {
-        crouching.SetActive(false);
+        //crouching.SetActive(false);
 
         // TODO
-        activeCharacter = 1;
+        //activeCharacter = 1;
     }
 
     private void Update()
@@ -111,7 +128,7 @@ public class UnitInteractions : MonoBehaviour
         }
     }
 
-    public void StanceCheck()
+    public void StanceCheckUI()
     {
         if (isStanding && activeCharacter == 1)
         {
