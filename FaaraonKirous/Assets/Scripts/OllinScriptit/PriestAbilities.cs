@@ -158,6 +158,7 @@ public class PriestAbilities : MonoBehaviour
                         this.gameObject.GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
                         warpSpellActive = false;
                         warped = true;
+                        Debug.Log("Warped");
                         //GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]--;
                     }
                     //GetComponent<PlayerController>().abilityActive = false;
