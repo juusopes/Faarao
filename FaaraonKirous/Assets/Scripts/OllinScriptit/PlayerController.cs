@@ -776,7 +776,8 @@ public class PlayerController : MonoBehaviour
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)
             return false;
-        return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        //return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        return UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null;
     }
 
     public void CooldownCheck()
