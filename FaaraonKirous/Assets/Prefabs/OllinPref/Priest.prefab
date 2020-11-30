@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 1842785535916910530}
   - component: {fileID: -6113639550760508180}
   - component: {fileID: 4331518717048695686}
+  - component: {fileID: 3275265742005428261}
   m_Layer: 8
   m_Name: Priest
   m_TagString: Player
@@ -144,8 +145,6 @@ MonoBehaviour:
   movementSpeed: 10
   doubleClickTimer: 0
   navMeshAgent: {fileID: 0}
-  _isRunning: 0
-  _isCrouching: 0
   abilityActive: 0
   indicator: {fileID: 5642665167690723842, guid: 608c7c670fc8a4347b2c9cdb6f954bde, type: 3}
   visibleInd: {fileID: 0}
@@ -164,6 +163,7 @@ MonoBehaviour:
   abilityLimitUsed: 0
   abilityLimits: 
   abilityCooldowns: []
+  unitInteractions: {fileID: 0}
 --- !u!114 &8668365835249963842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,6 +264,24 @@ MonoBehaviour:
   _list: 1
   _type: 2
   _id: 0
+--- !u!114 &3275265742005428261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274679408148448382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 4
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!114 &5403935106073002384
 MonoBehaviour:
   m_ObjectHideFlags: 0

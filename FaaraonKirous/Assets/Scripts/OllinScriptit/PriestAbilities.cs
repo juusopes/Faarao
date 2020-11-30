@@ -142,6 +142,9 @@ public class PriestAbilities : MonoBehaviour
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                     {
                         warpPosition = hit.point;
+                    } else
+                    {
+                        warpSpellActive = false;
                     }
                 }
                 if (GetComponent<PlayerController>().inRange
