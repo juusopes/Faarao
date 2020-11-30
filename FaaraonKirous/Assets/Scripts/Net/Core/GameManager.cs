@@ -18,6 +18,7 @@ public enum ObjectList : byte
     player,
     waypointGroup,
     activatable,
+    controller,
     count
 }
 
@@ -27,7 +28,8 @@ public enum ObjectType : short
     pharaoh,
     priest,
     waypointGroup,
-    activatable
+    activatable,
+    objectiveController
 }
 
 public class GameManager : MonoBehaviour
