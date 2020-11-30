@@ -41,7 +41,7 @@ public static class OnNavMesh
             Vector2 randomPoint = new Vector2(Mathf.Sin(angle) * radius, Mathf.Cos(angle) * radius);
             Vector3 endPoint = center + new Vector3(randomPoint.x, 0, randomPoint.y);
 
-            if (IsReachable(center, endPoint))
+            if (IsCompletelyReachable(center, endPoint))
             {
                 return endPoint;
             }
@@ -70,26 +70,48 @@ public static class OnNavMesh
     }
 
     /// <summary>
-    /// Returns true if navObject can traverse to testPosition with any means.
+    /// Returns true if navObject can traverse exactly to testPosition with any means.
     /// </summary>
     /// <param name="navObject"></param>
     /// <param name="testPosition"></param>
     /// <returns></returns>
-    public static bool IsReachable(Transform navObject, Vector3 testPosition)
+    public static bool IsCompletelyReachable(Transform navObject, Vector3 testPosition)
+    {
+        return IsCompletelyReachable(navObject.position, testPosition);
+    }
+
+    /// <summary>
+    /// Returns true if navObject can traverse exactly to testPosition with any means.
+    /// </summary>
+    /// <param name="navObject"></param>
+    /// <param name="testPosition"></param>
+    /// <returns></returns>
+    public static bool IsCompletelyReachable(Vector3 startPosition, Vector3 testPosition)
     {
         NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(testPosition, navObject.position, NavMesh.AllAreas, path);
+        NavMesh.CalculatePath(testPosition, testPosition, NavMesh.AllAreas, path);
         return path.status == NavMeshPathStatus.PathComplete;
     }
 
     /// <summary>
-    /// Returns true if navObject can traverse to testPosition with any means.
+    /// Returns true if testPosition is reachable from some part in nav mesh.
     /// </summary>
     /// <param name="navObject"></param>
     /// <param name="testPosition"></param>
     /// <returns></returns>
-    public static bool IsReachable(Vector3 startPosition, Vector3 testPosition)
+    public static bool IsPartiallyReachable(Transform navObject, Vector3 testPosition)
     {
-        return NavMesh.CalculatePath(testPosition, startPosition, NavMesh.AllAreas, new NavMeshPath());
+        return IsPartiallyReachable(navObject.position, testPosition);
+    }
+
+    /// <summary>
+    /// Returns true if testPosition is reachable from some part in nav mesh.
+    /// </summary>
+    /// <param name="navObject"></param>
+    /// <param name="testPosition"></param>
+    /// <returns></returns>
+    public static bool IsPartiallyReachable(Vector3 startPosition, Vector3 testPosition)
+    {
+        return NavMesh.CalculatePath(testPosition, testPosition, NavMesh.AllAreas, new NavMeshPath());
     }
 }

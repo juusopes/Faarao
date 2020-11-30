@@ -11,7 +11,7 @@ public static class UtilsClass
 
     public static bool IsMinimumVector(Vector3 testVector)
     {
-        return Vector3.Equals(testVector, new Vector3(float.MinValue, float.MinValue, float.MinValue));
+        return testVector == new Vector3(float.MinValue, float.MinValue, float.MinValue);
     }
 
     public static Vector3 GetVectorFromAngle(float angle)
@@ -29,9 +29,11 @@ public static class UtilsClass
         return n;
     }
 
-    public static bool Approximately(this Quaternion quatA, Quaternion value, float acceptableRange)
+    public static bool EqualsQuaternion(this Quaternion quatA, Quaternion value, float? acceptableRange = null)
     {
-        return 1 - Mathf.Abs(Quaternion.Dot(quatA, value)) < acceptableRange;
+        if (!acceptableRange.HasValue)
+            acceptableRange = Mathf.Epsilon;
+        return 1 - Mathf.Abs(Quaternion.Dot(quatA, value)) < acceptableRange.Value;
     }
 
     //Todo: test this ..
