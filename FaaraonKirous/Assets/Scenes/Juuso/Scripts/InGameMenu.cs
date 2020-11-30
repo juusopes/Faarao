@@ -34,6 +34,8 @@ public class InGameMenu : MonoBehaviour
     // TODO: For testing
     public GameObject objectivePanel;
 
+    public GameObject fadeFromBlack;
+
     public int savedLevel;
     [HideInInspector]
     public float lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ;
@@ -53,6 +55,7 @@ public class InGameMenu : MonoBehaviour
     {
         menuActive = false;
 
+        fadeFromBlack.SetActive(true);
         menuPanel.SetActive(false);
         optionsPanel.SetActive(false);
         audioPanel.SetActive(false);

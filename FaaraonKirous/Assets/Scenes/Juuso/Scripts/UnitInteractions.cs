@@ -30,13 +30,18 @@ public class UnitInteractions : MonoBehaviour
 
     //public Texture2D cursor, cursorInteract, cursorAttack;
     public bool checkbox;
+
+    [HideInInspector]
     public GameObject standing, crouching;
+    [HideInInspector]
     public GameObject standing2, crouching2;
 
     //public Image imageCooldown;
 
     public GameObject character1, character2;
+    [HideInInspector]
     public GameObject skillGroup1, skillGroup2;
+    [HideInInspector]
     public GameObject generalSkillGroup;
 
     [HideInInspector]
@@ -54,8 +59,6 @@ public class UnitInteractions : MonoBehaviour
 
     private void Start()
     {
-        //crouching.SetActive(false);
-
         // TODO
         //activeCharacter = 1;
     }
@@ -193,6 +196,5 @@ public class UnitInteractions : MonoBehaviour
         skillGroup1.SetActive(false);
         skillGroup2.SetActive(false);
         generalSkillGroup.SetActive(false);
-
     }
 }
