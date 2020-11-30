@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour
     public bool abilityClicked;
     //[HideInInspector]
     public bool[] abilityAllowed;
-    public float[] abilityCooldowns;
 
     //Invisibility
     public bool isInvisible;
@@ -132,7 +131,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 movingCheck;
 
     //Ability Limits
+    public int abilityLimitUsed;
     public int[] abilityLimits;
+    public float[] abilityCooldowns;
 
     private void Awake()
     {
@@ -148,7 +149,7 @@ public class PlayerController : MonoBehaviour
         //{
         //    myBoolArray.Add(abilityAllowed[i]);
         //}
-
+        CooldownCheck();
         if (!IsDead)
         {
             Moving();
@@ -213,7 +214,22 @@ public class PlayerController : MonoBehaviour
         {
             death.damage = 10;
         }
-        //AbilityLimits
+        //AbilityLimits & Cooldowns
+        if (playerOne)
+        {
+            abilityCooldowns = new float[GetComponent<PharaohAbilities>().abilityCDList.Length];
+            //for (int x = 0; x < abilityCooldowns.Length-1; x++)
+            //{
+            //    abilityCooldowns[x] = 0;
+            //}
+        } else
+        {
+            abilityCooldowns = new float[GetComponent<PriestAbilities>().abilityCDList.Length];
+            //for (int x = 0; x < abilityCooldowns.Length - 1; x++)
+            //{
+            //    abilityCooldowns[x] = 0;
+            //}
+        }
         ResetAbilityLimits();
     }
     public void Moving()
@@ -548,20 +564,46 @@ public class PlayerController : MonoBehaviour
     {
         if (abilityAllowed[tempAbilityNum])
         {
-            if (!abilityActive)
+            if (playerOne)
             {
-                abilityActive = true;
-                abilityNum = tempAbilityNum;
-            }
-            else if (abilityNum != tempAbilityNum)
+                if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || GetComponent<PharaohAbilities>().abilityLimitList[tempAbilityNum] == 0)
+                {
+                    if (!abilityActive)
+                    {
+                        abilityActive = true;
+                        abilityNum = tempAbilityNum;
+                    }
+                    else if (abilityNum != tempAbilityNum)
+                    {
+                        abilityActive = true;
+                        abilityNum = tempAbilityNum;
+                    }
+                    else
+                    {
+                        abilityActive = false;
+                        abilityNum = 0;
+                    }
+                }
+            } else
             {
-                abilityActive = true;
-                abilityNum = tempAbilityNum;
-            }
-            else
-            {
-                abilityActive = false;
-                abilityNum = 0;
+                if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || GetComponent<PriestAbilities>().abilityLimitList[tempAbilityNum] == 0)
+                {
+                    if (!abilityActive)
+                    {
+                        abilityActive = true;
+                        abilityNum = tempAbilityNum;
+                    }
+                    else if (abilityNum != tempAbilityNum)
+                    {
+                        abilityActive = true;
+                        abilityNum = tempAbilityNum;
+                    }
+                    else
+                    {
+                        abilityActive = false;
+                        abilityNum = 0;
+                    }
+                }
             }
         }
     }
@@ -569,11 +611,13 @@ public class PlayerController : MonoBehaviour
     {
         if (playerOne)
         {
-            abilityLimits = GetComponent<PharaohAbilities>().abilityLimitList;
+            abilityLimits = new int[GetComponent<PharaohAbilities>().abilityLimitList.Length];
+            GetComponent<PharaohAbilities>().abilityLimitList.CopyTo(abilityLimits, 0);
         }
         else
         {
-            abilityLimits = GetComponent<PriestAbilities>().abilityLimitList;
+            abilityLimits = new int[GetComponent<PriestAbilities>().abilityLimitList.Length];
+            GetComponent<PriestAbilities>().abilityLimitList.CopyTo(abilityLimits, 0);
         }
     }
     private void TestOffLink()
@@ -712,6 +756,29 @@ public class PlayerController : MonoBehaviour
 
     public void CooldownCheck()
     {
+        if (abilityLimitUsed > 0)
+        {
+            abilityLimits[abilityLimitUsed]--;   
+            if (playerOne) {
+                abilityCooldowns[abilityLimitUsed] = GetComponent<PharaohAbilities>().abilityCDList[abilityLimitUsed];
+            }
+            else
+            {
+                abilityCooldowns[abilityLimitUsed] = GetComponent<PriestAbilities>().abilityCDList[abilityLimitUsed];
+            }
+            //            public bool[] abilityAllowed;
+            //public float[] abilityCooldowns;
+            abilityLimitUsed = 0;
+        }
+        for (int x = 1; x < abilityCooldowns.Length-1; x++) {
+            if (abilityCooldowns[x] > 0)
+            {
+                abilityCooldowns[x] -= Time.deltaTime;
+            } else
+            {
+                abilityCooldowns[x] = 0;
+            }
+        }
         //if (Time.time > nextFireTime)
         //{
         //    onCooldown = false;

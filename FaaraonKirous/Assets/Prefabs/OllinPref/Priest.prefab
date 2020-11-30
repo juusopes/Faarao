@@ -153,6 +153,7 @@ MonoBehaviour:
   searchingForSight: 0
   abilityClicked: 0
   abilityAllowed: 0101010101010101010101
+  abilityCooldowns: []
   isInvisible: 0
   interactObject: {fileID: 0}
   targetEnemy: {fileID: 0}
@@ -160,6 +161,7 @@ MonoBehaviour:
   menu: {fileID: 0}
   startDead: 0
   anim: {fileID: 1622794347246304918}
+  abilityLimitUsed: 0
   abilityLimits: 
 --- !u!114 &8668365835249963842
 MonoBehaviour:
@@ -200,6 +202,18 @@ MonoBehaviour:
   - 0
   - 0
   abilityLimitList: 0000000002000000020000000200000002000000020000000200000002000000000000000000000000000000
+  abilityCDList:
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
   lineActive: 0000000000000000000000
 --- !u!114 &1842785535916910530
 MonoBehaviour:

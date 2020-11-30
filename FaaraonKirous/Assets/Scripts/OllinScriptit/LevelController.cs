@@ -63,6 +63,7 @@ public class LevelController : MonoBehaviour
     void Update()
     {
         KeyBoardControls();
+        InivsibilityView();
         // TODO: Doesn't work if no activeCharacter
         //InivsibilityView();
     }
@@ -82,22 +83,22 @@ public class LevelController : MonoBehaviour
 
     private void InivsibilityView()
     {
-        if (currentCharacter.GetComponent<PlayerController>().isInvisible)
-        {
-            if (postProcessWeight <= 1)
-            {
-                postProcessWeight += Time.deltaTime;
-            }
-        } else
-        {
-            if (postProcessWeight >= 0)
-            {
-                postProcessWeight -= Time.deltaTime;
-            }
-        }
-        mainCam.transform.GetChild(0).GetComponent<PostProcessVolume>().weight = postProcessWeight;
+        //if (currentCharacter.GetComponent<PlayerController>().isInvisible)
+        //{
+        //    if (postProcessWeight <= 1)
+        //    {
+        //        postProcessWeight += Time.deltaTime;
+        //    }
+        //}
+        //else
+        //{
+        //    if (postProcessWeight >= 0)
+        //    {
+        //        postProcessWeight -= Time.deltaTime;
+        //    }
+        //}
+        //mainCam.transform.GetChild(0).GetComponent<PostProcessVolume>().weight = postProcessWeight;
     }
-    
 
     //ButtonInterface
     public void ActiveCharacterAttack()
