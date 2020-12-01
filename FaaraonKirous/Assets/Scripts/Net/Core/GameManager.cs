@@ -48,8 +48,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyClientPrefab = null;
 
-    // Name
-    public string Name { get; private set; }
+    // Profile
+    public string Name { get; private set; } = null;
 
     private void Awake()
     {
@@ -168,19 +168,30 @@ public class GameManager : MonoBehaviour
 
     public string GetName()
     {
+        // Try to get cached name first
+        if (Name != null)
+        {
+            return Name;
+        }
+
+        // Try to retrieve from playerPrefs second
         if (PlayerPrefs.HasKey("Name"))
         {
             return PlayerPrefs.GetString("Name");
         }
-        else
-        {
-            return null;
-        }
+
+        // No name saved
+        return null;
     }
 
     public void SetName(string name)
     {
+        // Makes sure that empty strings are not saved
+        if (string.IsNullOrEmpty(name)) return;
+        
+        // Save and cache
         PlayerPrefs.SetString("Name", name);
+        Name = name;
     }
 
     public void StartLoading(bool willLoadSave = false)
