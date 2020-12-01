@@ -48,6 +48,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyClientPrefab = null;
 
+    // Name
+    public string Name { get; private set; }
+
     private void Awake()
     {
         if (_instance == null)
@@ -162,6 +165,23 @@ public class GameManager : MonoBehaviour
     private int _mainMenu;
     [SerializeField]
     private int[] _levels;
+
+    public string GetName()
+    {
+        if (PlayerPrefs.HasKey("Name"))
+        {
+            return PlayerPrefs.GetString("Name");
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void SetName(string name)
+    {
+        PlayerPrefs.SetString("Name", name);
+    }
 
     public void StartLoading(bool willLoadSave = false)
     {
@@ -603,7 +623,7 @@ public class GameManager : MonoBehaviour
             ControlledCharacter = null
         });
 
-        MessageLog.Instance.AddMessage($"{name} connected", Color.blue);
+        MessageLog.Instance.AddMessage($"{name} connected", Constants.messageColorNetworking);
 
         if (NetworkManager._instance.ShouldSendToClient)
         {
@@ -615,7 +635,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"{Players[id].Name} disconnected");
 
-        MessageLog.Instance.AddMessage($"{Players[id].Name} disconnected", Color.blue);
+        MessageLog.Instance.AddMessage($"{Players[id].Name} disconnected", Constants.messageColorNetworking);
 
         if (NetworkManager._instance.IsHost)
         {
