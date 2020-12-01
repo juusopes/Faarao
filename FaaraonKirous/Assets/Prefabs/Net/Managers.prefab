@@ -164,6 +164,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8991118080154960819, guid: ea0dade34338ef2448557ce16fab08f7, type: 3}
+      propertyPath: _levels.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991118080154960819, guid: ea0dade34338ef2448557ce16fab08f7, type: 3}
+      propertyPath: _levels.Array.data[0]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991118080154960819, guid: ea0dade34338ef2448557ce16fab08f7, type: 3}
+      propertyPath: _levels.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991118080154960819, guid: ea0dade34338ef2448557ce16fab08f7, type: 3}
+      propertyPath: _levels.Array.data[2]
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea0dade34338ef2448557ce16fab08f7, type: 3}
 --- !u!4 &7160037060586575186 stripped

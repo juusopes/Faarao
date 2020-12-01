@@ -24,7 +24,7 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
     [HideInInspector]
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
@@ -71,7 +71,7 @@ public class InGameMenu : MonoBehaviour
     {
         Scene sceneName = SceneManager.GetActiveScene();
 
-        if (sceneName.name != "MainMenu")
+        if (sceneName.name != "MainMenuAnimated")
         {
             timer();
 
@@ -131,15 +131,14 @@ public class InGameMenu : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene(1);
+        GameManager._instance.NewGame();
     }
 
     public void RestartLevel()
     {
         if (NetworkManager._instance.IsHost)
         {
-            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            GameManager._instance.LoadLevel(sceneIndex);
+            GameManager._instance.LoadLevel(GameManager._instance.CurrentSceneIndex);
         }
     }
 
@@ -157,7 +156,10 @@ public class InGameMenu : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.ExitToMainMenu();
+        }
     }
 
     public void SaveLevel()
@@ -174,6 +176,11 @@ public class InGameMenu : MonoBehaviour
         {
             GameManager._instance.LoadFromFile();
         }
+    }
+
+    public void ConnectToGame()
+    {
+
     }
 
     public void LoadLevelFromMenu()
