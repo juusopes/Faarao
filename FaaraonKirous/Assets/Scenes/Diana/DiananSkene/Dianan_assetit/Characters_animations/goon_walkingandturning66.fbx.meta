@@ -1,20 +1,14 @@
 fileFormatVersion: 2
-guid: 7756eea1e8fd6d143b53c6c334b18247
+guid: d3cff28bd41f2b94fa78fa7296a5d94d
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
-    second: Goon_Dying2
+    second: Goon_Walkingturn64
   - first:
-      74: -5815838055679148710
-    second: Goon_walking2
-  - first:
-      74: -6930570175855641242
-    second: Goon_walkturning2
-  - first:
-      74: 4411562594940512580
-    second: Goon_idleing2
+      74: 6362585140981188499
+    second: Walking_turning64
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -30,10 +24,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Spine1'
-      has translation animation that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -47,20 +38,20 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Goon_Dying2
+      name: Goon_Walkingturn64
       takeName: Take 001
       internalID: 0
-      firstFrame: 1
-      lastFrame: 83
+      firstFrame: 100
+      lastFrame: 140
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 1
-      loopTime: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 1
+      loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
@@ -76,36 +67,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0.9
     - serializedVersion: 16
-      name: Goon_walking2
-      takeName: Take 001
-      internalID: 0
-      firstFrame: 100
-      lastFrame: 140
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0.1
-      cycleOffset: 0.1
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 1
-      loopBlendPositionXZ: 1
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0.9
-    - serializedVersion: 16
-      name: Goon_walkturning2
+      name: Walking_turning64
       takeName: Take 001
       internalID: 0
       firstFrame: 141
@@ -120,36 +82,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0.9
-    - serializedVersion: 16
-      name: Goon_idleing2
-      takeName: Take 001
-      internalID: 0
-      firstFrame: 190
-      lastFrame: 220
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
@@ -194,7 +127,7 @@ ModelImporter:
     secondaryUVMinLightmapResolution: 40
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
-    useFileScale: 0
+    useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -625,359 +558,354 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: goon_deathwalkturnidle3.0(Clone)
+    - name: goon_walkingandturning66(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: goon_anim:Faaraon_Kirous_Character_Goon:Goon_Geo
-      parentName: goon_deathwalkturnidle3.0(Clone)
-      position: {x: -0, y: 88.043076, z: 4.416051}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:persp1
-      parentName: goon_deathwalkturnidle3.0(Clone)
-      position: {x: -140.45702, y: 117.046745, z: 328.33774}
+      parentName: goon_walkingandturning66(Clone)
+      position: {x: -1.4045701, y: 1.1704674, z: 3.2833774}
       rotation: {x: -0.0076227733, y: -0.98052317, z: 0.03885356, w: -0.19237103}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Bnd_Joints
-      parentName: goon_deathwalkturnidle3.0(Clone)
+      parentName: goon_walkingandturning66(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Hips
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Bnd_Joints
-      position: {x: -0, y: 93.75975, z: 5.8706803}
+      position: {x: -0.000000015832484, y: 0.93838054, z: 0.094670504}
       rotation: {x: -0.7071068, y: 0.7071068, z: -8.659561e-17, w: -8.7157646e-33}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Spine1
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Hips
-      position: {x: -11.449307, y: 0, z: 0}
+      position: {x: -0.11449307, y: 0, z: 0}
       rotation: {x: -6.1232336e-17, y: 6.1232336e-17, z: -2.16317e-40, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Spine2
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Spine1
-      position: {x: -10.4889345, y: 0, z: 0}
+      position: {x: -0.10488934, y: 0, z: 0}
       rotation: {x: -6.1232336e-17, y: 6.1232336e-17, z: -2.16317e-40, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Chest
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Spine2
-      position: {x: -14.286877, y: 0, z: 0}
+      position: {x: -0.14286876, y: 0, z: 0}
       rotation: {x: -6.1232336e-17, y: 6.1232336e-17, z: -2.16317e-40, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Neck
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Chest
-      position: {x: -12.555829, y: -9.8607613e-32, z: 0}
+      position: {x: -0.12555829, y: 0, z: 0}
       rotation: {x: -6.1232336e-17, y: 6.1232336e-17, z: -2.16317e-40, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Head
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Neck
-      position: {x: -10.103515, y: 0, z: 0}
+      position: {x: -0.10103515, y: 0, z: 0}
       rotation: {x: -6.1232336e-17, y: 6.1232336e-17, z: -2.16317e-40, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_Head
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Head
-      position: {x: -24.9599, y: 0, z: 0}
+      position: {x: -0.249599, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0.7071068, z: -8.659561e-17, w: -8.7157646e-33}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Clawicle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Chest
-      position: {x: -9.182856, y: 3.191686, z: -2.1426163}
-      rotation: {x: 0.090331465, y: 0.07721897, z: -0.7547343, w: 0.64517725}
+      position: {x: -0.091828555, y: 0.031916857, z: -0.021426162}
+      rotation: {x: 0.13933413, y: 0.10715911, z: -0.71423256, w: 0.67747676}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Shoulder
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Clawicle
-      position: {x: -14.367288, y: 0, z: -9.325873e-15}
-      rotation: {x: -0.0072843228, y: -0.11861484, z: 0.060861632, w: 0.9910466}
+      position: {x: -0.14367287, y: 0, z: -7.9936054e-17}
+      rotation: {x: -0.011374433, y: -0.16052249, z: 0.01130393, w: 0.9869019}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Elbow
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Shoulder
-      position: {x: -22.604942, y: 1.4210855e-14, z: -8.881784e-16}
-      rotation: {x: 0, y: 0, z: 0.039351314, w: 0.99922544}
+      position: {x: -0.22604942, y: -1.4210854e-16, z: -5.7731595e-17}
+      rotation: {x: 0.0085793, y: -0.03835121, z: 0.0041071954, w: 0.99921906}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Wrist
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Elbow
-      position: {x: -21.12234, y: -5.684342e-14, z: 1.7763568e-15}
+      position: {x: -0.2112234, y: -5.684342e-16, z: -1.4210854e-16}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_L_Wrist
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Wrist
-      position: {x: -10.978221, y: 0, z: -6.0584518e-28}
+      position: {x: -0.109782204, y: 0, z: -6.0584516e-30}
       rotation: {x: 1, y: -0, z: 0, w: 6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Thumb_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Wrist
-      position: {x: -3.6756837, y: 1.0663103, z: -3.5925941}
-      rotation: {x: 0.646899, y: -0.38195044, z: 0.29749966, w: 0.58917713}
+      position: {x: -0.036756836, y: 0.010663102, z: -0.03592594}
+      rotation: {x: 0.64583915, y: -0.3740986, z: 0.30045876, w: 0.5938574}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Thumb_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Thumb_Base
-      position: {x: -2.8957744, y: -2.842171e-14, z: -9.947598e-14}
-      rotation: {x: -0.07095434, y: -0.0073022204, z: -0.02992211, w: 0.9970039}
+      position: {x: -0.028957743, y: 0, z: -9.947598e-16}
+      rotation: {x: -0.070953436, y: -0.007304264, z: -0.029920463, w: 0.9970041}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Thumb_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Thumb_Middle
-      position: {x: -2.2334728, y: 7.1054274e-15, z: 1.7053026e-13}
+      position: {x: -0.022334728, y: 0, z: 1.2789769e-15}
       rotation: {x: 0.0011118617, y: 0.03390424, z: 0.0035499746, w: 0.99941814}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_L_Thumb
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Thumb_Tip
-      position: {x: -3.6896908, y: -7.1054274e-15, z: 0}
+      position: {x: -0.036896907, y: -7.105427e-17, z: 0}
       rotation: {x: 0.7426406, y: 0, z: 0, w: 0.66969025}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Index_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Wrist
-      position: {x: -10.115931, y: 0.547545, z: -2.7958784}
-      rotation: {x: 0.020578573, y: -0.09407946, z: -0.09109276, w: 0.99117494}
+      position: {x: -0.101159304, y: 0.00547545, z: -0.027958784}
+      rotation: {x: 0.020578563, y: -0.09407981, z: -0.09109296, w: 0.9911749}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Index_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Index_Base
-      position: {x: -3.0967824, y: -7.1054274e-14, z: -1.0658141e-14}
+      position: {x: -0.030967824, y: -7.81597e-16, z: -7.105427e-17}
       rotation: {x: 0, y: -0, z: -0.0071174777, w: 0.99997467}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Index_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Index_Middle
-      position: {x: -3.0464041, y: -5.684342e-14, z: -3.907985e-14}
+      position: {x: -0.03046404, y: -7.105427e-16, z: -4.2632563e-16}
       rotation: {x: 0, y: -0, z: -0.03256217, w: 0.9994697}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_L_Index
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Index_Tip
-      position: {x: -3.213871, y: 3.410605e-13, z: 6.3948846e-14}
+      position: {x: -0.03213871, y: 3.410605e-15, z: 6.3948843e-16}
       rotation: {x: 1, y: -0, z: 0, w: 6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Middle_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Wrist
-      position: {x: -10.319403, y: 0.547545, z: -1.0359209}
-      rotation: {x: 0.0068062106, y: -0.057329446, z: -0.10748361, w: 0.9925293}
+      position: {x: -0.10319403, y: 0.00547545, z: -0.010359208}
+      rotation: {x: 0.006806182, y: -0.05732936, z: -0.10748249, w: 0.99252945}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Middle_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Middle_Base
-      position: {x: -3.1904645, y: -4.2632564e-14, z: -3.5527137e-15}
+      position: {x: -0.031904645, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0.041811362, w: 0.99912554}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Middle_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Middle_Middle
-      position: {x: -3.2651906, y: 7.1054274e-14, z: 3.5527137e-15}
-      rotation: {x: -0.0000000015575938, y: 0.00000003722031, z: -0.040823124, w: 0.99916637}
+      position: {x: -0.032651905, y: 3.5527135e-16, z: 3.5527136e-17}
+      rotation: {x: 0.000000016415358, y: 0.00000013118621, z: -0.04081857, w: 0.99916655}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_L_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Middle_Tip
-      position: {x: -3.5857053, y: 1.4210855e-13, z: -5.3290705e-15}
+      position: {x: -0.03585705, y: 1.4210854e-15, z: -5.3290704e-17}
       rotation: {x: 1, y: -0, z: 0, w: 6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Ring_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Wrist
-      position: {x: -10.196029, y: 0.547545, z: 1.0783911}
+      position: {x: -0.10196029, y: 0.00547545, z: 0.010783911}
       rotation: {x: -5.103871e-15, y: 4.542435e-16, z: -0.09581235, w: 0.9953994}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Ring_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Ring_Base
-      position: {x: -3.2690022, y: -4.2632564e-14, z: -5.3290705e-15}
-      rotation: {x: 0.000000024110317, y: -0.000000409073, z: -0.037872005, w: 0.99928266}
+      position: {x: -0.032690022, y: -7.105427e-16, z: -1.0658141e-16}
+      rotation: {x: 0.000000017510096, y: 0.0000003235411, z: -0.03787029, w: 0.9992827}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Ring_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Ring_Middle
-      position: {x: -3.6344473, y: 3.4816594e-13, z: 1.4210855e-14}
+      position: {x: -0.036344472, y: 3.4816593e-15, z: 1.4210854e-16}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_L_Ring
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Ring_Tip
-      position: {x: -3.408135, y: 0, z: -9.769963e-15}
+      position: {x: -0.034081347, y: 0, z: -9.7699626e-17}
       rotation: {x: 1, y: -0, z: 0, w: 6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Pinky_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Wrist
-      position: {x: -9.8734865, y: 0.547545, z: 2.7503963}
-      rotation: {x: -0.029691601, y: 0.015172027, z: -0.0679646, w: 0.9971304}
+      position: {x: -0.09873486, y: 0.00547545, z: 0.027503962}
+      rotation: {x: -0.029691406, y: 0.015172949, z: -0.067965046, w: 0.99713045}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Pinky_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Pinky_Base
-      position: {x: -3.1172187, y: 2.2737368e-13, z: 1.9539925e-14}
-      rotation: {x: 0.003940546, y: -0.017548053, z: -0.037229206, w: 0.9991449}
+      position: {x: -0.031172186, y: 2.131628e-15, z: 1.687539e-16}
+      rotation: {x: 0.0039405683, y: -0.01754546, z: -0.03722271, w: 0.99914515}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Pinky_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Pinky_Middle
-      position: {x: -2.6357074, y: 1.7053026e-13, z: 7.1054274e-15}
+      position: {x: -0.026357073, y: 1.7053025e-15, z: -2.6645352e-17}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_L_Pinky
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Pinky_Tip
-      position: {x: -2.8755956, y: -5.684342e-14, z: -3.5527137e-15}
+      position: {x: -0.028755955, y: -5.684342e-16, z: -3.5527136e-17}
       rotation: {x: 1, y: -0, z: 0, w: 6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Clawicle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Chest
-      position: {x: -9.183127, y: -3.19169, z: -2.1426163}
-      rotation: {x: 0.7547343, y: -0.64517725, z: 0.0903315, w: 0.077219}
+      position: {x: -0.091831274, y: -0.031916898, z: -0.021426162}
+      rotation: {x: -0.6891271, y: 0.71482956, z: -0.09734494, w: -0.06816537}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Shoulder
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Clawicle
-      position: {x: 14.367297, y: -0.0000073571787, z: 0.0000021617557}
-      rotation: {x: -0.0075140796, y: -0.11860053, z: 0.06278103, w: 0.99092686}
+      position: {x: 0.14367296, y: -0.000000072058654, z: 0.000000034666787}
+      rotation: {x: -0.07891313, y: -0.12983316, z: -0.045062747, w: 0.98736286}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Elbow
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Shoulder
-      position: {x: 22.604933, y: -1.2789769e-13, z: -7.1676e-13}
-      rotation: {x: 0.0000000074448097, y: 2.9318822e-10, z: 0.039351314, w: 0.99922544}
+      position: {x: 0.22604969, y: -0.000000036425828, z: 0.0000002098031}
+      rotation: {x: -0.018033173, y: -0.025125602, z: 0.016144093, w: 0.9993913}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Wrist
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Elbow
-      position: {x: 21.1224, y: -5.684342e-14, z: -6.208367e-13}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      position: {x: 0.21122463, y: -0.00000013222639, z: 1.4210854e-16}
+      rotation: {x: 0.00064342265, y: -0.006202106, z: -0.06453807, w: 0.99789584}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_R_Wrist
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Wrist
-      position: {x: 10.9782, y: 1.7053026e-13, z: 4.226145e-14}
+      position: {x: 0.109781995, y: 1.7053025e-15, z: 4.2261446e-16}
       rotation: {x: 1, y: 2.9143357e-16, z: 3.8495767e-15, w: -6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Thumb_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Wrist
-      position: {x: 3.6755679, y: -1.0663595, z: 3.59259}
-      rotation: {x: 0.646892, y: -0.3818841, z: 0.2975229, w: 0.5892158}
+      position: {x: 0.036755677, y: -0.010663595, z: 0.0359259}
+      rotation: {x: 0.6481272, y: -0.41069528, z: 0.29003844, w: 0.57196003}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Thumb_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Thumb_Base
-      position: {x: 2.8958254, y: -1.4921397e-13, z: 0.00008440405}
-      rotation: {x: -0.07095658, y: -0.00731261, z: -0.0299167, w: 0.9970039}
+      position: {x: 0.028958254, y: -5.684342e-16, z: 0.00000084404047}
+      rotation: {x: -0.07095701, y: -0.0073171225, z: -0.029921133, w: 0.9970036}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Thumb_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Thumb_Middle
-      position: {x: 2.2336774, y: -4.973799e-14, z: -7.1054274e-15}
+      position: {x: 0.022336774, y: 2.842171e-16, z: -1.4210854e-16}
       rotation: {x: 0.0011118617, y: 0.03390424, z: 0.0035499746, w: 0.99941814}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_R_Thumb
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Thumb_Tip
-      position: {x: 3.6894248, y: 7.1054274e-15, z: -2.842171e-14}
+      position: {x: 0.036894247, y: 7.105427e-17, z: -2.842171e-16}
       rotation: {x: 0.7426406, y: 4.122484e-17, z: -4.1224835e-17, w: 0.66969025}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Index_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Wrist
-      position: {x: 10.1159, y: -0.547, z: 2.79588}
-      rotation: {x: 0.020576358, y: -0.09407273, z: -0.091071226, w: 0.99117756}
+      position: {x: 0.10116099, y: -0.0054710903, z: 0.027959377}
+      rotation: {x: 0.060901802, y: -0.060549982, z: -0.083592854, w: 0.9927925}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Index_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Index_Base
-      position: {x: 3.0969667, y: -2.842171e-14, z: 0.000012875048}
+      position: {x: 0.030969666, y: -5.32907e-16, z: 0.00000012875047}
       rotation: {x: 2.1063608e-26, y: -1.9429395e-16, z: -0.0071174777, w: 0.99997467}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Index_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Index_Middle
-      position: {x: 3.0463028, y: 0.00035605422, z: -1.030287e-13}
-      rotation: {x: 2.3226925e-25, y: -2.4993271e-16, z: -0.03256217, w: 0.9994697}
+      position: {x: 0.030467873, y: 0.000002735322, z: 7.105427e-16}
+      rotation: {x: -0.00000022926534, y: 0.00000080677626, z: -0.029007338, w: 0.9995792}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_R_Index
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Index_Tip
-      position: {x: 3.2138875, y: 2.842171e-14, z: 0.000006199121}
+      position: {x: 0.032138873, y: 2.842171e-16, z: 0.00000006199121}
       rotation: {x: 1, y: -1.700029e-15, z: 5.5511157e-16, w: -6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Middle_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Wrist
-      position: {x: 10.3194, y: -0.547, z: 1.03592}
-      rotation: {x: 0.0068048523, y: -0.057327423, z: -0.10745687, w: 0.9925323}
+      position: {x: 0.103196055, y: -0.005471098, z: 0.010359448}
+      rotation: {x: 0.010360647, y: -0.051106136, z: -0.088448234, w: 0.99471486}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Middle_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Middle_Base
-      position: {x: 3.1906493, y: -1.563194e-13, z: 0.000009351672}
+      position: {x: 0.031906493, y: -1.7053025e-15, z: 0.00000009351672}
       rotation: {x: 2.7982129e-24, y: 9.236806e-16, z: -0.041811362, w: 0.99912554}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Middle_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Middle_Middle
-      position: {x: 3.2649405, y: -4.2632564e-14, z: -9.2370556e-14}
-      rotation: {x: -0.000000019732862, y: 0.00000020424444, z: -0.04082157, w: 0.9991665}
+      position: {x: 0.032651342, y: 0.0000002943734, z: 1.4210854e-16}
+      rotation: {x: -0.00000004726584, y: 0.00000066170384, z: -0.02782389, w: 0.99961287}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_R_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Middle_Tip
-      position: {x: 3.5859275, y: -1.7053026e-13, z: 0.0000049898135}
+      position: {x: 0.035859276, y: -1.7053025e-15, z: 0.000000049898134}
       rotation: {x: 1, y: 4.7704896e-16, z: -4.315992e-15, w: -6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Ring_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Wrist
-      position: {x: 10.196, y: -0.547, z: -1.07839}
-      rotation: {x: -7.1446446e-24, y: 2.439231e-15, z: -0.09581235, w: 0.9953994}
+      position: {x: 0.10196207, y: -0.0054710987, z: -0.0107839}
+      rotation: {x: -0.022275653, y: -0.042692143, z: -0.09157903, w: 0.99463284}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Ring_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Ring_Base
-      position: {x: 3.2691064, y: 2.4158453e-13, z: -1.1368684e-13}
-      rotation: {x: -0.000000036548833, y: -0.0000005630468, z: -0.037913255, w: 0.99928105}
+      position: {x: 0.03269106, y: 2.0250468e-15, z: -2.842171e-16}
+      rotation: {x: -0.000000033527602, y: -0.00000049173815, z: -0.037915763, w: 0.999281}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Ring_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Ring_Middle
-      position: {x: 3.6342854, y: 0.00030886207, z: -1.3056223e-13}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      position: {x: 0.036346663, y: 0.000003136011, z: 1.4210854e-16}
+      rotation: {x: 0.000000029794608, y: -0.00000088905625, z: -0.030699506, w: 0.99952865}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_R_Ring
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Ring_Tip
-      position: {x: 3.408219, y: 8.526513e-14, z: -4.485301e-14}
+      position: {x: 0.03408219, y: 8.5265126e-16, z: -4.485301e-16}
       rotation: {x: 1, y: -1.6653345e-16, z: -1.5000686e-14, w: -6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Pinky_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Wrist
-      position: {x: 9.8735, y: -0.547, z: -2.7504}
-      rotation: {x: -0.029689573, y: 0.015166878, z: -0.067943774, w: 0.99713194}
+      position: {x: 0.09873698, y: -0.00547109, z: -0.027504597}
+      rotation: {x: -0.114679344, y: -0.026476115, z: -0.08939059, w: 0.9890182}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Pinky_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Pinky_Base
-      position: {x: 3.117419, y: -1.0658141e-13, z: -9.592327e-14}
-      rotation: {x: 0.00394054, y: -0.017546598, z: -0.037226625, w: 0.99914503}
+      position: {x: 0.031174188, y: -1.5809576e-15, z: 4.973799e-16}
+      rotation: {x: 0.003940565, y: -0.017549215, z: -0.037233863, w: 0.99914473}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Pinky_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Pinky_Middle
-      position: {x: 2.6353536, y: -1.7763568e-13, z: 0.000010685273}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      position: {x: 0.026355555, y: 0.00000035882178, z: 0.00000010685273}
+      rotation: {x: -0.0000011441291, y: 0.0000017285337, z: -0.030738814, w: 0.9995275}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_R_Pinky
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Pinky_Tip
-      position: {x: 2.8758671, y: 1.4210855e-13, z: 0.000015006242}
+      position: {x: 0.028758671, y: 1.4210854e-15, z: 0.00000015006242}
       rotation: {x: 1, y: 2.7755576e-17, z: 2.7755576e-17, w: -6.123234e-17}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Up_Leg
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Hips
-      position: {x: 6.9137535, y: -9.98639, z: 1.0096097}
-      rotation: {x: 0.9971836, y: -0.015659623, z: -0.073184974, w: -0.004856801}
+      position: {x: 0.069137536, y: -0.0998639, z: 0.010096096}
+      rotation: {x: 0.9959102, y: -0.01625613, z: -0.06950495, w: 0.05538662}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Knee
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Up_Leg
-      position: {x: 36.271694, y: -2.3092639e-14, z: 0.000015175547}
-      rotation: {x: -5.0328615e-20, y: 0.15819503, z: 1.5357748e-17, w: 0.9874079}
+      position: {x: 0.36271694, y: -2.3092638e-16, z: 0.00000015175546}
+      rotation: {x: 1.4658995e-17, y: 0.18549158, z: 2.8897356e-17, w: 0.98264587}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Ankle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Knee
-      position: {x: 40.863113, y: -1.9539925e-14, z: 0.000009294907}
-      rotation: {x: -0.057522453, y: -0.50616664, z: 0.0046866783, w: 0.8605025}
+      position: {x: 0.40863112, y: -1.9539925e-16, z: 0.000000092949065}
+      rotation: {x: 0.000815734, y: -0.50465703, z: -0.0131534645, w: 0.8632193}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Foot
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Ankle
-      position: {x: 10.494639, y: -5.3290705e-15, z: 0.00002394206}
-      rotation: {x: -3.4770242e-10, y: -0.3320324, z: -1.2239207e-10, w: 0.943268}
+      position: {x: 0.10494639, y: -5.3290704e-17, z: 0.0000002394206}
+      rotation: {x: -0.000000004171571, y: -0.33203262, z: -0.000000011851837, w: 0.94326794}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_R_Foot
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_R_Foot
-      position: {x: 10.0798, y: 1.7763568e-15, z: 2.6645353e-15}
+      position: {x: 0.100797996, y: 1.7763568e-17, z: 2.6645352e-17}
       rotation: {x: 0.5, y: 0.5, z: -0.5, w: -0.5}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Up_Leg
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_Hips
-      position: {x: 6.9137073, y: 9.986385, z: 1.0096098}
-      rotation: {x: 0.072773665, y: -0.080398425, z: 0.99356174, w: -0.032790504}
+      position: {x: 0.069137074, y: 0.09986385, z: 0.010096098}
+      rotation: {x: 0.11863019, y: -0.07779001, z: 0.98932374, w: -0.03337976}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Knee
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Up_Leg
-      position: {x: -36.271774, y: 1.4210855e-14, z: -7.1054274e-15}
-      rotation: {x: -5.3484206e-19, y: 0.15343048, z: -1.11056665e-17, w: 0.9881595}
+      position: {x: -0.36271775, y: 1.4210854e-16, z: -7.105427e-17}
+      rotation: {x: -5.9668654e-17, y: 0.343348, z: 4.087671e-16, w: 0.93920827}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Ankle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Knee
-      position: {x: -40.86303, y: -1.0658141e-14, z: -2.8865799e-15}
-      rotation: {x: 0.0017283716, y: -0.50183713, z: -0.02932397, w: 0.86446327}
+      position: {x: -0.40863028, y: -1.0658141e-16, z: -2.8865798e-17}
+      rotation: {x: 0.005381131, y: -0.6257718, z: -0.025566652, w: 0.77956855}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Foot
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Ankle
-      position: {x: -10.49468, y: 1.7763568e-15, z: -1.0658141e-14}
-      rotation: {x: -2.830175e-10, y: -0.3320324, z: -9.962279e-11, w: 0.943268}
+      position: {x: -0.1049468, y: 1.7763568e-17, z: -1.0658141e-16}
+      rotation: {x: -2.9836224e-11, y: -0.3320324, z: -1.05024175e-11, w: 0.943268}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:End_L_Foot
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Bnd_L_Foot
-      position: {x: -10.079787, y: 1.7763568e-15, z: 3.5527137e-15}
+      position: {x: -0.10079787, y: 1.7763568e-17, z: 3.5527136e-17}
       rotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_IK_Joints
@@ -985,8 +913,48 @@ ModelImporter:
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
+    - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_L_IK_Leg
+      parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_IK_Joints
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:IK_L_Heel
+      parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_L_IK_Leg
+      position: {x: -0.13846694, y: 0.15400846, z: 0.18950701}
+      rotation: {x: 0, y: -0.07053077, z: -0, w: 0.9975096}
+      scale: {x: 1, y: 1, z: 1}
+    - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:IK_L_Foot
+      parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_L_IK_Leg
+      position: {x: -0.14997803, y: 0.08827072, z: 0.27050006}
+      rotation: {x: 0.6576177, y: 0.6145068, z: -0.25988275, w: 0.34983066}
+      scale: {x: 1, y: 1, z: 1}
+    - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:IK_L_Toe
+      parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_L_IK_Leg
+      position: {x: -0.16416131, y: 0.08827072, z: 0.37029505}
+      rotation: {x: 0.53402025, y: 0.4634894, z: -0.4634894, w: 0.53402025}
+      scale: {x: 1, y: 1, z: 1}
+    - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_R_IK_Leg
+      parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_IK_Joints
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:IK_R_Heel
+      parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_R_IK_Leg
+      position: {x: 0.12508821, y: 0.11269716, z: 0.039518617}
+      rotation: {x: 0.034107096, y: 0.05174885, z: -0.0017684052, w: 0.99807596}
+      scale: {x: 1, y: 1, z: 1}
+    - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:IK_R_Foot
+      parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_R_IK_Leg
+      position: {x: 0.13306478, y: 0.04152859, z: 0.11623337}
+      rotation: {x: -0.3168195, y: -0.24974324, z: -0.63215935, w: 0.6615348}
+      scale: {x: 1, y: 1, z: 1}
+    - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:IK_R_Toe
+      parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_R_IK_Leg
+      position: {x: 0.1434649, y: 0.03464752, z: 0.21625699}
+      rotation: {x: -0.50874305, y: -0.45522586, z: -0.49110132, w: 0.5410818}
+      scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl
-      parentName: goon_deathwalkturnidle3.0(Clone)
+      parentName: goon_walkingandturning66(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -997,12 +965,12 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_Root
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Master
-      position: {x: -0, y: 93.75975, z: 1.2479538}
+      position: {x: -0, y: 0.93759745, z: 0.012479537}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Root
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_Root
-      position: {x: -0, y: 0, z: 4.6227264}
+      position: {x: 0.011533934, y: 0.00078301213, z: 0.08219096}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_Hips
@@ -1017,7 +985,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_Spine1
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Root
-      position: {x: -0, y: 11.449307, z: 0}
+      position: {x: -0, y: 0.11449307, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Spine1
@@ -1027,7 +995,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_Spine2
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Spine1
-      position: {x: -0, y: 10.4889345, z: 0}
+      position: {x: -0, y: 0.10488934, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Spine2
@@ -1037,7 +1005,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_Chest
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Spine2
-      position: {x: -0, y: 14.286877, z: 0}
+      position: {x: -0, y: 0.14286876, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Chest
@@ -1047,7 +1015,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_Neck
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Chest
-      position: {x: -0, y: 12.555829, z: 0}
+      position: {x: -0, y: 0.12555829, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Neck
@@ -1057,7 +1025,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_Head
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Neck
-      position: {x: -0, y: 10.103515, z: 0}
+      position: {x: -0, y: 0.10103515, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Head
@@ -1067,252 +1035,252 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_L_Clawicle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Chest
-      position: {x: -3.191686, y: 9.182856, z: 2.1426163}
+      position: {x: -0.031916857, y: 0.091828555, z: 0.021426162}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Clawicle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_L_Clawicle
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.98988694, y: 0.07746856, z: 0.118476056, w: -0.009271937}
+      rotation: {x: 0.9840871, y: 0.025990283, z: 0.17429703, w: -0.022751138}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_L_Shoulder
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Clawicle
-      position: {x: -14.367288, y: 0, z: 0}
+      position: {x: -0.14367287, y: 0, z: 0}
       rotation: {x: 0.98988694, y: 0.07746856, z: 0.118476056, w: 0.009271915}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Shoulder
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_L_Shoulder
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.8590745, y: 0.51185066, z: 3.0546024e-15, w: -1.8912594e-15}
+      rotation: {x: 0.82885486, y: 0.5589481, z: 0.019909667, w: -0.01342632}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Elbow
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Shoulder
-      position: {x: -22.604942, y: 0, z: -4.525026e-16}
-      rotation: {x: 0, y: 0, z: 0.039351314, w: 0.99922544}
+      position: {x: -0.22604942, y: 0, z: -4.5250258e-18}
+      rotation: {x: 0.009581911, y: -0.1003706, z: -0.016369335, w: 0.99476933}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Wrist
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Elbow
-      position: {x: -21.12234, y: -8.526513e-14, z: 4.038968e-28}
+      position: {x: -0.2112234, y: -8.5265126e-16, z: 4.0389677e-30}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Thumb_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Wrist
-      position: {x: -3.6756837, y: 1.0663103, z: -3.5925941}
+      position: {x: -0.036756836, y: 0.010663102, z: -0.03592594}
       rotation: {x: 0.6415391, y: -0.4274121, z: 0.2973678, w: 0.5633107}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Thumb_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Thumb_Base
-      position: {x: -2.8957744, y: 0, z: -2.842171e-14}
+      position: {x: -0.028957743, y: 0, z: -2.842171e-16}
       rotation: {x: -0.06874029, y: -0.05918747, z: -0.24248454, w: 0.96590525}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Thumb_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Thumb_Middle
-      position: {x: -2.2334728, y: -3.5527137e-15, z: 8.526513e-14}
+      position: {x: -0.022334728, y: -3.5527136e-17, z: 8.5265126e-16}
       rotation: {x: 0.0011118617, y: 0.03390424, z: 0.0035499746, w: 0.99941814}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Index_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Wrist
-      position: {x: -10.115931, y: 0.547545, z: -2.7958784}
+      position: {x: -0.101159304, y: 0.00547545, z: -0.027958784}
       rotation: {x: 0.022600835, y: -0.13897146, z: -0.1589214, w: 0.97720015}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Index_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Index_Base
-      position: {x: -3.0967824, y: -2.842171e-14, z: -1.7763568e-14}
+      position: {x: -0.030967824, y: -2.842171e-16, z: -1.7763567e-16}
       rotation: {x: 0, y: -0, z: -0.0071174777, w: 0.99997467}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Index_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Index_Middle
-      position: {x: -3.0464041, y: 0, z: -3.1974423e-14}
+      position: {x: -0.03046404, y: 0, z: -3.1974422e-16}
       rotation: {x: 0, y: -0, z: -0.03256217, w: 0.9994697}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Middle_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Wrist
-      position: {x: -10.319403, y: 0.547545, z: -1.0359209}
+      position: {x: -0.10319403, y: 0.00547545, z: -0.010359208}
       rotation: {x: 0.008035359, y: -0.05959013, z: -0.13339253, w: 0.98923755}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Middle_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Middle_Base
-      position: {x: -3.1904645, y: 2.842171e-14, z: -4.440892e-15}
+      position: {x: -0.031904645, y: 2.842171e-16, z: -4.4408918e-17}
       rotation: {x: 0, y: -0, z: -0.041811362, w: 0.99912554}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Middle_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Middle_Middle
-      position: {x: -3.2651906, y: 2.842171e-14, z: 5.3290705e-15}
+      position: {x: -0.032651905, y: 2.842171e-16, z: 5.3290704e-17}
       rotation: {x: 0, y: -0, z: -0.056076404, w: 0.9984265}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Ring_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Wrist
-      position: {x: -10.196029, y: 0.547545, z: 1.0783911}
+      position: {x: -0.10196029, y: 0.00547545, z: 0.010783911}
       rotation: {x: -1.1889673e-16, y: -9.694017e-17, z: -0.09581235, w: 0.9953994}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Ring_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Ring_Base
-      position: {x: -3.2690022, y: 0, z: -5.551115e-15}
+      position: {x: -0.032690022, y: 0, z: -5.551115e-17}
       rotation: {x: 0, y: -0, z: -0.114446856, w: 0.9934294}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Ring_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Ring_Middle
-      position: {x: -3.6344473, y: 1.9895197e-13, z: 1.37667655e-14}
+      position: {x: -0.036344472, y: 1.9895197e-15, z: 1.3766766e-16}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Pinky_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Wrist
-      position: {x: -9.8734865, y: 0.547545, z: 2.7503963}
+      position: {x: -0.09873486, y: 0.00547545, z: 0.027503962}
       rotation: {x: -0.02157182, y: 0.1437359, z: -0.14684136, w: 0.97842336}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Pinky_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Pinky_Base
-      position: {x: -3.1172187, y: 1.4210855e-13, z: 7.1054274e-15}
+      position: {x: -0.031172186, y: 1.4210854e-15, z: 7.105427e-17}
       rotation: {x: 0.003939094, y: -0.021031348, z: -0.044619, w: 0.99877495}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Pinky_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Pinky_Middle
-      position: {x: -2.6357074, y: 8.526513e-14, z: -5.3290705e-15}
+      position: {x: -0.026357073, y: 8.5265126e-16, z: -5.3290704e-17}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_R_Clawicle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Chest
-      position: {x: 3.19169, y: 9.183127, z: 2.1426163}
+      position: {x: 0.031916898, y: 0.091831274, z: 0.021426162}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Clawicle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_R_Clawicle
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.009271937, y: 0.118476056, z: -0.07746856, w: 0.98988694}
+      rotation: {x: 0.020633, y: 0.11703343, z: 0.018174468, w: 0.9927473}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_R_Shoulder
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Clawicle
-      position: {x: 14.3673, y: 0, z: 0.0000028562545}
+      position: {x: 0.143673, y: 0, z: 0.000000028562544}
       rotation: {x: -0.009271937, y: -0.118476056, z: 0.07746855, w: 0.98988694}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Shoulder
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_R_Shoulder
-      position: {x: -0.0000077486375, y: 0, z: 0}
-      rotation: {x: 0, y: -0, z: -0.54473346, w: 0.8386092}
+      position: {x: -0.000000077486376, y: 0, z: 0}
+      rotation: {x: -0.07518087, y: -0.05828316, z: -0.53989244, w: 0.8363415}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Elbow
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Shoulder
-      position: {x: 22.604933, y: -0.00031122728, z: 2.614995e-16}
-      rotation: {x: 0.0000000074448097, y: 2.9318886e-10, z: 0.039351314, w: 0.99922544}
+      position: {x: 0.22604932, y: -0.0000031122727, z: 2.614995e-18}
+      rotation: {x: -0.010590462, y: -0.3469603, z: -0.028612295, w: 0.9373835}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Wrist
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Elbow
-      position: {x: 21.1224, y: 0, z: 5.4988996e-14}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      position: {x: 0.211224, y: 0, z: 5.498899e-16}
+      rotation: {x: 0, y: -0, z: -0.10319136, w: 0.99466157}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Thumb_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Wrist
-      position: {x: 3.6756, y: -1.066, z: 3.59259}
+      position: {x: 0.036756, y: -0.010659999, z: 0.0359259}
       rotation: {x: 0.6415391, y: -0.4274121, z: 0.2973678, w: 0.5633107}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Thumb_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Thumb_Base
-      position: {x: 2.8958254, y: -0.000056564313, z: 0.00008440405}
+      position: {x: 0.028958254, y: -0.0000005656431, z: 0.00000084404047}
       rotation: {x: -0.06874029, y: -0.05918747, z: -0.24248454, w: 0.96590525}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Thumb_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Thumb_Middle
-      position: {x: 2.2336774, y: -0.000009680811, z: 0.0005293008}
+      position: {x: 0.022336774, y: -0.00000009680811, z: 0.000005293008}
       rotation: {x: 0.0011118617, y: 0.03390424, z: 0.0035499746, w: 0.99941814}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Index_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Wrist
-      position: {x: 10.1159, y: -0.547, z: 2.79588}
-      rotation: {x: 0.022600835, y: -0.13897146, z: -0.1589214, w: 0.97720015}
+      position: {x: 0.101159, y: -0.0054699997, z: 0.027958801}
+      rotation: {x: 0.073132455, y: -0.1203142, z: -0.51424265, w: 0.84600866}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Index_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Index_Base
-      position: {x: 3.0969667, y: -0.0006748194, z: 0.000012875048}
+      position: {x: 0.030969666, y: -0.0000067481938, z: 0.00000012875047}
       rotation: {x: -6.722961e-27, y: -5.551256e-17, z: -0.0071174777, w: 0.99997467}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Index_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Index_Middle
-      position: {x: 3.0463028, y: 0.00035605422, z: -0.000011388261}
-      rotation: {x: -5.263078e-27, y: 1.3885151e-17, z: -0.03256217, w: 0.9994697}
+      position: {x: 0.030463027, y: 0.0000035605422, z: -0.00000011388261}
+      rotation: {x: -3.4783913e-18, y: 1.3442403e-17, z: -0.2819026, w: 0.95944303}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Middle_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Wrist
-      position: {x: 10.3194, y: -0.547, z: 1.03592}
-      rotation: {x: 0.008035359, y: -0.05959013, z: -0.13339253, w: 0.98923755}
+      position: {x: 0.103194, y: -0.0054699997, z: 0.0103592}
+      rotation: {x: 0.029824188, y: -0.05221176, z: -0.49510223, w: 0.86675155}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Middle_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Middle_Base
-      position: {x: 3.1906493, y: -0.0009209561, z: 0.000009351672}
+      position: {x: 0.031906493, y: -0.000009209561, z: 0.00000009351672}
       rotation: {x: -3.4008043e-26, y: -6.25047e-17, z: -0.041811362, w: 0.99912554}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Middle_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Middle_Middle
-      position: {x: 3.2649405, y: 0.0008601901, z: -0.000010432071}
-      rotation: {x: -2.9205342e-25, y: -1.4594642e-16, z: -0.056076404, w: 0.9984265}
+      position: {x: 0.032649405, y: 0.000008601901, z: -0.000000104320705}
+      rotation: {x: 3.6561267e-17, y: -1.4129272e-16, z: -0.30440572, w: 0.9525425}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Ring_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Wrist
-      position: {x: 10.196, y: -0.547, z: -1.07839}
-      rotation: {x: 1.2345929e-14, y: 6.1533847e-16, z: -0.09581235, w: 0.9953994}
+      position: {x: 0.101959996, y: -0.0054699997, z: -0.0107839}
+      rotation: {x: 1.1211349e-14, y: 5.2063655e-15, z: -0.46258616, w: 0.8865743}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Ring_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Ring_Base
-      position: {x: 3.2691064, y: -0.00044869698, z: 0}
+      position: {x: 0.03269106, y: -0.00000448697, z: 0}
       rotation: {x: 0.0000000074016264, y: -8.526946e-10, z: -0.114446856, w: 0.9934294}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Ring_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Ring_Middle
-      position: {x: 3.6342854, y: 0.00030886207, z: 2.220446e-16}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      position: {x: 0.036342856, y: 0.0000030886206, z: 2.220446e-18}
+      rotation: {x: 0, y: -0, z: -0.2505116, w: 0.9681136}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Pinky_Base
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Wrist
-      position: {x: 9.8735, y: -0.547, z: -2.7504}
-      rotation: {x: -0.02157182, y: 0.1437359, z: -0.14684136, w: 0.97842336}
+      position: {x: 0.098735, y: -0.0054699997, z: -0.027504}
+      rotation: {x: -0.073967874, y: 0.1251164, z: -0.503506, w: 0.8516786}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Pinky_Middle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Pinky_Base
-      position: {x: 3.117419, y: -0.0009310456, z: -0.000025670206}
+      position: {x: 0.031174188, y: -0.000009310456, z: -0.00000025670207}
       rotation: {x: 0.003939094, y: -0.021031348, z: -0.044619, w: 0.99877495}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Pinky_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Pinky_Middle
-      position: {x: 2.6353536, y: 0.0008545501, z: 0.000010685273}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      position: {x: 0.026353534, y: 0.000008545501, z: 0.00000010685273}
+      rotation: {x: 0, y: -0, z: -0.2505116, w: 0.9681136}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_L_IK_Leg
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Master
-      position: {x: -9.986385, y: 10.736348, z: 3.1600218}
+      position: {x: -0.09986385, y: 0.10736348, z: 0.03160022}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_IK_Leg
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_L_IK_Leg
-      position: {x: -5.0114174, y: -10.736348, z: 8.1806965}
+      position: {x: -0.050114173, y: -0.06071849, z: 0.23889984}
       rotation: {x: 0, y: -0.07053077, z: -0, w: 0.9975096}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_L_Locators
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_IK_Leg
-      position: {x: -0, y: 10.736348, z: -8.1806965}
+      position: {x: -0, y: 0.10736348, z: -0.081806965}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_L_Heel
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_L_Locators
-      position: {x: -0, y: -10.736348, z: -4.9042816}
+      position: {x: -0, y: -0.10736348, z: -0.049042813}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_L_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_L_Heel
-      position: {x: -0, y: 0, z: 23.164766}
+      position: {x: -0, y: 0, z: 0.23164766}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_L_Ball_Ankle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_L_Tip
-      position: {x: -0, y: 0, z: -10.079787}
+      position: {x: -0, y: 0, z: -0.10079787}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_L_Ball_Toe
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_L_Tip
-      position: {x: -0, y: 0, z: -9.420506}
+      position: {x: -0, y: 0, z: -0.09420505}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_L_Knee_Target
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_IK_Leg
-      position: {x: -0, y: 51.347664, z: 81.12753}
+      position: {x: -0, y: 0.5134766, z: 0.8112753}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_L_Knee_Target
@@ -1322,47 +1290,47 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_R_IK_Leg
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_Master
-      position: {x: 9.98639, y: 10.7363, z: 3.1600199}
+      position: {x: 0.0998639, y: 0.107363, z: 0.0316002}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_IK_Leg
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_R_IK_Leg
-      position: {x: 3.2906995, y: -10.7363, z: 8.18068}
-      rotation: {x: 0, y: 0.051779058, z: -0, w: 0.9986586}
+      position: {x: 0.032906994, y: -0.107363, z: 0.0818068}
+      rotation: {x: 0.034107096, y: 0.05174885, z: -0.0017684052, w: 0.99807596}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_R_Locators
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_IK_Leg
-      position: {x: -0, y: 10.7363, z: -8.18068}
+      position: {x: -0, y: 0.107363, z: -0.0818068}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_R_Heel
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_R_Locators
-      position: {x: -0, y: -10.7363, z: -4.9040203}
+      position: {x: -0, y: -0.107363, z: -0.049040202}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_R_Tip
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_R_Heel
-      position: {x: -0, y: 0, z: 23.1645}
+      position: {x: -0, y: 0, z: 0.23164499}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_R_Ball_Ankle
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_R_Tip
-      position: {x: -0, y: 0, z: -10.0798}
+      position: {x: -0, y: 0, z: -0.100797996}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_R_Ball_Toe
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Loc_R_Tip
-      position: {x: -0, y: 0, z: -9.4205}
+      position: {x: -0, y: 0, z: -0.094205}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_R_Knee_Target
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_IK_Leg
-      position: {x: -0, y: 51.3477, z: 81.12755}
+      position: {x: -0, y: 0.51347697, z: 0.8112755}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: goon_anim:Faaraon_Kirous_Character_Goon:Rig:Ctrl_R_Knee_Target
       parentName: goon_anim:Faaraon_Kirous_Character_Goon:Rig:GRP_Ctrl_R_Knee_Target
-      position: {x: -9.554451, y: 1.4210855e-14, z: -15.304189}
+      position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
