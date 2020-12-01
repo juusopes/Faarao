@@ -18,7 +18,7 @@ public class NetworkManager : MonoBehaviour
 
     public bool ShouldSendToClient => Server.Instance.IsOnline;
 
-    public bool ShouldSendToServer => !IsHost;
+    public bool ShouldSendToServer => !IsHost && Client.Instance.IsOnline;
 
 
 
@@ -134,5 +134,14 @@ public class NetworkManager : MonoBehaviour
     {
         Server.Instance.Stop();
         Client.Instance.Disconnect();
+    }
+
+    public void ResetNetworking()
+    {
+        Server.Instance.Stop();
+        Client.Instance.Disconnect();
+
+        IsHost = true;
+        IsConnectedToServer = false;
     }
 }

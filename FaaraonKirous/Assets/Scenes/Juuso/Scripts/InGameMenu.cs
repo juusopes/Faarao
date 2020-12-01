@@ -138,8 +138,7 @@ public class InGameMenu : MonoBehaviour
     {
         if (NetworkManager._instance.IsHost)
         {
-            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            GameManager._instance.LoadLevel(sceneIndex);
+            GameManager._instance.LoadLevel(GameManager._instance.CurrentSceneIndex);
         }
     }
 
@@ -157,7 +156,10 @@ public class InGameMenu : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.ExitToMainMenu();
+        }
     }
 
     public void SaveLevel()

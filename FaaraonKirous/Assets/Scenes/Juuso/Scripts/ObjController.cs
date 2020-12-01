@@ -78,6 +78,8 @@ public class ObjController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(5);
+
+
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.buildIndex + 1);
         }

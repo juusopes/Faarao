@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         {
             _objectLists.Add((ObjectList)i, new Dictionary<int, ObjectManager>());
         }
-        
+
         // Add prefabs
         _objectPrefabs.Add(ObjectType.enemy, _enemyClientPrefab);
 
@@ -157,6 +157,12 @@ public class GameManager : MonoBehaviour
     private bool _isSceneLoaded = false;
     private bool _isFullyLoaded = false;
 
+    // Scene indexes
+    [SerializeField]
+    private int _mainMenu;
+    [SerializeField]
+    private int[] _levels;
+
     public void StartLoading(bool willLoadSave = false)
     {
         Time.timeScale = 0;
@@ -184,6 +190,25 @@ public class GameManager : MonoBehaviour
         WillLoadSave = false;
 
         Debug.Log("Loading ended");
+    }
+
+    public void LoadNextLevel()
+    {
+        int nextLevel = CurrentSceneIndex + 1;
+        if (nextLevel - _levels[0] < _levels.Length)
+        {
+            LoadLevel(nextLevel);
+        }
+        else
+        {
+            ExitToMainMenu();
+        }
+    }
+
+    public void ExitToMainMenu()
+    {
+        NetworkManager._instance.ResetNetworking();
+        LoadLevel(_mainMenu);
     }
 
     public void LoadLevel(int sceneIndex)
