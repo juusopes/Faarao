@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿#if UNITY_EDITOR
+using ParrelSync;
+#endif
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -28,16 +31,16 @@ public class PreIndexer : MonoBehaviour
             _instance = this;
         }
 
-#if UNITY_EDITOR
-        //if (!Application.isPlaying)
-        //{
-        //    UpdateIndexes();
-        //}
+#if UNITY_EDITOR 
+        if (!ClonesManager.IsClone() && !Application.isPlaying)
+        {
+            UpdateIndexes();
+        }
 #else
-        //if (Application.isPlaying)
-        //{
-        //    Destroy(this.gameObject);
-        //}
+        if (Application.isPlaying)
+        {
+            Destroy(this.gameObject);
+        }
 #endif
     }
 
