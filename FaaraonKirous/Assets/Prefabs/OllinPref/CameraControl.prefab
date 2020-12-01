@@ -156,6 +156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2609196066974326901}
   - component: {fileID: 2609196066974326890}
+  - component: {fileID: 2931977733071859826}
   m_Layer: 0
   m_Name: CameraControl
   m_TagString: Untagged
@@ -207,3 +208,18 @@ MonoBehaviour:
   zPanLimit: 102
   xPanLimit: 115
   dampTime: 0.15
+--- !u!114 &2931977733071859826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2609196066974326891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2999d607f6b3de9478d622220ef46c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _list: 6
+  _type: 6
+  _id: 0
