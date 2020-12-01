@@ -71,7 +71,7 @@ public class InGameMenu : MonoBehaviour
     {
         Scene sceneName = SceneManager.GetActiveScene();
 
-        if (sceneName.name != "MainMenu")
+        if (sceneName.name != "MainMenuAnimated")
         {
             timer();
 
@@ -176,6 +176,11 @@ public class InGameMenu : MonoBehaviour
         {
             GameManager._instance.LoadFromFile();
         }
+    }
+
+    public void ConnectToGame()
+    {
+
     }
 
     public void LoadLevelFromMenu()

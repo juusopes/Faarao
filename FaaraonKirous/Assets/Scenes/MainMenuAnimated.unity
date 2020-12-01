@@ -3229,7 +3229,7 @@ GameObject:
   - component: {fileID: 307550029}
   - component: {fileID: 307550028}
   m_Layer: 0
-  m_Name: Button_newGame
+  m_Name: Button_startGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3298,7 +3298,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1756873485}
         m_TargetAssemblyTypeName: InGameMenu, Assembly-CSharp
         m_MethodName: NewGame
         m_Mode: 1
@@ -3866,7 +3866,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: NEW GAME
+  m_Text: START GAME
 --- !u!222 &375990908
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4432,7 +4432,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CONTINUE
+  m_Text: CONNECT
 --- !u!222 &478469719
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5078,7 +5078,7 @@ GameObject:
   - component: {fileID: 553078094}
   - component: {fileID: 553078093}
   m_Layer: 0
-  m_Name: Button_continue
+  m_Name: Button_connect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5147,22 +5147,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1756873485}
         m_TargetAssemblyTypeName: InGameMenu, Assembly-CSharp
-        m_MethodName: LoadLevel
+        m_MethodName: ConnectToGame
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1211075386}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -17732,7 +17720,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1621641679}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1756873485}
+        m_TargetAssemblyTypeName: InGameMenu, Assembly-CSharp
+        m_MethodName: LoadLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1621641679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19051,7 +19051,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1756873485}
         m_TargetAssemblyTypeName: InGameMenu, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
@@ -19319,6 +19319,7 @@ GameObject:
   - component: {fileID: 1756873481}
   - component: {fileID: 1756873480}
   - component: {fileID: 1756873479}
+  - component: {fileID: 1756873485}
   m_Layer: 5
   m_Name: Canvas (1)
   m_TagString: Untagged
@@ -19517,6 +19518,47 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1756873485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1756873478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3712190a4c40bde49ac27027ffc6c19e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuPanel: {fileID: 0}
+  optionsPanel: {fileID: 0}
+  audioPanel: {fileID: 0}
+  videoPanel: {fileID: 0}
+  controlsPanel: {fileID: 0}
+  gameplayPanel: {fileID: 0}
+  continueButton: {fileID: 0}
+  loadButton: {fileID: 0}
+  saveButton: {fileID: 0}
+  optionsButton: {fileID: 0}
+  restartButton: {fileID: 0}
+  mainMenuButton: {fileID: 0}
+  gameplayButton: {fileID: 0}
+  audioButton: {fileID: 0}
+  controlsButton: {fileID: 0}
+  videoButton: {fileID: 0}
+  objectivePanel: {fileID: 198283769}
+  fadeFromBlack: {fileID: 198283769}
+  savedLevel: 0
+  lastSaveSpotX: 0
+  lastSaveSpotY: 0
+  lastSaveSpotZ: 0
+  lastSaveSpotX2: 0
+  lastSaveSpotY2: 0
+  lastSaveSpotZ2: 0
+  timeText: {fileID: 1488973689}
+  menuActive: 0
+  player: {fileID: 631244151}
+  player2: {fileID: 198283769}
 --- !u!1 &1761757768
 GameObject:
   m_ObjectHideFlags: 0
