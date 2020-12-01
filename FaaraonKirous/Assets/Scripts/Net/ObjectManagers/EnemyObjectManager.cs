@@ -31,10 +31,12 @@ public class EnemyObjectManager : CharacterObjectManager
 
         // State
         packet.Write((byte)Character.CurrentStateOption);
+
+        // Animation state
         packet.Write((byte)Character.CurrentAnimationState);
 
         // Detection cone
-        
+
 
         // ..
     }
@@ -58,6 +60,7 @@ public class EnemyObjectManager : CharacterObjectManager
             Character.UpdateStateIndicator((StateOption)packet.ReadByte());
         }
 
+        // Animation state
         Character.SetAnimation((AnimationState)packet.ReadByte());
 
         // Detection cone
