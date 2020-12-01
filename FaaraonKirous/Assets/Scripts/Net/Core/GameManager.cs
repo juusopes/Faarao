@@ -230,6 +230,11 @@ public class GameManager : MonoBehaviour
         action();
     }
 
+    public void NewGame()
+    {
+        LoadLevel(_levels[0]);
+    }
+
     public void LoadScene(int sceneIndex, bool restart = true)
     {
         if (NetworkManager._instance.ShouldSendToClient)

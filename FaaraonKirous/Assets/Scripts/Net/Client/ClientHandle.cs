@@ -212,6 +212,18 @@ public class ClientHandle
         }
     }
 
+    public static void AnimationChanged(int connection, Packet packet)
+    {
+        int id = packet.ReadInt();
+        AnimationState stateOption = (AnimationState)packet.ReadByte();
+
+        if (GameManager._instance.TryGetObject(ObjectList.enemy, id, out ObjectManager netManager))
+        {
+            EnemyObjectManager enemyNetManager = (EnemyObjectManager)netManager;
+            enemyNetManager.Character.SetAnimation(stateOption);
+        }
+    }
+
     public static void DetectionConeUpdated(int connection, Packet packet)
     {
         int id = packet.ReadInt();
