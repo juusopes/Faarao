@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
 
+[SelectionBase]
 public class Character : MonoBehaviour
 {
     #region User setting fields
@@ -150,9 +151,17 @@ public class Character : MonoBehaviour
     {
         if (IsHost)
         {
+            // ForceStraigthen();
             detector = new Detector(this);
             InitNavigator();
         }
+    }
+
+    private void ForceStraigthen()
+    {
+        Quaternion q = transform.rotation;
+        q.eulerAngles = new Vector3(0, q.eulerAngles.y, 0);
+        transform.rotation = q;
     }
 
     private void InitNavMeshAgent()
@@ -559,7 +568,7 @@ public class Character : MonoBehaviour
         if (position == null || navMeshAgent.destination == position || !navMeshAgent.enabled)
             return;
 
-        if (!OnNavMesh.IsReachable(transform, position))
+        if (!OnNavMesh.IsCompletelyReachable(transform, position))
             return;
 
         navMeshAgent.destination = position;

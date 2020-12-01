@@ -175,7 +175,7 @@ public class AbilityController : MonoBehaviour
 
     private void PossessEnemy(Vector3 destinationPoint)
     {
-        if (OnNavMesh.IsReachable(selectedAI.transform, destinationPoint))
+        if (OnNavMesh.IsCompletelyReachable(selectedAI.transform, destinationPoint))
         {
             SpawnAutoRemoved(destinationPoint, abilityOption);
             if (NetworkManager._instance.IsHost)
