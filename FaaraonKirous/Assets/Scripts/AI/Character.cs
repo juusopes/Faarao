@@ -63,8 +63,11 @@ public class Character : MonoBehaviour
     public bool couldDetectPlayer1;
     public bool couldDetectPlayer2;
 
+    private bool isDead;
+
     public StateOption PreviousStateOption { get; private set; } = StateOption.PatrolState;
     public StateOption CurrentStateOption { get; private set; } = StateOption.PatrolState;
+    public AnimationState CurrentAnimationState { get; private set; } = AnimationState.Idle;
 
     private GameObject player1ref;
     private GameObject player2ref;
@@ -86,6 +89,7 @@ public class Character : MonoBehaviour
     public SightDetection testSightDetection;      //new create
     public Detector detector;                       //new create
     private OffMeshLinkMovement linkMovement;       //new create
+    private CharacterAnimations charAnims;       //new create
 
     #endregion
 
@@ -155,6 +159,7 @@ public class Character : MonoBehaviour
             detector = new Detector(this);
             InitNavigator();
         }
+        charAnims = new CharacterAnimations(this);
     }
 
     private void ForceStraigthen()
@@ -196,12 +201,31 @@ public class Character : MonoBehaviour
             stateMachine.UpdateSM();
             TestOffLink();
             RunImpairementCounters();
+            ManageAnimations();
         }
     }
 
     #endregion
 
     #region Generic
+
+    public void ManageAnimations()
+    {
+        if (navMeshAgent.velocity.magnitude > 0.1f)
+            SetAnimation(AnimationState.Walk);
+        else
+            SetAnimation(AnimationState.Idle);
+    }
+
+    public void SetAnimation(AnimationState state)
+    {
+        if (charAnims.currentState != state)
+        {
+            CurrentAnimationState = state;
+            charAnims.SetAnimationState(state);
+            SendToClient_AnimationChanged();
+        }
+    }
 
     public void LostTrackOfPlayer()
     {
@@ -238,23 +262,32 @@ public class Character : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Enemy " + gameObject.name + " dieded");
-        //Own components
-        Destroy(navMeshAgent);
-        Destroy(deathScript);
+        if (!isDead)
+        {
+            isDead = true;
+            //Debug.Log("Enemy " + gameObject.name + " dieded");
+            SetAnimation(AnimationState.Death);
 
-        //Child objects
-        foreach (Transform c in transform)
-            Destroy(c.gameObject);
+            //Own components
+            Destroy(navMeshAgent);
+            Destroy(deathScript);
+            Destroy(GetComponent<Outline>());
+            //Child objects
+            foreach (Transform c in transform)
+            {
+                if (c.GetComponent<Animator>() == null)
+                    Destroy(c.gameObject);
+            }
 
-        player1SightRenderer.DestroyLine();
-        player2SightRenderer.DestroyLine();
-        testSightDetection.DestroyLine();
-        gameObject.tag = "DeadEnemy";
-        Collider[] colliders = GetComponents<Collider>();
-        foreach (Collider c in colliders)
-            c.isTrigger = true;
-        Destroy(this);
+            player1SightRenderer.DestroyLine();
+            player2SightRenderer.DestroyLine();
+            testSightDetection.DestroyLine();
+            gameObject.tag = "DeadEnemy";
+            Collider[] colliders = GetComponents<Collider>();
+            foreach (Collider c in colliders)
+                c.isTrigger = true;
+            Destroy(this);
+        }
     }
     public void KillPlayer(GameObject player)
     {
@@ -574,6 +607,7 @@ public class Character : MonoBehaviour
         navMeshAgent.destination = position;
         navMeshAgent.isStopped = false;
         navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : classSettings.navStoppingDistance;
+
     }
 
     public void StopNavigation()
@@ -599,7 +633,7 @@ public class Character : MonoBehaviour
     #endregion
 
     #region SaveAndLoad
-    
+
     public void SaveLoaded(Vector3 lastSeenPos, int currentWaypointIndex)
     {
         lastSeenPosition = lastSeenPos;
@@ -621,7 +655,11 @@ public class Character : MonoBehaviour
         if (ShouldSendToClient)
             ServerSend.StateChanged(Id, CurrentStateOption);
     }
-
+    private void SendToClient_AnimationChanged()
+    {
+        if (ShouldSendToClient)
+            ServerSend.AnimationChanged(Id, CurrentAnimationState);
+    }
 
     #endregion
 
@@ -629,6 +667,19 @@ public class Character : MonoBehaviour
 #if UNITY_EDITOR
 
     void OnDrawGizmos()
+    {
+        DebugWaypoints();
+        DrawFovDebug();
+    }
+
+    private void DrawFovDebug()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, 0, 0) * fieldOfViewGO.transform.forward * SightRange);
+        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, FOV / 2, 0) * fieldOfViewGO.transform.forward * SightRange);
+        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, FOV / 2 * -1, 0) * fieldOfViewGO.transform.forward * SightRange);
+    }
+
+    private void DebugWaypoints()
     {
         if (waypointGroup != null)
             UnityEditor.Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);

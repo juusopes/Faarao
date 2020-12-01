@@ -137,6 +137,11 @@ public partial class FOVRenderer
     */
     void OnDrawGizmos()
     {
+        DrawEdges();
+    }
+
+    private void DrawEdges()
+    {
         if (drawEdges && Application.isPlaying && vertexPoints != null)
         {
             Vector3 offset = Vector3.up * 0.2f;
