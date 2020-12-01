@@ -93,6 +93,7 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.sightChanged, ClientHandle.SightChanged },
             { (int)ServerPackets.abilityVisualEffectCreated, ClientHandle.AbilityVisualEffectCreated },
             { (int)ServerPackets.stateChanged, ClientHandle.StateChanged },
+            { (int)ServerPackets.animationChanged, ClientHandle.AnimationChanged },
             { (int)ServerPackets.characterDied, ClientHandle.CharacterDied },
             { (int)ServerPackets.detectionConeUpdated, ClientHandle.DetectionConeUpdated },
             { (int)ServerPackets.loadScene, ClientHandle.LoadScene },
