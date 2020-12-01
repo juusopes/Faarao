@@ -131,7 +131,7 @@ public class InGameMenu : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene(1);
+        GameManager._instance.NewGame();
     }
 
     public void RestartLevel()
