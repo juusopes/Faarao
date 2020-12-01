@@ -217,6 +217,15 @@ public class ServerSend
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
     }
 
+    public static void AnimationChanged(int id, AnimationState state)
+    {
+        var packet = new Packet((int)ServerPackets.animationChanged);
+        packet.Write(id);
+        packet.Write((byte)state);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
+    }
+
     public static void DetectionConeUpdated(int id, float percentage, LineType color, bool atExtreme)
     {
         var packet = new Packet((int)ServerPackets.detectionConeUpdated);
