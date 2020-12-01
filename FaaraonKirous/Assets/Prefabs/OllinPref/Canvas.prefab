@@ -504,7 +504,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055074088869330
 CanvasRenderer:
@@ -541,13 +541,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SPACE
+  m_Text: 'SPACE
+
+    stand/crouch'
 --- !u!1 &1184055074102787371
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,7 +585,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055074102787372
 CanvasRenderer:
@@ -620,13 +622,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: L CTRL
+  m_Text: 'L CTRL
+
+    interact'
 --- !u!1 &1184055074108600132
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,7 +741,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055074141820809
 CanvasRenderer:
@@ -774,13 +778,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: W
+  m_Text: 'W
+
+    distract'
 --- !u!1 &1184055074147248403
 GameObject:
   m_ObjectHideFlags: 0
@@ -1695,7 +1701,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055074563311288
 CanvasRenderer:
@@ -1732,13 +1738,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: W
+  m_Text: 'W
+
+    distract'
 --- !u!1 &1184055074637926386
 GameObject:
   m_ObjectHideFlags: 0
@@ -2173,7 +2181,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055074699657145
 CanvasRenderer:
@@ -2210,13 +2218,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: E
+  m_Text: 'E
+
+    flashbang'
 --- !u!1 &1184055074724095597
 GameObject:
   m_ObjectHideFlags: 0
@@ -2625,7 +2635,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055074932874701
 CanvasRenderer:
@@ -2662,13 +2672,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Q
+  m_Text: 'Q
+
+    invisibility'
 --- !u!1 &1184055074978218396
 GameObject:
   m_ObjectHideFlags: 0
@@ -3108,7 +3120,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055075133562713
 CanvasRenderer:
@@ -3145,13 +3157,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Q
+  m_Text: 'Q
+
+    teleport'
 --- !u!1 &1184055075148021154
 GameObject:
   m_ObjectHideFlags: 0
@@ -3412,7 +3426,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055075259748310
 CanvasRenderer:
@@ -3449,13 +3463,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: E
+  m_Text: 'E
+
+    possess'
 --- !u!1 &1184055075282909316
 GameObject:
   m_ObjectHideFlags: 0
@@ -3491,7 +3507,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055075282909321
 CanvasRenderer:
@@ -3528,13 +3544,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: R
+  m_Text: 'R
+
+    resurrect'
 --- !u!1 &1184055075367953965
 GameObject:
   m_ObjectHideFlags: 0
@@ -3645,7 +3663,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055075409007165
 CanvasRenderer:
@@ -3682,13 +3700,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: A
+  m_Text: 'A
+
+    attack'
 --- !u!1 &1184055075472959287
 GameObject:
   m_ObjectHideFlags: 0
@@ -4855,7 +4875,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055075767078380
 CanvasRenderer:
@@ -4892,13 +4912,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SPACE
+  m_Text: 'SPACE
+
+    stand/crouch'
 --- !u!1 &1184055075783436678
 GameObject:
   m_ObjectHideFlags: 0
@@ -5234,7 +5256,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 60, y: 17}
+  m_SizeDelta: {x: 89, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1184055076018297890
 CanvasRenderer:
@@ -5271,13 +5293,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: R
+  m_Text: 'R
+
+    resurrect'
 --- !u!1 &1355103711747019746
 GameObject:
   m_ObjectHideFlags: 0
@@ -16177,6 +16201,70 @@ PrefabInstance:
     - target: {fileID: 6836229995745062222, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
       propertyPath: m_Name
       value: CastingLimiter
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996251205613, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996251205613, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996251205613, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996286231160, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996439938525, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996439938525, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996439938525, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996859951196, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996859951196, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996859951196, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996860794283, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996860794283, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229996860794283, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229997563670930, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229997563670930, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836229997563670930, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
+      propertyPath: m_Color.b
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c0ac5b5a5d237e48856893166507e95, type: 3}
