@@ -674,7 +674,6 @@ public class Character : MonoBehaviour
 
     private void DrawFovDebug()
     {
-        Debug.Log("Waaa");
         Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, 0, 0) * fieldOfViewGO.transform.forward * SightRange);
         Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, FOV / 2, 0) * fieldOfViewGO.transform.forward * SightRange);
         Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, FOV / 2 * -1, 0) * fieldOfViewGO.transform.forward * SightRange);
