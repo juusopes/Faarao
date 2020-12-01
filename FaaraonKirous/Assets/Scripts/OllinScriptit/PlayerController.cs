@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
     public float[] abilityCooldowns;
 
     public UnitInteractions unitInteractions;
+
     private void Awake()
     {
         Initialize();
@@ -814,8 +815,8 @@ public class PlayerController : MonoBehaviour
             transform.GetChild(1).gameObject.SetActive(true);
         } else
         {
-            transform.GetChild(1).gameObject.SetActive(false);
             transform.GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(1).gameObject.SetActive(false);
         }
     }
 }
