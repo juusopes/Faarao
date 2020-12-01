@@ -54,8 +54,8 @@ public class UnitInteractions : MonoBehaviour
     public PlayerController ActiveAbilities2;
 
     public int activeCharacter;
-
-
+    public GameObject deathCanvas1, deathCanvas2;
+    //public DeathScript isDead1, isDead2;
 
     private void Start()
     {
@@ -83,6 +83,7 @@ public class UnitInteractions : MonoBehaviour
             for (int i = 0; i < 11; i++)
             {
                 bool v = GameManager._instance.Pharaoh.GetComponent<PlayerController>().abilityAllowed[i];
+                bool d = GameManager._instance.Pharaoh.GetComponent<PlayerController>().IsDead;
                 if (v)
                 {
                     if (allowedAbilities == 10)
@@ -103,6 +104,15 @@ public class UnitInteractions : MonoBehaviour
                     }
                 }
                 allowedAbilities++;
+
+                if (d && activeCharacter == 1)
+                {
+                    deathCanvas1.SetActive(true);
+                }
+                else if(!d || activeCharacter != 1)
+                {
+                    deathCanvas1.SetActive(false);
+                }
             }
 
             allowedAbilities = 0;
@@ -110,6 +120,7 @@ public class UnitInteractions : MonoBehaviour
             for (int i = 0; i < 11; i++)
             {
                 bool v = GameManager._instance.Priest.GetComponent<PlayerController>().abilityAllowed[i];
+                bool d = GameManager._instance.Priest.GetComponent<PlayerController>().IsDead;
                 if (v)
                 {
                     if (allowedAbilities == 1)
@@ -126,6 +137,15 @@ public class UnitInteractions : MonoBehaviour
                     }
                 }
                 allowedAbilities++;
+
+                if (d && activeCharacter == 2)
+                {
+                    deathCanvas2.SetActive(true);
+                }
+                else if (!d || activeCharacter != 2)
+                {
+                    deathCanvas2.SetActive(false);
+                }
             }
             allowedAbilities = 0;
         }
@@ -176,6 +196,12 @@ public class UnitInteractions : MonoBehaviour
     public void SelectPriestUI()
     {
         activeCharacter = 2;
+
+        //if (isDead2.isDead && activeCharacter == 2)
+        //{
+        //    deathSentence1.SetActive(false);
+        //    deathSentence2.SetActive(true);
+        //}
 
         generalSkillGroup.SetActive(true);
 
