@@ -37496,6 +37496,14 @@ PrefabInstance:
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityLimits.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityCooldowns.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
       propertyPath: unitInteractions
       value: 
       objectReference: {fileID: 555081518}
@@ -37507,6 +37515,34 @@ PrefabInstance:
       propertyPath: lC
       value: 
       objectReference: {fileID: 1968098987}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityAllowed.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityAllowed.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityAllowed.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityAllowed.Array.data[3]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityAllowed.Array.data[4]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityAllowed.Array.data[6]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706328075926723928, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
+      propertyPath: abilityAllowed.Array.data[7]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5706328075926723930, guid: 6efbf25f3d7075e44826a3edccbe59a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 99.35
@@ -84529,6 +84565,30 @@ PrefabInstance:
       propertyPath: lC
       value: 
       objectReference: {fileID: 1968098987}
+    - target: {fileID: 1274679408148448376, guid: 2995e8cc3841ac74895e9216397fde0f, type: 3}
+      propertyPath: abilityAllowed.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1274679408148448376, guid: 2995e8cc3841ac74895e9216397fde0f, type: 3}
+      propertyPath: abilityAllowed.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1274679408148448376, guid: 2995e8cc3841ac74895e9216397fde0f, type: 3}
+      propertyPath: abilityAllowed.Array.data[4]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1274679408148448376, guid: 2995e8cc3841ac74895e9216397fde0f, type: 3}
+      propertyPath: abilityAllowed.Array.data[5]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1274679408148448376, guid: 2995e8cc3841ac74895e9216397fde0f, type: 3}
+      propertyPath: abilityAllowed.Array.data[6]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1274679408148448376, guid: 2995e8cc3841ac74895e9216397fde0f, type: 3}
+      propertyPath: abilityAllowed.Array.data[7]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1274679408148448378, guid: 2995e8cc3841ac74895e9216397fde0f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 96.46
@@ -86604,11 +86664,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4093961370172857162, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
       propertyPath: rewardPlayerOne.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4093961370172857162, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
       propertyPath: rewardAbility.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4093961370172857162, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
       propertyPath: objectives
@@ -86666,6 +86726,58 @@ PrefabInstance:
       propertyPath: sn
       value: 
       objectReference: {fileID: 555081518}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: priestAbilities.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: priestAbilities.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: priestAbilities.Array.data[4]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: priestAbilities.Array.data[5]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: priestAbilities.Array.data[6]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: priestAbilities.Array.data[7]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: pharaohAbilities.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: pharaohAbilities.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: pharaohAbilities.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: pharaohAbilities.Array.data[3]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: pharaohAbilities.Array.data[4]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: pharaohAbilities.Array.data[6]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4093961370172857167, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
+      propertyPath: pharaohAbilities.Array.data[7]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4093961370172857168, guid: 8a7d4a7d16975cf45aa65679e4f07b29, type: 3}
       propertyPath: m_Name
       value: LevelController
