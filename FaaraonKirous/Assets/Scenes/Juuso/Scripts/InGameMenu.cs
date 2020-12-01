@@ -64,13 +64,6 @@ public class InGameMenu : MonoBehaviour
         gameplayPanel.SetActive(false);
 
         startTime = Time.time;
-
-        if (player != null && player2 != null)
-        {
-            //player.transform.position = new Vector3(lastSaveSpotX, lastSaveSpotY, lastSaveSpotZ);
-            //player2.transform.position = new Vector3(lastSaveSpotX2, lastSaveSpotY2, lastSaveSpotZ2);
-            Debug.LogWarning("COMMENTED THESE TWO LINES ABOVE... CAUSES A BUUUUUG because no save is found");
-        }
     }
 
     // Update is called once per frame
