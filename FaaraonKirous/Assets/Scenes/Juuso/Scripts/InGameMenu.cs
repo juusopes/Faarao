@@ -24,7 +24,7 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
     [HideInInspector]
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
