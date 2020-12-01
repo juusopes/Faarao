@@ -589,7 +589,7 @@ public class PlayerController : MonoBehaviour
         {
             if (playerOne)
             {
-                if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || GetComponent<PharaohAbilities>().abilityLimitList[tempAbilityNum] == 0)
+                if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || (GetComponent<PharaohAbilities>().abilityLimitList[tempAbilityNum] == 0 && abilityCooldowns[tempAbilityNum] == 0))
                 {
                     if (!abilityActive)
                     {

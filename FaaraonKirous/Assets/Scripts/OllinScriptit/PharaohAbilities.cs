@@ -101,7 +101,6 @@ public class PharaohAbilities : MonoBehaviour
         }
         if (invisibilityTimer >= 7 && useInvisibility)
         {
-            Debug.Log("HERE WE ARE!0");
             if (invisibilityTarget != null)
             {
                 invisibilityTarget.GetComponent<PlayerController>().isInvisible = false;
