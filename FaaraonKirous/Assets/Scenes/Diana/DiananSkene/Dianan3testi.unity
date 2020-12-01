@@ -14334,7 +14334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7667617526236659012, guid: 5ee20d2cbc6246c45891bb993e3789ea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.52
+      value: 3.54
       objectReference: {fileID: 0}
     - target: {fileID: 7667617526236659012, guid: 5ee20d2cbc6246c45891bb993e3789ea, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22066,6 +22066,18 @@ PrefabInstance:
       propertyPath: rewards
       value: 
       objectReference: {fileID: 248154513}
+    - target: {fileID: 8487983796543155865, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -189.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 8487983796543155865, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 127.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8487983796543155865, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.93
+      objectReference: {fileID: 0}
     - target: {fileID: 8487983797527302361, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -22112,11 +22124,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8487983797527302366, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
       propertyPath: objectiveDone.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8487983797527302366, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
       propertyPath: objectives.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8487983797527302366, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
       propertyPath: fadeToBlack
@@ -22124,15 +22136,19 @@ PrefabInstance:
       objectReference: {fileID: 697260030}
     - target: {fileID: 8487983797527302366, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
       propertyPath: objectivesInLevel
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8487983797527302366, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
       propertyPath: objectivesNeeded
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8487983797527302367, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
       propertyPath: m_Name
       value: Objectives
+      objectReference: {fileID: 0}
+    - target: {fileID: 8487983797928614294, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8487983797928614303, guid: 3000c3e9f12dbf549add8651e05319f8, type: 3}
       propertyPath: objectiveDoneMark
