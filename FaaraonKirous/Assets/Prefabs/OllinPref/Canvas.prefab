@@ -2291,7 +2291,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 363, y: 54.199997}
+  m_AnchoredPosition: {x: 363, y: 54.19995}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1184055074748037479
@@ -3834,7 +3834,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 192, y: 54.2}
+  m_AnchoredPosition: {x: 192, y: 54.19995}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1184055075504555227
@@ -6754,7 +6754,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 363, y: 54.2}
+  m_AnchoredPosition: {x: 363, y: 54.19995}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5874035953981789632
@@ -15646,6 +15646,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5874035955030540618}
     m_Modifications:
+    - target: {fileID: 4277804802207027177, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277804802848922451, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4277804803024908288, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -15730,9 +15738,29 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4277804803024908289, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4277804803024908291, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
       propertyPath: m_Name
       value: MessageLog
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277804803194999991, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277804803530366232, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277804803939874718, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4277804804110894504, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6821c3c99943624c8c6b9fbc4e54c57, type: 3}

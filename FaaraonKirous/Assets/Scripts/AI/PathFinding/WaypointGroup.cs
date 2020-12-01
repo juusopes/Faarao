@@ -19,8 +19,7 @@ public class WaypointGroup : MonoBehaviour
     private PatrolType patrolType = 0;
     private List<Waypoint> waypoints = new List<Waypoint>();
 
-    // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         Transform navTestTrans = GameManager._instance.Pharaoh.transform;
         Assert.IsNotNull(navTestTrans);
