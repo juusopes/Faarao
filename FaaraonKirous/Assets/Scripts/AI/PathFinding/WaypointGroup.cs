@@ -19,9 +19,9 @@ public class WaypointGroup : MonoBehaviour
     private PatrolType patrolType = 0;
     private List<Waypoint> waypoints = new List<Waypoint>();
 
-    void Start()
+    void Awake()
     {
-        Transform navTestTrans = GameManager._instance.Pharaoh.transform;
+        Transform navTestTrans = GameObject.FindGameObjectWithTag("Player").transform;      // Do not use any ready variable
         Assert.IsNotNull(navTestTrans);
 
         for (int i = 0; i < transform.childCount; i++)
