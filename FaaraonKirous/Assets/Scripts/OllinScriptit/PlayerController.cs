@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     public bool inRange;
     public bool searchingForSight;
     public bool abilityClicked;
+    public Vector3 abilityHitPos;
     //[HideInInspector]
     public bool[] abilityAllowed;
 
@@ -116,6 +117,7 @@ public class PlayerController : MonoBehaviour
             LineOfSight();
             if (!menu.menuActive && IsCurrentPlayer)
             {
+                print("MENU EI OO AKTIIVINE JA CURRENTPLAYER");
                 KeyControls();
             } else
             {

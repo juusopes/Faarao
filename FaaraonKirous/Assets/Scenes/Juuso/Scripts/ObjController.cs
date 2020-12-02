@@ -35,7 +35,6 @@ public class ObjController : MonoBehaviour
         {
             objectives[x].SetActive(true);
         }
-        playersInside = 0;
     }
 
     public void Update()
