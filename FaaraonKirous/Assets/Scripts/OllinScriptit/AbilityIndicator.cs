@@ -274,7 +274,7 @@ public class AbilityIndicator : MonoBehaviour
                         player.GetComponent<PlayerController>().GiveDestination(hitPos);
                         player.GetComponent<PlayerController>().searchingForSight = true;
                         player.GetComponent<PlayerController>().inRange = false;
-                        Debug.Log("CASE 1");
+                        //Debug.Log("CASE 1");
                     }
                     else if (distance > range + range * 0.1f)
                     {
@@ -282,13 +282,13 @@ public class AbilityIndicator : MonoBehaviour
                         player.GetComponent<PlayerController>().GiveDestination(endPoint);
                         player.GetComponent<PlayerController>().inRange = false;
                         player.GetComponent<PlayerController>().searchingForSight = false;
-                        Debug.Log("CASE 2: " + distance + ", " + range);
+                        //Debug.Log("CASE 2: " + distance + ", " + range);
                     }
                     else
                     {
                         player.GetComponent<PlayerController>().inRange = true;
                         player.GetComponent<PlayerController>().searchingForSight = false;
-                        Debug.Log("CASE 3");
+                        //Debug.Log("CASE 3");
                     }
                     player.GetComponent<PlayerController>().abilityClicked = true;
 

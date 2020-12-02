@@ -171,7 +171,7 @@ public class PriestAbilities : MonoBehaviour
                         }
                         warpSpellActive = false;
                         warped = true;
-                        Debug.Log("Warped");
+                        //Debug.Log("Warped");
                         //GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]--;
                     }
                     //GetComponent<PlayerController>().abilityActive = false;
