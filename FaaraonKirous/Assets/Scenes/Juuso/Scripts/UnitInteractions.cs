@@ -69,11 +69,12 @@ public class UnitInteractions : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager._instance.IsFullyLoaded)
-        {
+        ////// TODO JOONA(?)
+        //if (GameManager._instance.IsFullyLoaded)
+        //{
             AllowedAbilities();
             GameOverCheck();
-        }
+        //}
     }
 
     public void AllowedAbilities()
@@ -81,10 +82,11 @@ public class UnitInteractions : MonoBehaviour
         bool menuActivated = GetComponent<InGameMenu>().menuActive;
 
         int allowedAbilities = 0;
-
+        //print("ALLOWEDABILITIES ALKU");
         // cannot use abilities etc. if menu is active
         if (!menuActivated)
         {
+            //print("ALLOWEDABILITIES MENUACTIVATE");
             for (int i = 0; i < 11; i++)
             {
                 bool v = GameManager._instance.Pharaoh.GetComponent<PlayerController>().abilityAllowed[i];
@@ -101,10 +103,12 @@ public class UnitInteractions : MonoBehaviour
                     }
                     if (allowedAbilities == 3)
                     {
+                        print("PHARAOH ABILITY W (3) ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillW1.SetActive(true);
                     }
                     if (allowedAbilities == 2)
                     {
+
                         skillE1.SetActive(true);
                     }
                 }
@@ -136,10 +140,12 @@ public class UnitInteractions : MonoBehaviour
                 {
                     if (allowedAbilities == 1)
                     {
+                        print("PRIEST ABILITY 1 ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillQ2.SetActive(true);
                     }
                     if (allowedAbilities == 3)
                     {
+                        print("PRIEST ABILITY 3 W ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillW2.SetActive(true);
                     }
                     if (allowedAbilities == 2)
