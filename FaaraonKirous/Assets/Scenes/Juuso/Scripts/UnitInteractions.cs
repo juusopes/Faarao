@@ -57,6 +57,8 @@ public class UnitInteractions : MonoBehaviour
     public GameObject deathCanvas1, deathCanvas2;
 
     public GameObject gameOverMenu;
+    [HideInInspector]
+    public bool gameOver;
     //public DeathScript isDead1, isDead2;
 
     private void Start()
@@ -70,6 +72,7 @@ public class UnitInteractions : MonoBehaviour
         if (GameManager._instance.IsFullyLoaded)
         {
             AllowedAbilities();
+            GameOverCheck();
         }
     }
 
@@ -109,11 +112,17 @@ public class UnitInteractions : MonoBehaviour
 
                 if (d && activeCharacter == 1)
                 {
-                    deathCanvas1.SetActive(true);
+                    if (!gameOver)
+                    {
+                        deathCanvas1.SetActive(true);
+                    }
                 }
                 else if(!d || activeCharacter != 1)
                 {
-                    deathCanvas1.SetActive(false);
+                    if (!gameOver)
+                    {
+                        deathCanvas1.SetActive(false);
+                    }
                 }
             }
 
@@ -142,11 +151,17 @@ public class UnitInteractions : MonoBehaviour
 
                 if (d && activeCharacter == 2)
                 {
-                    deathCanvas2.SetActive(true);
+                    if (!gameOver)
+                    {
+                        deathCanvas2.SetActive(true);
+                    }
                 }
                 else if (!d || activeCharacter != 2)
                 {
-                    deathCanvas2.SetActive(false);
+                    if (!gameOver)
+                    {
+                        deathCanvas2.SetActive(false);
+                    }
                 }
             }
             allowedAbilities = 0;
@@ -226,14 +241,22 @@ public class UnitInteractions : MonoBehaviour
         generalSkillGroup.SetActive(false);
     }
 
-    public void GameOverScreen()
+    public void GameOverCheck()
     {
         if (ActiveAbilities.IsDead && ActiveAbilities2.IsDead)
         {
-            gameOverMenu.SetActive(true);
+            if(!this.gameObject.GetComponent<InGameMenu>().menuActive)
+            {
+                gameOverMenu.SetActive(true);
+                gameOver = true;
+            } else
+            {
+                gameOverMenu.SetActive(false);
+            }
         } else
         {
-            gameOverMenu.SetActive(false);
+                gameOverMenu.SetActive(false);
+                gameOver = false;
         }
     }
 }

@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
     public bool IsRunning { get; set; } = false;
 
     //PlayerSynergy
-    private GameObject anotherCharacter;
+    [HideInInspector]
+    public GameObject anotherCharacter;
     private bool lineOfSight;
 
     public bool IsCrouching { get; set; } = false;
