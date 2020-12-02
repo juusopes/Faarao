@@ -72,9 +72,12 @@ public class SpellcastLimiter : MonoBehaviour
         if (targetCharacter.GetComponent<PlayerController>().abilityLimits[abilityNum] < lastCount)
         {
             lastCount--;
-            if (lastCount < fullFillers.Length)
+            if (lastCount < fullFillers.Length && lastCount >= 0)
             {
                 fullFillers[lastCount] = 0;
+            } else if (lastCount < 0)
+            {
+                lastCount = 0;
             }
         }
         if (targetCharacter.GetComponent<PlayerController>().abilityLimits[abilityNum] > lastCount)
@@ -98,7 +101,7 @@ public class SpellcastLimiter : MonoBehaviour
         }
         if (targetPlayerOne)
         {
-            if (lastCount == 0)
+            if (lastCount == 0 && targetCharacter.GetComponent<PharaohAbilities>().abilityLimitList[abilityNum] != 0)
             {
                 coolDownFillerImage.fillAmount = 1;
             }
@@ -109,7 +112,7 @@ public class SpellcastLimiter : MonoBehaviour
         }
         else
         {
-            if (lastCount == 0)
+            if (lastCount == 0 && targetCharacter.GetComponent<PriestAbilities>().abilityLimitList[abilityNum] != 0)
             {
                 coolDownFillerImage.fillAmount = 1;
             }

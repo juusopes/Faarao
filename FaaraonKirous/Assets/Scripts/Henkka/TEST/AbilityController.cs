@@ -45,13 +45,12 @@ public class AbilityController : MonoBehaviour
             //     + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
         }
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
-              
 
         if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange 
             && abilityActivated
             && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked
             && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0
+            && (levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0 || (levelCtrl.currentCharacter.GetComponent<PlayerController>().playerOne && levelCtrl.currentCharacter.GetComponent<PharaohAbilities>().abilityLimitList[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0) || (!levelCtrl.currentCharacter.GetComponent<PlayerController>().playerOne && levelCtrl.currentCharacter.GetComponent<PriestAbilities>().abilityLimitList[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0))
             && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityCooldowns[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0)
         {
             PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
