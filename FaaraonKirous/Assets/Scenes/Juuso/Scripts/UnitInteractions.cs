@@ -55,6 +55,8 @@ public class UnitInteractions : MonoBehaviour
 
     public int activeCharacter;
     public GameObject deathCanvas1, deathCanvas2;
+
+    public GameObject gameOverMenu;
     //public DeathScript isDead1, isDead2;
 
     private void Start()
@@ -222,5 +224,16 @@ public class UnitInteractions : MonoBehaviour
         skillGroup1.SetActive(false);
         skillGroup2.SetActive(false);
         generalSkillGroup.SetActive(false);
+    }
+
+    public void GameOverScreen()
+    {
+        if (ActiveAbilities.IsDead && ActiveAbilities2.IsDead)
+        {
+            gameOverMenu.SetActive(true);
+        } else
+        {
+            gameOverMenu.SetActive(false);
+        }
     }
 }
