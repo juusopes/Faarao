@@ -52,7 +52,7 @@ public class AbilityController : MonoBehaviour
             && abilityActivated
             && currentPlayerController.abilityClicked
             && !currentPlayerController.searchingForSight
-            && currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0
+            && (currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 || (currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PharaohAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0) || (!currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PriestAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0)) 
             && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
             PlayerController caster = currentPlayerController;

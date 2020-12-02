@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
     //Invisibility
     public bool isInvisible;
+    private Material originalMaterial;
+    public Material invisibilityMaterial;
 
     //Camera
     private GameObject camControl;
@@ -190,6 +192,7 @@ public class PlayerController : MonoBehaviour
         }
 		
         ResetAbilityLimits();
+        originalMaterial = transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>().material;
     }
 
     public void Moving()
@@ -355,10 +358,12 @@ public class PlayerController : MonoBehaviour
         if (isInvisible)
         {
             this.gameObject.tag = "PlayerInvisible";
+            transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>().material = invisibilityMaterial;
         }
         else
         {
             this.gameObject.tag = "Player";
+            transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>().material = originalMaterial;
         }
     }
 
@@ -518,6 +523,7 @@ public class PlayerController : MonoBehaviour
                                 ClientSend.KillEnemy(targetEnemy.GetComponent<EnemyObjectManager>().Id);
                             }
                         }
+                        anim.SetTrigger("Attack");
                         targetEnemy = null;
                         target = null;
                         useAttack = false;

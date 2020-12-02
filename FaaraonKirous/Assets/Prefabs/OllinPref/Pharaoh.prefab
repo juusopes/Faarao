@@ -369,6 +369,7 @@ MonoBehaviour:
   abilityClicked: 0
   abilityAllowed: 0101010101010101010101
   isInvisible: 0
+  invisibilityMaterial: {fileID: 2100000, guid: 5aa7610f8df95bc47960b28f6f5e3484, type: 2}
   interactObject: {fileID: 0}
   targetEnemy: {fileID: 0}
   lC: {fileID: 0}
@@ -490,8 +491,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outlineMode: 2
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineColor: {r: 0.39215687, g: 1, b: 0.19607843, a: 1}
   outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &3467948272251231851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7394772034251038737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 3
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -660,6 +679,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14f08e70a259b964f800305da676fd42, type: 3}
+--- !u!1 &7394772034251038737 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 744681269957058947, guid: 14f08e70a259b964f800305da676fd42, type: 3}
+  m_PrefabInstance: {fileID: 7839115858687017362}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7914039853299727019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 80628321470987065, guid: 14f08e70a259b964f800305da676fd42, type: 3}

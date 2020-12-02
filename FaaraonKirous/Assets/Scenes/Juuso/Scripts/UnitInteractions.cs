@@ -55,7 +55,8 @@ public class UnitInteractions : MonoBehaviour
 
     public int activeCharacter;
 
-
+    //Game Over Screen
+    public GameObject gameOverScreen;
 
     private void Start()
     {
@@ -68,6 +69,7 @@ public class UnitInteractions : MonoBehaviour
         if (GameManager._instance.IsFullyLoaded)
         {
             AllowedAbilities();
+            GameOverCheck();
         }
     }
 
@@ -196,5 +198,16 @@ public class UnitInteractions : MonoBehaviour
         skillGroup1.SetActive(false);
         skillGroup2.SetActive(false);
         generalSkillGroup.SetActive(false);
+    }
+
+    private void GameOverCheck()
+    {
+        if ( ActiveAbilities.IsDead && ActiveAbilities2.IsDead)
+        {
+            gameOverScreen.SetActive(true);
+        } else
+        {
+            gameOverScreen.SetActive(false);
+        }
     }
 }
