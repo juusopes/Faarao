@@ -35,7 +35,6 @@ public class ObjController : MonoBehaviour
         {
             objectives[x].SetActive(true);
         }
-        playersInside = 0;
     }
 
     public void Update()
@@ -79,6 +78,7 @@ public class ObjController : MonoBehaviour
         {
             yield return new WaitForSeconds(5);
 
+            print("asd22222");
             GameManager._instance.LoadNextLevel();
         }
     }
