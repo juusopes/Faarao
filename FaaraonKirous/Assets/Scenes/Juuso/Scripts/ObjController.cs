@@ -78,7 +78,6 @@ public class ObjController : MonoBehaviour
         {
             yield return new WaitForSeconds(5);
 
-            print("asd22222");
             GameManager._instance.LoadNextLevel();
         }
     }
