@@ -75,23 +75,14 @@ public class InGameMenu : MonoBehaviour
         {
             timer();
 
+            if (LoadUIManager.Instance.IsOpen())
+            {
+                return;
+            }
+
             if (Input.GetButtonDown("Cancel") && !menuActive)
             {
-                menuActive = true;
-
-                menuPanel.SetActive(true);
-                objectivePanel.SetActive(false);
-
-                continueButton.SetActive(true);
-                loadButton.SetActive(true);
-                saveButton.SetActive(true);
-                optionsButton.SetActive(true);
-                restartButton.SetActive(true);
-                mainMenuButton.SetActive(true);
-                gameplayButton.SetActive(true);
-                audioButton.SetActive(true);
-                controlsButton.SetActive(true);
-                videoButton.SetActive(true);
+                ActivateMenu();
             }
 
             else if (Input.GetButtonDown("Cancel") && menuActive)
@@ -115,6 +106,25 @@ public class InGameMenu : MonoBehaviour
         string seconds = (t % 60).ToString("f1");
 
         timeText.text = "Level time: " + hours + ":" + minutes + ":" + seconds;
+    }
+
+    public void ActivateMenu()
+    {
+        menuActive = true;
+
+        menuPanel.SetActive(true);
+        objectivePanel.SetActive(false);
+
+        continueButton.SetActive(true);
+        loadButton.SetActive(true);
+        saveButton.SetActive(true);
+        optionsButton.SetActive(true);
+        restartButton.SetActive(true);
+        mainMenuButton.SetActive(true);
+        gameplayButton.SetActive(true);
+        audioButton.SetActive(true);
+        controlsButton.SetActive(true);
+        videoButton.SetActive(true);
     }
 
     public void DeactivateMenu()
@@ -174,7 +184,7 @@ public class InGameMenu : MonoBehaviour
     {
         if (NetworkManager._instance.IsHost)
         {
-            GameManager._instance.LoadFromFile();
+            LoadUIManager.Instance.OpenInGameMenu();
         }
     }
 
