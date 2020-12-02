@@ -2174,6 +2174,24 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: You forgot your gear on the other side.
+--- !u!114 &2089325613217141747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4568553121052555757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &4911053032549107984
 GameObject:
   m_ObjectHideFlags: 0
@@ -3057,24 +3075,6 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: If you keep performing like this we will need another 1000 slaves to clean
     up all the dust.
---- !u!114 &7462262995867255977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7432127225101125808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 3
-  outlineColor: {r: 0.39215687, g: 1, b: 0.19607843, a: 1}
-  outlineWidth: 3
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &8012497312050507780
 GameObject:
   m_ObjectHideFlags: 0
@@ -3655,6 +3655,11 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: e3cbd5ec144c1dc43b184ea651bbaae2, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8e0dc9631ee63b4984a09ef4a9b004c, type: 3}
+--- !u!1 &5417459423267077718 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d8e0dc9631ee63b4984a09ef4a9b004c, type: 3}
+  m_PrefabInstance: {fileID: 5183581004016648967}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &1622794347246304918 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: d8e0dc9631ee63b4984a09ef4a9b004c, type: 3}
@@ -3663,11 +3668,6 @@ Animator:
 --- !u!4 &4640253567764882668 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d8e0dc9631ee63b4984a09ef4a9b004c, type: 3}
-  m_PrefabInstance: {fileID: 5183581004016648967}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5417459423267077718 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d8e0dc9631ee63b4984a09ef4a9b004c, type: 3}
   m_PrefabInstance: {fileID: 5183581004016648967}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7886255941736524083
@@ -3751,13 +3751,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14f08e70a259b964f800305da676fd42, type: 3}
---- !u!1 &7432127225101125808 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 744681269957058947, guid: 14f08e70a259b964f800305da676fd42, type: 3}
-  m_PrefabInstance: {fileID: 7886255941736524083}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7813720034976059914 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 80628321470987065, guid: 14f08e70a259b964f800305da676fd42, type: 3}
+  m_PrefabInstance: {fileID: 7886255941736524083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4568553121052555757 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5915294652412596446, guid: 14f08e70a259b964f800305da676fd42, type: 3}
   m_PrefabInstance: {fileID: 7886255941736524083}
   m_PrefabAsset: {fileID: 0}

@@ -6,7 +6,12 @@ ModelImporter:
   - first:
       74: 1827226128182048838
     second: Dying
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phong1
+    second: {fileID: -2154018342376339288, guid: 3ae96ab324bd1dd40b3ddfeab21a4691, type: 3}
   materials:
     materialImportMode: 0
     materialName: 0
