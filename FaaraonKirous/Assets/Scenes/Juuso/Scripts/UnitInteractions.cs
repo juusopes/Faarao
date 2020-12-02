@@ -69,12 +69,11 @@ public class UnitInteractions : MonoBehaviour
 
     private void Update()
     {
-        ////// TODO JOONA(?)
-        //if (GameManager._instance.IsFullyLoaded)
-        //{
+        if (GameManager._instance.IsFullyLoaded)
+        {
             AllowedAbilities();
             GameOverCheck();
-        //}
+        }
     }
 
     public void AllowedAbilities()
