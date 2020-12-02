@@ -22,7 +22,6 @@ public class Book : MonoBehaviour {
     public bool enableShadowEffect=true;
     //represent the index of the sprite shown in the right page
     public int currentPage = 0;
-    public GameObject flipImage;
 
 
 
@@ -55,7 +54,6 @@ public class Book : MonoBehaviour {
     public Image RightNext;
     public UnityEvent OnFlip;
     float radius1, radius2;
-
     //Spine Bottom
     Vector3 sb;
     //Spine Top
@@ -272,7 +270,6 @@ public class Book : MonoBehaviour {
     }
     public void OnMouseDragRightPage()
     {
-        flipImage.SetActive(false);
         if (interactable)
         DragRightPageToPoint(transformPoint(Input.mousePosition));
         
