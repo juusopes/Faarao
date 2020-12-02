@@ -5,8 +5,16 @@ using UnityEngine.UI;
 
 public class MenuSettings : MonoBehaviour
 {
-    private AudioSource audioSrc;
     private float musicVolume = 0.2f;
+
+    [SerializeField]
+    private AudioMixer _mixer;
+    [SerializeField]
+    private Slider _master;
+    [SerializeField]
+    private Slider _music;
+    [SerializeField]
+    private Slider _effects;
 
     public Dropdown resolutionDropDown;
 
@@ -15,8 +23,6 @@ public class MenuSettings : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        audioSrc = GetComponent<AudioSource>();
-
         resolutions = Screen.resolutions;
         resolutionDropDown.ClearOptions();
         List<string> options = new List<string>();
@@ -42,20 +48,47 @@ public class MenuSettings : MonoBehaviour
         resolutionDropDown.AddOptions(options);
         resolutionDropDown.value = currentResolution;
         resolutionDropDown.RefreshShownValue();
+
+        InitAudio();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void InitAudio()
     {
-        audioSrc.volume = musicVolume;
+        float masterVolume = PlayerPrefs.GetFloat("Master", 1);
+        float musicVolume = PlayerPrefs.GetFloat("Music", 1);
+        float effectsVolume = PlayerPrefs.GetFloat("Effects", 1);
+
+        SetMasterLevel(masterVolume);
+        SetMusicLevel(musicVolume);
+        SetEffectsLevel(effectsVolume);
+
+        _master.value = masterVolume;
+        _music.value = musicVolume;
+        _effects.value = effectsVolume;
     }
 
-    public void SetVolume(float vol)
+    public void SetMasterLevel(float sliderValue)
     {
-        musicVolume = vol;
+        SetAudioLevel("Master", sliderValue);
     }
 
-    public void setQuality (int qualitySetting)
+    public void SetMusicLevel(float sliderValue)
+    {
+        SetAudioLevel("Music", sliderValue);
+    }
+
+    public void SetEffectsLevel(float sliderValue)
+    {
+        SetAudioLevel("Effects", sliderValue);
+    }
+
+    private void SetAudioLevel(string audioType, float value)
+    {
+        PlayerPrefs.SetFloat(audioType, float.Parse(value.ToString("n2")));
+        _mixer.SetFloat(audioType, Mathf.Log10(value) * 20); // 
+    }
+
+    public void SetQuality (int qualitySetting)
     {
         QualitySettings.SetQualityLevel(qualitySetting, true);
     }
@@ -65,7 +98,7 @@ public class MenuSettings : MonoBehaviour
         Screen.fullScreen = isFullscreen;
     }
 
-    public void setResolution(int currentResolution)
+    public void SetResolution(int currentResolution)
     {
         Resolution resolution = resolutions[currentResolution];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);

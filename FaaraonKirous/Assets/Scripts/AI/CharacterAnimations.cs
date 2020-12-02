@@ -11,9 +11,11 @@ public class CharacterAnimations
 
     private Dictionary<AnimationState, string> states = new Dictionary<AnimationState, string>()
         {
-            {AnimationState.Idle, "Idle"},
-            {AnimationState.Walk, "Walk"},
-            {AnimationState.Death, "Enemy_death"},
+            {AnimationState.Idle, "Goon_Idle"},
+            {AnimationState.Walk, "Goon_walking"},
+            {AnimationState.Run, "Goon_Run"},
+            {AnimationState.WalkTurn, "Goon_Walkturn"},
+            {AnimationState.Death, "Goon_dying"},
         };
 
     public CharacterAnimations(Character character)
