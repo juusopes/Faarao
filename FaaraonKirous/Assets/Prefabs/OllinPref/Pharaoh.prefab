@@ -2221,6 +2221,7 @@ MonoBehaviour:
   movementSpeed: 10
   doubleClickTimer: 0
   navMeshAgent: {fileID: 0}
+  anotherCharacter: {fileID: 0}
   abilityActive: 0
   indicator: {fileID: 5642665167690723842, guid: 608c7c670fc8a4347b2c9cdb6f954bde, type: 3}
   visibleInd: {fileID: 0}
@@ -3736,6 +3737,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 744681269957058947, guid: 14f08e70a259b964f800305da676fd42, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5611011091763209457, guid: 14f08e70a259b964f800305da676fd42, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8075033373836202280, guid: 14f08e70a259b964f800305da676fd42, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
