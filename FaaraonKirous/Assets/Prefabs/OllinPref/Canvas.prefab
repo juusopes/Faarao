@@ -258,7 +258,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 1305b93441434a84c894893a22f21c61, type: 3}
+  m_Texture: {fileID: 2800000, guid: a29955021dd195a43a7040c0ce5dcc61, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -12376,6 +12376,10 @@ MonoBehaviour:
   ActiveAbilities: {fileID: 0}
   ActiveAbilities2: {fileID: 0}
   activeCharacter: 0
+  deathCanvas1: {fileID: 0}
+  deathCanvas2: {fileID: 0}
+  gameOverMenu: {fileID: 0}
+  gameOver: 0
 --- !u!114 &5874035955030540616
 MonoBehaviour:
   m_ObjectHideFlags: 0
