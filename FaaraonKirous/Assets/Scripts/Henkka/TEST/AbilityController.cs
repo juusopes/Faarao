@@ -33,27 +33,29 @@ public class AbilityController : MonoBehaviour
         if (levelCtrl.currentCharacter == null)
             return;
 
-        if (!levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityActive)
+        PlayerController currentPlayerController = levelCtrl.currentCharacter.GetComponent<PlayerController>();
+
+        if (!currentPlayerController.abilityActive)
             return;
 
         if (Input.GetKeyDown(KeyCode.Mouse1)
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0 
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityCooldowns[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0)
+            && currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 
+            && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
             abilityActivated = true;
-            //Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
-            //     + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
+            //Debug.Log("InRange: " + CurrentPlayerController.inRange + ", Ability Activated: " + abilityActivated
+            //     + ", abilityClicked: " + CurrentPlayerController.abilityClicked + ", SearchingForSight: " + CurrentPlayerController.searchingForSight);
         }
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
 
-        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange 
+        if (currentPlayerController.inRange 
             && abilityActivated
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked
-            && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight
-            && (levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0 || (levelCtrl.currentCharacter.GetComponent<PlayerController>().playerOne && levelCtrl.currentCharacter.GetComponent<PharaohAbilities>().abilityLimitList[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0) || (!levelCtrl.currentCharacter.GetComponent<PlayerController>().playerOne && levelCtrl.currentCharacter.GetComponent<PriestAbilities>().abilityLimitList[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0))
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityCooldowns[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0)
+            && currentPlayerController.abilityClicked
+            && !currentPlayerController.searchingForSight
+            && currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0
+            && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
-            PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
+            PlayerController caster = currentPlayerController;
             if (caster.abilityNum == 2 && !caster.playerOne)
                 abilityOption = AbilityOption.DistractBlindingLight;
             else if (caster.abilityNum == 2 && caster.playerOne)
@@ -108,7 +110,7 @@ public class AbilityController : MonoBehaviour
         else
         {
             //abilityActivated = false;
-            PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
+            PlayerController caster = currentPlayerController;
             //caster.abilityClicked = false;
             return;
         }

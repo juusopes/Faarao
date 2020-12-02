@@ -52,10 +52,10 @@ public class Detector
 
     private void TryDetectPlayers()
     {
-        detectionPercentage = detectionPercentageCalculator.SimulateFOVPercentage(character.CouldDetectAnyPlayer);
-
         character.couldDetectPlayer1 = CouldDetectPlayer(Player1, Player1Controller);
         character.couldDetectPlayer2 = CouldDetectPlayer(Player2, Player2Controller);
+
+        detectionPercentage = detectionPercentageCalculator.SimulateFOVPercentage(character.CouldDetectAnyPlayer);
 
         bool sim1Reached = SimulationReached(Player1, detectionPercentage);
         bool sim2Reached = SimulationReached(Player2, detectionPercentage);

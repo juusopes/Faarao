@@ -547,7 +547,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (lC.targetObject != null)
                     {
-                            target = lC.targetObject;
+                        target = lC.targetObject;
                         if (target.tag == "Player")
                         {
                             targetV3 = target.transform.position;

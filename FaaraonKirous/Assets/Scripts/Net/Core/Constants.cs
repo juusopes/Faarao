@@ -35,4 +35,7 @@ public class Constants
     public const float messageLifetimeInSeconds = 10;
     public const float messageStartFadeoutAfterSeconds = 5;
     public const float messageFadeoutTimespan = messageLifetimeInSeconds - messageStartFadeoutAfterSeconds;
+
+
+    public static readonly Color messageColorNetworking = Color.blue;
 }

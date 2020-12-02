@@ -219,7 +219,7 @@ public class Character : MonoBehaviour
 
     public void SetAnimation(AnimationState state)
     {
-        if(charAnims.currentState != state)
+        if (charAnims.currentState != state)
         {
             CurrentAnimationState = state;
             charAnims.SetAnimationState(state);
@@ -667,6 +667,19 @@ public class Character : MonoBehaviour
 #if UNITY_EDITOR
 
     void OnDrawGizmos()
+    {
+        DebugWaypoints();
+        DrawFovDebug();
+    }
+
+    private void DrawFovDebug()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, 0, 0) * fieldOfViewGO.transform.forward * SightRange);
+        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, FOV / 2, 0) * fieldOfViewGO.transform.forward * SightRange);
+        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, FOV / 2 * -1, 0) * fieldOfViewGO.transform.forward * SightRange);
+    }
+
+    private void DebugWaypoints()
     {
         if (waypointGroup != null)
             UnityEditor.Handles.DrawDottedLine(transform.position, waypointGroup.transform.position, 4f);

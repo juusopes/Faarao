@@ -12,6 +12,14 @@ public class CharacterObjectManager : DynamicObjectManager
         DeathScript = GetComponent<DeathScript>();
     }
 
+    protected override void UpdateTransform()
+    {
+        if (!DeathScript.isDead)
+        {
+            base.UpdateTransform();
+        }
+    }
+
     public override void SendSync(Packet packet)
     {
         base.SendSync(packet);

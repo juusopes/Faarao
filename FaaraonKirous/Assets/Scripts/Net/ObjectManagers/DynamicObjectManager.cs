@@ -9,6 +9,14 @@ public class DynamicObjectManager : ObjectManager
     protected override void FixedUpdate()
     {
         base.FixedUpdate();  // TODO: Are we calling fixed update a second time?
-        if (NetworkManager._instance.ShouldSendToClient) ServerSend.UpdateObjectTransform(List, Id, Transform.position, Transform.rotation);
+        UpdateTransform();
+    }
+
+    protected virtual void UpdateTransform()
+    {
+        if (NetworkManager._instance.ShouldSendToClient)
+        {
+            ServerSend.UpdateObjectTransform(List, Id, Transform.position, Transform.rotation);
+        }
     }
 }
