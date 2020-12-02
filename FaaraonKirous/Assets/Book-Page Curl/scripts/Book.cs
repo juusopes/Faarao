@@ -22,7 +22,7 @@ public class Book : MonoBehaviour {
     public bool enableShadowEffect=true;
     //represent the index of the sprite shown in the right page
     public int currentPage = 0;
-
+    public GameObject flipImage;
 
 
     public int TotalPageCount
@@ -271,8 +271,10 @@ public class Book : MonoBehaviour {
     public void OnMouseDragRightPage()
     {
         if (interactable)
-        DragRightPageToPoint(transformPoint(Input.mousePosition));
-        
+        {
+            flipImage.SetActive(false);
+            DragRightPageToPoint(transformPoint(Input.mousePosition));
+        }
     }
     public void DragLeftPageToPoint(Vector3 point)
     {
