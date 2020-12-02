@@ -48,19 +48,32 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5198251, y: 0.74041456, z: 3.5337048}
   m_Center: {x: 0.0000014305115, y: -0.085977696, z: 0}
---- !u!65 &4869825317515376072
+--- !u!65 &3998190719144930820
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3420864011212558482}
+  m_GameObject: {fileID: 2760600342437402935}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5198255, y: 0.74041456, z: 3.5337057}
-  m_Center: {x: -0.000013828278, y: -0.08597764, z: 4.2632564e-14}
+  m_Size: {x: 1.519825, y: 0.74041456, z: 3.5337048}
+  m_Center: {x: 0.0000014305115, y: -0.085977696, z: -0.0000076293945}
+--- !u!65 &7818871986800316685
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2777570203240554329}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.519825, y: 0.74041456, z: 3.5337052}
+  m_Center: {x: 0.0000014305115, y: -0.085977696, z: -0.0000038146973}
 --- !u!1 &2882689271661019156
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,32 +166,19 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!65 &7818871986800316685
+--- !u!65 &4869825317515376072
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2777570203240554329}
+  m_GameObject: {fileID: 3420864011212558482}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.519825, y: 0.74041456, z: 3.5337052}
-  m_Center: {x: 0.0000014305115, y: -0.085977696, z: -0.0000038146973}
---- !u!65 &3998190719144930820
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2760600342437402935}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.519825, y: 0.74041456, z: 3.5337048}
-  m_Center: {x: 0.0000014305115, y: -0.085977696, z: -0.0000076293945}
+  m_Size: {x: 1.5198255, y: 0.74041456, z: 3.5337057}
+  m_Center: {x: -0.000013828278, y: -0.08597764, z: 4.2632564e-14}
 --- !u!1001 &2240998823347149723
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -249,6 +249,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
       propertyPath: m_Name
       value: goldignot_unity (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
@@ -333,6 +337,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: goldignot_unity (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
 --- !u!1 &3420864011212558482 stripped
@@ -416,6 +424,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: goldignot_unity
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
 --- !u!1 &2777570203240554329 stripped
@@ -498,6 +510,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
       propertyPath: m_Name
       value: goldignot_unity (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b66620fb5219ca4190f0cf9a8b3b2d2, type: 3}

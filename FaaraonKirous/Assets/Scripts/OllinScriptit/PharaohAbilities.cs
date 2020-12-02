@@ -75,11 +75,10 @@ public class PharaohAbilities : MonoBehaviour
                     && target.tag == "Player"
                     && invisibilityClicked)
                     {
-                        Debug.Log("INVISIBILITY!");
                         target.GetComponent<PlayerController>().isInvisible = true;
                         invisibilityTimer = 0;
                         useInvisibility = true;
-                        GetComponent<PlayerController>().Stay();
+                        //GetComponent<PlayerController>().Stay();
                         //GetComponent<PlayerController>().abilityActive = false;
                         //GetComponent<PlayerController>().abilityNum = 0;
                         invisibilityTarget = target;

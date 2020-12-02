@@ -13,6 +13,8 @@ public class AbilityController : MonoBehaviour
     private int click = 0;
     private bool abilityActivated;
 
+    private PlayerController currentPlayerController;
+
     private void Start()
     {
         Assert.IsNotNull(abilitySpawner, "Add ability spawner prefab!");
@@ -33,7 +35,7 @@ public class AbilityController : MonoBehaviour
         if (levelCtrl.currentCharacter == null)
             return;
 
-        PlayerController currentPlayerController = levelCtrl.currentCharacter.GetComponent<PlayerController>();
+        currentPlayerController = levelCtrl.currentCharacter.GetComponent<PlayerController>();
 
         if (!currentPlayerController.abilityActive)
             return;
@@ -203,12 +205,11 @@ public class AbilityController : MonoBehaviour
                 ServerSend.AbilityVisualEffectCreated(option, pos);
             }
         }
-
-        abilitySpawner.SpawnAtPosition(pos, option);
+        abilitySpawner.SpawnAtPosition(currentPlayerController.abilityHitPos, option);
     }
 
     private void SpawnRemovable(Vector3 pos, AbilityOption option)
     {
-        lastSpawnedAbility = abilitySpawner.SpawnAtPosition(pos, option);
+        lastSpawnedAbility = abilitySpawner.SpawnAtPosition(currentPlayerController.abilityHitPos, option);
     }
 }

@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &7186350194837106158
 Transform:
@@ -166,6 +166,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 61fc115142cedb348ad0de6ef7584f29, type: 3}
       propertyPath: m_Name
       value: rubblepile_unity (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 61fc115142cedb348ad0de6ef7584f29, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61fc115142cedb348ad0de6ef7584f29, type: 3}

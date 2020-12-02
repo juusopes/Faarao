@@ -251,22 +251,28 @@ public class AbilityIndicator : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Mouse1))
                 {
                     playerPos = player.GetComponent<PlayerController>().GetPosition();
+                    Debug.Log("playerPos: " + playerPos);
                     Vector3 hitPos = hit.transform.position;
+                    player.GetComponent<PlayerController>().abilityHitPos = hitPos;
+                    Debug.Log("hitPos: " + hitPos);
                     lineOfSightPoint = hit.transform.position;
                     lineOfSightPoint.y = hit.transform.position.y + 0.3f;
                     lineOfSightPointBool = true;
                     //hitPos.y = playerPos.y;
                     float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
+                    Debug.Log("distance: " + distance);
                     //LineOfSightCheck
                     if (Physics.Raycast(player.transform.position, lineOfSightPoint - player.transform.position, out hit, Vector3.Distance(player.transform.position, lineOfSightPoint) - 0.3f, RayCaster.attackLayerMask) && hit.collider.gameObject.tag != targetTag)
                     {
                         hasLineOfSight = false;
                         Debug.Log(hit.collider.gameObject);
+                        Debug.Log("hasLineOfSight = false");
                     }
                     else
                     {
                         hasLineOfSight = true;
                         lineOfSightPointBool = false;
+                        Debug.Log("hasLineOfSight = true");
                     }
                     //DistanceCheck
                     if (!hasLineOfSight)
