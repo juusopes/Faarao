@@ -161,6 +161,11 @@ public class PriestAbilities : MonoBehaviour
                         if (NetworkManager._instance.IsHost)
                         {
                             GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
+                            //Debug.Log("iR: " + GetComponent<PlayerController>().inRange);
+                            //Debug.Log("aC: " + GetComponent<PlayerController>().abilityClicked);
+                            //Debug.Log("SfS: " + GetComponent<PlayerController>().searchingForSight);
+                            //Debug.Log("aL: " + GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]);
+                            //Debug.Log("aCD: " + GetComponent<PlayerController>().abilityCooldowns[GetComponent<PlayerController>().abilityNum]);
                         }
                         else
                         {

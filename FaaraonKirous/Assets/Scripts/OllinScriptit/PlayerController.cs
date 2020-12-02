@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     public bool inRange;
     public bool searchingForSight;
     public bool abilityClicked;
+    public Vector3 abilityHitPos;
     //[HideInInspector]
     public bool[] abilityAllowed;
 
