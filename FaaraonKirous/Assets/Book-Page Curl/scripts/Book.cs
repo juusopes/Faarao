@@ -273,7 +273,10 @@ public class Book : MonoBehaviour {
         if (interactable)
         {
             flipImage.SetActive(false);
-            DragRightPageToPoint(transformPoint(Input.mousePosition));
+            if(currentPage != bookPages.Length - 2)
+            {
+                DragRightPageToPoint(transformPoint(Input.mousePosition));
+            }
         }
     }
     public void DragLeftPageToPoint(Vector3 point)
@@ -415,7 +418,7 @@ public class Book : MonoBehaviour {
 
     public void OnLastPage()
     {
-        if(currentPage == bookPages.Length)
+        if(currentPage == bookPages.Length - 2)
         {
             continueButton.SetActive(true);
         }
