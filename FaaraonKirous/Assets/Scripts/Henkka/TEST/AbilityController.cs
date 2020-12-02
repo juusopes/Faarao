@@ -205,7 +205,6 @@ public class AbilityController : MonoBehaviour
                 ServerSend.AbilityVisualEffectCreated(option, pos);
             }
         }
-
         abilitySpawner.SpawnAtPosition(currentPlayerController.abilityHitPos, option);
     }
 
