@@ -33,7 +33,7 @@ public class DeathSentence : MonoBehaviour
         {
             currentDeath = true;
         }
-        Debug.Log(canvas.gameObject.GetComponent<UnitInteractions>().gameOver);
+        //Debug.Log(canvas.gameObject.GetComponent<UnitInteractions>().gameOver);
         if (!canvas.menuActive && !canvas.gameObject.GetComponent<UnitInteractions>().gameOver)
         {
             if (deathCanvas.activeSelf == false)
