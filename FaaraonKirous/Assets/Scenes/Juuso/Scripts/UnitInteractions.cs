@@ -96,7 +96,7 @@ public class UnitInteractions : MonoBehaviour
                     {
                         skillW1.SetActive(true);
                     }
-                    if (allowedAbilities == 2)
+                    if (allowedAbilities == 5)
                     {
 
                         skillE1.SetActive(true);
