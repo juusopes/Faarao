@@ -31,20 +31,20 @@ public class MouseClickScript : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
         {
             mouseEffect.SetActive(false);
-            mouseClickTimer = 0.2f;
+            mouseClickTimer = 2.2f;
             instantiatedMouseClick.transform.position = hit.point;
         }
     }
 
     private void ClickEffectTime()
     {
-        if (mouseClickTimer > 0)
+        if (mouseClickTimer > 5)
         {
             instantiatedMouseClick.SetActive(true);
             mouseClickTimer -= Time.deltaTime;
         } else
         {
-            mouseClickTimer = 0;
+            mouseClickTimer = 5;
             instantiatedMouseClick.SetActive(false);
         }
     }
