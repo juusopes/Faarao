@@ -505,7 +505,6 @@ public class PlayerController : MonoBehaviour
                         if (target.tag == "Enemy")
                         {
                             targetV3 = target.transform.position;
-                            targetV3.y = transform.position.y;
                             SetDestination(targetV3);
                             useAttack = true;
                             abilityActive = false;
