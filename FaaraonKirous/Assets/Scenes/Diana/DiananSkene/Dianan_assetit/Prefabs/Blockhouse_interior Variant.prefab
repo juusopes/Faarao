@@ -167,7 +167,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: c9956b57060607d4daf6fe3b43f66820, type: 2}
     - target: {fileID: 919132149155446097, guid: a66d7f90f5711774cb90a29da50d868c, type: 3}
       propertyPath: m_Name
-      value: Blockhouse_interior
+      value: Blockhouse_interior Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a66d7f90f5711774cb90a29da50d868c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a66d7f90f5711774cb90a29da50d868c, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a66d7f90f5711774cb90a29da50d868c, type: 3}
