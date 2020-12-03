@@ -102,7 +102,6 @@ public class UnitInteractions : MonoBehaviour
                     }
                     if (allowedAbilities == 3)
                     {
-                        print("PHARAOH ABILITY W (3) ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillW1.SetActive(true);
                     }
                     if (allowedAbilities == 2)

@@ -601,6 +601,9 @@ public class PlayerController : MonoBehaviour
             {
                 if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || (GetComponent<PharaohAbilities>().abilityLimitList[tempAbilityNum] == 0 && abilityCooldowns[tempAbilityNum] == 0))
                 {
+                    abilityClicked = false;
+                    searchingForSight = true;
+                    inRange = false;
                     if (!abilityActive)
                     {
                         abilityActive = true;
