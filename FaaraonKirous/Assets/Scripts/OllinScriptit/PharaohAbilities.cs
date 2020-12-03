@@ -8,7 +8,7 @@ public class PharaohAbilities : MonoBehaviour
     private LevelController levelControl;
     private bool invisibilityActive;
     public bool useInvisibility;
-    private float invisibilityTimer;
+    public float invisibilityTimer;
     public float timeInInvisibility;
     public GameObject[] indicatorList;
     public float[] rangeList;
@@ -17,6 +17,8 @@ public class PharaohAbilities : MonoBehaviour
     public bool[] lineActive;
     private bool invisibilityClicked;
     private GameObject invisibilityTarget;
+
+    public SoundManager soundFX;
 
     // Start is called before the first frame update
     void Start()
@@ -70,6 +72,7 @@ public class PharaohAbilities : MonoBehaviour
                         if (target.tag == "Player")
                         {
                             invisibilityTarget = target;
+                            soundFX.InvisibilitySound();
                         } else
                         {
                             invisibilityTarget = null;

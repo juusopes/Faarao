@@ -23,6 +23,8 @@ public class PriestAbilities : MonoBehaviour
     public float[] abilityCDList;
     public bool[] lineActive;
 
+    public SoundManager soundFX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -146,6 +148,7 @@ public class PriestAbilities : MonoBehaviour
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                     {
                         warpPosition = hit.point;
+                        soundFX.WarpSound();
                     } else
                     {
                         warpSpellActive = false;
