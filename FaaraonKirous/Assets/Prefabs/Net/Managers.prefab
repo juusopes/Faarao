@@ -209,7 +209,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ff04d2dba5138e74cac237e5ff2b45b0, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -305,7 +305,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 5fcfe66c133bfa448aef15d02a1be7cc, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -401,7 +401,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 025d833f5a36eab419ada9ee98828384, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -497,7 +497,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: e52ef3042a3332548a8a1714c41d9c93, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -812,15 +812,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: waypointGroups.Array.size
-      value: 51
+      value: 53
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: activatableObjects.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: enemies.Array.size
-      value: 51
+      value: 53
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: waypointGroups.Array.data[0]
@@ -1244,6 +1244,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: enemies.Array.data[50]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
+      propertyPath: waypointGroups.Array.data[51]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
+      propertyPath: waypointGroups.Array.data[52]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
+      propertyPath: enemies.Array.data[51]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
+      propertyPath: enemies.Array.data[52]
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458692, guid: 069213871507cbc48895f49b273754f1, type: 3}
