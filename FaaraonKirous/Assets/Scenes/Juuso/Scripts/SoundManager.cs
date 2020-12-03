@@ -14,6 +14,7 @@ public class SoundManager : MonoBehaviour
     public AudioSource attackSound;
     public AudioSource resurrectSound;
     public AudioSource deathSound;
+    public AudioSource clickSound;
 
     public void InvisibilitySound()
     {
@@ -42,14 +43,20 @@ public class SoundManager : MonoBehaviour
 
     public void AttackSound()
     {
-
+        attackSound.Play();
     }
     public void ResurrectSound()
     {
-
+        resurrectSound.Play();
     }
+
     public void DeathSound()
     {
+        deathSound.Play();
+    }
 
+    public void ClickSound()
+    {
+        clickSound.Play();
     }
 }

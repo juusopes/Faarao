@@ -67,7 +67,7 @@ GameObject:
   - component: {fileID: 4551234615080187055}
   - component: {fileID: 2753634455893552592}
   - component: {fileID: 6878878644799846895}
-  - component: {fileID: 7401177828462024283}
+  - component: {fileID: 9041679262543309387}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -973,7 +973,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!82 &7401177828462024283
+--- !u!82 &9041679262543309387
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -983,11 +983,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -1510732355611921181, guid: 46ff873a4c9ef284283751b597fc85c0, type: 2}
-  m_audioClip: {fileID: 8300000, guid: ab77b7545daaf574e8941e6e3c19311a, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 0.1
+  m_audioClip: {fileID: 8300000, guid: 1a8b3c4858ad85b43801782d0e03f79c, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.3
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1300,15 +1300,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: waypointGroups.Array.size
-      value: 53
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: activatableObjects.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: enemies.Array.size
-      value: 53
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2509831347713458691, guid: 069213871507cbc48895f49b273754f1, type: 3}
       propertyPath: waypointGroups.Array.data[0]
