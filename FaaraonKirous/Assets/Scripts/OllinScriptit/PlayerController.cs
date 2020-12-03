@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
             LineOfSight();
             if (!menu.menuActive && IsCurrentPlayer)
             {
-                print("MENU EI OO AKTIIVINE JA CURRENTPLAYER");
+                //print("MENU EI OO AKTIIVINE JA CURRENTPLAYER");
                 KeyControls();
             } else
             {
