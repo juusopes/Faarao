@@ -13009,6 +13009,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1621641676}
   m_CullTransparentMesh: 0
+--- !u!1 &1631205086
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1631205087}
+  m_Layer: 5
+  m_Name: Placeholder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1631205087
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631205086}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1756873484}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1633305169
 GameObject:
   m_ObjectHideFlags: 0
@@ -13966,6 +14001,7 @@ RectTransform:
   - {fileID: 1414744391}
   - {fileID: 1211075387}
   - {fileID: 1359141539}
+  - {fileID: 1631205087}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13986,8 +14022,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3712190a4c40bde49ac27027ffc6c19e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuPanel: {fileID: 0}
-  optionsPanel: {fileID: 0}
+  menuPanel: {fileID: 1631205086}
+  optionsPanel: {fileID: 1631205086}
   audioPanel: {fileID: 631244151}
   videoPanel: {fileID: 631244151}
   controlsPanel: {fileID: 631244151}
@@ -14002,8 +14038,8 @@ MonoBehaviour:
   audioButton: {fileID: 0}
   controlsButton: {fileID: 0}
   videoButton: {fileID: 0}
-  objectivePanel: {fileID: 0}
-  fadeFromBlack: {fileID: 0}
+  objectivePanel: {fileID: 1631205086}
+  fadeFromBlack: {fileID: 1631205086}
   savedLevel: 0
   lastSaveSpotX: 0
   lastSaveSpotY: 0
@@ -14014,7 +14050,7 @@ MonoBehaviour:
   timeText: {fileID: 1488973689}
   menuActive: 0
   player: {fileID: 631244151}
-  player2: {fileID: 0}
+  player2: {fileID: 1631205086}
 --- !u!1 &1761757768
 GameObject:
   m_ObjectHideFlags: 0
