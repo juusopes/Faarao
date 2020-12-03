@@ -195,7 +195,11 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
-    
+    public void LoadLevelMainMenu()
+    {
+        MainMenuUIManager.Instance.Close();
+        LoadUIManager.Instance.OpenMainMenu();
+    }
 
     public void Host()
     {
@@ -203,6 +207,25 @@ public class InGameMenu : MonoBehaviour
         {
             HostUIManager.Instance.OpenInGameMenu();
         }
+    }
+
+    [SerializeField]
+    private MenuListCreator _saveMenuList;
+
+    public void UpdateSaveList()
+    {
+        if (_saveMenuList == null || !_saveMenuList.isActiveAndEnabled) return;
+
+        SaveUIObject[] saveList = GameManager._instance.GetSaveFiles().ToArray();
+
+        _saveMenuList.RefreshList(saveList);
+    }
+
+
+    public void LoadLevelDeathScreen()
+    {
+
+        UpdateSaveList();
     }
 
     public void ConnectToGame()

@@ -82,7 +82,8 @@ public class ColliderDebugger : ScriptableWizard
         for (int i = 0; i < objects.Count; ++i)
         {
             GameObject gameObject = objects[i];
-            if (gameObject.GetComponent<Collider>() == null)
+            //Get objects without collider and without child that has colliderer and renderer (sub models)
+            if (gameObject.GetComponent<Collider>() == null && gameObject.GetComponentInChildren<Collider>() == null && gameObject.GetComponentInChildren<Renderer>() == null)
             {
                 ret.Add(gameObject);
             }
