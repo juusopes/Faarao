@@ -41,11 +41,12 @@ public class AbilityController : MonoBehaviour
 
         if (!currentPlayerController.abilityActive)
             return;
-
+        //Debug.Log("Overrided pos: " + currentPlayerController.abilityHitPos);
         if (Input.GetKeyDown(KeyCode.Mouse0)
             && currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 
             && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
+            //Debug.Log("Activated");
             abilityActivated = true;
             //Debug.Log("InRange: " + CurrentPlayerController.inRange + ", Ability Activated: " + abilityActivated
             //     + ", abilityClicked: " + CurrentPlayerController.abilityClicked + ", SearchingForSight: " + CurrentPlayerController.searchingForSight);
@@ -59,6 +60,7 @@ public class AbilityController : MonoBehaviour
             && (currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 || (currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PharaohAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0) || (!currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PriestAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0)) 
             && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
+            //Debug.Log("Selecting");
             PlayerController caster = currentPlayerController;
             if (caster.abilityNum == 2 && !caster.playerOne)
                 abilityOption = AbilityOption.DistractBlindingLight;
