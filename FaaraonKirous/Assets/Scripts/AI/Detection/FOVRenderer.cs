@@ -149,6 +149,15 @@ public partial class FOVRenderer : MonoBehaviour
         //SaveAsset();
     }
 
+<<<<<<< Updated upstream
+=======
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if (movementDebugger) DebugMoveEnemy();
+    }
+#endif
+>>>>>>> Stashed changes
 
     private void LateUpdate()
     {

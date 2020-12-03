@@ -189,6 +189,10 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
+
+#if UNITY_EDITOR
+        if (isDebuggingDummy) return;
+#endif
         if (IsDead)
         {
             Die();
@@ -665,6 +669,8 @@ public class Character : MonoBehaviour
 
     #region Editor stuff
 #if UNITY_EDITOR
+
+    public bool isDebuggingDummy = false;
 
     void OnDrawGizmos()
     {

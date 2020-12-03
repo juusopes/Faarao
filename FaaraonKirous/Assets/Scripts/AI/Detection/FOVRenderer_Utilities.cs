@@ -11,6 +11,11 @@ public partial class FOVRenderer
 {
     #region General Utilities ===============================================================================================================================
 
+    private float GetAngleFromCurve(float xIn)
+    {
+        return X_FOV / 2 * xIterationCurve.Evaluate((float)xIn / (xRayCount - 1));
+    }
+
     /// <summary>
     /// RAYCASTS IN GLOBAL SPACE !! MESH CALCULATIONS ARE IN LOCAL SCAPE!! Returns local space position. Position is raycast end point at range or hit point. 
     /// </summary>
@@ -68,6 +73,12 @@ public partial class FOVRenderer
         //We cannot use closest point on concave colliders, so use raycasting as a show must go on option 
         if (testRayHit.collider.GetType() == typeof(MeshCollider))
         {
+<<<<<<< Updated upstream
+=======
+            return Vector3.zero;
+            /*
+             
+>>>>>>> Stashed changes
             //Debug.Log(testRayHit.collider.gameObject);
             Vector3 rayStart = reSampleTest + Vector3.up * -0.2f;
             //ACylinder(rayStart, Color.black);
@@ -78,6 +89,8 @@ public partial class FOVRenderer
             Vector3 res = ConvertLocal(GetHitPointOnSpecificCollider(rayStart, dir, lenght, testRayHit.collider));
             //ACylinder(res);
             return res;
+
+            */
         }
 
         return ConvertLocal(testRayHit.collider.ClosestPoint(ConvertGlobal(reSampleTest)));
