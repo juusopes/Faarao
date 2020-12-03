@@ -43,6 +43,7 @@ public class PriestAbilities : MonoBehaviour
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         telekinesisActive = false;
         telekinesisTimer = 5;
+        warped = false;
     }
 
     //public void Telekinesis()

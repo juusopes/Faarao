@@ -459,7 +459,7 @@ public class PlayerController : MonoBehaviour
                                 SetDestination(targetV3);
 
                                 groundInd.SetActive(true);
-                                Vector3 tempV3 = targetV3;
+                                Vector3 tempV3 = target.transform.position;
                                 tempV3.y = targetV3.y + 0.2f;
                                 groundInd.transform.position = tempV3;
                             }
@@ -521,7 +521,7 @@ public class PlayerController : MonoBehaviour
                             abilityActive = false;
 
                             groundInd.SetActive(true);
-                            Vector3 tempV3 = targetV3;
+                            Vector3 tempV3 = target.transform.position; 
                             tempV3.y = targetV3.y + 0.2f;
                             groundInd.transform.position = tempV3;
                         }
@@ -582,7 +582,7 @@ public class PlayerController : MonoBehaviour
                             abilityActive = false;
 
                             groundInd.SetActive(true);
-                            Vector3 tempV3 = targetV3;
+                            Vector3 tempV3 = target.transform.position; 
                             tempV3.y = targetV3.y + 0.2f;
                             groundInd.transform.position = tempV3;
                         }

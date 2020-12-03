@@ -175,8 +175,8 @@ public class LevelController : MonoBehaviour
 
     public void UpdateAbilities()
     {
-        pharaoh.GetComponent<PlayerController>().abilityAllowed = pharaohAbilities;
-        priest.GetComponent<PlayerController>().abilityAllowed = priestAbilities;
+        pharaohAbilities.CopyTo(pharaoh.GetComponent<PlayerController>().abilityAllowed, 0);
+        priestAbilities.CopyTo(priest.GetComponent<PlayerController>().abilityAllowed, 0);
     }
 
 }
