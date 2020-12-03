@@ -1,7 +1,7 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!64 &6570076419388189645
-MeshCollider:
+--- !u!65 &4332668834785901076
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -10,10 +10,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -8116138440861595531, guid: b3ab7744813ef9242a48b9ed45bbd4b6, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.5582943, y: 3.6191723, z: 0.6241226}
+  m_Center: {x: 0.019997597, y: 0, z: 0.003211975}
 --- !u!1001 &8943970369032064980
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80,6 +79,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b3ab7744813ef9242a48b9ed45bbd4b6, type: 3}
       propertyPath: m_NavMeshLayer
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b3ab7744813ef9242a48b9ed45bbd4b6, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3ab7744813ef9242a48b9ed45bbd4b6, type: 3}
