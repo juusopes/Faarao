@@ -250,16 +250,16 @@ public class AbilityIndicator : MonoBehaviour
                     playerPos = player.GetComponent<PlayerController>().GetPosition();
                     //Debug.Log("playerPos: " + playerPos);
                     Vector3 hitPos = hit.point;
-                    hitPos.y = hit.transform.position.y + 0.1f;
+                    hitPos.y = hit.point.y + 0.1f;
                     groundIndicator.transform.position = hitPos;
                     groundIndicator.SetActive(true);
                     SetGroundIndicatorImages();
 
-                    hitPos = hit.transform.position;
+                    hitPos = hit.point;
                     player.GetComponent<PlayerController>().abilityHitPos = hitPos;
                     //Debug.Log("hitPos: " + hitPos);
-                    lineOfSightPoint = hit.transform.position;
-                    lineOfSightPoint.y = hit.transform.position.y + 0.3f;
+                    lineOfSightPoint = hit.point;
+                    lineOfSightPoint.y = hit.point.y + 0.3f;
                     lineOfSightPointBool = true;
                     //hitPos.y = playerPos.y;
                     float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
