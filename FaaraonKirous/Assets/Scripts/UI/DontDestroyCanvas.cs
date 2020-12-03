@@ -8,6 +8,7 @@ public class DontDestroyCanvas : MonoBehaviour
 
     private LoadUIManager _loadUiManager;
     private SaveUIManager _saveUiManager;
+    private HostUIManager _hostUiManager;
 
     private void Awake()
     {
@@ -25,11 +26,12 @@ public class DontDestroyCanvas : MonoBehaviour
 
         _loadUiManager = GetComponent<LoadUIManager>();
         _saveUiManager = GetComponent<SaveUIManager>();
+        _hostUiManager = GetComponent<HostUIManager>();
     }
 
     public bool IsOpen()
     {
-        if (_loadUiManager.IsOpen() || _saveUiManager.IsOpen())
+        if (_loadUiManager.IsOpen() || _saveUiManager.IsOpen() || _hostUiManager.IsOpen())
         {
             return true;
         }

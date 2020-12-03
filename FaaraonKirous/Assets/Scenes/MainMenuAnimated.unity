@@ -3817,7 +3817,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1756873480}
         m_TargetAssemblyTypeName: MenuSettings, Assembly-CSharp
-        m_MethodName: setResolution
+        m_MethodName: SetResolution
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13308,7 +13308,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1756873480}
         m_TargetAssemblyTypeName: MenuSettings, Assembly-CSharp
-        m_MethodName: setQuality
+        m_MethodName: SetQuality
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14032,6 +14032,7 @@ MonoBehaviour:
   videoPanel: {fileID: 631244151}
   controlsPanel: {fileID: 631244151}
   gameplayPanel: {fileID: 631244151}
+  background: {fileID: 0}
   continueButton: {fileID: 0}
   loadButton: {fileID: 0}
   saveButton: {fileID: 0}

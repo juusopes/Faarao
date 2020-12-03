@@ -88,6 +88,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        
+    }
+
     #region Loading/Saving
     /// <summary>Returns the build index of the current scene.</summary>
     public int CurrentSceneIndex => SceneManager.GetActiveScene().buildIndex;
@@ -389,7 +394,7 @@ public class GameManager : MonoBehaviour
     {
         if (!File.Exists(filePath))
         {
-            MessageLog.Instance.AddMessage($"File \"{filePath}\" was not found!", Color.red);
+            MessageLog.Instance.AddMessage($"Save file does not exist", Color.red);
             return false;
         }
 
