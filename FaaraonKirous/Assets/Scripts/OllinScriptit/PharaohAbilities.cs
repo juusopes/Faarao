@@ -9,6 +9,7 @@ public class PharaohAbilities : MonoBehaviour
     private bool invisibilityActive;
     public bool useInvisibility;
     private float invisibilityTimer;
+    public float timeInInvisibility;
     public GameObject[] indicatorList;
     public float[] rangeList;
     public int[] abilityLimitList;
@@ -33,7 +34,7 @@ public class PharaohAbilities : MonoBehaviour
     {
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         invisibilityActive = false;
-        invisibilityTimer = 10;
+        invisibilityTimer = timeInInvisibility * 10;
     }
 
     public void Invisibility()
@@ -107,11 +108,11 @@ public class PharaohAbilities : MonoBehaviour
                 }
             }
         }
-        if (invisibilityTimer <= 7)
+        if (invisibilityTimer <= timeInInvisibility)
         {
             invisibilityTimer += Time.deltaTime;
         }
-        if (invisibilityTimer >= 7 && useInvisibility)
+        if (invisibilityTimer >= timeInInvisibility && useInvisibility)
         {
             if (invisibilityTarget != null)
             {
