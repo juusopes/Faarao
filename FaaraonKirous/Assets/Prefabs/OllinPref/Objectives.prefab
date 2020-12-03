@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 2121519826743185656}
   m_Layer: 2
   m_Name: Objective5
-  m_TagString: TargetableObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -251,6 +251,7 @@ MonoBehaviour:
   activated3: {fileID: 6636836934617393856}
   activated4: {fileID: 6636836934617393856}
   activated5: {fileID: 6636836934617393856}
+  objectiveActivated: 0
 --- !u!114 &6636836934617393856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9995,7 +9996,7 @@ GameObject:
   - component: {fileID: 8337839600671913698}
   m_Layer: 2
   m_Name: Objective1
-  m_TagString: TargetableObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10117,6 +10118,7 @@ MonoBehaviour:
   activated3: {fileID: 6257779590255095275}
   activated4: {fileID: 6257779590255095275}
   activated5: {fileID: 6257779590255095275}
+  objectiveActivated: 0
 --- !u!114 &6257779590255095275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10284,6 +10286,7 @@ MonoBehaviour:
   activated3: {fileID: 7745601239536070312}
   activated4: {fileID: 7745601239536070312}
   activated5: {fileID: 7745601239536070312}
+  objectiveActivated: 0
 --- !u!114 &7745601239536070312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15142,7 +15145,7 @@ GameObject:
   - component: {fileID: 119591857900547441}
   m_Layer: 2
   m_Name: Objective2
-  m_TagString: TargetableObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15264,6 +15267,7 @@ MonoBehaviour:
   activated3: {fileID: 1796952373119475595}
   activated4: {fileID: 1796952373119475595}
   activated5: {fileID: 1796952373119475595}
+  objectiveActivated: 0
 --- !u!114 &1796952373119475595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29830,7 +29834,7 @@ GameObject:
   - component: {fileID: 5303619546539536601}
   m_Layer: 2
   m_Name: Objective3
-  m_TagString: TargetableObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29952,6 +29956,7 @@ MonoBehaviour:
   activated3: {fileID: 3499799632734588341}
   activated4: {fileID: 3499799632734588341}
   activated5: {fileID: 3499799632734588341}
+  objectiveActivated: 0
 --- !u!114 &3499799632734588341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29998,7 +30003,7 @@ GameObject:
   - component: {fileID: 1326213778951916706}
   m_Layer: 2
   m_Name: Objective4
-  m_TagString: TargetableObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30120,6 +30125,7 @@ MonoBehaviour:
   activated3: {fileID: 5894055272851897524}
   activated4: {fileID: 5894055272851897524}
   activated5: {fileID: 5894055272851897524}
+  objectiveActivated: 0
 --- !u!114 &5894055272851897524
 MonoBehaviour:
   m_ObjectHideFlags: 0
