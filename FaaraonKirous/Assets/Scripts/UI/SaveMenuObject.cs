@@ -28,7 +28,7 @@ public class SaveMenuObject : BaseMenuObject
     {
         if (GameManager._instance.LoadFromFile(saveObject.Name))
         {
-            LoadUIManager.Instance.CloseInGameMenu();
+            LoadUIManager.Instance.Close();
         }
     }
 }
