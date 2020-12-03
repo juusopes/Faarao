@@ -198,11 +198,11 @@ public class AbilityController : MonoBehaviour
         {
             if (NetworkManager._instance.ShouldSendToServer)
             {
-                ClientSend.AbilityUsed(option, pos);
+                ClientSend.AbilityUsed(option, currentPlayerController.abilityHitPos);
             }
             else if (NetworkManager._instance.ShouldSendToClient)
             {
-                ServerSend.AbilityVisualEffectCreated(option, pos);
+                ServerSend.AbilityVisualEffectCreated(option, currentPlayerController.abilityHitPos);
             }
         }
         abilitySpawner.SpawnAtPosition(currentPlayerController.abilityHitPos, option);
