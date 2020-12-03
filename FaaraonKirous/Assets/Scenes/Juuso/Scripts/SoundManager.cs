@@ -20,25 +20,25 @@ public class SoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool currentplayer = playercontroller.IsCurrentPlayer;
-        bool invisible = playercontroller.isInvisible;
-        float invisibilityTime = pharaohTimers.invisibilityTimer;
+        //bool currentplayer = playercontroller.IsCurrentPlayer;
+        //bool invisible = playercontroller.isInvisible;
+        //float invisibilityTime = pharaohTimers.invisibilityTimer;
 
-        if(invisible)
-        {
-            print("invisible");
-        }
+        //if(invisible)
+        //{
+        //    print("invisible");
+        //}
 
-        if (currentplayer)
-        {
-            if(soundTimes == 0 && invisible)
-            {
-                invisibilityBuzz.Play();
-                soundTimes++;
+        //if (currentplayer)
+        //{
+        //    if(soundTimes == 0 && invisible)
+        //    {
+        //        invisibilityBuzz.Play();
+        //        soundTimes++;
 
-                StartCoroutine(WaitForSeconds(2.25f));
-            }
-        }
+        //        StartCoroutine(WaitForSeconds(2.25f));
+        //    }
+        //}
     }
 
     public IEnumerator WaitForSeconds(float time)
