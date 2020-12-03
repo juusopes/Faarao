@@ -24,6 +24,16 @@ public class ColliderDebugger : ScriptableWizard
         PrintList(objectsWithoutCollider);
         Selection.objects = objectsWithoutCollider.ToArray();
     }
+
+    [MenuItem("Henkka/Find All With Colliders")]
+    public static void FindWithColliders()
+    {
+        List<GameObject> objectsInScene = GetAllSceneObjects();
+        List<GameObject> objectsWithCollider = GetObjectsWithCollider(objectsInScene);
+        PrintList(objectsWithCollider);
+        Selection.objects = objectsWithCollider.ToArray();
+    }
+
     /*
         [MenuItem("Example/Select All of Tag...")]
         static void SelectAllOfTagWizard()
@@ -101,6 +111,24 @@ public class ColliderDebugger : ScriptableWizard
     }
 
     [ExecuteInEditMode]
+    private static List<GameObject> GetObjectsWithCollider(List<GameObject> objects)
+    {
+        Debug.Log("Get all objects with mesh collider");
+        var ret = new List<GameObject>();
+        // iterate root objects and do something
+        for (int i = 0; i < objects.Count; ++i)
+        {
+            GameObject gameObject = objects[i];
+            //Get objects without collider and without child that has colliderer and renderer (sub models)
+            if (gameObject.GetComponent<Collider>() != null || gameObject.GetComponentInChildren<Collider>() != null)
+            {
+                ret.Add(gameObject);
+            }
+        }
+        return ret;
+    }
+
+    [ExecuteInEditMode]
     private static List<GameObject> GetObjectsInLayer(int layer)
     {
         Debug.Log("Get all objects in layer");
@@ -116,6 +144,22 @@ public class ColliderDebugger : ScriptableWizard
                 ret.Add(gameObject);
                 //Debug.Log(gameObject.name);
             }
+        }
+        return ret;
+    }
+
+    [ExecuteInEditMode]
+    private static List<GameObject> GetAllSceneObjects()
+    {
+        Debug.Log("Get all objects in scene");
+        // get root objects in scene
+        GameObject[] rootObjects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+        var ret = new List<GameObject>();
+        // iterate root objects and do something
+        for (int i = 0; i < rootObjects.Length; ++i)
+        {
+            GameObject gameObject = rootObjects[i];
+            ret.Add(gameObject);
         }
         return ret;
     }
