@@ -1,25 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [ExecuteInEditMode]
-public class ColliderDebugger : MonoBehaviour
+public class ColliderDebugger : ScriptableWizard
 {
-    [ContextMenu("Find All Mesh Colliders")]
-    public void FindMeshColliders()
+    [MenuItem("Henkka/Find All Mesh Colliders")]
+    public static void FindMeshColliders()
     {
         List<GameObject> objectsInLayer = GetObjectsInLayer(15);
         List<GameObject> objectsWithMeshCollider = GetObjectsWithMeshCollider(objectsInLayer);
         PrintList(objectsWithMeshCollider);
     }
 
-    [ContextMenu("Find All Without Colliders")]
-    public void FindWithoutColliders()
+    [MenuItem("Henkka/Find All Without Colliders")]
+    public static void FindWithoutColliders()
     {
         List<GameObject> objectsInLayer = GetObjectsInLayer(15);
         List<GameObject> objectsWithoutCollider = GetObjectsWithoutCollider(objectsInLayer);
         PrintList(objectsWithoutCollider);
+    }
+/*
+    [MenuItem("Example/Select All of Tag...")]
+    static void SelectAllOfTagWizard()
+    {
+        ScriptableWizard.DisplayWizard(
+            "Select All of Tag...",
+            typeof(SelectAllOfTag),
+            "Make Selection");
+    }
+*/
+    [MenuItem("Henkka/Select All of Tag HighestObject")]
+    public static void SelectWithTag()
+    {
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("HighestObject");
+        Selection.objects = gos;
     }
 
 
