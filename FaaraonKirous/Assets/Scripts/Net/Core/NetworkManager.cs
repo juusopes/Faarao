@@ -48,7 +48,10 @@ public class NetworkManager : MonoBehaviour
             Destroy(this);
             return;
         }
+    }
 
+    private void Start()
+    {
 #if UNITY_EDITOR
         if (Testing)
         {
@@ -71,7 +74,7 @@ public class NetworkManager : MonoBehaviour
     {
         if (Client.Instance.IsOnline || Server.Instance.IsOnline)
         {
-            Debug.Log("Cannot create server if server or client is online!");
+            MessageLog.Instance.AddMessage("Already hosting or connected", Color.red);
             return false;
         }
         else

@@ -25,8 +25,8 @@ public class Navigator
 
     public Waypoint GetFirstWaypoint()
     {
-        if (waypointCount == 0)
-            return null;
+        if (waypointCount == 0) return null;
+
         //if (patrolType == PatrolType.ShorterBackAndForth || patrolType == PatrolType.ShorterOnce)
         //    return wpGroup.GetWaypoint(GetClosestWaypoint(parentTrans));
         return wpGroup.GetWaypoint(0);
@@ -34,6 +34,8 @@ public class Navigator
 
     public Waypoint GetSavedWaypoint(int index)
     {
+        if (waypointCount == 0) return null;
+
         currentWaypoint = index;
         return wpGroup.GetWaypoint(currentWaypoint);
     }

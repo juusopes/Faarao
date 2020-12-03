@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7047389699088551474}
   - component: {fileID: 6224678385116021143}
   - component: {fileID: 8180356937640342877}
-  - component: {fileID: 5436716691239911370}
-  m_Layer: 0
+  - component: {fileID: 54368733783770781}
+  m_Layer: 15
   m_Name: Pillar Wall
-  m_TagString: Untagged
+  m_TagString: HighestObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 8
@@ -82,8 +82,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5436716691239911370
-MeshCollider:
+--- !u!65 &54368733783770781
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -92,7 +92,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5236710971717515544, guid: 496ddfd3f069dc640ae861dd0c9b3223, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.7938893, y: 7.998918, z: 2.0064592}
+  m_Center: {x: 0, y: 0, z: 0}

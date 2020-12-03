@@ -20,6 +20,8 @@ public class ObjectiveCounter: MonoBehaviour
 
     public ActivatorScript activated, activated2, activated3, activated4, activated5;
 
+    public bool objectiveActivated;
+
     private void Awake()
     {
         //Set All Objectives To False
@@ -31,6 +33,7 @@ public class ObjectiveCounter: MonoBehaviour
 
         rewards = GameObject.FindGameObjectWithTag("LevelController").GetComponent<RewardController>();
         objectiveContoller = transform.parent.gameObject.GetComponent<ObjController>();
+        objectiveActivated = false;
     }
 
     public void Update()
@@ -41,7 +44,7 @@ public class ObjectiveCounter: MonoBehaviour
 
     public void CheckIfDone()
     {
-        if (activated.activated == true)
+        if (objectiveActivated)
         {
             objectiveContoller.objectiveDone[objNum - 1] = true;
 
@@ -65,6 +68,11 @@ public class ObjectiveCounter: MonoBehaviour
         {
             objectiveContoller.playersInside++;
             inEndPoint = true;
+        }
+
+        if (other.gameObject.tag == "Player" && objNum != 0)
+        {
+            objectiveActivated = true;
         }
     }
 

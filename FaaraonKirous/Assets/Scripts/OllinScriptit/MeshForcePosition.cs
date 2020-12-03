@@ -14,7 +14,7 @@ public class MeshForcePosition : MonoBehaviour
     void Update()
     {
         Vector3 forcedPos = transform.parent.transform.position;
-        forcedPos.y = transform.parent.transform.position.y - 1;
+        forcedPos.y = transform.parent.transform.position.y - 0.9f;
         transform.position = forcedPos;
     }
 }

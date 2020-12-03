@@ -42,7 +42,7 @@ public sealed class Server : NetworkHandler
 
         StartHeartbeats();
 
-        Debug.Log($"Server started on {Port}.");
+        MessageLog.Instance.AddMessage($"Server started on port {Port}", Constants.messageColorNetworking);
     }
 
     public void StartHeartbeats()
@@ -75,6 +75,11 @@ public sealed class Server : NetworkHandler
         ServerSend.ServerStopped();
 
         if (CloseSocket()) Debug.Log("Server stopped.");
+
+        ThreadManager._instance.ExecuteOnMainThread(() =>
+        {
+            MessageLog.Instance.AddMessage($"Server stopped", Constants.messageColorNetworking);
+        });
     }
 
     protected override void OnReceiveException()

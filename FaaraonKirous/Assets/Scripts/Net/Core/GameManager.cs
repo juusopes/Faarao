@@ -48,6 +48,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyClientPrefab = null;
 
+    // Profile
+    public string Name { get; private set; } = null;
+
     private void Awake()
     {
         if (_instance == null)
@@ -83,6 +86,11 @@ public class GameManager : MonoBehaviour
             IsSceneLoaded = true;
             IsFullyLoaded = true;
         }
+    }
+
+    private void Start()
+    {
+        
     }
 
     #region Loading/Saving
@@ -162,6 +170,34 @@ public class GameManager : MonoBehaviour
     private int _mainMenu;
     [SerializeField]
     private int[] _levels;
+
+    public string GetName()
+    {
+        // Try to get cached name first
+        if (Name != null)
+        {
+            return Name;
+        }
+
+        // Try to retrieve from playerPrefs second
+        if (PlayerPrefs.HasKey("Name"))
+        {
+            return PlayerPrefs.GetString("Name");
+        }
+
+        // No name saved
+        return null;
+    }
+
+    public void SetName(string name)
+    {
+        // Makes sure that empty strings are not saved
+        if (string.IsNullOrEmpty(name)) return;
+        
+        // Save and cache
+        PlayerPrefs.SetString("Name", name);
+        Name = name;
+    }
 
     public void StartLoading(bool willLoadSave = false)
     {
@@ -318,30 +354,28 @@ public class GameManager : MonoBehaviour
 
         // Create file
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/" + saveName + ".save");
+        string filePath = Application.persistentDataPath + "/" + saveName + ".save";
+        FileStream file = File.Create(filePath);
         bf.Serialize(file, save);
         file.Close();
 
-        Debug.Log("Game saved");
+        // Set date
+        FileInfo fileInfo = new FileInfo(filePath);
+        fileInfo.CreationTime = DateTime.Now;
+
+        MessageLog.Instance.AddMessage("Game saved", Color.green);
     }
 
-    public void LoadFromFile(string saveName = "quicksave")
+    public bool LoadFromFile(string saveName = "quicksave.save")
     {
+        string filePath = Application.persistentDataPath + "/" + saveName;
+        if (!DoesFileExist(filePath)) return false;
+
         // Initialize loading
         StartLoading(true);
 
-        // Find file
-        string filePath = Application.persistentDataPath + "/" + saveName + ".save";
-        if (!File.Exists(filePath))
-        {
-            // TODO: There should be a GUI for accessing saves, so in the end this is unneccessary
-
-            Debug.Log("Save file not found!");
-            EndLoading();
-            return;
-        }
-
         // Get save object
+        // TODO: Add error handling
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(filePath, FileMode.Open);
         Save save = (Save)bf.Deserialize(file);
@@ -352,6 +386,53 @@ public class GameManager : MonoBehaviour
 
         // Load game state
         StartCoroutine(WaitForSceneLoad(() => LoadGameState(save)));
+
+        return true;
+    }
+
+    private bool DoesFileExist(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            MessageLog.Instance.AddMessage($"Save file does not exist", Color.red);
+            return false;
+        }
+
+        return true;
+    }
+
+    public List<SaveUIObject> GetSaveFiles()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(Application.persistentDataPath + "/");
+        FileInfo[] fileInfos = directoryInfo.GetFiles();
+
+        List<SaveUIObject> saves = new List<SaveUIObject>();
+
+        for (int i = 0; i < fileInfos.Length; ++i)
+        {
+            FileInfo fileInfo = fileInfos[i];
+            string extension = fileInfo.Extension;
+
+            // Is save file
+            if (extension != ".save") continue;
+
+            SaveUIObject save = new SaveUIObject();
+            save.Name = fileInfo.Name;
+            save.CreationDate = fileInfo.CreationTime;
+            saves.Add(save);
+        }
+
+        return saves;
+    }
+
+    public bool DeleteFile(string saveName)
+    {
+        string filePath = Application.persistentDataPath + "/" + saveName;
+        if (!DoesFileExist(filePath)) return false;
+
+        File.Delete(filePath);
+
+        return true;
     }
 
     private void LoadGameState(Save save)
@@ -603,7 +684,7 @@ public class GameManager : MonoBehaviour
             ControlledCharacter = null
         });
 
-        MessageLog.Instance.AddMessage($"{name} connected", Color.blue);
+        MessageLog.Instance.AddMessage($"{name} connected", Constants.messageColorNetworking);
 
         if (NetworkManager._instance.ShouldSendToClient)
         {
@@ -615,7 +696,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"{Players[id].Name} disconnected");
 
-        MessageLog.Instance.AddMessage($"{Players[id].Name} disconnected", Color.blue);
+        MessageLog.Instance.AddMessage($"{Players[id].Name} disconnected", Constants.messageColorNetworking);
 
         if (NetworkManager._instance.IsHost)
         {

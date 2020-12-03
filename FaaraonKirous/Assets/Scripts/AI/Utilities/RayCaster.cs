@@ -12,6 +12,7 @@ public static class RayCaster
     private static readonly LayerMask layerDefault = 1;
     private static readonly LayerMask layerTrans = 1 << 1;
     private static readonly LayerMask layerIgnoreRay = 1 << 2;
+    private static readonly LayerMask layerStructure = 1 << LayerMask.NameToLayer("Structure");
     private static readonly LayerMask layerPlayer = 1 << LayerMask.NameToLayer("Player");
     private static readonly LayerMask layerEnemy = 1 << LayerMask.NameToLayer("Enemy");
     private static readonly LayerMask layerLadder = 1 << LayerMask.NameToLayer("Raycast/Ladder");
@@ -21,7 +22,7 @@ public static class RayCaster
 
     public static readonly LayerMask defaultLayerMask = ~(1 << 2);   //~() means all other than what is inside
 
-    public static readonly int LayerListStructures = layerDefault;
+    public static readonly int LayerListStructures = layerDefault | layerStructure;
     public static readonly int LayerListDefaultIgnore = layerIgnoreRay | layerTrans | layerEditor;
     public static readonly int LayerListCharacters = layerPlayer | layerEnemy;
     public static readonly int LayerListRaycastable = layerLadder | layerDistraction | layerClickSelector;
@@ -31,7 +32,8 @@ public static class RayCaster
     //public static readonly LayerMask defaultLayerMaskMinusPlayer = ~(1 << 2 | 1 << layerPlayer);
     //public static readonly LayerMask defaultLayerMaskMinusCharacters = ~(1 << 2 | 1 << layerPlayer | 1 << layerEnemy);
     public static readonly LayerMask ladderLayerMask = layerLadder;
-    public static readonly LayerMask viewConeLayerMask = ~(LayerListDefaultIgnore | LayerListObjects);
+    //public static readonly LayerMask viewConeLayerMask = ~(LayerListDefaultIgnore | LayerListObjects);
+    public static readonly LayerMask viewConeLayerMask = layerStructure;
     public static readonly LayerMask distractionLayerMask = LayerListStructures | layerDistraction;
     public static readonly LayerMask playerDetectLayerMask = LayerListStructures | layerPlayer;
     public static readonly LayerMask clickSelectorLayerMask = LayerListStructures | layerClickSelector;

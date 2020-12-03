@@ -7,6 +7,8 @@ public class AnimationActivator : MonoBehaviour
     public GameObject opener;
     public Animator animator;
 
+
+
     // Update is called once per frame
     void Update()
     {
@@ -16,7 +18,6 @@ public class AnimationActivator : MonoBehaviour
 
             if (activated)
             {
-
                 animator.enabled = true;
             }
         }

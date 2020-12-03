@@ -15,13 +15,14 @@ public class PlayerController : MonoBehaviour
     public bool IsCurrentPlayer { get; set; } = false;
     public bool IsActivePlayer { get; set; } = false;
     public NavMeshAgent navMeshAgent;
-    private Vector3 targetV3;
+    public Vector3 targetV3;
     private Vector3 position;
 
     public bool IsRunning { get; set; } = false;
 
     //PlayerSynergy
-    private GameObject anotherCharacter;
+    [HideInInspector]
+    public GameObject anotherCharacter;
     private bool lineOfSight;
 
     public bool IsCrouching { get; set; } = false;
@@ -38,18 +39,25 @@ public class PlayerController : MonoBehaviour
     public bool inRange;
     public bool searchingForSight;
     public bool abilityClicked;
+    public Vector3 abilityHitPos;
     //[HideInInspector]
     public bool[] abilityAllowed;
 
+    [HideInInspector]
+    public GameObject groundInd;
+
     //Invisibility
     public bool isInvisible;
+    private Material originalMaterial;
+    public Material invisibilityMaterial;
 
     //Camera
     private GameObject camControl;
 
     //Interactive
     public GameObject interactObject;
-    private bool useInteract;
+    [HideInInspector]
+    public bool useInteract;
 
     //Climbing
     //public GameObject climbObject;
@@ -67,10 +75,12 @@ public class PlayerController : MonoBehaviour
     //Attack
     public GameObject targetEnemy;
     private GameObject target;
-    private bool useAttack;
+    [HideInInspector]
+    public bool useAttack;
 
     //Respawn
-    private bool useRespawn;
+    [HideInInspector]
+    public bool useRespawn;
     
     //Menu
     public LevelController lC;
@@ -88,6 +98,7 @@ public class PlayerController : MonoBehaviour
     public float[] abilityCooldowns;
 
     public UnitInteractions unitInteractions;
+
     private void Awake()
     {
         Initialize();
@@ -110,8 +121,9 @@ public class PlayerController : MonoBehaviour
         {
             Moving();
             LineOfSight();
-            if (!menu.menuActive && IsCurrentPlayer)
+            if (!menu.menuActive && IsCurrentPlayer && !DontDestroyCanvas.Instance.IsOpen())
             {
+                //print("MENU EI OO AKTIIVINE JA CURRENTPLAYER");
                 KeyControls();
             } else
             {
@@ -190,6 +202,7 @@ public class PlayerController : MonoBehaviour
         }
 		
         ResetAbilityLimits();
+        originalMaterial = transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>().material;
     }
 
     public void Moving()
@@ -197,9 +210,9 @@ public class PlayerController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
         //DoubleClick Check
-        if (IsCurrentPlayer)
+        if (IsCurrentPlayer && !menu.menuActive && !DontDestroyCanvas.Instance.IsOpen())
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
+            if (Input.GetKeyDown(KeyCode.Mouse1) && !PointerOverUI())
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                 {
@@ -355,10 +368,12 @@ public class PlayerController : MonoBehaviour
         if (isInvisible)
         {
             this.gameObject.tag = "PlayerInvisible";
+            transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>().material = invisibilityMaterial;
         }
         else
         {
             this.gameObject.tag = "Player";
+            transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>().material = originalMaterial;
         }
     }
 
@@ -431,7 +446,7 @@ public class PlayerController : MonoBehaviour
                     target = null;
                 }
 
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer && !PointerOverUI())
+                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer && !PointerOverUI())
                 {
                     if (lC.targetObject != null)
                     {
@@ -442,6 +457,11 @@ public class PlayerController : MonoBehaviour
                             {
                                 targetV3 = hit.point;
                                 SetDestination(targetV3);
+
+                                groundInd.SetActive(true);
+                                Vector3 tempV3 = targetV3;
+                                tempV3.y = targetV3.y + 0.2f;
+                                groundInd.transform.position = tempV3;
                             }
 
                             useInteract = true;
@@ -488,7 +508,7 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
                 {
                     if (lC.targetObject != null)
                     {
@@ -496,10 +516,14 @@ public class PlayerController : MonoBehaviour
                         if (target.tag == "Enemy")
                         {
                             targetV3 = target.transform.position;
-                            targetV3.y = transform.position.y;
                             SetDestination(targetV3);
                             useAttack = true;
                             abilityActive = false;
+
+                            groundInd.SetActive(true);
+                            Vector3 tempV3 = targetV3;
+                            tempV3.y = targetV3.y + 0.2f;
+                            groundInd.transform.position = tempV3;
                         }
                     }
                 }
@@ -510,6 +534,7 @@ public class PlayerController : MonoBehaviour
                         if (NetworkManager._instance.IsHost)
                         {
                             targetEnemy.GetComponent<DeathScript>().Die();
+                            isInvisible = false;
                         }
                         else
                         {
@@ -518,6 +543,7 @@ public class PlayerController : MonoBehaviour
                                 ClientSend.KillEnemy(targetEnemy.GetComponent<EnemyObjectManager>().Id);
                             }
                         }
+                        anim.SetTrigger("Attack");
                         targetEnemy = null;
                         target = null;
                         useAttack = false;
@@ -543,17 +569,22 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
                 {
                     if (lC.targetObject != null)
                     {
-                            target = lC.targetObject;
+                        target = lC.targetObject;
                         if (target.tag == "Player")
                         {
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
                             useRespawn = true;
                             abilityActive = false;
+
+                            groundInd.SetActive(true);
+                            Vector3 tempV3 = targetV3;
+                            tempV3.y = targetV3.y + 0.2f;
+                            groundInd.transform.position = tempV3;
                         }
                     }
                 }
@@ -564,6 +595,7 @@ public class PlayerController : MonoBehaviour
                         if (NetworkManager._instance.IsHost)
                         {
                             targetEnemy.GetComponent<DeathScript>().Revive();
+                            isInvisible = false;
                         }
                         else
                         {
@@ -589,8 +621,11 @@ public class PlayerController : MonoBehaviour
         {
             if (playerOne)
             {
-                if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || GetComponent<PharaohAbilities>().abilityLimitList[tempAbilityNum] == 0)
+                if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || (GetComponent<PharaohAbilities>().abilityLimitList[tempAbilityNum] == 0 && abilityCooldowns[tempAbilityNum] == 0))
                 {
+                    abilityClicked = false;
+                    searchingForSight = true;
+                    inRange = false;
                     if (!abilityActive)
                     {
                         abilityActive = true;
@@ -814,8 +849,8 @@ public class PlayerController : MonoBehaviour
             transform.GetChild(1).gameObject.SetActive(true);
         } else
         {
-            transform.GetChild(1).gameObject.SetActive(false);
             transform.GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(1).gameObject.SetActive(false);
         }
     }
 }

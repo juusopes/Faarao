@@ -8,7 +8,8 @@ public class PharaohAbilities : MonoBehaviour
     private LevelController levelControl;
     private bool invisibilityActive;
     public bool useInvisibility;
-    private float invisibilityTimer;
+    public float invisibilityTimer;
+    public float timeInInvisibility;
     public GameObject[] indicatorList;
     public float[] rangeList;
     public int[] abilityLimitList;
@@ -16,6 +17,8 @@ public class PharaohAbilities : MonoBehaviour
     public bool[] lineActive;
     private bool invisibilityClicked;
     private GameObject invisibilityTarget;
+
+    public SoundManager soundFX;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +36,7 @@ public class PharaohAbilities : MonoBehaviour
     {
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         invisibilityActive = false;
-        invisibilityTimer = 10;
+        invisibilityTimer = timeInInvisibility * 10;
     }
 
     public void Invisibility()
@@ -61,28 +64,41 @@ public class PharaohAbilities : MonoBehaviour
             }
             if (invisibilityActive && GetComponent<PlayerController>().abilityNum == 1)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1))
+                if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     invisibilityClicked = true;
+                    if (target != null)
+                    {
+                        if (target.tag == "Player")
+                        {
+                            invisibilityTarget = target;
+                            soundFX.InvisibilitySound();
+                        } else
+                        {
+                            invisibilityTarget = null;
+                        }
+                    }
+                    else
+                    {
+                        invisibilityTarget = null;
+                    }
                 }
-                if (target != null)
+                if (invisibilityTarget != null)
                 {
                     if (GetComponent<PlayerController>().inRange
                     && GetComponent<PlayerController>().abilityClicked
                     && !GetComponent<PlayerController>().searchingForSight
                     && GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum] > 0
                     && GetComponent<PlayerController>().abilityCooldowns[GetComponent<PlayerController>().abilityNum] == 0
-                    && target.tag == "Player"
+                    && invisibilityTarget.tag == "Player"
                     && invisibilityClicked)
                     {
-                        Debug.Log("INVISIBILITY!");
-                        target.GetComponent<PlayerController>().isInvisible = true;
+                        invisibilityTarget.GetComponent<PlayerController>().isInvisible = true;
                         invisibilityTimer = 0;
                         useInvisibility = true;
-                        GetComponent<PlayerController>().Stay();
+                        //GetComponent<PlayerController>().Stay();
                         //GetComponent<PlayerController>().abilityActive = false;
                         //GetComponent<PlayerController>().abilityNum = 0;
-                        invisibilityTarget = target;
                         GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
                         invisibilityClicked = false;
                     }
@@ -95,13 +111,12 @@ public class PharaohAbilities : MonoBehaviour
                 }
             }
         }
-        if (invisibilityTimer <= 7)
+        if (invisibilityTimer <= timeInInvisibility)
         {
             invisibilityTimer += Time.deltaTime;
         }
-        if (invisibilityTimer >= 7 && useInvisibility)
+        if (invisibilityTimer >= timeInInvisibility && useInvisibility)
         {
-            Debug.Log("HERE WE ARE!0");
             if (invisibilityTarget != null)
             {
                 invisibilityTarget.GetComponent<PlayerController>().isInvisible = false;

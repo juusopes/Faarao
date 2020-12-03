@@ -25,7 +25,7 @@ public class InGameMenu : MonoBehaviour
     }
 
     //[HideInInspector]
-    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
+    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel, background;
     [HideInInspector]
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     [HideInInspector]
@@ -75,23 +75,14 @@ public class InGameMenu : MonoBehaviour
         {
             timer();
 
+            if (DontDestroyCanvas.Instance.IsOpen())
+            {
+                return;
+            }
+
             if (Input.GetButtonDown("Cancel") && !menuActive)
             {
-                menuActive = true;
-
-                menuPanel.SetActive(true);
-                objectivePanel.SetActive(false);
-
-                continueButton.SetActive(true);
-                loadButton.SetActive(true);
-                saveButton.SetActive(true);
-                optionsButton.SetActive(true);
-                restartButton.SetActive(true);
-                mainMenuButton.SetActive(true);
-                gameplayButton.SetActive(true);
-                audioButton.SetActive(true);
-                controlsButton.SetActive(true);
-                videoButton.SetActive(true);
+                ActivateMenu();
             }
 
             else if (Input.GetButtonDown("Cancel") && menuActive)
@@ -117,10 +108,20 @@ public class InGameMenu : MonoBehaviour
         timeText.text = "Level time: " + hours + ":" + minutes + ":" + seconds;
     }
 
+    public void ActivateMenu()
+    {
+        menuActive = true;
+
+        background.SetActive(true);
+        menuPanel.SetActive(true);
+        objectivePanel.SetActive(false);
+    }
+
     public void DeactivateMenu()
     {
         menuActive = false;
 
+        background.SetActive(false);
         menuPanel.SetActive(false);
         optionsPanel.SetActive(false);
         audioPanel.SetActive(false);
@@ -166,6 +167,22 @@ public class InGameMenu : MonoBehaviour
     {
         if (NetworkManager._instance.IsHost)
         {
+            SaveUIManager.Instance.OpenInGameMenu();
+        }
+    }
+
+    public void Quickload()
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.LoadFromFile();
+        }
+    }
+
+    public void Quicksave()
+    {
+        if (NetworkManager._instance.IsHost)
+        {
             GameManager._instance.SaveToFile();
         }
     }
@@ -174,7 +191,21 @@ public class InGameMenu : MonoBehaviour
     {
         if (NetworkManager._instance.IsHost)
         {
-            GameManager._instance.LoadFromFile();
+            LoadUIManager.Instance.OpenInGameMenu();
+        }
+    }
+
+    public void LoadLevelMainMenu()
+    {
+        MainMenuUIManager.Instance.Close();
+        LoadUIManager.Instance.OpenMainMenu();
+    }
+
+    public void Host()
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            HostUIManager.Instance.OpenInGameMenu();
         }
     }
 

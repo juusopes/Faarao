@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1294765408210825691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7137787440605162513}
+  - component: {fileID: 7537197322594937416}
+  m_Layer: 15
+  m_Name: Cube (1)
+  m_TagString: HighestObject
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7137787440605162513
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294765408210825691}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.35, y: -1.72, z: -5.07}
+  m_LocalScale: {x: 2.068506, y: 11.777866, z: 2.068506}
+  m_Children: []
+  m_Father: {fileID: 8031112312779614655}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7537197322594937416
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294765408210825691}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.0000002, z: 0.9999999}
+  m_Center: {x: -0.0000038146973, y: -0.00000044703484, z: -0.0000038146973}
 --- !u!1 &7223754790911537925
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,10 +55,9 @@ GameObject:
   - component: {fileID: 8031112312779614655}
   - component: {fileID: 6402963685977990682}
   - component: {fileID: 9169068006458872528}
-  - component: {fileID: 6646664101937469535}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: pyramidentrance_unity
-  m_TagString: Untagged
+  m_TagString: HighestObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967263
@@ -29,7 +72,9 @@ Transform:
   m_LocalRotation: {x: -0.047656547, y: 0.307796, z: -0.015438356, w: 0.95013267}
   m_LocalPosition: {x: -39.130005, y: 12.880005, z: 29.199951}
   m_LocalScale: {x: 2, y: 2, z: 2}
-  m_Children: []
+  m_Children:
+  - {fileID: 8996496381889317657}
+  - {fileID: 7137787440605162513}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -4.649, y: 36.037, z: -3.375}
@@ -82,17 +127,47 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6646664101937469535
-MeshCollider:
+--- !u!1 &7921702593360709630
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7223754790911537925}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8996496381889317657}
+  - component: {fileID: 1074714128878060859}
+  m_Layer: 15
+  m_Name: Cube
+  m_TagString: HighestObject
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8996496381889317657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7921702593360709630}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.6, y: -1.98, z: 4.09}
+  m_LocalScale: {x: 2.068506, y: 11.181843, z: 2.068506}
+  m_Children: []
+  m_Father: {fileID: 8031112312779614655}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1074714128878060859
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7921702593360709630}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3325355006403327553, guid: c06b53eb403f8d14e93bdf7942080f19, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.0000002, z: 0.9999999}
+  m_Center: {x: -0.0000038146973, y: -0.00000044703484, z: -0.0000038146973}

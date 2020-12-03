@@ -11,10 +11,12 @@ GameObject:
   - component: {fileID: 6326117239916489844}
   - component: {fileID: 6946021263189828561}
   - component: {fileID: 5152626774339589915}
-  - component: {fileID: -6108795532792976355}
-  m_Layer: 0
+  - component: {fileID: 8975316236203463599}
+  - component: {fileID: 269224007562658054}
+  - component: {fileID: 3803864038559198052}
+  m_Layer: 15
   m_Name: GrandDoorway
-  m_TagString: Untagged
+  m_TagString: HighestObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -82,8 +84,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-6108795532792976355
-MeshCollider:
+--- !u!65 &8975316236203463599
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665664656423663310}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.4639511, y: 3.643303, z: 6.8417206}
+  m_Center: {x: 0.04178787, y: 2.179265, z: -0.0003569126}
+--- !u!65 &269224007562658054
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -92,7 +107,19 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1375386967081765053, guid: 71153a8b5b4c5624f924a7681aae2fb5, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.5459137, y: 4.422718, z: 1.306448}
+  m_Center: {x: 0.03058809, y: -1.7895575, z: 2.7672796}
+--- !u!65 &3803864038559198052
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665664656423663310}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.65266037, y: 4.337386, z: 1.2486401}
+  m_Center: {x: 0.0012775213, y: -1.8322234, z: -2.796897}

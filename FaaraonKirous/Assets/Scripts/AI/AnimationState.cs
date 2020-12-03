@@ -2,5 +2,7 @@
 {
     Idle,
     Walk,
+    WalkTurn,
+    Run,
     Death
 }

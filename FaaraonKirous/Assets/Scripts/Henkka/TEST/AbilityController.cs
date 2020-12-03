@@ -13,6 +13,10 @@ public class AbilityController : MonoBehaviour
     private int click = 0;
     private bool abilityActivated;
 
+    private PlayerController currentPlayerController;
+
+    public SoundManager soundFX;
+
     private void Start()
     {
         Assert.IsNotNull(abilitySpawner, "Add ability spawner prefab!");
@@ -33,28 +37,31 @@ public class AbilityController : MonoBehaviour
         if (levelCtrl.currentCharacter == null)
             return;
 
-        if (!levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityActive)
-            return;
+        currentPlayerController = levelCtrl.currentCharacter.GetComponent<PlayerController>();
 
-        if (Input.GetKeyDown(KeyCode.Mouse1)
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0 
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityCooldowns[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0)
+        if (!currentPlayerController.abilityActive)
+            return;
+        //Debug.Log("Overrided pos: " + currentPlayerController.abilityHitPos);
+        if (Input.GetKeyDown(KeyCode.Mouse0)
+            && currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 
+            && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
+            //Debug.Log("Activated");
             abilityActivated = true;
-            //Debug.Log("InRange: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange + ", Ability Activated: " + abilityActivated
-            //     + ", abilityClicked: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked + ", SearchingForSight: " + levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight);
+            //Debug.Log("InRange: " + CurrentPlayerController.inRange + ", Ability Activated: " + abilityActivated
+            //     + ", abilityClicked: " + CurrentPlayerController.abilityClicked + ", SearchingForSight: " + CurrentPlayerController.searchingForSight);
         }
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
-              
 
-        if (levelCtrl.currentCharacter.GetComponent<PlayerController>().inRange 
+        if (currentPlayerController.inRange 
             && abilityActivated
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityClicked
-            && !levelCtrl.currentCharacter.GetComponent<PlayerController>().searchingForSight
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityLimits[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] > 0
-            && levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityCooldowns[levelCtrl.currentCharacter.GetComponent<PlayerController>().abilityNum] == 0)
+            && currentPlayerController.abilityClicked
+            && !currentPlayerController.searchingForSight
+            && (currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 || (currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PharaohAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0) || (!currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PriestAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0)) 
+            && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
-            PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
+            //Debug.Log("Selecting");
+            PlayerController caster = currentPlayerController;
             if (caster.abilityNum == 2 && !caster.playerOne)
                 abilityOption = AbilityOption.DistractBlindingLight;
             else if (caster.abilityNum == 2 && caster.playerOne)
@@ -92,6 +99,10 @@ public class AbilityController : MonoBehaviour
             //Ability Ender
             if (caster.abilityNum != 7 && caster.abilityNum != 1 || (caster.abilityNum == 7 && click == 1) || (caster.abilityNum == 1 && caster.playerOne && caster.gameObject.GetComponent<PharaohAbilities>().useInvisibility) || (!caster.playerOne && caster.abilityNum == 1 && caster.gameObject.GetComponent<PriestAbilities>().warped))
             {
+                if (!caster.playerOne || (caster.playerOne && caster.abilityNum != 1))
+                {
+                    caster.isInvisible = false;
+                }
                 caster.abilityLimitUsed = caster.abilityNum;
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
@@ -99,6 +110,7 @@ public class AbilityController : MonoBehaviour
                 caster.searchingForSight = true;
                 caster.abilityClicked = false;
                 abilityActivated = false;
+                caster.Stay();
                 click = 0;
             }
             else
@@ -109,7 +121,7 @@ public class AbilityController : MonoBehaviour
         else
         {
             //abilityActivated = false;
-            PlayerController caster = levelCtrl.currentCharacter.GetComponent<PlayerController>();
+            PlayerController caster = currentPlayerController;
             //caster.abilityClicked = false;
             return;
         }
@@ -126,6 +138,7 @@ public class AbilityController : MonoBehaviour
         {
             if (selectedAI)
             {
+                soundFX.PossessSound();
                 PossessEnemy(hit.point);
                 DeselectAI();
             }
@@ -195,19 +208,18 @@ public class AbilityController : MonoBehaviour
         {
             if (NetworkManager._instance.ShouldSendToServer)
             {
-                ClientSend.AbilityUsed(option, pos);
+                ClientSend.AbilityUsed(option, currentPlayerController.abilityHitPos);
             }
             else if (NetworkManager._instance.ShouldSendToClient)
             {
-                ServerSend.AbilityVisualEffectCreated(option, pos);
+                ServerSend.AbilityVisualEffectCreated(option, currentPlayerController.abilityHitPos);
             }
         }
-
-        abilitySpawner.SpawnAtPosition(pos, option);
+        abilitySpawner.SpawnAtPosition(currentPlayerController.abilityHitPos, option);
     }
 
     private void SpawnRemovable(Vector3 pos, AbilityOption option)
     {
-        lastSpawnedAbility = abilitySpawner.SpawnAtPosition(pos, option);
+        lastSpawnedAbility = abilitySpawner.SpawnAtPosition(currentPlayerController.abilityHitPos, option);
     }
 }

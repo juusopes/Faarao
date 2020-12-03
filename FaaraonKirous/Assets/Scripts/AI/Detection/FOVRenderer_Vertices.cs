@@ -199,10 +199,13 @@ public partial class FOVRenderer
         step = step.normalized * ledgeStep;
 
         float maxDistance = maxSightRangeOnLedge - closestOnCollider.magnitude;
+        int colliderTries = 0;      //Emergency break forever loop
 
         //Start tracking if we have other floor colliders that are closer to sample
         for (int i = 1; i < 3; i++)
         {
+            if (colliderTries > 50)
+                break;
             //float iterationBonus = i * ledgeStep;
             //float startDistance = Mathf.Min(closestOnCollider.magnitude + iterationBonus, maxDistance);
             Vector3 sampleStart = firstSample + step * i;
@@ -222,6 +225,7 @@ public partial class FOVRenderer
                             break;
 
                         firstSample = closestOnCollider + vertOffset;
+                        colliderTries++;
                         i = 0;
                     }
             }

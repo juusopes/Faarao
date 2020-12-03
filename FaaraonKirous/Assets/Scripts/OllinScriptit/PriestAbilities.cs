@@ -23,6 +23,8 @@ public class PriestAbilities : MonoBehaviour
     public float[] abilityCDList;
     public bool[] lineActive;
 
+    public SoundManager soundFX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,7 +71,7 @@ public class PriestAbilities : MonoBehaviour
     //        {
     //            if (telekinesisActive && GetComponent<PlayerController>().abilityNum == 6)
     //            {
-    //                if (Input.GetKeyDown(KeyCode.Mouse1))
+    //                if (Input.GetKeyDown(KeyCode.Mouse0))
     //                {
     //                    if (target.tag == "TargetableObject")
     //                    {
@@ -135,18 +137,28 @@ public class PriestAbilities : MonoBehaviour
             }
             if (warpSpellActive && GetComponent<PlayerController>().abilityNum == 1)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1) && !PointerOverUI())
+                if (!GetComponent<PlayerController>().abilityClicked)
+                {
+                    warped = false;
+                }
+                if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit = new RaycastHit();
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                     {
                         warpPosition = hit.point;
+                        soundFX.WarpSound();
                     } else
                     {
                         warpSpellActive = false;
                     }
                 }
+                //Debug.Log("iR: " + GetComponent<PlayerController>().inRange);
+                //Debug.Log("aC: " + GetComponent<PlayerController>().abilityClicked);
+                //Debug.Log("SfS: " + GetComponent<PlayerController>().searchingForSight);
+                //Debug.Log("aL: " + GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]);
+                //Debug.Log("aCD: " + GetComponent<PlayerController>().abilityCooldowns[GetComponent<PlayerController>().abilityNum]);
                 if (GetComponent<PlayerController>().inRange
                     && GetComponent<PlayerController>().abilityClicked
                     && !GetComponent<PlayerController>().searchingForSight
@@ -171,7 +183,7 @@ public class PriestAbilities : MonoBehaviour
                         }
                         warpSpellActive = false;
                         warped = true;
-                        Debug.Log("Warped");
+                        //Debug.Log("Warped");
                         //GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]--;
                     }
                     //GetComponent<PlayerController>().abilityActive = false;

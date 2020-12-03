@@ -9,6 +9,8 @@ public class DeathScript : MonoBehaviour
     public float heal;
     public bool isDead;
 
+    public SoundManager soundFX;
+
     private CharacterObjectManager CharacterNetManager { get; set; }
 
     void Awake()
@@ -61,13 +63,14 @@ public class DeathScript : MonoBehaviour
     {
         isDead = true;
         hp = 0;
+        soundFX.DeathSound();
 
-        if (doMessage && CharacterNetManager.List == ObjectList.player)
-        {
-            MessageLog.Instance.AddMessage(
-                $"{Tools.TypeToString(CharacterNetManager.Type)} died",
-                Color.red);
-        }
+        //if (doMessage && CharacterNetManager.List == ObjectList.player)
+        //{
+        //    MessageLog.Instance.AddMessage(
+        //        $"{Tools.TypeToString(CharacterNetManager.Type)} died",
+        //        Color.red);
+        //}
 
         if (NetworkManager._instance.ShouldSendToClient)
         {

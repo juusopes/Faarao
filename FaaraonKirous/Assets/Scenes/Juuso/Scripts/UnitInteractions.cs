@@ -21,22 +21,18 @@ public class UnitInteractions : MonoBehaviour
         }
     }
 
-
     public float cooldownTime;
     public float nextFireTime;
     public bool isStanding = true;
     public bool isStanding2 = true;
     public bool onCooldown = false;
 
-    //public Texture2D cursor, cursorInteract, cursorAttack;
     public bool checkbox;
 
     [HideInInspector]
     public GameObject standing, crouching;
     [HideInInspector]
     public GameObject standing2, crouching2;
-
-    //public Image imageCooldown;
 
     public GameObject character1, character2;
     [HideInInspector]
@@ -54,20 +50,22 @@ public class UnitInteractions : MonoBehaviour
     public PlayerController ActiveAbilities2;
 
     public int activeCharacter;
+    public GameObject deathCanvas1, deathCanvas2;
 
-
+    public GameObject gameOverMenu;
+    [HideInInspector]
+    public bool gameOver;
 
     private void Start()
     {
-        // TODO
-        //activeCharacter = 1;
     }
 
     private void Update()
     {
-        if (GameManager._instance.IsFullyLoaded)
+        if (GameManager._instance.IsFullyLoaded && !DontDestroyCanvas.Instance.IsOpen())
         {
             AllowedAbilities();
+            GameOverCheck();
         }
     }
 
@@ -83,6 +81,7 @@ public class UnitInteractions : MonoBehaviour
             for (int i = 0; i < 11; i++)
             {
                 bool v = GameManager._instance.Pharaoh.GetComponent<PlayerController>().abilityAllowed[i];
+                bool d = GameManager._instance.Pharaoh.GetComponent<PlayerController>().IsDead;
                 if (v)
                 {
                     if (allowedAbilities == 10)
@@ -97,12 +96,27 @@ public class UnitInteractions : MonoBehaviour
                     {
                         skillW1.SetActive(true);
                     }
-                    if (allowedAbilities == 2)
+                    if (allowedAbilities == 5)
                     {
                         skillE1.SetActive(true);
                     }
                 }
                 allowedAbilities++;
+
+                if (d && activeCharacter == 1)
+                {
+                    if (!gameOver)
+                    {
+                        deathCanvas1.SetActive(true);
+                    }
+                }
+                else if(!d || activeCharacter != 1)
+                {
+                    if (!gameOver)
+                    {
+                        deathCanvas1.SetActive(false);
+                    }
+                }
             }
 
             allowedAbilities = 0;
@@ -110,6 +124,7 @@ public class UnitInteractions : MonoBehaviour
             for (int i = 0; i < 11; i++)
             {
                 bool v = GameManager._instance.Priest.GetComponent<PlayerController>().abilityAllowed[i];
+                bool d = GameManager._instance.Priest.GetComponent<PlayerController>().IsDead;
                 if (v)
                 {
                     if (allowedAbilities == 1)
@@ -126,6 +141,21 @@ public class UnitInteractions : MonoBehaviour
                     }
                 }
                 allowedAbilities++;
+
+                if (d && activeCharacter == 2)
+                {
+                    if (!gameOver)
+                    {
+                        deathCanvas2.SetActive(true);
+                    }
+                }
+                else if (!d || activeCharacter != 2)
+                {
+                    if (!gameOver)
+                    {
+                        deathCanvas2.SetActive(false);
+                    }
+                }
             }
             allowedAbilities = 0;
         }
@@ -196,5 +226,25 @@ public class UnitInteractions : MonoBehaviour
         skillGroup1.SetActive(false);
         skillGroup2.SetActive(false);
         generalSkillGroup.SetActive(false);
+    }
+
+    public void GameOverCheck()
+    {
+        if (ActiveAbilities.IsDead && ActiveAbilities2.IsDead)
+        {
+            if(!this.gameObject.GetComponent<InGameMenu>().menuActive)
+            {
+                gameOverMenu.SetActive(true);
+                gameOver = true;
+                Time.timeScale = 0;
+            } else
+            {
+                gameOverMenu.SetActive(false);
+            }
+        } else
+        {
+                gameOverMenu.SetActive(false);
+                gameOver = false;
+        }
     }
 }

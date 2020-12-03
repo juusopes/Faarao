@@ -35,7 +35,8 @@ public class ObjController : MonoBehaviour
         {
             objectives[x].SetActive(true);
         }
-        playersInside = 0;
+
+
     }
 
     public void Update()
@@ -54,10 +55,13 @@ public class ObjController : MonoBehaviour
         }
     }
 
-    private void CheckObjectives()
+    public void CheckObjectives()
     {
         //Counts the number of completed objectives
         int tempBoolCounter = 0;
+
+        Scene scene = SceneManager.GetActiveScene();
+
         foreach (bool done in objectiveDone)
         {
             if (done)
@@ -68,18 +72,40 @@ public class ObjController : MonoBehaviour
         //Moves to next Build Index if enough objectives are done 
         if (tempBoolCounter >= objectivesNeeded)
         {
-            fadeToBlack.SetActive(true);
-            StartCoroutine(WaitForSeconds2());
+            if (scene.name == "CreditScene" && !fadeToBlack.activeSelf)
+            {
+                StartCoroutine(WaitForSeconds2(60));
+                StartCoroutine(WaitForSeconds3(55));
+            }
+            else
+            {
+                fadeToBlack.SetActive(true);
+                StartCoroutine(WaitForSeconds2(5));
+            }
         }
     }
 
-    public IEnumerator WaitForSeconds2()
+    public IEnumerator WaitForSeconds2(int time)
+    {
+        Scene scene = SceneManager.GetActiveScene();
+
+        while (true)
+        {
+            yield return new WaitForSeconds(time);
+
+            if (NetworkManager._instance.IsHost)
+            {
+                GameManager._instance.LoadNextLevel();
+            }
+        }
+    }
+
+    public IEnumerator WaitForSeconds3(int time)
     {
         while (true)
         {
-            yield return new WaitForSeconds(5);
-
-            GameManager._instance.LoadNextLevel();
+            yield return new WaitForSeconds(time);
+            fadeToBlack.SetActive(true);
         }
     }
 }

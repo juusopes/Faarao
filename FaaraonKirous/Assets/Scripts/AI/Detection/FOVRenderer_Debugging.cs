@@ -36,6 +36,10 @@ public partial class FOVRenderer
     private bool drawEdges = false;
     [SerializeField]
     private bool testTime = false;
+    [SerializeField]
+    private bool movementDebugger = false;
+
+    private UnityEngine.AI.NavMeshAgent navMeshAgent;
 
     private bool DebugRayCasts => debugMode == DebugMode.Raycasts || debugMode == DebugMode.All;
     private bool DebugCleanedVertexShapes => debugMode == DebugMode.CleanedVertexShapes || debugMode == DebugMode.AllVertices || debugMode == DebugMode.AllShapes || debugMode == DebugMode.All;
