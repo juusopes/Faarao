@@ -16,7 +16,6 @@ public class AnimationActivator : MonoBehaviour
 
             if (activated)
             {
-
                 animator.enabled = true;
             }
         }

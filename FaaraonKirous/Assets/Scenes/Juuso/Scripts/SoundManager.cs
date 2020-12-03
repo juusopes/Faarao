@@ -11,6 +11,10 @@ public class SoundManager : MonoBehaviour
     public AudioSource possessSound;
     public AudioSource warpSound;
 
+    public AudioSource attackSound;
+    public AudioSource resurrectSound;
+    public AudioSource deathSound;
+
     public void InvisibilitySound()
     {
         invisibilitySound.Play();
@@ -34,5 +38,18 @@ public class SoundManager : MonoBehaviour
     public void WarpSound()
     {
         warpSound.Play();
+    }
+
+    public void AttackSound()
+    {
+
+    }
+    public void ResurrectSound()
+    {
+
+    }
+    public void DeathSound()
+    {
+
     }
 }

@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 1874013125250795940}
   - component: {fileID: 6636836934617393856}
   - component: {fileID: 2121519826743185656}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Objective5
   m_TagString: TargetableObject
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 3, y: 1.5, z: 3}
   m_Center: {x: 0.03697872, y: -0.21930742, z: -0.009098053}
 --- !u!54 &7580911765592269778
 Rigidbody:
@@ -9993,7 +9993,7 @@ GameObject:
   - component: {fileID: 8487983796017585794}
   - component: {fileID: 6257779590255095275}
   - component: {fileID: 8337839600671913698}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Objective1
   m_TagString: TargetableObject
   m_Icon: {fileID: 0}
@@ -10076,7 +10076,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 3, y: 1.5, z: 3}
   m_Center: {x: -0.0021798909, y: -0.062395215, z: -0.024252892}
 --- !u!54 &8487983796017585805
 Rigidbody:
@@ -10161,7 +10161,7 @@ GameObject:
   - component: {fileID: 8487983796034150745}
   - component: {fileID: 7745601239536070312}
   - component: {fileID: 8805320722124870837}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EndPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15140,7 +15140,7 @@ GameObject:
   - component: {fileID: 8487983796543155864}
   - component: {fileID: 1796952373119475595}
   - component: {fileID: 119591857900547441}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Objective2
   m_TagString: TargetableObject
   m_Icon: {fileID: 0}
@@ -15223,7 +15223,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 3, y: 1.5, z: 3}
   m_Center: {x: 0.040823705, y: -0.21326709, z: -0.017929077}
 --- !u!54 &8487983796543155869
 Rigidbody:
@@ -29828,7 +29828,7 @@ GameObject:
   - component: {fileID: 8487983797928614303}
   - component: {fileID: 3499799632734588341}
   - component: {fileID: 5303619546539536601}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Objective3
   m_TagString: TargetableObject
   m_Icon: {fileID: 0}
@@ -29911,7 +29911,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 3, y: 1.5, z: 3}
   m_Center: {x: -0.015053749, y: -0.21901584, z: 0.010856628}
 --- !u!54 &8487983797928614291
 Rigidbody:
@@ -29996,7 +29996,7 @@ GameObject:
   - component: {fileID: 639837990455357998}
   - component: {fileID: 5894055272851897524}
   - component: {fileID: 1326213778951916706}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Objective4
   m_TagString: TargetableObject
   m_Icon: {fileID: 0}
@@ -30079,7 +30079,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 3, y: 1.5, z: 3}
   m_Center: {x: -0.03483677, y: -0.22228909, z: -0.007282257}
 --- !u!54 &3814494988881576382
 Rigidbody:
@@ -30237,9 +30237,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8487983796017585795}
     m_Modifications:
+    - target: {fileID: 1285167300409586611, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_Name
       value: Ankh piece collectibles
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30297,16 +30305,28 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 2744060214522489243, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5399725619421822818, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449837758167043685, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
---- !u!4 &1913557543871464815 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
-  m_PrefabInstance: {fileID: 560135946777939146}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1280573559068565461 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+  m_PrefabInstance: {fileID: 560135946777939146}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1913557543871464815 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
   m_PrefabInstance: {fileID: 560135946777939146}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &897551156844154672
@@ -30398,9 +30418,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8487983796543155865}
     m_Modifications:
+    - target: {fileID: 1285167300409586611, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_Name
       value: Ankh piece collectibles (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30458,6 +30486,18 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 2744060214522489243, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5399725619421822818, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449837758167043685, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
 --- !u!1 &86169431489049777 stripped
@@ -30477,9 +30517,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8487983797928614289}
     m_Modifications:
+    - target: {fileID: 1285167300409586611, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_Name
       value: Ankh piece collectibles (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30536,6 +30584,18 @@ PrefabInstance:
     - target: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2744060214522489243, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5399725619421822818, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449837758167043685, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
@@ -30638,9 +30698,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1814256047266597912}
     m_Modifications:
+    - target: {fileID: 1285167300409586611, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_Name
       value: Ankh piece collectibles (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30697,6 +30765,18 @@ PrefabInstance:
     - target: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2744060214522489243, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5399725619421822818, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449837758167043685, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
@@ -30717,9 +30797,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5808139594772377391}
     m_Modifications:
+    - target: {fileID: 1285167300409586611, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_Name
       value: Ankh piece collectibles (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30776,6 +30864,18 @@ PrefabInstance:
     - target: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2744060214522489243, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5399725619421822818, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449837758167043685, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
@@ -30952,9 +31052,4 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4742717578854165744, guid: 7b87f99093b030149bd6d4c7f4e2771a, type: 3}
   m_PrefabInstance: {fileID: 7902589537206644083}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4851294862190755654 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
-  m_PrefabInstance: {fileID: 6781031422813845219}
   m_PrefabAsset: {fileID: 0}
