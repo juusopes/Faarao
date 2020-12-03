@@ -322,7 +322,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &530665350
 RectTransform:
   m_ObjectHideFlags: 0
@@ -330,16 +330,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 530665349}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2132427671}
-  m_RootOrder: 3
+  m_Father: {fileID: 561703777}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -350}
+  m_AnchoredPosition: {x: 0, y: -336}
   m_SizeDelta: {x: 175, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &530665351
@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -364,11 +364,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: e058ae6458ae06644bf2924975902b75, type: 3}
-    m_FontSize: 12
+    m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 1
-    m_MaxSize: 40
+    m_MinSize: 0
+    m_MaxSize: 46
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -483,14 +483,15 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 530665350}
   m_Father: {fileID: 2132427671}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -2.7, y: -297}
-  m_SizeDelta: {x: 443.99774, y: 199}
+  m_AnchoredPosition: {x: -1.4, y: -832.6}
+  m_SizeDelta: {x: 351.01746, y: 1132.0588}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &561703778
 MonoBehaviour:
@@ -505,7 +506,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -514,7 +515,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: e058ae6458ae06644bf2924975902b75, type: 3}
-    m_FontSize: 46
+    m_FontSize: 33
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -528,17 +529,17 @@ MonoBehaviour:
   m_Text: 'credits
 
 
-    - project lead -
+    - project lead & idea -
 
 
     - code -
 
 
-    - game design -
-
-
+    - game design
     -
-    level design -
+
+
+    - level design -
 
 
     - network -
@@ -547,11 +548,11 @@ MonoBehaviour:
     - animation -
 
 
-    - story -
-
-
+    - story
     -
-    art -
+
+
+    - art -
 
 
     - sound fx -
@@ -900,7 +901,7 @@ RectTransform:
   m_LocalScale: {x: 1.08594, y: 1.08594, z: 1.08594}
   m_Children: []
   m_Father: {fileID: 2132427671}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1014,7 +1015,7 @@ RectTransform:
   m_LocalScale: {x: 1.08594, y: 1.08594, z: 1.08594}
   m_Children: []
   m_Father: {fileID: 2132427671}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1280,7 +1281,7 @@ RectTransform:
   m_Children:
   - {fileID: 1015488704}
   m_Father: {fileID: 2132427671}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1419,7 +1420,6 @@ RectTransform:
   - {fileID: 1410147776}
   - {fileID: 733771062}
   - {fileID: 561703777}
-  - {fileID: 530665350}
   - {fileID: 1473720644}
   - {fileID: 1155976286}
   - {fileID: 1156645104}
