@@ -49,9 +49,11 @@ public sealed class Client : NetworkHandler
 
         if (!CloseSocket()) return;
 
-        Debug.Log("Disconnected from server.");
-
-        ThreadManager._instance.ExecuteOnMainThread(() => GameManager._instance.ExitToMainMenu());
+        ThreadManager._instance.ExecuteOnMainThread(() =>
+        {
+            MessageLog.Instance.AddMessage($"Disconnected from server", Constants.messageColorNetworking);
+            GameManager._instance.ExitToMainMenu();
+        });
     }
 
     protected override void OnReceiveException()
