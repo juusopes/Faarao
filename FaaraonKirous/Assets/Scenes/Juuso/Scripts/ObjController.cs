@@ -107,6 +107,5 @@ public class ObjController : MonoBehaviour
             yield return new WaitForSeconds(time);
             fadeToBlack.SetActive(true);
         }
-
     }
 }
