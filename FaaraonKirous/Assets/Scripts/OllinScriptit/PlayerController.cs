@@ -518,6 +518,7 @@ public class PlayerController : MonoBehaviour
                         if (NetworkManager._instance.IsHost)
                         {
                             targetEnemy.GetComponent<DeathScript>().Die();
+                            isInvisible = false;
                         }
                         else
                         {
@@ -573,6 +574,7 @@ public class PlayerController : MonoBehaviour
                         if (NetworkManager._instance.IsHost)
                         {
                             targetEnemy.GetComponent<DeathScript>().Revive();
+                            isInvisible = false;
                         }
                         else
                         {
