@@ -40,7 +40,7 @@ public class AbilityController : MonoBehaviour
         if (!currentPlayerController.abilityActive)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Mouse1)
+        if (Input.GetKeyDown(KeyCode.Mouse0)
             && currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 
             && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
