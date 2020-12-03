@@ -135,6 +135,10 @@ public class PriestAbilities : MonoBehaviour
             }
             if (warpSpellActive && GetComponent<PlayerController>().abilityNum == 1)
             {
+                if (!GetComponent<PlayerController>().abilityClicked)
+                {
+                    warped = false;
+                }
                 if (Input.GetKeyDown(KeyCode.Mouse1) && !PointerOverUI())
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -147,6 +151,11 @@ public class PriestAbilities : MonoBehaviour
                         warpSpellActive = false;
                     }
                 }
+                //Debug.Log("iR: " + GetComponent<PlayerController>().inRange);
+                //Debug.Log("aC: " + GetComponent<PlayerController>().abilityClicked);
+                //Debug.Log("SfS: " + GetComponent<PlayerController>().searchingForSight);
+                //Debug.Log("aL: " + GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]);
+                //Debug.Log("aCD: " + GetComponent<PlayerController>().abilityCooldowns[GetComponent<PlayerController>().abilityNum]);
                 if (GetComponent<PlayerController>().inRange
                     && GetComponent<PlayerController>().abilityClicked
                     && !GetComponent<PlayerController>().searchingForSight
@@ -161,11 +170,6 @@ public class PriestAbilities : MonoBehaviour
                         if (NetworkManager._instance.IsHost)
                         {
                             GetComponent<PlayerController>().navMeshAgent.Warp(warpPosition);
-                            //Debug.Log("iR: " + GetComponent<PlayerController>().inRange);
-                            //Debug.Log("aC: " + GetComponent<PlayerController>().abilityClicked);
-                            //Debug.Log("SfS: " + GetComponent<PlayerController>().searchingForSight);
-                            //Debug.Log("aL: " + GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]);
-                            //Debug.Log("aCD: " + GetComponent<PlayerController>().abilityCooldowns[GetComponent<PlayerController>().abilityNum]);
                         }
                         else
                         {

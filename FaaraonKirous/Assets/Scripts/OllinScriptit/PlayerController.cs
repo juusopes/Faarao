@@ -505,7 +505,6 @@ public class PlayerController : MonoBehaviour
                         if (target.tag == "Enemy")
                         {
                             targetV3 = target.transform.position;
-                            targetV3.y = transform.position.y;
                             SetDestination(targetV3);
                             useAttack = true;
                             abilityActive = false;
@@ -601,6 +600,9 @@ public class PlayerController : MonoBehaviour
             {
                 if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || (GetComponent<PharaohAbilities>().abilityLimitList[tempAbilityNum] == 0 && abilityCooldowns[tempAbilityNum] == 0))
                 {
+                    abilityClicked = false;
+                    searchingForSight = true;
+                    inRange = false;
                     if (!abilityActive)
                     {
                         abilityActive = true;
