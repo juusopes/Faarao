@@ -149,6 +149,12 @@ public partial class FOVRenderer : MonoBehaviour
         //SaveAsset();
     }
 
+#if UNITY_EDITOR
+    private void Update()
+    {
+        
+    }
+#endif
 
     private void LateUpdate()
     {

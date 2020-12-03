@@ -202,7 +202,7 @@ public partial class FOVRenderer
             TryCreateFloorToWallCornerVertex(yAngleSampled, FirstVertex, sample);
         }
         //When going forward from wall to floor
-        else if (IsWallToFloor(previousRayCastHit, raycastHit))
+        else if (IsWallToFloor(previousRayCastHit, raycastHit) && IsClearlyHigher(previousSample, sample))
         {
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=white>Wall to floor calculation</color></b>");

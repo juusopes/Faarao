@@ -33,7 +33,7 @@ public static class RayCaster
     //public static readonly LayerMask defaultLayerMaskMinusCharacters = ~(1 << 2 | 1 << layerPlayer | 1 << layerEnemy);
     public static readonly LayerMask ladderLayerMask = layerLadder;
     //public static readonly LayerMask viewConeLayerMask = ~(LayerListDefaultIgnore | LayerListObjects);
-    public static readonly LayerMask viewConeLayerMask = LayerListStructures;
+    public static readonly LayerMask viewConeLayerMask = layerStructure;
     public static readonly LayerMask distractionLayerMask = LayerListStructures | layerDistraction;
     public static readonly LayerMask playerDetectLayerMask = LayerListStructures | layerPlayer;
     public static readonly LayerMask clickSelectorLayerMask = LayerListStructures | layerClickSelector;
