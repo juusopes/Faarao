@@ -104,8 +104,8 @@ public partial class FOVRenderer
             AddVertexPoint(ledgeEnd, sampleType);
             return ledgeEnd;
         }
-        else
-           Debug.Log("Nope could not understand ledges! ");
+        //else
+        //   Debug.Log("Nope could not understand ledges! ");
         return Vector3.zero;
     }
 
@@ -187,7 +187,7 @@ public partial class FOVRenderer
         //ACylinder(closestOnCollider);
         if (closestOnCollider == Vector3.zero)
         {
-            Debug.LogWarning("Could not get closest on collider");
+            //Debug.LogWarning("Could not get closest on collider");
             return Vector3.zero;
         }
 

@@ -93,7 +93,7 @@ public partial class FOVRenderer
             float angle = X_FOV / 2 * xIterationCurve.Evaluate((float)i / (xRayCount - 1));
             if (angle < maxXAngle)       //Negatives are up angle{
             {
-                Debug.Log("True maximum x iterations: " + i + " at angle: " + angle + " Total max iterations: " + (i * yRayCount));
+                //Debug.Log("True maximum x iterations: " + i + " at angle: " + angle + " Total max iterations: " + (i * yRayCount));
                 return;
             }
         }
@@ -109,7 +109,7 @@ public partial class FOVRenderer
             if (RayCaster.HitObject(hit))
             {
                 navMeshAgent.SetDestination(hit.point);
-                Debug.Log("MOi");
+                //Debug.Log("MOi");
             }
         }
     }

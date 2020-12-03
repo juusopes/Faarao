@@ -126,9 +126,10 @@ public partial class FOVRenderer
 
     private bool ShouldQuitXIteration(float xAngleSampled, RaycastHit previousRayCastHit, RaycastHit raycastHit)
     {
-        if (previousRayCastHit.collider && raycastHit.collider == null)
-            if (previousRayCastHit.collider.CompareTag("HighestObject"))
-                return true;
+        // if (previousRayCastHit.collider && raycastHit.collider == null)
+        // if (previousRayCastHit.collider.CompareTag("HighestObject"))
+        if (previousRayCastHit.collider && previousRayCastHit.collider.CompareTag("HighestObject"))
+            return true;
 
         //If the first two upsamples have no hit, just give up iteration
         if (xAngleSampled < -5 && raycastHit.collider == null && previousRayCastHit.collider == null)
@@ -186,7 +187,7 @@ public partial class FOVRenderer
 #endif
 
                 //TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSampled, yAngleSampled);
-                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, GetAngleFromCurve(xIteration-1), previousSample, sample, previousRayCastHit);
+                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, GetAngleFromCurve(xIteration - 1), previousSample, sample, previousRayCastHit);
             }
             TryCreateFloorVertex(raycastHit, sample);
 
@@ -202,7 +203,6 @@ public partial class FOVRenderer
         else if (x == 0 && HitPointIsSideFacing(raycastHit))
         {
             TryCreateFloorToWallCornerVertex(yAngleSampled, FirstVertex, sample);
-<<<<<<< Updated upstream
         }
         //When going forward from wall to floor
         else if (IsWallToFloor(previousRayCastHit, raycastHit) && IsClearlyHigher(previousSample, sample))
@@ -211,8 +211,6 @@ public partial class FOVRenderer
             if (debuggingLogging) Debug.Log("<b><color=white>Wall to floor calculation</color></b>");
 #endif
             TryCreateWallToFloorCornerVertex(previousSample, sample);
-=======
->>>>>>> Stashed changes
 
         }
         //When going up from floor to wall

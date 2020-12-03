@@ -73,12 +73,9 @@ public partial class FOVRenderer
         //We cannot use closest point on concave colliders, so use raycasting as a show must go on option 
         if (testRayHit.collider.GetType() == typeof(MeshCollider))
         {
-<<<<<<< Updated upstream
-=======
             return Vector3.zero;
             /*
              
->>>>>>> Stashed changes
             //Debug.Log(testRayHit.collider.gameObject);
             Vector3 rayStart = reSampleTest + Vector3.up * -0.2f;
             //ACylinder(rayStart, Color.black);
@@ -146,7 +143,7 @@ public partial class FOVRenderer
         }
         else
         {
-            Debug.LogWarning("Could not find intersection");
+            //Debug.LogWarning("Could not find intersection");
         }
 
         //Debug.Log("Could not find intersection");
