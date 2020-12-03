@@ -206,7 +206,7 @@ public class PlayerController : MonoBehaviour
         //DoubleClick Check
         if (IsCurrentPlayer)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
+            if (Input.GetKeyDown(KeyCode.Mouse1) && !PointerOverUI())
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                 {
@@ -440,7 +440,7 @@ public class PlayerController : MonoBehaviour
                     target = null;
                 }
 
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer && !PointerOverUI())
+                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer && !PointerOverUI())
                 {
                     if (lC.targetObject != null)
                     {
@@ -497,7 +497,7 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
                 {
                     if (lC.targetObject != null)
                     {
@@ -553,7 +553,7 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
                 {
                     if (lC.targetObject != null)
                     {
