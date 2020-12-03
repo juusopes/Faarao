@@ -183,11 +183,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1477966920734627834}
   m_LocalRotation: {x: 0.71504515, y: -0, z: -0, w: 0.6990783}
-  m_LocalPosition: {x: 0, y: 2.79, z: 0.08}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 4.58, z: 0.16}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
-  m_Father: {fileID: 3805621768413671849}
-  m_RootOrder: 2
+  m_Father: {fileID: 5706328075926723930}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 91.29401, y: 0, z: 0}
 --- !u!108 &8691069468399369420
 Light:
@@ -319,7 +319,7 @@ RectTransform:
   - {fileID: 3997313670091471662}
   - {fileID: 5750788781288310469}
   m_Father: {fileID: 5706328075926723930}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1522,6 +1522,24 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Psst... You should not have done that!
+--- !u!114 &7304014516203047745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4583424692537928467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 2
+  outlineColor: {r: 0, g: 1, b: 0.048674583, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!114 &7558704277129561318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2185,7 +2203,6 @@ GameObject:
   - component: {fileID: -2370286539409642136}
   - component: {fileID: -3261075203119826798}
   - component: {fileID: 9181582814195248809}
-  - component: {fileID: 5509294381195506819}
   - component: {fileID: 3035807873385856047}
   m_Layer: 8
   m_Name: Pharaoh
@@ -2208,6 +2225,7 @@ Transform:
   - {fileID: 3805621768413671849}
   - {fileID: 7914039853299727019}
   - {fileID: 2795708156166373220}
+  - {fileID: 2451400477284517772}
   - {fileID: 3750558802029591427}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2321,6 +2339,7 @@ MonoBehaviour:
   inRange: 0
   searchingForSight: 0
   abilityClicked: 0
+  abilityHitPos: {x: 0, y: 0, z: 0}
   abilityAllowed: 0101010101010101010101
   isInvisible: 0
   invisibilityMaterial: {fileID: 2100000, guid: 5aa7610f8df95bc47960b28f6f5e3484, type: 2}
@@ -2432,24 +2451,6 @@ MonoBehaviour:
   _list: 1
   _type: 1
   _id: 0
---- !u!114 &5509294381195506819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5706328075926723934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 2
-  outlineColor: {r: 0.39215687, g: 1, b: 0.19607843, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!114 &3035807873385856047
 MonoBehaviour:
   m_ObjectHideFlags: 0
