@@ -5,49 +5,34 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
 
-    public AudioSource invisibilityBuzz;
-    public PlayerController playercontroller;
-    public PharaohAbilities pharaohTimers;
-    public int soundTimes;
+    public AudioSource invisibilitySound;
+    public AudioSource distractSound;
+    public AudioSource flashBangSound;
+    public AudioSource possessSound;
+    public AudioSource warpSound;
 
-    // Start is called before the first frame update
-    void Start()
+    public void InvisibilitySound()
     {
-        invisibilityBuzz = GetComponent<AudioSource>();
-        soundTimes = 0;
+        invisibilitySound.Play();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DistractSound()
     {
-        //bool currentplayer = playercontroller.IsCurrentPlayer;
-        //bool invisible = playercontroller.isInvisible;
-        //float invisibilityTime = pharaohTimers.invisibilityTimer;
-
-        //if(invisible)
-        //{
-        //    print("invisible");
-        //}
-
-        //if (currentplayer)
-        //{
-        //    if(soundTimes == 0 && invisible)
-        //    {
-        //        invisibilityBuzz.Play();
-        //        soundTimes++;
-
-        //        StartCoroutine(WaitForSeconds(2.25f));
-        //    }
-        //}
+        distractSound.Play();
     }
 
-    public IEnumerator WaitForSeconds(float time)
+    public void FlashBangSound()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(time);
+        flashBangSound.Play();
+    }
 
-            soundTimes--;
-        }
+    public void PossessSound()
+    {
+        possessSound.Play();
+    }
+
+    public void WarpSound()
+    {
+        warpSound.Play();
     }
 }
