@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public bool IsCurrentPlayer { get; set; } = false;
     public bool IsActivePlayer { get; set; } = false;
     public NavMeshAgent navMeshAgent;
-    private Vector3 targetV3;
+    public Vector3 targetV3;
     private Vector3 position;
 
     public bool IsRunning { get; set; } = false;
@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviour
     //[HideInInspector]
     public bool[] abilityAllowed;
 
+    [HideInInspector]
+    public GameObject groundInd;
+
     //Invisibility
     public bool isInvisible;
     private Material originalMaterial;
@@ -53,7 +56,8 @@ public class PlayerController : MonoBehaviour
 
     //Interactive
     public GameObject interactObject;
-    private bool useInteract;
+    [HideInInspector]
+    public bool useInteract;
 
     //Climbing
     //public GameObject climbObject;
@@ -71,10 +75,12 @@ public class PlayerController : MonoBehaviour
     //Attack
     public GameObject targetEnemy;
     private GameObject target;
-    private bool useAttack;
+    [HideInInspector]
+    public bool useAttack;
 
     //Respawn
-    private bool useRespawn;
+    [HideInInspector]
+    public bool useRespawn;
     
     //Menu
     public LevelController lC;
@@ -451,6 +457,11 @@ public class PlayerController : MonoBehaviour
                             {
                                 targetV3 = hit.point;
                                 SetDestination(targetV3);
+
+                                groundInd.SetActive(true);
+                                Vector3 tempV3 = targetV3;
+                                tempV3.y = targetV3.y + 0.2f;
+                                groundInd.transform.position = tempV3;
                             }
 
                             useInteract = true;
@@ -508,6 +519,11 @@ public class PlayerController : MonoBehaviour
                             SetDestination(targetV3);
                             useAttack = true;
                             abilityActive = false;
+
+                            groundInd.SetActive(true);
+                            Vector3 tempV3 = targetV3;
+                            tempV3.y = targetV3.y + 0.2f;
+                            groundInd.transform.position = tempV3;
                         }
                     }
                 }
@@ -564,6 +580,11 @@ public class PlayerController : MonoBehaviour
                             SetDestination(targetV3);
                             useRespawn = true;
                             abilityActive = false;
+
+                            groundInd.SetActive(true);
+                            Vector3 tempV3 = targetV3;
+                            tempV3.y = targetV3.y + 0.2f;
+                            groundInd.transform.position = tempV3;
                         }
                     }
                 }

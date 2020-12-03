@@ -41,8 +41,6 @@ public class LoadUIManager : MonoBehaviour
 
     public void UpdateSaveList()
     {
-        if (!_saveMenuList.isActiveAndEnabled) return;
-
         SaveUIObject[] saveList = GameManager._instance.GetSaveFiles().ToArray();
 
         _saveMenuList.RefreshList(saveList);
@@ -50,18 +48,9 @@ public class LoadUIManager : MonoBehaviour
 
     public void UpdateSaveListMainMenu()
     {
-        if (!_saveMenuListMainMenu.isActiveAndEnabled) return;
-
         SaveUIObject[] saveList = GameManager._instance.GetSaveFiles().ToArray();
 
         _saveMenuListMainMenu.RefreshList(saveList);
-    }
-
-    public void UpdateSaveListAll()
-    {
-        UpdateSaveListMainMenu();
-        UpdateSaveList();
-        InGameMenu._instance.UpdateSaveList();
     }
 
     public void OpenInGameMenu()
