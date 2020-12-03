@@ -195,6 +195,8 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
+    
+
     public void Host()
     {
         if (NetworkManager._instance.IsHost)
