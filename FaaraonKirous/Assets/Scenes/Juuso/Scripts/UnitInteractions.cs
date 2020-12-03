@@ -237,6 +237,7 @@ public class UnitInteractions : MonoBehaviour
             {
                 gameOverMenu.SetActive(true);
                 gameOver = true;
+                Time.timeScale = 0;
             } else
             {
                 gameOverMenu.SetActive(false);

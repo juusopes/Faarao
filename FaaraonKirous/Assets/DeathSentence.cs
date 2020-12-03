@@ -61,7 +61,6 @@ public class DeathSentence : MonoBehaviour
         } else
         {
             deathCanvas.SetActive(false);
-            Time.timeScale = 0;
         }
     }
 }
