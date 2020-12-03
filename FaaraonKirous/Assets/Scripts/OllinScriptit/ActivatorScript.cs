@@ -17,9 +17,9 @@ public class ActivatorScript : MonoBehaviour
     public bool activated;
     public void Activate()
     {
+        soundFX.ClickSound();
         if (activated)
         {
-            soundFX.ClickSound();
             activated = false;
         }
         else

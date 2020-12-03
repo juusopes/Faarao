@@ -8,7 +8,7 @@ public class PostProcessingScript : MonoBehaviour
 {
     public Volume volume;
     private LevelController levelController;
-    ColorAdjustments cA;
+    private ColorAdjustments cA;
 
     // Start is called before the first frame update
     void Start()
