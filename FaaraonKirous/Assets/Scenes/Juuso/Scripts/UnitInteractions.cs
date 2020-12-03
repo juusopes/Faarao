@@ -21,22 +21,18 @@ public class UnitInteractions : MonoBehaviour
         }
     }
 
-
     public float cooldownTime;
     public float nextFireTime;
     public bool isStanding = true;
     public bool isStanding2 = true;
     public bool onCooldown = false;
 
-    //public Texture2D cursor, cursorInteract, cursorAttack;
     public bool checkbox;
 
     [HideInInspector]
     public GameObject standing, crouching;
     [HideInInspector]
     public GameObject standing2, crouching2;
-
-    //public Image imageCooldown;
 
     public GameObject character1, character2;
     [HideInInspector]
@@ -59,12 +55,9 @@ public class UnitInteractions : MonoBehaviour
     public GameObject gameOverMenu;
     [HideInInspector]
     public bool gameOver;
-    //public DeathScript isDead1, isDead2;
 
     private void Start()
     {
-        // TODO
-        //activeCharacter = 1;
     }
 
     private void Update()
@@ -81,11 +74,10 @@ public class UnitInteractions : MonoBehaviour
         bool menuActivated = GetComponent<InGameMenu>().menuActive;
 
         int allowedAbilities = 0;
-        //print("ALLOWEDABILITIES ALKU");
+
         // cannot use abilities etc. if menu is active
         if (!menuActivated)
         {
-            //print("ALLOWEDABILITIES MENUACTIVATE");
             for (int i = 0; i < 11; i++)
             {
                 bool v = GameManager._instance.Pharaoh.GetComponent<PlayerController>().abilityAllowed[i];
@@ -102,7 +94,6 @@ public class UnitInteractions : MonoBehaviour
                     }
                     if (allowedAbilities == 3)
                     {
-                        //print("PHARAOH ABILITY W (3) ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillW1.SetActive(true);
                     }
                     if (allowedAbilities == 2)
@@ -139,12 +130,10 @@ public class UnitInteractions : MonoBehaviour
                 {
                     if (allowedAbilities == 1)
                     {
-                        //print("PRIEST ABILITY 1 ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillQ2.SetActive(true);
                     }
                     if (allowedAbilities == 3)
                     {
-                        //print("PRIEST ABILITY 3 W ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillW2.SetActive(true);
                     }
                     if (allowedAbilities == 2)
@@ -219,12 +208,6 @@ public class UnitInteractions : MonoBehaviour
     {
         activeCharacter = 2;
 
-        //if (isDead2.isDead && activeCharacter == 2)
-        //{
-        //    deathSentence1.SetActive(false);
-        //    deathSentence2.SetActive(true);
-        //}
-
         generalSkillGroup.SetActive(true);
 
         character1.SetActive(false);
@@ -254,6 +237,7 @@ public class UnitInteractions : MonoBehaviour
             {
                 gameOverMenu.SetActive(true);
                 gameOver = true;
+                Time.timeScale = 0;
             } else
             {
                 gameOverMenu.SetActive(false);

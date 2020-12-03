@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
         //DoubleClick Check
-        if (IsCurrentPlayer)
+        if (IsCurrentPlayer && !menu.menuActive && !DontDestroyCanvas.Instance.IsOpen())
         {
             if (Input.GetKeyDown(KeyCode.Mouse1) && !PointerOverUI())
             {

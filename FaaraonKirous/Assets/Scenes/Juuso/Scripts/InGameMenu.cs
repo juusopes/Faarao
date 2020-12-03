@@ -195,6 +195,12 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
+    public void LoadLevelMainMenu()
+    {
+        MainMenuUIManager.Instance.Close();
+        LoadUIManager.Instance.OpenMainMenu();
+    }
+
     public void Host()
     {
         if (NetworkManager._instance.IsHost)
