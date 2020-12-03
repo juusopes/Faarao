@@ -8,7 +8,7 @@ public class PharaohAbilities : MonoBehaviour
     private LevelController levelControl;
     private bool invisibilityActive;
     public bool useInvisibility;
-    private float invisibilityTimer;
+    public float invisibilityTimer;
     public GameObject[] indicatorList;
     public float[] rangeList;
     public int[] abilityLimitList;
