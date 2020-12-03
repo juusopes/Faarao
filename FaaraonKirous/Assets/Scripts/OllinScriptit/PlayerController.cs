@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
     public float[] abilityCooldowns;
 
     public UnitInteractions unitInteractions;
+    public SoundManager soundFX;
 
     private void Awake()
     {
@@ -515,6 +516,8 @@ public class PlayerController : MonoBehaviour
                         target = lC.targetObject;
                         if (target.tag == "Enemy")
                         {
+                            soundFX.AttackSound();
+
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
                             useAttack = true;
@@ -576,6 +579,7 @@ public class PlayerController : MonoBehaviour
                         target = lC.targetObject;
                         if (target.tag == "Player")
                         {
+                            soundFX.ResurrectSound();
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
                             useRespawn = true;
@@ -788,7 +792,7 @@ public class PlayerController : MonoBehaviour
         {
             UseAbility(4);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             UseAbility(5);
         }

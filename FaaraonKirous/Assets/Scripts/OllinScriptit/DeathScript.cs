@@ -63,7 +63,15 @@ public class DeathScript : MonoBehaviour
     {
         isDead = true;
         hp = 0;
-        soundFX.DeathSound();
+
+        if(gameObject.CompareTag("Player"))
+        {
+            soundFX.PlayerDeathSound();
+        }
+        else
+        {
+            soundFX.DeathSound();
+        }
 
         //if (doMessage && CharacterNetManager.List == ObjectList.player)
         //{
