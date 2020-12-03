@@ -85,7 +85,7 @@ public class MenuSettings : MonoBehaviour
     private void SetAudioLevel(string audioType, float value)
     {
         PlayerPrefs.SetFloat(audioType, float.Parse(value.ToString("n2")));
-        _mixer.SetFloat(audioType, Mathf.Log10(value) * 20); // 
+        _mixer.SetFloat(audioType, Mathf.Log10(value) * 20);
     }
 
     public void SetQuality (int qualitySetting)

@@ -139,12 +139,12 @@ public class UnitInteractions : MonoBehaviour
                 {
                     if (allowedAbilities == 1)
                     {
-                        print("PRIEST ABILITY 1 ALLOWED AAAAAAAAAAAAAAAAASD");
+                        //print("PRIEST ABILITY 1 ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillQ2.SetActive(true);
                     }
                     if (allowedAbilities == 3)
                     {
-                        print("PRIEST ABILITY 3 W ALLOWED AAAAAAAAAAAAAAAAASD");
+                        //print("PRIEST ABILITY 3 W ALLOWED AAAAAAAAAAAAAAAAASD");
                         skillW2.SetActive(true);
                     }
                     if (allowedAbilities == 2)

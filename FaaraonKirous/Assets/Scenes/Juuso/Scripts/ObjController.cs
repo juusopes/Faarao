@@ -93,7 +93,10 @@ public class ObjController : MonoBehaviour
         {
             yield return new WaitForSeconds(time);
 
-            GameManager._instance.LoadNextLevel();
+            if (NetworkManager._instance.IsHost)
+            {
+                GameManager._instance.LoadNextLevel();
+            }
         }
     }
 

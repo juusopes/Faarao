@@ -349,30 +349,28 @@ public class GameManager : MonoBehaviour
 
         // Create file
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/" + saveName + ".save");
+        string filePath = Application.persistentDataPath + "/" + saveName + ".save";
+        FileStream file = File.Create(filePath);
         bf.Serialize(file, save);
         file.Close();
+
+        // Set date
+        FileInfo fileInfo = new FileInfo(filePath);
+        fileInfo.CreationTime = DateTime.Now;
 
         Debug.Log("Game saved");
     }
 
-    public void LoadFromFile(string saveName = "quicksave")
+    public bool LoadFromFile(string saveName = "quicksave.save")
     {
+        string filePath = Application.persistentDataPath + "/" + saveName;
+        if (!DoesFileExist(filePath)) return false;
+
         // Initialize loading
         StartLoading(true);
 
-        // Find file
-        string filePath = Application.persistentDataPath + "/" + saveName + ".save";
-        if (!File.Exists(filePath))
-        {
-            // TODO: There should be a GUI for accessing saves, so in the end this is unneccessary
-
-            Debug.Log("Save file not found!");
-            EndLoading();
-            return;
-        }
-
         // Get save object
+        // TODO: Add error handling
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(filePath, FileMode.Open);
         Save save = (Save)bf.Deserialize(file);
@@ -383,6 +381,53 @@ public class GameManager : MonoBehaviour
 
         // Load game state
         StartCoroutine(WaitForSceneLoad(() => LoadGameState(save)));
+
+        return true;
+    }
+
+    private bool DoesFileExist(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            MessageLog.Instance.AddMessage($"File \"{filePath}\" was not found!", Color.red);
+            return false;
+        }
+
+        return true;
+    }
+
+    public List<SaveUIObject> GetSaveFiles()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(Application.persistentDataPath + "/");
+        FileInfo[] fileInfos = directoryInfo.GetFiles();
+
+        List<SaveUIObject> saves = new List<SaveUIObject>();
+
+        for (int i = 0; i < fileInfos.Length; ++i)
+        {
+            FileInfo fileInfo = fileInfos[i];
+            string extension = fileInfo.Extension;
+
+            // Is save file
+            if (extension != ".save") continue;
+
+            SaveUIObject save = new SaveUIObject();
+            save.Name = fileInfo.Name;
+            save.CreationDate = fileInfo.CreationTime;
+            saves.Add(save);
+        }
+
+        return saves;
+    }
+
+    public bool DeleteFile(string saveName)
+    {
+        string filePath = Application.persistentDataPath + "/" + saveName;
+        if (!DoesFileExist(filePath)) return false;
+
+        File.Delete(filePath);
+
+        return true;
     }
 
     private void LoadGameState(Save save)
