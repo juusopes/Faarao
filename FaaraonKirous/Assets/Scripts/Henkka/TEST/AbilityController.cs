@@ -15,6 +15,8 @@ public class AbilityController : MonoBehaviour
 
     private PlayerController currentPlayerController;
 
+    public SoundManager soundFX;
+
     private void Start()
     {
         Assert.IsNotNull(abilitySpawner, "Add ability spawner prefab!");
@@ -134,6 +136,7 @@ public class AbilityController : MonoBehaviour
         {
             if (selectedAI)
             {
+                soundFX.PossessSound();
                 PossessEnemy(hit.point);
                 DeselectAI();
             }
