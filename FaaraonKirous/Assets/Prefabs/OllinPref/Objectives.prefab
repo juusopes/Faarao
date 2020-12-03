@@ -125,7 +125,6 @@ GameObject:
   - component: {fileID: 2002860732106596534}
   - component: {fileID: 7580911765592269778}
   - component: {fileID: 1874013125250795940}
-  - component: {fileID: 6636836934617393856}
   - component: {fileID: 2121519826743185656}
   m_Layer: 2
   m_Name: Objective5
@@ -246,25 +245,12 @@ MonoBehaviour:
   objNum: 5
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 6636836934617393856}
-  activated2: {fileID: 6636836934617393856}
-  activated3: {fileID: 6636836934617393856}
-  activated4: {fileID: 6636836934617393856}
-  activated5: {fileID: 6636836934617393856}
+  activated: {fileID: 0}
+  activated2: {fileID: 0}
+  activated3: {fileID: 0}
+  activated4: {fileID: 0}
+  activated5: {fileID: 0}
   objectiveActivated: 0
---- !u!114 &6636836934617393856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4897397586411370665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!114 &2121519826743185656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,8 +263,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eae1704896eb864fbb30c11054c965d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _list: 3
-  _type: 4
+  _list: 5
+  _type: 7
   _id: 0
 --- !u!95 &2947799333307010892
 Animator:
@@ -9992,7 +9978,6 @@ GameObject:
   - component: {fileID: 8487983796017585804}
   - component: {fileID: 8487983796017585805}
   - component: {fileID: 8487983796017585794}
-  - component: {fileID: 6257779590255095275}
   - component: {fileID: 8337839600671913698}
   m_Layer: 2
   m_Name: Objective1
@@ -10113,25 +10098,12 @@ MonoBehaviour:
   objNum: 1
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 6257779590255095275}
-  activated2: {fileID: 6257779590255095275}
-  activated3: {fileID: 6257779590255095275}
-  activated4: {fileID: 6257779590255095275}
-  activated5: {fileID: 6257779590255095275}
+  activated: {fileID: 0}
+  activated2: {fileID: 0}
+  activated3: {fileID: 0}
+  activated4: {fileID: 0}
+  activated5: {fileID: 0}
   objectiveActivated: 0
---- !u!114 &6257779590255095275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8487983796017585792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!114 &8337839600671913698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10144,8 +10116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eae1704896eb864fbb30c11054c965d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _list: 3
-  _type: 4
+  _list: 5
+  _type: 7
   _id: 0
 --- !u!1 &8487983796034150739
 GameObject:
@@ -10161,7 +10133,6 @@ GameObject:
   - component: {fileID: 8487983796034150749}
   - component: {fileID: 8487983796034150738}
   - component: {fileID: 8487983796034150745}
-  - component: {fileID: 7745601239536070312}
   - component: {fileID: 8805320722124870837}
   m_Layer: 2
   m_Name: EndPoint
@@ -10281,25 +10252,12 @@ MonoBehaviour:
   objNum: 0
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 7745601239536070312}
-  activated2: {fileID: 7745601239536070312}
-  activated3: {fileID: 7745601239536070312}
-  activated4: {fileID: 7745601239536070312}
-  activated5: {fileID: 7745601239536070312}
+  activated: {fileID: 0}
+  activated2: {fileID: 0}
+  activated3: {fileID: 0}
+  activated4: {fileID: 0}
+  activated5: {fileID: 0}
   objectiveActivated: 0
---- !u!114 &7745601239536070312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8487983796034150739}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!114 &8805320722124870837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10312,8 +10270,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eae1704896eb864fbb30c11054c965d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _list: 3
-  _type: 4
+  _list: 5
+  _type: 7
   _id: 0
 --- !u!1 &8487983796110470532
 GameObject:
@@ -15141,7 +15099,6 @@ GameObject:
   - component: {fileID: 8487983796543155868}
   - component: {fileID: 8487983796543155869}
   - component: {fileID: 8487983796543155864}
-  - component: {fileID: 1796952373119475595}
   - component: {fileID: 119591857900547441}
   m_Layer: 2
   m_Name: Objective2
@@ -15262,25 +15219,12 @@ MonoBehaviour:
   objNum: 2
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 1796952373119475595}
-  activated2: {fileID: 1796952373119475595}
-  activated3: {fileID: 1796952373119475595}
-  activated4: {fileID: 1796952373119475595}
-  activated5: {fileID: 1796952373119475595}
+  activated: {fileID: 0}
+  activated2: {fileID: 0}
+  activated3: {fileID: 0}
+  activated4: {fileID: 0}
+  activated5: {fileID: 0}
   objectiveActivated: 0
---- !u!114 &1796952373119475595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8487983796543155859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!114 &119591857900547441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15293,8 +15237,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eae1704896eb864fbb30c11054c965d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _list: 3
-  _type: 4
+  _list: 5
+  _type: 7
   _id: 0
 --- !u!1 &8487983796546669078
 GameObject:
@@ -29830,7 +29774,6 @@ GameObject:
   - component: {fileID: 8487983797928614290}
   - component: {fileID: 8487983797928614291}
   - component: {fileID: 8487983797928614303}
-  - component: {fileID: 3499799632734588341}
   - component: {fileID: 5303619546539536601}
   m_Layer: 2
   m_Name: Objective3
@@ -29951,25 +29894,12 @@ MonoBehaviour:
   objNum: 3
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 3499799632734588341}
-  activated2: {fileID: 3499799632734588341}
-  activated3: {fileID: 3499799632734588341}
-  activated4: {fileID: 3499799632734588341}
-  activated5: {fileID: 3499799632734588341}
+  activated: {fileID: 0}
+  activated2: {fileID: 0}
+  activated3: {fileID: 0}
+  activated4: {fileID: 0}
+  activated5: {fileID: 0}
   objectiveActivated: 0
---- !u!114 &3499799632734588341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8487983797928614294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!114 &5303619546539536601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29982,8 +29912,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eae1704896eb864fbb30c11054c965d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _list: 3
-  _type: 4
+  _list: 5
+  _type: 7
   _id: 0
 --- !u!1 &8524011809994692202
 GameObject:
@@ -29999,7 +29929,6 @@ GameObject:
   - component: {fileID: 1638462507202982208}
   - component: {fileID: 3814494988881576382}
   - component: {fileID: 639837990455357998}
-  - component: {fileID: 5894055272851897524}
   - component: {fileID: 1326213778951916706}
   m_Layer: 2
   m_Name: Objective4
@@ -30120,25 +30049,12 @@ MonoBehaviour:
   objNum: 4
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 5894055272851897524}
-  activated2: {fileID: 5894055272851897524}
-  activated3: {fileID: 5894055272851897524}
-  activated4: {fileID: 5894055272851897524}
-  activated5: {fileID: 5894055272851897524}
+  activated: {fileID: 0}
+  activated2: {fileID: 0}
+  activated3: {fileID: 0}
+  activated4: {fileID: 0}
+  activated5: {fileID: 0}
   objectiveActivated: 0
---- !u!114 &5894055272851897524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8524011809994692202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activated: 0
 --- !u!114 &1326213778951916706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30151,8 +30067,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eae1704896eb864fbb30c11054c965d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _list: 3
-  _type: 4
+  _list: 5
+  _type: 7
   _id: 0
 --- !u!1001 &376205088466104478
 PrefabInstance:
@@ -30506,14 +30422,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
---- !u!1 &86169431489049777 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
-  m_PrefabInstance: {fileID: 1671293782928959406}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &754900531567570443 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+  m_PrefabInstance: {fileID: 1671293782928959406}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &86169431489049777 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
   m_PrefabInstance: {fileID: 1671293782928959406}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3361221422952083345
