@@ -249,7 +249,7 @@ public class AbilityIndicator : MonoBehaviour
                 {
                     playerPos = player.GetComponent<PlayerController>().GetPosition();
                     //Debug.Log("playerPos: " + playerPos);
-                    Vector3 hitPos = hit.transform.position;
+                    Vector3 hitPos = hit.point;
                     hitPos.y = hit.transform.position.y + 0.1f;
                     groundIndicator.transform.position = hitPos;
                     groundIndicator.SetActive(true);
