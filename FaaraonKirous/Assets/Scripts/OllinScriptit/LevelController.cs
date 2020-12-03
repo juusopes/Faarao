@@ -124,6 +124,9 @@ public class LevelController : MonoBehaviour
 
     private void KeyBoardControls()
     {
+        if (DontDestroyCanvas.Instance.IsOpen() || InGameMenu._instance.menuActive) return;
+
+
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             if (NetworkManager._instance.IsHost)

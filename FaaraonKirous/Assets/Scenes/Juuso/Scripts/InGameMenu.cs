@@ -25,7 +25,7 @@ public class InGameMenu : MonoBehaviour
     }
 
     //[HideInInspector]
-    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel;
+    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel, background;
     [HideInInspector]
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     [HideInInspector]
@@ -112,25 +112,16 @@ public class InGameMenu : MonoBehaviour
     {
         menuActive = true;
 
+        background.SetActive(true);
         menuPanel.SetActive(true);
         objectivePanel.SetActive(false);
-
-        continueButton.SetActive(true);
-        loadButton.SetActive(true);
-        saveButton.SetActive(true);
-        optionsButton.SetActive(true);
-        restartButton.SetActive(true);
-        mainMenuButton.SetActive(true);
-        gameplayButton.SetActive(true);
-        audioButton.SetActive(true);
-        controlsButton.SetActive(true);
-        videoButton.SetActive(true);
     }
 
     public void DeactivateMenu()
     {
         menuActive = false;
 
+        background.SetActive(false);
         menuPanel.SetActive(false);
         optionsPanel.SetActive(false);
         audioPanel.SetActive(false);
@@ -180,11 +171,35 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
+    public void Quickload()
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.LoadFromFile();
+        }
+    }
+
+    public void Quicksave()
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.SaveToFile();
+        }
+    }
+
     public void LoadLevel()
     {
         if (NetworkManager._instance.IsHost)
         {
             LoadUIManager.Instance.OpenInGameMenu();
+        }
+    }
+
+    public void Host()
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            HostUIManager.Instance.OpenInGameMenu();
         }
     }
 

@@ -69,7 +69,7 @@ public class UnitInteractions : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager._instance.IsFullyLoaded)
+        if (GameManager._instance.IsFullyLoaded && !DontDestroyCanvas.Instance.IsOpen())
         {
             AllowedAbilities();
             GameOverCheck();
