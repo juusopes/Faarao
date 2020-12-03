@@ -29,10 +29,7 @@ public class AbilityIndicator : MonoBehaviour
     private bool lineOfSightPointBool;
     private bool allOk;
 
-
-    private bool tempLineOfSight = false;
-    private bool tempInRange = false;
-    Vector3 mouseHitPos;
+    public GameObject groundIndicator;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +54,7 @@ public class AbilityIndicator : MonoBehaviour
         line.transform.parent = null;
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         previousAbilityNum = 0;
+        groundIndicator.transform.parent = null;
     }
     private void MoveInd()
     {
@@ -252,6 +250,12 @@ public class AbilityIndicator : MonoBehaviour
                     playerPos = player.GetComponent<PlayerController>().GetPosition();
                     //Debug.Log("playerPos: " + playerPos);
                     Vector3 hitPos = hit.transform.position;
+                    hitPos.y = hit.transform.position.y + 0.1f;
+                    groundIndicator.transform.position = hitPos;
+                    groundIndicator.SetActive(true);
+                    SetGroundIndicatorImages();
+
+                    hitPos = hit.transform.position;
                     player.GetComponent<PlayerController>().abilityHitPos = hitPos;
                     //Debug.Log("hitPos: " + hitPos);
                     lineOfSightPoint = hit.transform.position;
@@ -270,7 +274,6 @@ public class AbilityIndicator : MonoBehaviour
                     {
                         hasLineOfSight = true;
                         lineOfSightPointBool = false;
-                        Debug.Log("hasLineOfSight = true");
                     }
                     //DistanceCheck
                     if (!hasLineOfSight)
@@ -299,6 +302,9 @@ public class AbilityIndicator : MonoBehaviour
                    // Debug.Log("In Range: " + player.GetComponent<PlayerController>().inRange + ", Sight: " + player.GetComponent<PlayerController>().searchingForSight);
                 }
             }
+        } else
+        {
+            SetGroundIndicatorImages();
         }
         //if (player.GetComponent<PlayerController>().abilityClicked)
         //{
@@ -351,6 +357,16 @@ public class AbilityIndicator : MonoBehaviour
             }
         }
     }
+
+    private void SetGroundIndicatorImages()
+    {
+        groundIndicator.transform.localScale = indicatorArea.transform.localScale;
+        //Switch Background
+        groundIndicator.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = indicatorArea.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite;
+        //Switch Icon
+        groundIndicator.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = indicatorArea.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite;
+    }
+
     private void LineColorChanger()
     {
         //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
