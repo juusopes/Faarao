@@ -6,6 +6,9 @@ public class DontDestroyCanvas : MonoBehaviour
 {
     public static DontDestroyCanvas Instance { get; private set; } = null;
 
+    private LoadUIManager _loadUiManager;
+    private SaveUIManager _saveUiManager;
+
     private void Awake()
     {
         if (Instance == null)
@@ -19,7 +22,18 @@ public class DontDestroyCanvas : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        _loadUiManager = GetComponent<LoadUIManager>();
+        _saveUiManager = GetComponent<SaveUIManager>();
     }
 
+    public bool IsOpen()
+    {
+        if (_loadUiManager.IsOpen() || _saveUiManager.IsOpen())
+        {
+            return true;
+        }
 
+        return false;
+    }
 }

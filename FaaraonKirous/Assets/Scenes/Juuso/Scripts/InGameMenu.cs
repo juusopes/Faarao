@@ -75,7 +75,7 @@ public class InGameMenu : MonoBehaviour
         {
             timer();
 
-            if (LoadUIManager.Instance.IsOpen())
+            if (DontDestroyCanvas.Instance.IsOpen())
             {
                 return;
             }
@@ -176,7 +176,7 @@ public class InGameMenu : MonoBehaviour
     {
         if (NetworkManager._instance.IsHost)
         {
-            GameManager._instance.SaveToFile();
+            SaveUIManager.Instance.OpenInGameMenu();
         }
     }
 
