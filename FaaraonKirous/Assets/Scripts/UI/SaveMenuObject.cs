@@ -21,7 +21,7 @@ public class SaveMenuObject : BaseMenuObject
     public void Delete()
     {
         GameManager._instance.DeleteFile(saveObject.Name);
-        LoadUIManager.Instance.UpdateSaveList();
+        LoadUIManager.Instance.UpdateSaveListAll();
     }
 
     public void Load()

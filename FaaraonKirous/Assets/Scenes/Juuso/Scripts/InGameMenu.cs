@@ -209,6 +209,25 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    private MenuListCreator _saveMenuList;
+
+    public void UpdateSaveList()
+    {
+        if (_saveMenuList == null || !_saveMenuList.isActiveAndEnabled) return;
+
+        SaveUIObject[] saveList = GameManager._instance.GetSaveFiles().ToArray();
+
+        _saveMenuList.RefreshList(saveList);
+    }
+
+
+    public void LoadLevelDeathScreen()
+    {
+
+        UpdateSaveList();
+    }
+
     public void ConnectToGame()
     {
 
