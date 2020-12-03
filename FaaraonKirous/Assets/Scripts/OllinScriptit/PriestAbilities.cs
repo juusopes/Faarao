@@ -43,6 +43,7 @@ public class PriestAbilities : MonoBehaviour
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         telekinesisActive = false;
         telekinesisTimer = 5;
+        warped = false;
     }
 
     //public void Telekinesis()
@@ -181,6 +182,7 @@ public class PriestAbilities : MonoBehaviour
                                 ClientSend.Warp(GetComponent<PlayerObjectManager>().Type, warpPosition);
                             }
                         }
+                        Debug.Log("Warped!");
                         warpSpellActive = false;
                         warped = true;
                         //Debug.Log("Warped");

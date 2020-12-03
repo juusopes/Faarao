@@ -37,6 +37,7 @@ public class PharaohAbilities : MonoBehaviour
         levelControl = GameObject.FindGameObjectWithTag("LevelController").GetComponent<LevelController>();
         invisibilityActive = false;
         invisibilityTimer = timeInInvisibility * 10;
+        useInvisibility = false;
     }
 
     public void Invisibility()
@@ -85,6 +86,12 @@ public class PharaohAbilities : MonoBehaviour
                 }
                 if (invisibilityTarget != null)
                 {
+                    //Debug.Log("iR" + GetComponent<PlayerController>().inRange);
+                    //Debug.Log("aC" + GetComponent<PlayerController>().abilityClicked);
+                    //Debug.Log("sFs" + GetComponent<PlayerController>().searchingForSight);
+                    //Debug.Log("aL" + GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum]);
+                    //Debug.Log("aCD" + GetComponent<PlayerController>().abilityCooldowns[GetComponent<PlayerController>().abilityNum]);
+                    //Debug.Log("iTT" + invisibilityTarget.tag);
                     if (GetComponent<PlayerController>().inRange
                     && GetComponent<PlayerController>().abilityClicked
                     && !GetComponent<PlayerController>().searchingForSight
@@ -93,6 +100,7 @@ public class PharaohAbilities : MonoBehaviour
                     && invisibilityTarget.tag == "Player"
                     && invisibilityClicked)
                     {
+                        Debug.Log("Invisibility7");
                         invisibilityTarget.GetComponent<PlayerController>().isInvisible = true;
                         invisibilityTimer = 0;
                         useInvisibility = true;

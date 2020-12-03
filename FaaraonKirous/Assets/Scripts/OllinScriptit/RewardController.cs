@@ -28,7 +28,6 @@ public class RewardController : MonoBehaviour
     public void UpdateObjectives()
     {
         for (int x = 0; x < objectives.objectiveDone.Length; x++) {
-            Debug.Log(x + ": " + objectives.objectiveDone.Length);
             if (objectives.objectiveDone[x] && rewardAbility[x] > 0)
             {
                 if (rewardPlayerOne[x])

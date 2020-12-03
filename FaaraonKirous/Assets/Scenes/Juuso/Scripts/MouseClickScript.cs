@@ -34,7 +34,6 @@ public class MouseClickScript : MonoBehaviour
             mouseClickTimer = 0.2f;
             instantiatedMouseClick.transform.position = hit.point;
         }
-        Debug.Log("Click Played");
     }
 
     private void ClickEffectTime()
@@ -48,7 +47,6 @@ public class MouseClickScript : MonoBehaviour
             mouseClickTimer = 0;
             instantiatedMouseClick.SetActive(false);
         }
-        Debug.Log("Click Timer");
     }
     public bool PointerOverUI()
     {

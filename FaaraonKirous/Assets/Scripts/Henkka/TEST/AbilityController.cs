@@ -97,7 +97,7 @@ public class AbilityController : MonoBehaviour
             }
 
             //Ability Ender
-            if (caster.abilityNum != 5 && caster.abilityNum != 5 || (caster.abilityNum == 7 && click == 1) || (caster.abilityNum == 1 && caster.playerOne && caster.gameObject.GetComponent<PharaohAbilities>().useInvisibility) || (!caster.playerOne && caster.abilityNum == 1 && caster.gameObject.GetComponent<PriestAbilities>().warped))
+            if (caster.abilityNum != 5 && caster.abilityNum != 1 || (caster.abilityNum == 5 && click == 1) || (caster.abilityNum == 1 && caster.playerOne && caster.gameObject.GetComponent<PharaohAbilities>().useInvisibility) || (!caster.playerOne && caster.abilityNum == 1 && caster.gameObject.GetComponent<PriestAbilities>().warped))
             {
                 if (!caster.playerOne || (caster.playerOne && caster.abilityNum != 1))
                 {
