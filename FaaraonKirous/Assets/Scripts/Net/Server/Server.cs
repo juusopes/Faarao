@@ -75,6 +75,11 @@ public sealed class Server : NetworkHandler
         ServerSend.ServerStopped();
 
         if (CloseSocket()) Debug.Log("Server stopped.");
+
+        ThreadManager._instance.ExecuteOnMainThread(() =>
+        {
+            MessageLog.Instance.AddMessage($"Server stopped", Constants.messageColorNetworking);
+        });
     }
 
     protected override void OnReceiveException()
