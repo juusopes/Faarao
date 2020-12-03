@@ -42,7 +42,7 @@ public sealed class Server : NetworkHandler
 
         StartHeartbeats();
 
-        Debug.Log($"Server started on {Port}.");
+        MessageLog.Instance.AddMessage($"Server started on port {Port}", Constants.messageColorNetworking);
     }
 
     public void StartHeartbeats()
