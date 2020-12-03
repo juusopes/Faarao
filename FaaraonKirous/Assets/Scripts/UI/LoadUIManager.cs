@@ -10,6 +10,12 @@ public class LoadUIManager : MonoBehaviour
     [SerializeField]
     private GameObject _loadMenu;
 
+    [SerializeField]
+    private MenuListCreator _saveMenuListMainMenu;
+
+    [SerializeField]
+    private GameObject _loadMenuMainMenu;
+
     private void Awake()
     {
         if (Instance == null)
@@ -33,16 +39,29 @@ public class LoadUIManager : MonoBehaviour
         return false;
     }
 
-    public void Start()
-    {
-        UpdateSaveList();
-    }
-
     public void UpdateSaveList()
     {
+        if (!_saveMenuList.isActiveAndEnabled) return;
+
         SaveUIObject[] saveList = GameManager._instance.GetSaveFiles().ToArray();
 
         _saveMenuList.RefreshList(saveList);
+    }
+
+    public void UpdateSaveListMainMenu()
+    {
+        if (!_saveMenuListMainMenu.isActiveAndEnabled) return;
+
+        SaveUIObject[] saveList = GameManager._instance.GetSaveFiles().ToArray();
+
+        _saveMenuListMainMenu.RefreshList(saveList);
+    }
+
+    public void UpdateSaveListAll()
+    {
+        UpdateSaveListMainMenu();
+        UpdateSaveList();
+        InGameMenu._instance.UpdateSaveList();
     }
 
     public void OpenInGameMenu()
@@ -50,6 +69,12 @@ public class LoadUIManager : MonoBehaviour
         InGameMenu._instance.DeactivateMenu();
         _loadMenu.SetActive(true);
         UpdateSaveList();
+    }
+
+    public void Close()
+    {
+        _loadMenu.SetActive(false);
+        _loadMenuMainMenu.SetActive(false);
     }
 
     public void CloseInGameMenu()
@@ -60,11 +85,15 @@ public class LoadUIManager : MonoBehaviour
 
     public void CloseMainMenu()
     {
+        _loadMenuMainMenu.SetActive(false);
+        MainMenuUIManager.Instance.Open();
         // TODO: Not implemented
     }
 
     public void OpenMainMenu()
     {
+        _loadMenuMainMenu.SetActive(true);
+        UpdateSaveListMainMenu();
         // TODO: Not implemented
     }
 }

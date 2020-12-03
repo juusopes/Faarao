@@ -23,6 +23,8 @@ public class PriestAbilities : MonoBehaviour
     public float[] abilityCDList;
     public bool[] lineActive;
 
+    public SoundManager soundFX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,7 +71,7 @@ public class PriestAbilities : MonoBehaviour
     //        {
     //            if (telekinesisActive && GetComponent<PlayerController>().abilityNum == 6)
     //            {
-    //                if (Input.GetKeyDown(KeyCode.Mouse1))
+    //                if (Input.GetKeyDown(KeyCode.Mouse0))
     //                {
     //                    if (target.tag == "TargetableObject")
     //                    {
@@ -139,13 +141,14 @@ public class PriestAbilities : MonoBehaviour
                 {
                     warped = false;
                 }
-                if (Input.GetKeyDown(KeyCode.Mouse1) && !PointerOverUI())
+                if (Input.GetKeyDown(KeyCode.Mouse0) && !PointerOverUI())
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit = new RaycastHit();
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                     {
                         warpPosition = hit.point;
+                        soundFX.WarpSound();
                     } else
                     {
                         warpSpellActive = false;

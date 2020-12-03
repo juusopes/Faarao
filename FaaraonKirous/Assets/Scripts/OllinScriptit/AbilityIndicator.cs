@@ -247,7 +247,7 @@ public class AbilityIndicator : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
             {
                 //vectorLength = vectorLength / 6.6f;
-                if (Input.GetKeyDown(KeyCode.Mouse1))
+                if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     playerPos = player.GetComponent<PlayerController>().GetPosition();
                     //Debug.Log("playerPos: " + playerPos);
