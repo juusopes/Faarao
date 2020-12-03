@@ -182,7 +182,6 @@ public class PriestAbilities : MonoBehaviour
                                 ClientSend.Warp(GetComponent<PlayerObjectManager>().Type, warpPosition);
                             }
                         }
-                        Debug.Log("Warped!");
                         warpSpellActive = false;
                         warped = true;
                         //Debug.Log("Warped");
