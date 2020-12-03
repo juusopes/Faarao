@@ -35,6 +35,8 @@ public class ObjController : MonoBehaviour
         {
             objectives[x].SetActive(true);
         }
+
+
     }
 
     public void Update()
@@ -57,6 +59,9 @@ public class ObjController : MonoBehaviour
     {
         //Counts the number of completed objectives
         int tempBoolCounter = 0;
+
+        Scene scene = SceneManager.GetActiveScene();
+
         foreach (bool done in objectiveDone)
         {
             if (done)
@@ -67,17 +72,29 @@ public class ObjController : MonoBehaviour
         //Moves to next Build Index if enough objectives are done 
         if (tempBoolCounter >= objectivesNeeded)
         {
-            fadeToBlack.SetActive(true);
-            StartCoroutine(WaitForSeconds2());
+            if (scene.name == "CreditScene")
+            {
+                StartCoroutine(WaitForSeconds2(10));
+            }
+
+            StartCoroutine(WaitForSeconds2(5));
         }
     }
 
-    public IEnumerator WaitForSeconds2()
+    public IEnumerator WaitForSeconds2(int time)
     {
+        //Scene scene = SceneManager.GetActiveScene();
+
         while (true)
         {
-            yield return new WaitForSeconds(5);
+            //if(scene.name == "CreditScene")
+            //{
+            //    time = 30;
+            //}
 
+            yield return new WaitForSeconds(time);
+
+            fadeToBlack.SetActive(true);
             GameManager._instance.LoadNextLevel();
         }
     }
