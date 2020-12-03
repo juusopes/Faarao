@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2127215213278946426}
   - component: {fileID: 3038444729344945119}
   - component: {fileID: 994818518049595157}
-  - component: {fileID: 1877960956243411859}
+  - component: {fileID: 7347470517847778300}
   m_Layer: 0
   m_Name: alcove_unity
   m_TagString: Untagged
@@ -82,8 +82,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1877960956243411859
-MeshCollider:
+--- !u!65 &7347470517847778300
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -92,7 +92,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5001103794907324600, guid: bcdd503e0d7da5547b0721efb38a7498, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 1.5142475, y: 6.07633, z: 4.2100296}
+  m_Center: {x: 0, y: -0.00000047683716, z: -0.00000023841858}
