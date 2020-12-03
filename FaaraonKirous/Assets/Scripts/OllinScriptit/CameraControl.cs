@@ -95,7 +95,7 @@ public class CameraControl : MonoBehaviour
             }
         }
 
-        if (cameraController.transform.position.y < 0f)
+        if (cameraController.transform.position.y < 15f)
         {
             //scrolling down (zoom out)
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
