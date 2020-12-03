@@ -79,7 +79,6 @@ public class PharaohAbilities : MonoBehaviour
                         invisibilityTarget = null;
                     }
                 }
-                Debug.Log(GetComponent<PlayerController>().inRange);
                 if (invisibilityTarget != null)
                 {
                     if (GetComponent<PlayerController>().inRange

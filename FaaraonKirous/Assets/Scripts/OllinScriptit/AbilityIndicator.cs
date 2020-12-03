@@ -264,8 +264,7 @@ public class AbilityIndicator : MonoBehaviour
                     if (Physics.Raycast(player.transform.position, lineOfSightPoint - player.transform.position, out hit, Vector3.Distance(player.transform.position, lineOfSightPoint) - 0.3f, RayCaster.attackLayerMask) && hit.collider.gameObject.tag != targetTag)
                     {
                         hasLineOfSight = false;
-                        Debug.Log(hit.collider.gameObject);
-                        Debug.Log("hasLineOfSight = false");
+                        //Debug.Log(hit.collider.gameObject);
                     }
                     else
                     {
