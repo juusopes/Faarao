@@ -62,7 +62,7 @@ public class PharaohAbilities : MonoBehaviour
             }
             if (invisibilityActive && GetComponent<PlayerController>().abilityNum == 1)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse1))
+                if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     invisibilityClicked = true;
                     if (target != null)
