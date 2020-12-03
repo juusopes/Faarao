@@ -104,8 +104,6 @@ public class AbilityIndicator : MonoBehaviour
 
             //Shoot Ray To see if in line of sight
             //DoubleClick Check
-
-            PointCalculator();
             //Vector Top point
             //Vector3 topPoint = player.transform.position + ((transform.position - player.transform.position) / 2);
             //topPoint.y = 10;
@@ -114,6 +112,7 @@ public class AbilityIndicator : MonoBehaviour
             //Line End
             line.SetPosition(line.positionCount - 1, transform.position);
         }
+        PointCalculator();
     }
     private void TargetTags()
     {
@@ -251,22 +250,21 @@ public class AbilityIndicator : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Mouse1))
                 {
                     playerPos = player.GetComponent<PlayerController>().GetPosition();
-                    Debug.Log("playerPos: " + playerPos);
+                    //Debug.Log("playerPos: " + playerPos);
                     Vector3 hitPos = hit.transform.position;
                     player.GetComponent<PlayerController>().abilityHitPos = hitPos;
-                    Debug.Log("hitPos: " + hitPos);
+                    //Debug.Log("hitPos: " + hitPos);
                     lineOfSightPoint = hit.transform.position;
                     lineOfSightPoint.y = hit.transform.position.y + 0.3f;
                     lineOfSightPointBool = true;
                     //hitPos.y = playerPos.y;
                     float distance = (Vector3.Distance(playerPos, hitPos)) / 4;
-                    Debug.Log("distance: " + distance);
+                    //Debug.Log("distance: " + distance);
                     //LineOfSightCheck
                     if (Physics.Raycast(player.transform.position, lineOfSightPoint - player.transform.position, out hit, Vector3.Distance(player.transform.position, lineOfSightPoint) - 0.3f, RayCaster.attackLayerMask) && hit.collider.gameObject.tag != targetTag)
                     {
                         hasLineOfSight = false;
-                        Debug.Log(hit.collider.gameObject);
-                        Debug.Log("hasLineOfSight = false");
+                        //Debug.Log(hit.collider.gameObject);
                     }
                     else
                     {
@@ -339,7 +337,7 @@ public class AbilityIndicator : MonoBehaviour
             // lineOfSightPoint.y = playerPos.y;
             //lineOfSightPoint.y += 0.3f;
             float distance = (Vector3.Distance(playerPos, lineOfSightPoint)) / 4;
-            if (distance <= range + range * 0.1)
+            if (distance <= range + range * 0.2)
             {
                 //endPoint = Vector3.MoveTowards(playerPos, hitPos, ((distance - range) * 4));
                 //player.GetComponent<PlayerController>().GiveDestination(endPoint);
@@ -347,7 +345,8 @@ public class AbilityIndicator : MonoBehaviour
                 player.GetComponent<PlayerController>().inRange = true;
                 if (player.GetComponent<PlayerController>().abilityClicked)
                 {
-                    player.GetComponent<PlayerController>().Stay();
+                    //player.GetComponent<PlayerController>().Stay();
+                    //player.GetComponent<PlayerController>().abilityClicked = false;
                 }
             }
         }

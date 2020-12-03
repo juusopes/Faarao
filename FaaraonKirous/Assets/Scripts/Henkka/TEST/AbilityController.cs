@@ -102,6 +102,7 @@ public class AbilityController : MonoBehaviour
                 caster.searchingForSight = true;
                 caster.abilityClicked = false;
                 abilityActivated = false;
+                caster.Stay();
                 click = 0;
             }
             else

@@ -64,24 +64,37 @@ public class PharaohAbilities : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Mouse1))
                 {
                     invisibilityClicked = true;
+                    if (target != null)
+                    {
+                        if (target.tag == "Player")
+                        {
+                            invisibilityTarget = target;
+                        } else
+                        {
+                            invisibilityTarget = null;
+                        }
+                    }
+                    else
+                    {
+                        invisibilityTarget = null;
+                    }
                 }
-                if (target != null)
+                if (invisibilityTarget != null)
                 {
                     if (GetComponent<PlayerController>().inRange
                     && GetComponent<PlayerController>().abilityClicked
                     && !GetComponent<PlayerController>().searchingForSight
                     && GetComponent<PlayerController>().abilityLimits[GetComponent<PlayerController>().abilityNum] > 0
                     && GetComponent<PlayerController>().abilityCooldowns[GetComponent<PlayerController>().abilityNum] == 0
-                    && target.tag == "Player"
+                    && invisibilityTarget.tag == "Player"
                     && invisibilityClicked)
                     {
-                        target.GetComponent<PlayerController>().isInvisible = true;
+                        invisibilityTarget.GetComponent<PlayerController>().isInvisible = true;
                         invisibilityTimer = 0;
                         useInvisibility = true;
                         //GetComponent<PlayerController>().Stay();
                         //GetComponent<PlayerController>().abilityActive = false;
                         //GetComponent<PlayerController>().abilityNum = 0;
-                        invisibilityTarget = target;
                         GetComponent<PlayerController>().visibleInd.GetComponent<AbilityIndicator>().targetTag = null;
                         invisibilityClicked = false;
                     }

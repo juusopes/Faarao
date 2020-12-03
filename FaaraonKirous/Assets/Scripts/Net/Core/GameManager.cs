@@ -358,7 +358,7 @@ public class GameManager : MonoBehaviour
         FileInfo fileInfo = new FileInfo(filePath);
         fileInfo.CreationTime = DateTime.Now;
 
-        Debug.Log("Game saved");
+        MessageLog.Instance.AddMessage("Game saved", Color.green);
     }
 
     public bool LoadFromFile(string saveName = "quicksave.save")
