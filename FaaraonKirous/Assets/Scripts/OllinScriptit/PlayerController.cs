@@ -101,9 +101,12 @@ public class PlayerController : MonoBehaviour
     public UnitInteractions unitInteractions;
     public SoundManager soundFX;
 
+    public PlayerObjectManager manager;
+
     private void Awake()
     {
         Initialize();
+        manager = GetComponent<PlayerObjectManager>();
     }
 
     private void Start()
@@ -457,10 +460,8 @@ public class PlayerController : MonoBehaviour
                 //}
                 if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer && !PointerOverUI())
                 {
-                    interactObject = null;
                     target = null;
-                    useInteract = false;
-                    abilityNum = 0;
+                    lC.targetObject = null;
                 }
                 if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer && !PointerOverUI())
                 {

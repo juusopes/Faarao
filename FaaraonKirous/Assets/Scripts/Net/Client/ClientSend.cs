@@ -166,6 +166,15 @@ public class ClientSend
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
+
+    public static void AbilityLimitUsed(ObjectType character, int abilityNum)
+    {
+        var packet = new Packet((int)ClientPackets.abilityLimitUsed);
+        packet.Write((short)character);
+        packet.Write(abilityNum);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
     #endregion
 
     #region Activatable

@@ -110,6 +110,16 @@ public class AbilityController : MonoBehaviour
                 }
                 Debug.Log("Disabled");
                 caster.abilityLimitUsed = caster.abilityNum;
+                
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.AbilityUsed(currentPlayerController.manager.Type, caster.abilityLimitUsed);
+                }
+                else if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.AbilityLimitUsed(currentPlayerController.manager.Type, caster.abilityLimitUsed);
+                }
+
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
                 caster.inRange = false;

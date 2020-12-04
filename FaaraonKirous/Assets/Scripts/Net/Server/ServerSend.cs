@@ -339,6 +339,14 @@ public class ServerSend
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
     }
 
+    public static void AbilityUsed(ObjectType character, int abilityNum)
+    {
+        var packet = new Packet((int)ServerPackets.abilityUsed);
+        packet.Write((short)character);
+        packet.Write(abilityNum);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
+    }
     #endregion
 
     #region Activatable
