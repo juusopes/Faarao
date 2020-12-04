@@ -31,6 +31,16 @@ public class MasterServerManager : MonoBehaviour
         MasterServer.Instance.Start();
     }
 
+    private async void CreateServerObjectAsync(ServerDB server)
+    {
+        await _dbRepository.CreateServer(server);
+    }
+
+    private async void RemoveServerObjectAsync(Guid guid)
+    {
+        await _dbRepository.DeleteServer(guid);
+    }
+
     private DBRepository _dbRepository = new DBRepository();
 
     public Dictionary<int, Guid> ConnectionGuidPairs { get; private set; } = new Dictionary<int, Guid>();
@@ -42,7 +52,8 @@ public class MasterServerManager : MonoBehaviour
         ConnectionGuidPairs.Add(connection, serverObject.Id);
         GuidConnectionPairs.Add(serverObject.Id, connection);
 
-        _dbRepository.CreateServer(serverObject);
+        // Creat to repo
+        CreateServerObjectAsync(serverObject);
     }
 
     public void RemoveServerObject(int connection)
@@ -51,8 +62,8 @@ public class MasterServerManager : MonoBehaviour
         ConnectionGuidPairs.Remove(connection);
         GuidConnectionPairs.Remove(guid);
 
-        // Delete from repository
-        _dbRepository.DeleteServer(guid);
+        // Delete from repo
+        RemoveServerObjectAsync(guid);
     }
 
     //public void PlayerConnected(int connection)

@@ -14,35 +14,34 @@ public class DBRepository
 
     public DBRepository()
     {
-        var mongoClient = new MongoClient("mongodb://localhost:27017?connect=replicaSet");
+        var mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
         var database = mongoClient.GetDatabase("masterserver");
         _serverCollection = database.GetCollection<ServerDB>("servers");
 
         _bsonDocumentCollection = database.GetCollection<BsonDocument>("servers");
-
     }
 
-    public ServerDB[] GetAllServers()
+    public async Task<ServerDB[]> GetAllServers()
     {
-        return _serverCollection.Find(new BsonDocument()).ToList().ToArray();
+        return (await (await _serverCollection.FindAsync(new BsonDocument())).ToListAsync()).ToArray();
     }
 
-    public ServerDB GetServer(Guid id)
+    public async Task<ServerDB> GetServer(Guid id)
     {
         var filter = Builders<ServerDB>.Filter.Eq(s => s.Id, id);
-        return _serverCollection.Find(filter).FirstOrDefault();
+        return await (await _serverCollection.FindAsync(filter)).FirstOrDefaultAsync();
     }
 
-    public ServerDB CreateServer(ServerDB server)
+    public async Task<ServerDB> CreateServer(ServerDB server)
     {
-        _serverCollection.InsertOne(server);
+        await _serverCollection.InsertOneAsync(server);
         return server;
     }
 
-    public ServerDB DeleteServer(Guid id)
+    public async Task<ServerDB> DeleteServer(Guid id)
     {
         var filter = Builders<ServerDB>.Filter.Eq(s => s.Id, id);
-        return _serverCollection.FindOneAndDelete(filter);
+        return await _serverCollection.FindOneAndDeleteAsync(filter);
     }
 
     //public async Task<ServerDB> PlayerConnected(Guid serverId, Guid playerId)

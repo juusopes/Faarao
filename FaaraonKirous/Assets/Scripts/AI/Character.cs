@@ -45,7 +45,7 @@ public class Character : MonoBehaviour
     private float distractionTimer;
 
     [HideInInspector]
-    public Vector3 possessedGoToTarget;
+    public Vector3 possessedGoToTarget = UtilsClass.GetMinVector();
     [HideInInspector]
     public Vector3 currentDistractionPos;
     [HideInInspector]
@@ -189,6 +189,10 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
+
+#if UNITY_EDITOR
+        if (isDebuggingDummy) return;
+#endif
         if (IsDead)
         {
             Die();
@@ -407,6 +411,7 @@ public class Character : MonoBehaviour
 
     public void PossessAI(Vector3 position)
     {
+        Debug.Log("Going to " + position);
         stateMachine.PlayerTakesControl();
         possessedGoToTarget = position;
     }
@@ -601,13 +606,17 @@ public class Character : MonoBehaviour
         if (position == null || navMeshAgent.destination == position || !navMeshAgent.enabled)
             return;
 
-        if (!OnNavMesh.IsCompletelyReachable(transform, position))
-            return;
+        //if (isPosessed) Debug.Log("Pos" + position);
+
+        //if (!OnNavMesh.IsPartiallyReachable(transform, position))
+         //   return;
+
+        //if(isPosessed) Debug.Log("Pos now" + position);
 
         navMeshAgent.destination = position;
         navMeshAgent.isStopped = false;
         navMeshAgent.stoppingDistance = navMeshAgent.isOnOffMeshLink ? 0.05f : classSettings.navStoppingDistance;
-
+        //if (isPosessed) Debug.Log("Pos noweeeee" + navMeshAgent.destination);
     }
 
     public void StopNavigation()
@@ -665,6 +674,8 @@ public class Character : MonoBehaviour
 
     #region Editor stuff
 #if UNITY_EDITOR
+
+    public bool isDebuggingDummy = false;
 
     void OnDrawGizmos()
     {

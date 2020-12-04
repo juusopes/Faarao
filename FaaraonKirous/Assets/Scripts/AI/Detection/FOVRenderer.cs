@@ -152,7 +152,7 @@ public partial class FOVRenderer : MonoBehaviour
 #if UNITY_EDITOR
     private void Update()
     {
-        
+        if (movementDebugger) DebugMoveEnemy();
     }
 #endif
 

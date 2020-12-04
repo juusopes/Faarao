@@ -43,7 +43,7 @@ public class AbilityController : MonoBehaviour
             return;
         //Debug.Log("Overrided pos: " + currentPlayerController.abilityHitPos);
         if (Input.GetKeyDown(KeyCode.Mouse0)
-            && currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 
+            && currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0
             && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
             //Debug.Log("Activated");
@@ -53,11 +53,11 @@ public class AbilityController : MonoBehaviour
         }
         //Debug.Log(levelCtrl.activeCharacter.GetComponent<PlayerController>().inRange);
 
-        if (currentPlayerController.inRange 
+        if (currentPlayerController.inRange
             && abilityActivated
             && currentPlayerController.abilityClicked
             && !currentPlayerController.searchingForSight
-            && (currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 || (currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PharaohAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0) || (!currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PriestAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0)) 
+            && (currentPlayerController.abilityLimits[currentPlayerController.abilityNum] > 0 || (currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PharaohAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0) || (!currentPlayerController.playerOne && levelCtrl.currentCharacter.GetComponent<PriestAbilities>().abilityLimitList[currentPlayerController.abilityNum] == 0))
             && currentPlayerController.abilityCooldowns[currentPlayerController.abilityNum] == 0)
         {
             //Debug.Log("Selecting");
@@ -90,9 +90,14 @@ public class AbilityController : MonoBehaviour
                 RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, abilityLayerMask);
                 //Debug.Log("hit " + hit.point);
 
-                if (RayCaster.HitObject(hit))
+                if (caster.abilityNum == 5)
                 {
-                    UseAbility(hit);
+                    if (RayCaster.HitObject(hit))
+                        UseAbility(hit, hit.point);
+                }
+                else
+                {
+                    UseAbility(hit, currentPlayerController.abilityHitPos);
                 }
             }
 
@@ -103,6 +108,7 @@ public class AbilityController : MonoBehaviour
                 {
                     caster.isInvisible = false;
                 }
+                Debug.Log("Disabled");
                 caster.abilityLimitUsed = caster.abilityNum;
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
@@ -116,6 +122,7 @@ public class AbilityController : MonoBehaviour
             else
             {
                 click++;
+                abilityActivated = false;
             }
         }
         else
@@ -127,7 +134,7 @@ public class AbilityController : MonoBehaviour
         }
     }
 
-    private void UseAbility(RaycastHit hit)
+    private void UseAbility(RaycastHit hit, Vector3 pos)
     {
         //TODO: Lazy ? no : object pooling...
         //Debug.Log(abilityOption);
@@ -139,11 +146,12 @@ public class AbilityController : MonoBehaviour
             if (selectedAI)
             {
                 SoundManager.Instance.PossessSound();
-                PossessEnemy(hit.point);
+                PossessEnemy(pos);
                 DeselectAI();
             }
-            else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
+            else if (hit.collider && hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
             {
+                Debug.Log("Select AI");
                 SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
             }
         }
@@ -153,7 +161,7 @@ public class AbilityController : MonoBehaviour
             {
                 DeselectAI();
             }
-            else if (hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
+            else if (hit.collider && hit.collider.CompareTag(RayCaster.CLICK_SELECTOR_TAG))
             {
                 SelectAI(hit.collider.gameObject.GetComponentInParent<Character>());
             }
@@ -161,45 +169,52 @@ public class AbilityController : MonoBehaviour
         else if (abilityOption == AbilityOption.TestSight)
         {
             DeselectAI();
-            SpawnRemovable(hit.point, abilityOption);
+            SpawnRemovable(pos, abilityOption);
         }
         else if (abilityOption < AbilityOption.NoMoreDistractions)
         {
             DeselectAI();
-            SpawnAutoRemoved(hit.point, abilityOption);
+            SpawnAutoRemoved(pos, abilityOption);
         }
     }
 
     private void SelectAI(Character character)
     {
         selectedAI = character;
-        if (selectedAI != null)
-            selectedAI.selectionIndicator.SetActive(true);
+        //if (selectedAI != null)
+        //    selectedAI.selectionIndicator.SetActive(true);
     }
 
 
     private void DeselectAI()
     {
-        if (selectedAI != null)
-            selectedAI.selectionIndicator.SetActive(false);
+        // if (selectedAI != null)
+        //   selectedAI.selectionIndicator.SetActive(false);
 
         selectedAI = null;
     }
 
     private void PossessEnemy(Vector3 destinationPoint)
     {
-        if (OnNavMesh.IsCompletelyReachable(selectedAI.transform, destinationPoint))
-        {
-            SpawnAutoRemoved(destinationPoint, abilityOption);
-            if (NetworkManager._instance.IsHost)
-                selectedAI.PossessAI(destinationPoint);
-            else if (NetworkManager._instance.ShouldSendToServer)
-                ClientSend.EnemyPossessed(selectedAI.Id, destinationPoint);
-        }
-        else
-        {
-            //TODO: Spawn failed marker
-        }
+        //Debug.Log("TRYING Posess AI" + destinationPoint);
+        //if (!OnNavMesh.IsPartiallyReachable(selectedAI.transform, destinationPoint))
+        //{
+        //     destinationPoint = OnNavMesh.GetClosestPointOnNavmesh(destinationPoint);
+        //}
+        //Debug.Log("Posess AI");
+        // if (!OnNavMesh.IsPartiallyReachable(selectedAI.transform, destinationPoint))
+        // {
+        SpawnAutoRemoved(destinationPoint, abilityOption);
+        if (NetworkManager._instance.IsHost)
+            selectedAI.PossessAI(destinationPoint);
+        else if (NetworkManager._instance.ShouldSendToServer)
+            ClientSend.EnemyPossessed(selectedAI.Id, destinationPoint);
+        // }
+        //}
+        //else
+        //{
+        //TODO: Spawn failed marker
+        //}
     }
 
     private void SpawnAutoRemoved(Vector3 pos, AbilityOption option)
@@ -208,18 +223,18 @@ public class AbilityController : MonoBehaviour
         {
             if (NetworkManager._instance.ShouldSendToServer)
             {
-                ClientSend.AbilityUsed(option, currentPlayerController.abilityHitPos);
+                ClientSend.AbilityUsed(option, pos);
             }
             else if (NetworkManager._instance.ShouldSendToClient)
             {
-                ServerSend.AbilityVisualEffectCreated(option, currentPlayerController.abilityHitPos);
+                ServerSend.AbilityVisualEffectCreated(option, pos);
             }
         }
-        abilitySpawner.SpawnAtPosition(currentPlayerController.abilityHitPos, option);
+        abilitySpawner.SpawnAtPosition(pos, option);
     }
 
     private void SpawnRemovable(Vector3 pos, AbilityOption option)
     {
-        lastSpawnedAbility = abilitySpawner.SpawnAtPosition(currentPlayerController.abilityHitPos, option);
+        lastSpawnedAbility = abilitySpawner.SpawnAtPosition(pos, option);
     }
 }
