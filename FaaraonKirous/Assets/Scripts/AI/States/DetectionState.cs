@@ -16,6 +16,7 @@ public class DetectionState : State
 
     public override void OnStateEnter()
     {
+        FOVManager._instance.EnableGameObject(character);
         searchTimer = 0;
         character.StopNavigation();
     }

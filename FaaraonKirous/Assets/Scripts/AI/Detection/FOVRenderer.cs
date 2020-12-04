@@ -47,7 +47,8 @@ public partial class FOVRenderer : MonoBehaviour
     int vertexIndex = 1;
     int triangleIndex = 0;
     SampleType lastSampleType = 0;
-    int yIteration, xIteration, vertexPair, island, lastUsed;
+    int yIteration, xIteration, vertexPair, island;
+    int lastUsed = 0;
 
     //Tweakable values
     public AnimationCurve xIterationCurve;
