@@ -108,7 +108,7 @@ public class AbilityController : MonoBehaviour
                 {
                     caster.isInvisible = false;
                 }
-                //Debug.Log("Disabled");
+                Debug.Log("Disabled");
                 caster.abilityLimitUsed = caster.abilityNum;
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
@@ -122,7 +122,10 @@ public class AbilityController : MonoBehaviour
             else
             {
                 click++;
-                abilityActivated = false;
+                if (caster.abilityNum != 1)
+                {
+                    abilityActivated = false;
+                }
             }
         }
         else
