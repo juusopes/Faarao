@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 using ParrelSync;
-using System;
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
