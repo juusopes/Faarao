@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 7580911765592269778}
   - component: {fileID: 1874013125250795940}
   - component: {fileID: 2121519826743185656}
+  - component: {fileID: 7684762389502090128}
   m_Layer: 2
   m_Name: Objective5
   m_TagString: Untagged
@@ -245,11 +246,11 @@ MonoBehaviour:
   objNum: 5
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 0}
-  activated2: {fileID: 0}
-  activated3: {fileID: 0}
-  activated4: {fileID: 0}
-  activated5: {fileID: 0}
+  activated: {fileID: 102830837978010838}
+  activated2: {fileID: 102830837978010838}
+  activated3: {fileID: 102830837978010838}
+  activated4: {fileID: 102830837978010838}
+  activated5: {fileID: 102830837978010838}
   objectiveActivated: 0
 --- !u!114 &2121519826743185656
 MonoBehaviour:
@@ -266,6 +267,20 @@ MonoBehaviour:
   _list: 5
   _type: 7
   _id: 0
+--- !u!114 &7684762389502090128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4897397586411370665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFX: {fileID: 0}
+  activated: 0
 --- !u!95 &2947799333307010892
 Animator:
   serializedVersion: 3
@@ -9979,6 +9994,7 @@ GameObject:
   - component: {fileID: 8487983796017585805}
   - component: {fileID: 8487983796017585794}
   - component: {fileID: 8337839600671913698}
+  - component: {fileID: 102830837978010838}
   m_Layer: 2
   m_Name: Objective1
   m_TagString: Untagged
@@ -10098,11 +10114,11 @@ MonoBehaviour:
   objNum: 1
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 0}
-  activated2: {fileID: 0}
-  activated3: {fileID: 0}
-  activated4: {fileID: 0}
-  activated5: {fileID: 0}
+  activated: {fileID: 102830837978010838}
+  activated2: {fileID: 102830837978010838}
+  activated3: {fileID: 102830837978010838}
+  activated4: {fileID: 102830837978010838}
+  activated5: {fileID: 102830837978010838}
   objectiveActivated: 0
 --- !u!114 &8337839600671913698
 MonoBehaviour:
@@ -10119,6 +10135,20 @@ MonoBehaviour:
   _list: 5
   _type: 7
   _id: 0
+--- !u!114 &102830837978010838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487983796017585792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFX: {fileID: 0}
+  activated: 0
 --- !u!1 &8487983796034150739
 GameObject:
   m_ObjectHideFlags: 0
@@ -10134,6 +10164,7 @@ GameObject:
   - component: {fileID: 8487983796034150738}
   - component: {fileID: 8487983796034150745}
   - component: {fileID: 8805320722124870837}
+  - component: {fileID: 6048682004269817903}
   m_Layer: 2
   m_Name: EndPoint
   m_TagString: Untagged
@@ -10252,11 +10283,11 @@ MonoBehaviour:
   objNum: 0
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 0}
-  activated2: {fileID: 0}
-  activated3: {fileID: 0}
-  activated4: {fileID: 0}
-  activated5: {fileID: 0}
+  activated: {fileID: 102830837978010838}
+  activated2: {fileID: 102830837978010838}
+  activated3: {fileID: 102830837978010838}
+  activated4: {fileID: 102830837978010838}
+  activated5: {fileID: 102830837978010838}
   objectiveActivated: 0
 --- !u!114 &8805320722124870837
 MonoBehaviour:
@@ -10273,6 +10304,20 @@ MonoBehaviour:
   _list: 5
   _type: 7
   _id: 0
+--- !u!114 &6048682004269817903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487983796034150739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFX: {fileID: 0}
+  activated: 0
 --- !u!1 &8487983796110470532
 GameObject:
   m_ObjectHideFlags: 0
@@ -15100,6 +15145,7 @@ GameObject:
   - component: {fileID: 8487983796543155869}
   - component: {fileID: 8487983796543155864}
   - component: {fileID: 119591857900547441}
+  - component: {fileID: 9218578294826494926}
   m_Layer: 2
   m_Name: Objective2
   m_TagString: Untagged
@@ -15219,11 +15265,11 @@ MonoBehaviour:
   objNum: 2
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 0}
-  activated2: {fileID: 0}
-  activated3: {fileID: 0}
-  activated4: {fileID: 0}
-  activated5: {fileID: 0}
+  activated: {fileID: 102830837978010838}
+  activated2: {fileID: 102830837978010838}
+  activated3: {fileID: 102830837978010838}
+  activated4: {fileID: 102830837978010838}
+  activated5: {fileID: 102830837978010838}
   objectiveActivated: 0
 --- !u!114 &119591857900547441
 MonoBehaviour:
@@ -15240,6 +15286,20 @@ MonoBehaviour:
   _list: 5
   _type: 7
   _id: 0
+--- !u!114 &9218578294826494926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487983796543155859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFX: {fileID: 0}
+  activated: 0
 --- !u!1 &8487983796546669078
 GameObject:
   m_ObjectHideFlags: 0
@@ -29775,6 +29835,7 @@ GameObject:
   - component: {fileID: 8487983797928614291}
   - component: {fileID: 8487983797928614303}
   - component: {fileID: 5303619546539536601}
+  - component: {fileID: 2225971154827677654}
   m_Layer: 2
   m_Name: Objective3
   m_TagString: Untagged
@@ -29894,11 +29955,11 @@ MonoBehaviour:
   objNum: 3
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 0}
-  activated2: {fileID: 0}
-  activated3: {fileID: 0}
-  activated4: {fileID: 0}
-  activated5: {fileID: 0}
+  activated: {fileID: 102830837978010838}
+  activated2: {fileID: 102830837978010838}
+  activated3: {fileID: 102830837978010838}
+  activated4: {fileID: 102830837978010838}
+  activated5: {fileID: 102830837978010838}
   objectiveActivated: 0
 --- !u!114 &5303619546539536601
 MonoBehaviour:
@@ -29915,6 +29976,20 @@ MonoBehaviour:
   _list: 5
   _type: 7
   _id: 0
+--- !u!114 &2225971154827677654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487983797928614294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFX: {fileID: 0}
+  activated: 0
 --- !u!1 &8524011809994692202
 GameObject:
   m_ObjectHideFlags: 0
@@ -29930,6 +30005,7 @@ GameObject:
   - component: {fileID: 3814494988881576382}
   - component: {fileID: 639837990455357998}
   - component: {fileID: 1326213778951916706}
+  - component: {fileID: 3738874598596884234}
   m_Layer: 2
   m_Name: Objective4
   m_TagString: Untagged
@@ -30049,11 +30125,11 @@ MonoBehaviour:
   objNum: 4
   objectiveDoneMark: {fileID: 0}
   rewards: {fileID: 0}
-  activated: {fileID: 0}
-  activated2: {fileID: 0}
-  activated3: {fileID: 0}
-  activated4: {fileID: 0}
-  activated5: {fileID: 0}
+  activated: {fileID: 102830837978010838}
+  activated2: {fileID: 102830837978010838}
+  activated3: {fileID: 102830837978010838}
+  activated4: {fileID: 102830837978010838}
+  activated5: {fileID: 102830837978010838}
   objectiveActivated: 0
 --- !u!114 &1326213778951916706
 MonoBehaviour:
@@ -30070,6 +30146,20 @@ MonoBehaviour:
   _list: 5
   _type: 7
   _id: 0
+--- !u!114 &3738874598596884234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524011809994692202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53dfa97014a0944fbd1370fcb61c4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFX: {fileID: 0}
+  activated: 0
 --- !u!1001 &376205088466104478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30422,14 +30512,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
---- !u!4 &754900531567570443 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
-  m_PrefabInstance: {fileID: 1671293782928959406}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &86169431489049777 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1586254924275667743, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
+  m_PrefabInstance: {fileID: 1671293782928959406}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &754900531567570443 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2110027545806768549, guid: c9e4d24762fbe6e45a76f90b22acc37a, type: 3}
   m_PrefabInstance: {fileID: 1671293782928959406}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3361221422952083345
