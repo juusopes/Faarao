@@ -579,7 +579,6 @@ public class PlayerController : MonoBehaviour
                         target = lC.targetObject;
                         if (target.tag == "Player")
                         {
-                            SoundManager.Instance.ResurrectSound();
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
                             useRespawn = true;
