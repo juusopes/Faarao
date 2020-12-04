@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
     private GameObject target;
     [HideInInspector]
     public bool useAttack;
+    private GameObject attackTarget;
 
     //Respawn
     [HideInInspector]
@@ -520,7 +521,7 @@ public class PlayerController : MonoBehaviour
                 //    useAttack = false;
                 //    abilityNum = 0;
                 //}
-                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
                 {
                     if (lC.targetObject != null)
                     {
@@ -529,6 +530,7 @@ public class PlayerController : MonoBehaviour
                         {
                             soundFX.AttackSound();
 
+                            attackTarget = target;
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
                             useAttack = true;
@@ -540,6 +542,16 @@ public class PlayerController : MonoBehaviour
                             groundInd.transform.position = tempV3;
                         }
                     }
+                }
+                if (attackTarget != null)
+                {
+                    targetV3 = attackTarget.transform.position;
+                    SetDestination(targetV3);
+
+                    groundInd.SetActive(true);
+                    Vector3 tempV3 = target.transform.position;
+                    tempV3.y = targetV3.y + 0.2f;
+                    groundInd.transform.position = tempV3;
                 }
                 if (targetEnemy != null)
                 {
@@ -562,6 +574,7 @@ public class PlayerController : MonoBehaviour
                         target = null;
                         useAttack = false;
                         abilityNum = 0;
+                        attackTarget = null;
                         Stay();
                     }
                 }
