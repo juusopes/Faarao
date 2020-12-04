@@ -99,7 +99,7 @@ public partial class FOVRenderer
         Vector3 closestOnCollider = GetClosestPointOnCollider(raycastHit, sample);
         if(closestOnCollider == Vector3.zero)
         {
-            Debug.Log("Warning did not find closest point!");
+            //Debug.Log("Warning did not find closest point!");
             return Vector3.zero;
         }
         //ACylinder(closestOnCollider, Color.blue);
