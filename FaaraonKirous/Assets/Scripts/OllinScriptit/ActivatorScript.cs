@@ -6,6 +6,7 @@ using UnityEngine;
 public class ActivatorScript : MonoBehaviour
 {
     private ActivatableObjectManager _objectManager;
+    public SoundManager soundFX;
 
     public void Awake()
     {
@@ -16,6 +17,7 @@ public class ActivatorScript : MonoBehaviour
     public bool activated;
     public void Activate()
     {
+        soundFX.ClickSound();
         if (activated)
         {
             activated = false;

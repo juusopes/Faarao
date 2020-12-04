@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
     public float[] abilityCooldowns;
 
     public UnitInteractions unitInteractions;
+    public SoundManager soundFX;
 
     private void Awake()
     {
@@ -459,7 +460,7 @@ public class PlayerController : MonoBehaviour
                                 SetDestination(targetV3);
 
                                 groundInd.SetActive(true);
-                                Vector3 tempV3 = targetV3;
+                                Vector3 tempV3 = target.transform.position;
                                 tempV3.y = targetV3.y + 0.2f;
                                 groundInd.transform.position = tempV3;
                             }
@@ -515,13 +516,15 @@ public class PlayerController : MonoBehaviour
                         target = lC.targetObject;
                         if (target.tag == "Enemy")
                         {
+                            soundFX.AttackSound();
+
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
                             useAttack = true;
                             abilityActive = false;
 
                             groundInd.SetActive(true);
-                            Vector3 tempV3 = targetV3;
+                            Vector3 tempV3 = target.transform.position; 
                             tempV3.y = targetV3.y + 0.2f;
                             groundInd.transform.position = tempV3;
                         }
@@ -576,13 +579,14 @@ public class PlayerController : MonoBehaviour
                         target = lC.targetObject;
                         if (target.tag == "Player")
                         {
+                            soundFX.ResurrectSound();
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
                             useRespawn = true;
                             abilityActive = false;
 
                             groundInd.SetActive(true);
-                            Vector3 tempV3 = targetV3;
+                            Vector3 tempV3 = target.transform.position; 
                             tempV3.y = targetV3.y + 0.2f;
                             groundInd.transform.position = tempV3;
                         }
@@ -788,7 +792,7 @@ public class PlayerController : MonoBehaviour
         {
             UseAbility(4);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             UseAbility(5);
         }
