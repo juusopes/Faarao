@@ -7,6 +7,7 @@ public class MouseClickScript : MonoBehaviour
     public GameObject mouseEffect;
     private GameObject instantiatedMouseClick;
     private float mouseClickTimer = 0;
+    public float effectVisibilityTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,20 +32,22 @@ public class MouseClickScript : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
         {
             mouseEffect.SetActive(false);
-            mouseClickTimer = 2.2f;
-            instantiatedMouseClick.transform.position = hit.point;
+            mouseClickTimer = effectVisibilityTime;
+            Vector3 position = hit.point;
+            position.y = hit.point.y + 0.2f;
+            instantiatedMouseClick.transform.position = position;
         }
     }
 
     private void ClickEffectTime()
     {
-        if (mouseClickTimer > 5)
+        if (mouseClickTimer > 0)
         {
             instantiatedMouseClick.SetActive(true);
             mouseClickTimer -= Time.deltaTime;
         } else
         {
-            mouseClickTimer = 5;
+            mouseClickTimer = 0;
             instantiatedMouseClick.SetActive(false);
         }
     }

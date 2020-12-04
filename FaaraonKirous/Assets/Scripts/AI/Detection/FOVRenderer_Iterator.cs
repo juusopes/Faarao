@@ -39,7 +39,7 @@ public partial class FOVRenderer
 
         for (xIteration = 0; xIteration < xRayCount; xIteration++)
         {
-            xAngleSampled = X_FOV / 2 * xIterationCurve.Evaluate((float)xIteration / (xRayCount - 1));
+            xAngleSampled = GetAngleFromCurve(xIteration);
 
             if (xAngleSampled < maxXAngle)       //Negatives are up angle
                 return;
@@ -54,16 +54,18 @@ public partial class FOVRenderer
 
             RaycastHit raycastHit;
             RaycastHit previousRayCastHit;
+            RaycastHit secondPreviousRayCastHit;
 
             //if(x > 0)
             previousRayCastHit = xIteration > 0 ? lastColumnSampleRays[xIteration - 1] : new RaycastHit();
+            secondPreviousRayCastHit = xIteration > 1 ? lastColumnSampleRays[xIteration - 2] : new RaycastHit();
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
 
 
             //if (!hasResampled)
             //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSampled, yGlobalAngleIn, raycastHit, ref yAngleSampled, ref sample);
 
-            Vector3 reSampleXCorner = InspectSample(false, xIteration, yAngleSampled, xAngleSampled, previousSample, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
+            Vector3 reSampleXCorner = InspectSample(false, xIteration, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, sample, lastTrueRayCastHit, secondPreviousRayCastHit, previousRayCastHit, raycastHit);
 
 #if UNITY_EDITOR
             reSampleXCorner = disableReSampling ? Vector3.zero : reSampleXCorner;
@@ -124,9 +126,10 @@ public partial class FOVRenderer
 
     private bool ShouldQuitXIteration(float xAngleSampled, RaycastHit previousRayCastHit, RaycastHit raycastHit)
     {
-        if (previousRayCastHit.collider && raycastHit.collider == null)
-            if (previousRayCastHit.collider.CompareTag("HighestObject"))
-                return true;
+        // if (previousRayCastHit.collider && raycastHit.collider == null)
+        // if (previousRayCastHit.collider.CompareTag("HighestObject"))
+        if (previousRayCastHit.collider && previousRayCastHit.collider.CompareTag("HighestObject"))
+            return true;
 
         //If the first two upsamples have no hit, just give up iteration
         if (xAngleSampled < -5 && raycastHit.collider == null && previousRayCastHit.collider == null)
@@ -135,17 +138,17 @@ public partial class FOVRenderer
         return false;
     }
 
-    private Vector3 InspectSample(bool isResample, int x, float yAngleSampled, float xAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit previousRayCastHit, RaycastHit raycastHit)
+    private Vector3 InspectSample(bool isResample, int x, float yAngleSampled, float xAngleSampled, Vector3 secondPreviousSample, Vector3 previousSample, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit secondPreviousRayCastHit, RaycastHit previousRayCastHit, RaycastHit raycastHit)
     {
         Vector3 reSampleXCorner = Vector3.zero;
         switch (GetVerticalDirection(xAngleSampled))
         {
             case Looking.Down:
-                reSampleXCorner = InspectDownSample(isResample, x, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
+                reSampleXCorner = InspectDownSample(isResample, x, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, sample, secondPreviousRayCastHit, previousRayCastHit, raycastHit);
                 break;
             case Looking.ZeroAngle:
                 InspectFlatSample(yAngleSampled, xAngleSampled, previousSample, sample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
-                reSampleXCorner = InspectDownSample(isResample, x, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
+                reSampleXCorner = InspectDownSample(isResample, x, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, sample, secondPreviousRayCastHit, previousRayCastHit, raycastHit);
                 break;
             case Looking.Up:
                 InspectUpSample(yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit, raycastHit);
@@ -155,7 +158,7 @@ public partial class FOVRenderer
     }
 
 
-    private Vector3 InspectDownSample(bool isResampleX, int x, float yAngleSampled, float xAngleSampled, Vector3 previousSample, Vector3 sample, RaycastHit previousRayCastHit, RaycastHit raycastHit)
+    private Vector3 InspectDownSample(bool isResampleX, int x, float yAngleSampled, float xAngleSampled, Vector3 secondPreviousSample, Vector3 previousSample, Vector3 sample, RaycastHit secondPreviousRayCastHit, RaycastHit previousRayCastHit, RaycastHit raycastHit)
     {
         // if (!AreVerticallyAligned(previousSample, sample))        //Ignore any hits that are above previous
         //{
@@ -184,7 +187,7 @@ public partial class FOVRenderer
 #endif
 
                 //TryCreateFloorToDownFloorVertex(previousRayCastHit, previousSample, sample, xAngleSampled, yAngleSampled);
-                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
+                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, GetAngleFromCurve(xIteration - 1), previousSample, sample, previousRayCastHit);
             }
             TryCreateFloorVertex(raycastHit, sample);
 
@@ -209,22 +212,30 @@ public partial class FOVRenderer
 #endif
             TryCreateWallToFloorCornerVertex(previousSample, sample);
 
-            if (!AreHittingSameCollider(previousRayCastHit, raycastHit) && !AreSimilarHeight(LastAddedVertex, sample))
-                TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //When going up from floor to wall
-        else if (IsFloorToWall(previousRayCastHit, raycastHit)) // &&IsClearlyHigher(previousSample, sample))
+        else if (IsFloorToWall(secondPreviousRayCastHit, previousRayCastHit) && !AreSimilarHeight(secondPreviousSample, sample)) // &&IsClearlyHigher(previousSample, sample))
         {
 #if UNITY_EDITOR
             if (debuggingLogging) Debug.Log("<b><color=orange>Floor to wall calculation</color></b>");
 #endif
             //Todo: consider back tracking
-            if (!TryCreateFloorToWallCornerVertex(yAngleSampled, previousSample, sample))
+            if (!TryCreateFloorToWallCornerVertex(yAngleSampled, secondPreviousSample, previousSample))
             {
                 //Debug.Log("Nope");
-                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
+                reSampleXCorner = TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, secondPreviousRayCastHit);
             }
+        }
+        //When going forward from wall to floor
+        else if (IsWallToFloor(previousRayCastHit, raycastHit) && !AreSimilarHeight(secondPreviousSample, sample))
+        {
+#if UNITY_EDITOR
+            if (debuggingLogging) Debug.Log("<b><color=white>Wall to floor calculation</color></b>");
+#endif
+            TryCreateWallToFloorCornerVertex(previousSample, sample);
 
+            if (!AreHittingSameCollider(previousRayCastHit, raycastHit) && !AreSimilarHeight(LastAddedVertex, sample))
+                TryCreateLedgeVertices(lastSampleType, false, yAngleSampled, xAngleSampled, previousSample, sample, previousRayCastHit);
         }
         //Hit two walls that are clearly not same wall
         else if (IsWallToWall(previousRayCastHit, raycastHit) && IsClearlyLonger(previousSample, sample))

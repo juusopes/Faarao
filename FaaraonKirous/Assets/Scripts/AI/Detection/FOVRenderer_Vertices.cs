@@ -79,7 +79,7 @@ public partial class FOVRenderer
             //Debug.Log(ledgeStartSample + " " + closestCorner);
             if (closestCorner == Vector3.zero)
             {
-                Debug.LogError("Closest corner is zero");
+                //Debug.LogError("Closest corner is zero");
                 return Vector3.zero;
             }
         }
@@ -104,8 +104,8 @@ public partial class FOVRenderer
             AddVertexPoint(ledgeEnd, sampleType);
             return ledgeEnd;
         }
-        else
-           Debug.Log("Nope could not understand ledges! ");
+        //else
+        //   Debug.Log("Nope could not understand ledges! ");
         return Vector3.zero;
     }
 
@@ -147,7 +147,7 @@ public partial class FOVRenderer
             Vector3 reTry = GetClosestPointOnCollider(ledgeStartRayCastHit, approximateCorner);
             if(reTry == Vector3.zero)
             {
-                Debug.Log("Corner failed " + approximateCorner.y + " " + previousSample.y + " " + range);
+                //Debug.Log("Corner failed " + approximateCorner.y + " " + previousSample.y + " " + range);
                 return Vector3.zero;
             }
 
@@ -187,7 +187,7 @@ public partial class FOVRenderer
         //ACylinder(closestOnCollider);
         if (closestOnCollider == Vector3.zero)
         {
-            Debug.LogWarning("Could not get closest on collider");
+            //Debug.LogWarning("Could not get closest on collider");
             return Vector3.zero;
         }
 

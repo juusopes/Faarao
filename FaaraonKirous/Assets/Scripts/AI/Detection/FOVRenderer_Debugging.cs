@@ -79,6 +79,11 @@ public partial class FOVRenderer
 
         timeTester = new DeltaTimeTester();
         TestMaxIterations();
+        if (movementDebugger)
+        {
+            character.isDebuggingDummy = true;
+            navMeshAgent = GetComponentInParent<UnityEngine.AI.NavMeshAgent>();
+        }
     }
 
     private void TestMaxIterations()
@@ -88,8 +93,23 @@ public partial class FOVRenderer
             float angle = X_FOV / 2 * xIterationCurve.Evaluate((float)i / (xRayCount - 1));
             if (angle < maxXAngle)       //Negatives are up angle{
             {
-                Debug.Log("True maximum x iterations: " + i + " at angle: " + angle + " Total max iterations: " + (i * yRayCount));
+                //Debug.Log("True maximum x iterations: " + i + " at angle: " + angle + " Total max iterations: " + (i * yRayCount));
                 return;
+            }
+        }
+    }
+
+    private void DebugMoveEnemy()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.clickSpawnerLayerMask);
+            //Debug.Log("hit " + hit.point);
+
+            if (RayCaster.HitObject(hit))
+            {
+                navMeshAgent.SetDestination(hit.point);
+                //Debug.Log("MOi");
             }
         }
     }

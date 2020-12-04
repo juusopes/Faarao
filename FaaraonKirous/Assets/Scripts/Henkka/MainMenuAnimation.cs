@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenuAnimation : MonoBehaviour
 {
@@ -21,8 +22,11 @@ public class MainMenuAnimation : MonoBehaviour
     private float hieroglyphSaturation = 0.4f;
     private float lightAnimationSpeed = 0.09f;
     private float hieroglyphAnimationSpeed = 0.11f;
+    private float menuTitleSpeed = 0.035f;
+    private float titleOpacity = 1.0f;
 
 
+    public RawImage title;
     public GameObject start;
     public GameObject mid;
     public GameObject end;
@@ -46,8 +50,10 @@ public class MainMenuAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        title.material.SetFloat(OPACITY, titleOpacity);
         fakeLight.material.SetFloat(OPACITY, lightOpacity);
         hieroglyphs.material.SetFloat(SATURATION, hieroglyphSaturation);
+
     }
 
     public IEnumerator LightAnimation()
@@ -74,7 +80,7 @@ public class MainMenuAnimation : MonoBehaviour
             StartCoroutine(GoonMovement(goon, 6.0f));
             yield return new WaitForSeconds(3f);
             fallingDust.Play();
-            yield return StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] { 0.4f, 1f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f }, 0.05f / hieroglyphAnimationSpeed));
+            yield return StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] { 0.5f, 1f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f, 0.6f, 1.2f }, 0.05f / hieroglyphAnimationSpeed));
             yield return new WaitForSeconds(0.2f);
             StartCoroutine(ScaleOverSeconds(ghost, new Vector3(30f, 30f, 30f), 6.0f));
             yield return new WaitForSeconds(5f);
@@ -82,13 +88,17 @@ public class MainMenuAnimation : MonoBehaviour
             yield return StartCoroutine(GoonThrow(goon, 1.5f));
             //StartCoroutine(HieroGlyphAnimation());
 
-            yield return new WaitForSeconds(3f);
-
-            StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] {1.2f, 0.4f }, 0.05f / hieroglyphAnimationSpeed));
+            yield return new WaitForSeconds(2f);
             fallingDust.Stop();
             yield return new WaitForSeconds(1f);
+            StartCoroutine(AssignFloat(value => titleOpacity = value, new float[] {1f, 0.1f }, 0.05f / menuTitleSpeed));
+            StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] {1.2f, 0.5f }, 0.05f / hieroglyphAnimationSpeed));
+
+            yield return new WaitForSeconds(1f);
             ResetValues();
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(3f);
+            StartCoroutine(AssignFloat(value => titleOpacity = value, new float[] { 0.1f, 1f }, 0.05f / menuTitleSpeed));
+            yield return new WaitForSeconds(10f);
         }
     }
 
@@ -96,7 +106,7 @@ public class MainMenuAnimation : MonoBehaviour
     {
         blood.SetActive(false);
         lightOpacity = 0.98f;
-        hieroglyphSaturation = 0.4f;
+        hieroglyphSaturation = 0.5f;
         lightAnimationSpeed = 0.09f;
         hieroglyphAnimationSpeed = 0.11f;
     }
