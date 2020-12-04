@@ -90,9 +90,10 @@ public class AbilityController : MonoBehaviour
                 RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, abilityLayerMask);
                 //Debug.Log("hit " + hit.point);
 
-                if (caster.abilityNum == 5 && RayCaster.HitObject(hit))
+                if (caster.abilityNum == 5)
                 {
-                    UseAbility(hit, hit.point);
+                    if (RayCaster.HitObject(hit))
+                        UseAbility(hit, hit.point);
                 }
                 else
                 {
