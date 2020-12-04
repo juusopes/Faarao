@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DontDestroyCanvas : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class DontDestroyCanvas : MonoBehaviour
     private LoadUIManager _loadUiManager;
     private SaveUIManager _saveUiManager;
     private HostUIManager _hostUiManager;
+
+    public GameObject loadingScreen;
+    public Slider loadingScreenSlider;
 
     private void Awake()
     {
@@ -31,11 +35,16 @@ public class DontDestroyCanvas : MonoBehaviour
 
     public bool IsOpen()
     {
-        if (_loadUiManager.IsOpen() || _saveUiManager.IsOpen() || _hostUiManager.IsOpen())
+        if (_loadUiManager.IsOpen() || _saveUiManager.IsOpen() || _hostUiManager.IsOpen() || IsOpenLoadingScreen())
         {
             return true;
         }
 
         return false;
+    }
+
+    public bool IsOpenLoadingScreen()
+    {
+        return loadingScreen.activeInHierarchy;
     }
 }
