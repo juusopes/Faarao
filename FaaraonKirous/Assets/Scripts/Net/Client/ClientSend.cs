@@ -6,11 +6,14 @@ public class ClientSend
 {
 
     #region Core
-    public static void ConnectionRequest()
+    public static void ConnectionRequest(string playerName, string password)
     {
         Debug.Log("Sending request");
 
         var packet = new Packet((int)ClientPackets.connectionRequest);
+        packet.Write(playerName);
+        packet.Write(password);
+
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
 

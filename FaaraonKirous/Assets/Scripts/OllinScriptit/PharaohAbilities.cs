@@ -73,7 +73,7 @@ public class PharaohAbilities : MonoBehaviour
                         if (target.tag == "Player")
                         {
                             invisibilityTarget = target;
-                            soundFX.InvisibilitySound();
+                            SoundManager.Instance.InvisibilitySound();
                         } else
                         {
                             invisibilityTarget = null;

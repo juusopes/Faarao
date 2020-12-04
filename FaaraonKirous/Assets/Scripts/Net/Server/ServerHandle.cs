@@ -10,8 +10,17 @@ public class ServerHandle
     {
         Debug.Log($"{GameManager._instance.Players.Count} Join request received!");
 
+        string name = packet.ReadString();
+        string password = packet.ReadString();
+
+        // Check password
+        if (!password.Equals(Server.Instance.Password))
+        {
+            Server.Instance.DisconnectClient(connection);
+        }
+
         Server.Instance.SetConnectionFlags(connection, ConnectionState.Connected);
-        GameManager._instance.PlayerConnected(connection, "placeholder");
+        GameManager._instance.PlayerConnected(connection, name);
         
         // Send connection accepted message
         ServerSend.ConnectionAccepted(connection);

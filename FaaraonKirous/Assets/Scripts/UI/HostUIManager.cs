@@ -53,7 +53,7 @@ public class HostUIManager : MonoBehaviour
         string password = _sessionPassword.text;
 
         // TODO: Provide session name and password to host server
-        if (NetworkManager._instance.HostServer())
+        if (NetworkManager._instance.HostServer(sessionName, password))
         {
             CloseInGameMenu();
         }

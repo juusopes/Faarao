@@ -15,6 +15,8 @@ public class PreIndexer : MonoBehaviour
     [SerializeField]
     private ActivatableObjectManager[] activatableObjects;
     [SerializeField]
+    private ObjectiveObjectManager[] objectiveObjects;
+    [SerializeField]
     private WaypointGroupManager[] waypointGroups;
     [SerializeField]
     private EnemyObjectManager[] enemies;
@@ -70,6 +72,14 @@ public class PreIndexer : MonoBehaviour
         {
             enemies[i].Id = i;
             EditorUtility.SetDirty(enemies[i]);
+        }
+
+        // Preindex objectives
+        objectiveObjects = FindObjectsOfType<ObjectiveObjectManager>();
+        for (int i = 0; i < objectiveObjects.Length; ++i)
+        {
+            objectiveObjects[i].Id = i;
+            EditorUtility.SetDirty(objectiveObjects[i]);
         }
 
         Debug.Log("Preindexed");

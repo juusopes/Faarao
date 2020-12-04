@@ -68,13 +68,13 @@ public class MultiplayerUIManager : MonoBehaviour
         }
     }
 
-    public void Host()
-    {
-        if (NetworkManager._instance.HostServer())
-        {
-            _multiplayerMenu.SetActive(false);
-        }
+    //public void Host()
+    //{
+    //    if (NetworkManager._instance.HostServer())
+    //    {
+    //        _multiplayerMenu.SetActive(false);
+    //    }
 
-        GameManager._instance.LoadScene(1);
-    }
+    //    GameManager._instance.LoadScene(1);
+    //}
 }

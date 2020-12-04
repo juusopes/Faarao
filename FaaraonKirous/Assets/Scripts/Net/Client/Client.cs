@@ -21,7 +21,7 @@ public sealed class Client : NetworkHandler
     }
     public Connection Connection { get; private set; }
 
-    public void ConnectToServer(IPEndPoint endPoint)
+    public void ConnectToServer(IPEndPoint endPoint, string name, string password)
     {
         Debug.Log("ConnectToServer");
 
@@ -33,7 +33,7 @@ public sealed class Client : NetworkHandler
 
         BeginReceive();
 
-        ClientSend.ConnectionRequest();
+        ClientSend.ConnectionRequest(name, password);
     }
 
     public override void ConnectionTimeout(int connection)

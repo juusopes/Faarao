@@ -54,6 +54,20 @@ public enum ClientPackets
     warp
 }
 
+
+public enum MasterClientPackets
+{
+    connectionRequest = 1,
+    disconnecting,
+    heartbeatResponse
+}
+
+public enum MasterServerPackets
+{
+    connectionAccepted = 1,
+    heartbeat
+}
+
 public delegate void PacketHandler(int connection, Packet packet);
 
 public class Packet : IDisposable
