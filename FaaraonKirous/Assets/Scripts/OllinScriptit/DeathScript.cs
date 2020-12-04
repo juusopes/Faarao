@@ -66,11 +66,11 @@ public class DeathScript : MonoBehaviour
 
         if(gameObject.CompareTag("Player"))
         {
-            soundFX.PlayerDeathSound();
+            SoundManager.Instance.PlayerDeathSound();
         }
         else
         {
-            soundFX.DeathSound();
+            SoundManager.Instance.DeathSound();
         }
 
         //if (doMessage && CharacterNetManager.List == ObjectList.player)

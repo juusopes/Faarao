@@ -138,7 +138,7 @@ public class AbilityController : MonoBehaviour
         {
             if (selectedAI)
             {
-                soundFX.PossessSound();
+                SoundManager.Instance.PossessSound();
                 PossessEnemy(hit.point);
                 DeselectAI();
             }

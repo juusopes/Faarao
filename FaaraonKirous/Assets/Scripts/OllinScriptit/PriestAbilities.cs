@@ -149,7 +149,7 @@ public class PriestAbilities : MonoBehaviour
                     if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                     {
                         warpPosition = hit.point;
-                        soundFX.WarpSound();
+                        SoundManager.Instance.WarpSound();
                     } else
                     {
                         warpSpellActive = false;

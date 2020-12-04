@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectiveObjectManager : ActivatableObjectManager
+public class ObjectiveObjectManager : ObjectManager
 {
+    protected override void Awake()
+    {
+        IsPreIndexed = true;
+        base.Awake();
+    }
+
     public override void SendSync(Packet packet)
     {
         base.SendSync(packet);
