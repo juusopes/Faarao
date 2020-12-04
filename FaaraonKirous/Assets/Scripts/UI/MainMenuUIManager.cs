@@ -91,4 +91,13 @@ public class MainMenuUIManager : MonoBehaviour
 
         NetworkManager._instance.AttemptHandshake(guid, endpoint, password);
     }
+
+    public void StartLevel(int index)
+    {
+        if (NetworkManager._instance.IsHost)
+        {
+            GameManager._instance.LoadLevel(index);
+        }
+    }
+
 }
