@@ -102,8 +102,8 @@ public class NetworkManager : MonoBehaviour
     {
         Debug.Log("Attempting handshake");
 
-        ClientSend.HandshakeRequest(guid);
         JoinServer(endPoint, password);
+        ClientSend.HandshakeRequest(guid);
     }
 
     public bool JoinServer(IPEndPoint endPoint = null, string password = null)
