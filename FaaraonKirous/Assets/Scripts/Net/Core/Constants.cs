@@ -15,7 +15,7 @@ public class Constants
     public const int maxSequenceNumber = 10000;
     public const float timeout = 1f;
     public const int updateFrequency = 10;  // ms
-    public const int heartbeatFrequency = 1000;  // ms
+    public const int heartbeatFrequency = 10000;  // ms
     public const int defaultConnectionId = 0;
     public const int serverConnectionId = defaultConnectionId;
     public const int noId = -1;
@@ -43,4 +43,6 @@ public class Constants
     public const int maxServers = 512;
     public const string masterServerDNS = "faaraonkirous.ddns.net";
     public const float masterServerHeartbeatFrequency = 10f;
+    public const int masterServerId = masterServerPort;
+
 }
