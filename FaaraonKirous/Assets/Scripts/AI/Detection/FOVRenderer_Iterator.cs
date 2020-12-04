@@ -65,12 +65,12 @@ public partial class FOVRenderer
             //if (!hasResampled)
             //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSampled, yGlobalAngleIn, raycastHit, ref yAngleSampled, ref sample);
 
-            //if (raycastHit.collider != null && (raycastHit.collider.gameObject.CompareTag("Stairs") || raycastHit.collider.gameObject.CompareTag("Terrain")))
-           // {
-            //    InspectConcaveSample(sample, raycastHit);
-            //}
-           // else
-            //{
+            if (raycastHit.collider != null && (raycastHit.collider.gameObject.CompareTag("Stairs") || raycastHit.collider.gameObject.CompareTag("Terrain")))
+            {
+                InspectConcaveSample(sample, raycastHit);
+            }
+            else
+            {
                 Vector3 reSampleXCorner = InspectSample(false, xIteration, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, sample, lastTrueRayCastHit, secondPreviousRayCastHit, previousRayCastHit, raycastHit);
 
 
@@ -100,7 +100,7 @@ public partial class FOVRenderer
                     //   Debug.Log("Did not replace resample: y: " + y + " x: " + xIteration);
                     //InspectSample(true, xIteration, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
                 }
-            //}
+            }
 
             //Save sample info for next iteration
 

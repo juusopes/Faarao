@@ -254,9 +254,9 @@ public partial class FOVRenderer : MonoBehaviour
         vertNew.y = yIteration;
 
 
-       // if (sampleType == SampleType.Concave)
-         //   AddNeighbourVerticesConcave(sample, sampleType, vertNew, vertPrev);
-        //else
+        if (sampleType == SampleType.Concave)
+            AddNeighbourVerticesConcave(sample, sampleType, vertNew, vertPrev);
+        else
             AddNeighbourVertices(sample, sampleType, vertNew, vertPrev);
 
         vertexPoints.Add(vertNew);
