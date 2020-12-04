@@ -109,7 +109,7 @@ public class NetworkManager : MonoBehaviour
 
     public bool JoinServer(IPEndPoint endPoint = null, string password = null)
     {
-        Debug.Log("Trying to join server");
+        MessageLog.Instance.AddMessage("Trying to join server", Color.yellow);
 
         if (Client.Instance.IsOnline || Server.Instance.IsOnline)
         {

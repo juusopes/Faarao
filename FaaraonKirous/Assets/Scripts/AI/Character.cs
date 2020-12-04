@@ -162,10 +162,10 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
+        detector = new Detector(this);
         if (IsHost)
         {
             // ForceStraigthen();
-            detector = new Detector(this);
             InitNavigator();
         }
         charAnims = new CharacterAnimations(this);
@@ -274,8 +274,8 @@ public class Character : MonoBehaviour
             fov3d.UpdateMaterialProperties(lineType, lineType, percentage);
         }
 
-        player1SightRenderer.DrawSightDetectionFixed(couldDetectPlayer1 ? 1f : 0, lineType, Player1);
-        player2SightRenderer.DrawSightDetectionFixed(couldDetectPlayer2 ? 1f : 0, lineType, Player2);
+        player1SightRenderer.DrawSightDetectionFixed(detector.CouldDetectPlayer(Player1, Player1Controller) ? 1f : 0, lineType, Player1);
+        player2SightRenderer.DrawSightDetectionFixed(detector.CouldDetectPlayer(Player2, Player2Controller) ? 1f : 0, lineType, Player2);
     }
 
     public void SetSightVisuals(bool enable)
