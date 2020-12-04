@@ -180,7 +180,7 @@ public class Detector
     {
         if (playerController == null)
             return true;
-        if (playerController.IsDead || playerController.isInvisible)
+        if (playerController.IsDead || playerController.IsInvisible)
             return true;
 
         return false;

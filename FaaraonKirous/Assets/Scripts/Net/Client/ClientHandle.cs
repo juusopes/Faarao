@@ -335,7 +335,7 @@ public class ClientHandle
         if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
         {
             PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
-            playerNetManager.PlayerController.isInvisible = true;
+            playerNetManager.PlayerController.IsInvisible = true;
         }
     }
 
@@ -348,6 +348,18 @@ public class ClientHandle
         {
             PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
             playerNetManager.PlayerController.abilityLimitUsed = abilityNum;
+        }
+    }
+
+    public static void ChangeInvisibility(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController._isInvisible = state;
         }
     }
     #endregion

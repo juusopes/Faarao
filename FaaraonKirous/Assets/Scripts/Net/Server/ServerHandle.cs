@@ -234,6 +234,8 @@ public class ServerHandle
 
     public static void AbilityLimitUsed(int connection, Packet packet)
     {
+        if (!Server.Instance.IsSynced(connection)) return;
+
         ObjectType character = (ObjectType)packet.ReadShort();
         int abilityNum = packet.ReadInt();
 
@@ -241,6 +243,18 @@ public class ServerHandle
         {
             PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
             playerNetManager.PlayerController.abilityLimitUsed = abilityNum;
+        }
+    }
+
+    public static void ChangeInvisibility(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        bool state = packet.ReadBool();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController._isInvisible = state;
         }
     }
     #endregion

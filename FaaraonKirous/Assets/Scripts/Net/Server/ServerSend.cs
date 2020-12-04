@@ -347,6 +347,15 @@ public class ServerSend
 
         Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
     }
+
+    public static void ChangeInvisibility(ObjectType character, bool state)
+    {
+        var packet = new Packet((int)ServerPackets.invisibilityChanged);
+        packet.Write((short)character);
+        packet.Write(state);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
+    }
     #endregion
 
     #region Activatable

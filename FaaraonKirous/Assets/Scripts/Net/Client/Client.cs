@@ -120,7 +120,8 @@ public sealed class Client : NetworkHandler
             { (int)MasterServerPackets.connectionAccepted, ClientHandle.ConnectionAcceptedMaster },
             { (int)MasterServerPackets.heartbeat, ClientHandle.HeartbeatMaster },
             { (int)ServerPackets.invisibilityActivated, ClientHandle.InvisibilityActivated },
-            { (int)ServerPackets.abilityUsed, ClientHandle.AbilityUsed }
+            { (int)ServerPackets.abilityUsed, ClientHandle.AbilityUsed },
+            { (int)ServerPackets.invisibilityChanged, ClientHandle.ChangeInvisibility }
         };
 
         // Initialize connection
