@@ -20,7 +20,7 @@ public partial class FOVRenderer
                 return;
 #endif
 
-            vertexPair = 0;
+            vertexPair = 1;
             IterateX(yIteration, yGlobalAngle);
             //Debug.Log(y + " global y " + yGlobalAngle + " " + yStartingAngle + " " + yFOV);
             yGlobalAngle += yAngleIncrease;
@@ -60,12 +60,20 @@ public partial class FOVRenderer
             previousRayCastHit = xIteration > 0 ? lastColumnSampleRays[xIteration - 1] : new RaycastHit();
             secondPreviousRayCastHit = xIteration > 1 ? lastColumnSampleRays[xIteration - 2] : new RaycastHit();
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
-
+            Vector3 reSampleXCorner = Vector3.zero;
 
             //if (!hasResampled)
             //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSampled, yGlobalAngleIn, raycastHit, ref yAngleSampled, ref sample);
 
-            Vector3 reSampleXCorner = InspectSample(false, xIteration, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, sample, lastTrueRayCastHit, secondPreviousRayCastHit, previousRayCastHit, raycastHit);
+            if (raycastHit.collider != null && (raycastHit.collider.gameObject.CompareTag("Stairs") || raycastHit.collider.gameObject.CompareTag("Terrain")))
+            {
+                InspectConcaveSample(sample, raycastHit);
+            }
+            else
+            {
+                reSampleXCorner = InspectSample(false, xIteration, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, sample, lastTrueRayCastHit, secondPreviousRayCastHit, previousRayCastHit, raycastHit);
+            }
+
 
 #if UNITY_EDITOR
             reSampleXCorner = disableReSampling ? Vector3.zero : reSampleXCorner;
@@ -136,6 +144,11 @@ public partial class FOVRenderer
             return true;
 
         return false;
+    }
+
+    private void InspectConcaveSample(Vector3 sample, RaycastHit raycastHit)
+    {
+        AddVertexPoint(sample, SampleType.Concave);
     }
 
     private Vector3 InspectSample(bool isResample, int x, float yAngleSampled, float xAngleSampled, Vector3 secondPreviousSample, Vector3 previousSample, Vector3 sample, RaycastHit lastTrueRayCastHit, RaycastHit secondPreviousRayCastHit, RaycastHit previousRayCastHit, RaycastHit raycastHit)

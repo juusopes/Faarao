@@ -25,12 +25,21 @@ public class ColliderDebugger
         Selection.objects = objectsWithoutCollider.ToArray();
     }
 
+    [MenuItem("Henkka/Find All Structures With Colliders")]
+    public static void FindStructuresWithColliders()
+    {
+        List<GameObject> objectsInLayer = GetObjectsInLayer(15);
+        List<GameObject> objectsWithCollider = GetObjectsWithCollider(objectsInLayer);
+        //PrintList(objectsWithCollider);
+        Selection.objects = objectsWithCollider.ToArray();
+    }
+
     [MenuItem("Henkka/Find All With Colliders")]
     public static void FindWithColliders()
     {
         List<GameObject> objectsInScene = GetAllSceneObjects();
         List<GameObject> objectsWithCollider = GetObjectsWithCollider(objectsInScene);
-        PrintList(objectsWithCollider);
+        //PrintList(objectsWithCollider);
         Selection.objects = objectsWithCollider.ToArray();
     }
 
