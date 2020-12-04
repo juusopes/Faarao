@@ -20,5 +20,13 @@ public class MasterServerSend
 
         MasterServer.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet);
     }
+
+    public static void Handshake(int connection, string endpoint)
+    {
+        var packet = new Packet((int)MasterServerPackets.handshake);
+        packet.Write(endpoint);
+
+        MasterServer.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet);
+    }
 }
 

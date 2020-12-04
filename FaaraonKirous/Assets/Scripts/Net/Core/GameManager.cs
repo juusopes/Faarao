@@ -244,7 +244,10 @@ public class GameManager : MonoBehaviour
     public void ExitToMainMenu()
     {
         NetworkManager._instance.ResetNetworking();
-        LoadLevel(_mainMenu);
+        if (CurrentSceneIndex != _mainMenu)
+        {
+            LoadLevel(_mainMenu);
+        }
     }
 
     public void LoadLevel(int sceneIndex)

@@ -114,10 +114,16 @@ public class AbilityIndicator : MonoBehaviour
     }
     private void TargetTags()
     {
-        if (player.GetComponent<PlayerController>().abilityNum == 7 || player.GetComponent<PlayerController>().abilityNum == 9)
+        if (player.GetComponent<PlayerController>().abilityNum == 5 || player.GetComponent<PlayerController>().abilityNum == 9)
         {
             targetTag = "Enemy";
-            calculateNeeded = false;
+            if (player.GetComponent<PlayerController>().abilityNum == 9)
+            {
+                calculateNeeded = false;
+            } else
+            {
+                calculateNeeded = true;
+            }
         }
         else if (player.GetComponent<PlayerController>().abilityNum == 10)
         {

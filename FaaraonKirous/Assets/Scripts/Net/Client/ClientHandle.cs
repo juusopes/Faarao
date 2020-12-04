@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class ClientHandle
 {
+    #region MasterServer
+
+    public static void ConnectionAcceptedMaster(int connection, Packet packet)
+    {
+        int sendId = packet.ReadInt();
+
+        Client.Instance.MasterServer.SendId = sendId;
+    }
+
+    public static void HeartbeatMaster(int connection, Packet packet)
+    {
+        // Do nothing
+    }
+
+    public static void Handshake(int connection, Packet packet)
+    {
+        string endpoint = packet.ReadString();
+
+        // TODO: Now try to connect
+    }
+    #endregion
+
     #region Core
     public static void ConnectionAccepted(int connection, Packet packet)
     {

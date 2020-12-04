@@ -1,10 +1,31 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class ServerHandle
 {
+    #region MasterServer
+    public static void ConnectionAcceptedMaster(int connection, Packet packet)
+    {
+        int sendId = packet.ReadInt();
+
+        Server.Instance.MasterServer.SendId = sendId;
+    }
+
+    public static void HeartbeatMaster(int connection, Packet packet)
+    {
+        // Do nothing
+    }
+
+    public static void Handshake(int connection, Packet packet)
+    {
+        string endpoint = packet.ReadString();
+        Server.Instance.TryConnectClient(NetTools.CreateIPEndPoint(endpoint));
+    }
+    #endregion
+
     #region Core
     public static void ConnectionRequest(int connection, Packet packet)
     {

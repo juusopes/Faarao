@@ -122,7 +122,10 @@ public class AbilityController : MonoBehaviour
             else
             {
                 click++;
-                abilityActivated = false;
+                if (caster.abilityNum != 1)
+                {
+                    abilityActivated = false;
+                }
             }
         }
         else

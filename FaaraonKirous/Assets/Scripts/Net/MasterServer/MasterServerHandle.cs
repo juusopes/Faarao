@@ -7,26 +7,35 @@ using UnityEngine;
 
 public class MasterServerHandle
 {
-    public static void ConnectionRequest(int connection, Packet packet)
+    public static void ServerAnnouncement(int connection, Packet packet)
     {
-        Debug.Log($"Server request received!");
+        Debug.Log($"Server announcement received");
 
         // Add to mongo
         MasterServerManager.Instance.CreateServerObject(
             connection,
             packet.ReadString(), 
-            MasterServer.Instance.Servers[connection].EndPoint.ToString(), 
+            MasterServer.Instance.Connections[connection].EndPoint.ToString(), 
             packet.ReadBool()
         );
-
-        // TODO: Create key for server
 
         MasterServerSend.ConnectionAccepted(connection);
     }
 
+    public static void HandshakeRequest(int connection, Packet packet)
+    {
+        Debug.Log($"Handshake request received!");
+
+        string guidString = packet.ReadString();
+
+        MasterServerSend.ConnectionAccepted(connection);
+
+        MasterServerManager.Instance.DoHandshake(connection, guidString);
+    }
+
     public static void Disconnecting(int connection, Packet packet)
     {
-        MasterServer.Instance.DisconnectServer(connection);
+        MasterServer.Instance.Disconnect(connection);
     }
 
     public static void HeartbeatResponse(int connection, Packet packet)

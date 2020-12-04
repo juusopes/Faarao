@@ -542,8 +542,6 @@ public class PlayerController : MonoBehaviour
                     }
                     if (target != null && target.tag == "Enemy")
                     {
-                        SoundManager.Instance.AttackSound();
-
                         if (lC.targetObject != null)
                         {
                             attackTarget = target;

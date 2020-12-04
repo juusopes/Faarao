@@ -1,9 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ClientSend
 {
+    #region MasterServer
+
+    public static void HandshakeRequest(Guid guid)
+    {
+        var packet = new Packet((int)MasterClientPackets.handshakeRequest);
+        packet.Write(guid.ToString());
+
+        Client.Instance.BeginSendPacketToMasterServer(ChannelType.Reliable, packet);
+    }
+
+    #endregion
 
     #region Core
     public static void ConnectionRequest(string playerName, string password)
@@ -39,7 +51,6 @@ public class ClientSend
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
     #endregion
-
 
     #region Abilities
     public static void AbilityUsed(AbilityOption ability, Vector3 position)
