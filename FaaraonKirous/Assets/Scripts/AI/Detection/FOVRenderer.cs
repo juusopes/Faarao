@@ -146,10 +146,11 @@ public partial class FOVRenderer : MonoBehaviour
 
 #if UNITY_EDITOR
         StartDebug();
-#endif
+
 
         Init2DCone();
         SaveAsset();
+#endif
     }
 
 #if UNITY_EDITOR

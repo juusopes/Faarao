@@ -44,6 +44,7 @@ public class ServersUI : MonoBehaviour
             newUIObject.EndPoint = server.EndPoint;
             newUIObject.HasPassword = server.HasPassword;
             newUIObject.Guid = server.Id;
+            uiObjects.Add(newUIObject);
         }
 
         ServerUIObject[] serverList = uiObjects.ToArray();
