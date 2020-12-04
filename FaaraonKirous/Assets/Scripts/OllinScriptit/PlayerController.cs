@@ -516,7 +516,7 @@ public class PlayerController : MonoBehaviour
                         target = lC.targetObject;
                         if (target.tag == "Enemy")
                         {
-                            soundFX.AttackSound();
+                            SoundManager.Instance.AttackSound();
 
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
@@ -579,7 +579,7 @@ public class PlayerController : MonoBehaviour
                         target = lC.targetObject;
                         if (target.tag == "Player")
                         {
-                            soundFX.ResurrectSound();
+                            SoundManager.Instance.ResurrectSound();
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
                             useRespawn = true;
