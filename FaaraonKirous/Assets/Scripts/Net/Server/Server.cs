@@ -224,6 +224,7 @@ public sealed class Server : NetworkHandler
             {
                 Debug.Log($"Chosen id is {i}");
                 Connections[i].Connect(endpoint, Constants.defaultConnectionId);
+                ServerSend.Message(i, "Handshake");
                 return;
             }
         }
