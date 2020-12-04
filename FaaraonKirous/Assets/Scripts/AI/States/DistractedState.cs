@@ -20,7 +20,10 @@ public class DistractedState : State
         character.StopNavigation();
 
         if (distraction == null)
+        {
             ToAlertState();
+            return;
+        }
 
         switch (distraction.option)
         {
