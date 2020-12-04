@@ -330,6 +330,15 @@ public class ServerSend
             Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
         }
     }
+
+    public static void InvisibilityActivated(ObjectType character)
+    {
+        var packet = new Packet((int)ServerPackets.invisibilityActivated);
+        packet.Write((short)character);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
+    }
+
     #endregion
 
     #region Activatable

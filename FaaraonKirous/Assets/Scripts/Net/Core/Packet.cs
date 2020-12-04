@@ -30,7 +30,8 @@ public enum ServerPackets
     playerDisconnected,
     serverStopped,
     activationStateChanged,
-    characterRevived
+    characterRevived,
+    invisibilityActivated
 }
 
 /// <summary>Sent from client to server.</summary>

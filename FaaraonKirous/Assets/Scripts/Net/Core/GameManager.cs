@@ -201,6 +201,8 @@ public class GameManager : MonoBehaviour
 
     public void StartLoading(bool willLoadSave = false)
     {
+        DontDestroyCanvas.Instance.loadingScreen.SetActive(true);
+
         Time.timeScale = 0;
 
         // Set everything to "not loaded" initially
@@ -225,7 +227,7 @@ public class GameManager : MonoBehaviour
         IsFullyLoaded = true;
         WillLoadSave = false;
 
-        Debug.Log("Loading ended");
+        DontDestroyCanvas.Instance.loadingScreen.SetActive(false);
     }
 
     public void LoadNextLevel()
@@ -308,7 +310,7 @@ public class GameManager : MonoBehaviour
         {
             float progress = Mathf.Clamp01(loadSceneOperation.progress / Constants.maxSceneLoadProgress);
 
-            // TODO: Update progress bar and percentage
+            DontDestroyCanvas.Instance.loadingScreenSlider.value = progress;
 
             yield return null;
         }

@@ -37,6 +37,7 @@ public class ServerHandle
         // Check password
         if (!password.Equals(Server.Instance.Password))
         {
+            Debug.Log("Incorrect password");
             Server.Instance.DisconnectClient(connection);
         }
 
