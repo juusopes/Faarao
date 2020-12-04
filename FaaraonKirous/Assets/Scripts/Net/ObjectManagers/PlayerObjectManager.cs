@@ -115,6 +115,9 @@ public class PlayerObjectManager : CharacterObjectManager
         {
             packet.Write(Constants.noId);
         }
+
+        // Invisibility
+        packet.Write(PlayerController._isInvisible);
     }
 
     public override void HandleSync(Packet packet)
@@ -163,6 +166,9 @@ public class PlayerObjectManager : CharacterObjectManager
                 Controller = controller;
             }
         }
+
+        // Invisibility
+        PlayerController._isInvisible = packet.ReadBool();
     }
 
     public override void WriteState(Packet dataPacket)

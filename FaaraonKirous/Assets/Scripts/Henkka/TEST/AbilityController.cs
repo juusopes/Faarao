@@ -106,7 +106,7 @@ public class AbilityController : MonoBehaviour
             {
                 if (!caster.playerOne || (caster.playerOne && caster.abilityNum != 1))
                 {
-                    caster.isInvisible = false;
+                    caster.IsInvisible = false;
                 }
                 Debug.Log("Disabled");
                 caster.abilityLimitUsed = caster.abilityNum;

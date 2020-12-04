@@ -32,7 +32,8 @@ public enum ServerPackets
     activationStateChanged,
     characterRevived,
     invisibilityActivated,
-    abilityUsed
+    abilityUsed,
+    invisibilityChanged
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -54,7 +55,8 @@ public enum ClientPackets
     stay,
     revive,
     warp,
-    abilityLimitUsed
+    abilityLimitUsed,
+    invisibilityChanged
 }
 
 

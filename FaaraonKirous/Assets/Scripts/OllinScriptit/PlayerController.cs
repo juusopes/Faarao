@@ -46,8 +46,27 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public GameObject groundInd;
 
+    public bool _isInvisible = false;
     //Invisibility
-    public bool isInvisible;
+    public bool IsInvisible 
+    { 
+        get
+        {
+            return _isInvisible;
+        } 
+        set
+        {
+            if (NetworkManager._instance.ShouldSendToClient)
+            {
+                ServerSend.ChangeInvisibility(manager.Type, value);
+            }
+            else if (NetworkManager._instance.ShouldSendToServer)
+            {
+                ClientSend.ChangeInvisibility(manager.Type, value);
+            }
+            _isInvisible = value;
+        }
+    }
     private Material originalMaterial;
     public Material invisibilityMaterial;
 
@@ -372,7 +391,7 @@ public class PlayerController : MonoBehaviour
 
     private void Invisibility()
     {
-        if (isInvisible)
+        if (IsInvisible)
         {
             this.gameObject.tag = "PlayerInvisible";
             transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>().material = invisibilityMaterial;
@@ -579,7 +598,7 @@ public class PlayerController : MonoBehaviour
                         if (NetworkManager._instance.IsHost)
                         {
                             targetEnemy.GetComponent<DeathScript>().Die();
-                            isInvisible = false;
+                            IsInvisible = false;
                         }
                         else
                         {
@@ -651,7 +670,7 @@ public class PlayerController : MonoBehaviour
                         if (NetworkManager._instance.IsHost)
                         {
                             targetEnemy.GetComponent<DeathScript>().Revive();
-                            isInvisible = false;
+                            IsInvisible = false;
                         }
                         else
                         {

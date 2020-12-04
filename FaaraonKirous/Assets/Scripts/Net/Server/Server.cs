@@ -291,7 +291,8 @@ public sealed class Server : NetworkHandler
             { (int)MasterServerPackets.connectionAccepted, ServerHandle.ConnectionAcceptedMaster },
             { (int)MasterServerPackets.heartbeat, ServerHandle.HeartbeatMaster },
             { (int)MasterServerPackets.handshake, ServerHandle.Handshake },
-            { (int)ClientPackets.abilityLimitUsed, ServerHandle.AbilityLimitUsed }
+            { (int)ClientPackets.abilityLimitUsed, ServerHandle.AbilityLimitUsed },
+            { (int)ClientPackets.invisibilityChanged, ServerHandle.ChangeInvisibility }
         };
 
         // Initialize connections

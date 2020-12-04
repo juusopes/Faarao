@@ -58,7 +58,7 @@ public class PostProcessingScript : MonoBehaviour
                     }
                 }
             }
-            if (levelController.currentCharacter.GetComponent<PlayerController>().isInvisible)
+            if (levelController.currentCharacter.GetComponent<PlayerController>().IsInvisible)
             {
                 if (volume.profile.TryGet<ColorAdjustments>(out cA))
                 {
@@ -80,7 +80,7 @@ public class PostProcessingScript : MonoBehaviour
                     }
                 }
             }
-            if (!levelController.currentCharacter.GetComponent<PlayerController>().isInvisible && !levelController.currentCharacter.GetComponent<PlayerController>().IsDead)
+            if (!levelController.currentCharacter.GetComponent<PlayerController>().IsInvisible && !levelController.currentCharacter.GetComponent<PlayerController>().IsDead)
             {
                 if (volume.profile.TryGet<ColorAdjustments>(out cA))
                 {

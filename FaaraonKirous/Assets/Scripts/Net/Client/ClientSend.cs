@@ -175,6 +175,15 @@ public class ClientSend
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }
+
+    public static void ChangeInvisibility(ObjectType character, bool state)
+    {
+        var packet = new Packet((int)ClientPackets.invisibilityChanged);
+        packet.Write((short)character);
+        packet.Write(state);
+
+        Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
+    }
     #endregion
 
     #region Activatable
