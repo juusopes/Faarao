@@ -149,6 +149,11 @@ public class AbilityController : MonoBehaviour
 
     private void UseAbility(RaycastHit hit, Vector3 pos)
     {
+        if (abilityOption != AbilityOption.PossessAI)
+        {
+            SoundManager.Instance.FlashBangSound();
+        }
+
         //TODO: Lazy ? no : object pooling...
         //Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)

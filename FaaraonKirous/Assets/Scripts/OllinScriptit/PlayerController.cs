@@ -479,10 +479,8 @@ public class PlayerController : MonoBehaviour
                 //}
                 if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer && !PointerOverUI())
                 {
-                    interactObject = null;
                     target = null;
-                    useInteract = false;
-                    abilityNum = 0;
+                    lC.targetObject = null;
                 }
                 if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer && !PointerOverUI())
                 {

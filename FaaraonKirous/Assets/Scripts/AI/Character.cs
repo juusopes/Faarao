@@ -334,6 +334,9 @@ public class Character : MonoBehaviour
         SendToClient_StateChanged();
 
         stateVisualizer.sprite = stateIndicators.GetIndicator(stateOption);
+
+        if (!NetworkManager._instance.IsHost && stateOption == StateOption.DetectionState)
+            FOVManager._instance.EnableGameObject(this);
     }
     #endregion
 
