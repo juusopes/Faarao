@@ -516,7 +516,7 @@ public class PlayerController : MonoBehaviour
                         target = lC.targetObject;
                         if (target.tag == "Enemy")
                         {
-                            soundFX.AttackSound();
+                            SoundManager.Instance.AttackSound();
 
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
