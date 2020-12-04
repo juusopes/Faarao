@@ -110,6 +110,16 @@ public class AbilityController : MonoBehaviour
                 }
                 Debug.Log("Disabled");
                 caster.abilityLimitUsed = caster.abilityNum;
+                
+                if (NetworkManager._instance.ShouldSendToClient)
+                {
+                    ServerSend.AbilityUsed(currentPlayerController.manager.Type, caster.abilityLimitUsed);
+                }
+                else if (NetworkManager._instance.ShouldSendToServer)
+                {
+                    ClientSend.AbilityLimitUsed(currentPlayerController.manager.Type, caster.abilityLimitUsed);
+                }
+
                 caster.abilityNum = 0;
                 caster.abilityActive = false;
                 caster.inRange = false;
@@ -139,6 +149,11 @@ public class AbilityController : MonoBehaviour
 
     private void UseAbility(RaycastHit hit, Vector3 pos)
     {
+        if (abilityOption != AbilityOption.PossessAI)
+        {
+            SoundManager.Instance.FlashBangSound();
+        }
+
         //TODO: Lazy ? no : object pooling...
         //Debug.Log(abilityOption);
         if (lastSpawnedAbility != null)

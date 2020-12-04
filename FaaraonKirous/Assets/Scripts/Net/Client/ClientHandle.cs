@@ -338,6 +338,18 @@ public class ClientHandle
             playerNetManager.PlayerController.isInvisible = true;
         }
     }
+
+    public static void AbilityUsed(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        int abilityNum = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.abilityLimitUsed = abilityNum;
+        }
+    }
     #endregion
 
     #region Activatable

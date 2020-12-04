@@ -103,6 +103,7 @@ public class NetworkManager : MonoBehaviour
         Debug.Log("Attempting handshake");
 
         JoinServer(endPoint, password);
+        Client.Instance.ConnectToMasterServer();
         ClientSend.HandshakeRequest(guid);
     }
 
