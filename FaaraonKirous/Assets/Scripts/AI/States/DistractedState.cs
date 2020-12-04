@@ -19,9 +19,11 @@ public class DistractedState : State
     {
         character.StopNavigation();
 
+        if (distraction == null)
+            ToAlertState();
+
         switch (distraction.option)
         {
-
             case AbilityOption.DistractBlindingLight:
                 //COMMENTED : Always get blinding light
                 //character.StartImpairSightRange(distraction.effectTime);
