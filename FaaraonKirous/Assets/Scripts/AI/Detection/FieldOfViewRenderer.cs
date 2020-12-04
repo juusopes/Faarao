@@ -150,7 +150,7 @@ public class FieldOfViewRenderer : MonoBehaviour
 
     public void UpdateMaterialProperties(LineType background, LineType fill, float percentage)
     {
-        //material.SetFloat(THICKNESS, outerThickness);
+        material.SetFloat("_FillScale", percentage);
     }
 
 

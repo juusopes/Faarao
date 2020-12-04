@@ -78,6 +78,9 @@ public class Character : MonoBehaviour
 
     private bool need2DFOV = false;
 
+    public FieldOfViewRenderer fov2d;
+    public FOVRenderer fov3d;
+
     //Components
 
     [HideInInspector]
@@ -261,8 +264,18 @@ public class Character : MonoBehaviour
 
     public void UpdateSightVisuals(float percentage, LineType lineType)
     {
-        player1SightRenderer.DrawSightDetection(percentage, lineType, Player1);
-        player2SightRenderer.DrawSightDetection(percentage, lineType, Player2);
+        if (fieldOfView2DGO.activeSelf)
+        {
+            fov2d.UpdateMaterialProperties(lineType, lineType, percentage);
+        }
+
+        else if (fieldOfViewGO.activeSelf)
+        {
+            fov3d.UpdateMaterialProperties(lineType, lineType, percentage);
+        }
+
+        player1SightRenderer.DrawSightDetectionFixed(couldDetectPlayer1 ? 1f : 0, lineType, Player1);
+        player2SightRenderer.DrawSightDetectionFixed(couldDetectPlayer2 ? 1f : 0, lineType, Player2);
     }
 
     public void SetSightVisuals(bool enable)
@@ -272,7 +285,7 @@ public class Character : MonoBehaviour
 
     public void EnableFov(bool enable)
     {
-        if(need2DFOV)
+        if (need2DFOV)
             fieldOfView2DGO.SetActive(enable);
         else
             fieldOfViewGO.SetActive(enable);
@@ -626,7 +639,7 @@ public class Character : MonoBehaviour
         //if (isPosessed) Debug.Log("Pos" + position);
 
         //if (!OnNavMesh.IsPartiallyReachable(transform, position))
-         //   return;
+        //   return;
 
         //if(isPosessed) Debug.Log("Pos now" + position);
 

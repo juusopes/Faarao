@@ -89,6 +89,23 @@ public class SightRenderer
         DrawLine(OwnPosition, endPoint);
     }
 
+    /// <summary>
+    /// Simulates sight and draws a sight line. Returns true once the enemy detection line end has reached player. If enemy can see player the line expands, otherwise it shrinks.
+    /// </summary>
+    /// <param name="CanSeeObject">If enemy can see player</param>
+    /// <returns></returns>
+    public void DrawSightDetectionFixed(float sightPercentage, LineType lineType, GameObject target)
+    {
+        SetLineMaterial(lineType);
+
+        Vector3 targetDirection = (target.transform.position - OwnPosition).normalized;
+        float lenght = (target.transform.position - OwnPosition).magnitude;
+        endPoint = OwnPosition + targetDirection * lenght * sightPercentage;
+        //endPoint = OwnPosition + parentObject.transform.forward * maxLenght * sightPercentage;
+
+        DrawLine(OwnPosition, endPoint);
+    }
+
     private void DrawLine(Vector3 start, Vector3 target)
     {
         lineRenderer.SetPosition(0, start);
