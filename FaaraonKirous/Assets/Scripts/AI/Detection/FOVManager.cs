@@ -28,9 +28,9 @@ public class FOVManager : MonoBehaviour
         {
             RaycastHit hit = RayCaster.ScreenPoint(Input.mousePosition, RayCaster.clickSelectorLayerMask);
 
-            if (RayCaster.HitObject(hit))
+            if (RayCaster.HitObject(hit, "ClickSelector"))
             {
-                EnableGameObject(hit.collider.gameObject.GetComponent<Character>());
+                EnableGameObject(hit.collider.gameObject.GetComponentInParent<Character>());
             }
         }
     }
@@ -43,5 +43,7 @@ public class FOVManager : MonoBehaviour
 
         if(currentFov != null)
         currentFov.EnableFov(false);
+
+        currentFov = character;
     }
 }

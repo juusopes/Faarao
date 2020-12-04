@@ -267,8 +267,7 @@ public class Character : MonoBehaviour
 
     public void SetSightVisuals(bool enable)
     {
-        FOVManager._instance.EnableGameObject(this);
-        EnableFov(enable);
+        EnableFov(false);
     }
 
     public void EnableFov(bool enable)
