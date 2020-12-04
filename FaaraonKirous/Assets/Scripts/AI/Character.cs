@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 [SelectionBase]
 public class Character : MonoBehaviour
@@ -24,6 +25,7 @@ public class Character : MonoBehaviour
     private SpriteRenderer stateVisualizer = null;
     public Transform sightPosition;
     public GameObject fieldOfViewGO = null;
+    public GameObject fieldOfView2DGO = null;
     public GameObject clickSelector = null;
     public GameObject selectionIndicator = null;
     [SerializeField]
@@ -73,6 +75,8 @@ public class Character : MonoBehaviour
     private GameObject player2ref;
     private PlayerController playerController1ref;
     private PlayerController playerController2ref;
+
+    private bool need2DFOV = false;
 
     //Components
 
@@ -149,6 +153,8 @@ public class Character : MonoBehaviour
         //player2SightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, SightSpeed);
         testSightDetection = new SightDetection(gameObject, classSettings.lm, 0.2f, 1000f);
         lastSeenPosition = UtilsClass.GetMinVector();
+
+        need2DFOV = SceneManager.GetActiveScene().buildIndex == 4;
     }
 
     private void Start()
@@ -261,7 +267,15 @@ public class Character : MonoBehaviour
 
     public void SetSightVisuals(bool enable)
     {
-        fieldOfViewGO.SetActive(enable);
+        EnableFov(false);
+    }
+
+    public void EnableFov(bool enable)
+    {
+        if(need2DFOV)
+            fieldOfView2DGO.SetActive(enable);
+        else
+            fieldOfViewGO.SetActive(enable);
     }
 
     public void Die()

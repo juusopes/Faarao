@@ -35,7 +35,16 @@ public sealed class Server : NetworkHandler
         Debug.Log("Starting server...");
 
         Port = port;
-        Password = password;
+
+        if (Password == null)
+        {
+            Password = "";
+        }
+        else
+        {
+            Password = password;
+        }
+        
         Name = name;
 
         InitializeServerData();
@@ -50,7 +59,27 @@ public sealed class Server : NetworkHandler
 
         bool hasPassword = !string.IsNullOrEmpty(password);
 
-        NetworkManager._instance.ConnectToMasterServer(name, hasPassword);
+        ConnectToMasterServer(name, hasPassword);
+    }
+
+    public bool ConnectToMasterServer(string name, bool hasPassword)
+    {
+        Debug.Log("Connecting to master server...");
+
+        // Try get master server IP
+        string masterServerIP = NetTools.GetMasterServerIP();
+        if (masterServerIP == null) return false;
+
+        // Create endpoint
+        IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(masterServerIP), Constants.masterServerPort);
+
+        // Connect
+        MasterServer.Connect(endPoint, Constants.defaultConnectionId);
+
+        // Announce
+        ServerSend.ServerAnnouncement(name, hasPassword);
+
+        return true;
     }
 
     public void StartHeartbeats()
@@ -105,7 +134,14 @@ public sealed class Server : NetworkHandler
 
     public override void ConnectionTimeout(int connection)
     {
-        DisconnectClient(connection);
+        if (connection == Constants.masterServerId)
+        {
+            MasterServerTimeout();
+        }
+        else
+        {
+            DisconnectClient(connection);
+        }
     }
 
     public void BeginSendPacket(int connectionId, ChannelType channelType, Packet packet, 
@@ -188,18 +224,18 @@ public sealed class Server : NetworkHandler
         }
     }
 
-    private void ConnectClient(int connection, string name)
+    public void TryConnectClient(IPEndPoint endpoint)
     {
-        SetConnectionFlags(connection, ConnectionState.Connected);
-        GameManager._instance.PlayerConnected(connection, name);
-
-        ServerSend.ConnectionAccepted(connection);
-        ServerSend.SyncPlayers(connection);
-        ServerSend.StartLoading(connection);
-
-        if (GameManager._instance.IsFullyLoaded)
+        // Allocate ID and connect
+        for (int i = 1; i <= MaxPlayers; ++i)
         {
-            ServerSend.LoadScene(GameManager._instance.CurrentSceneIndex, connection);
+            if (Connections[i].EndPoint == null)
+            {
+                Debug.Log($"Chosen id is {i}");
+                Connections[i].Connect(endpoint, Constants.defaultConnectionId);
+                ServerSend.Message(i, "Handshake");
+                return;
+            }
         }
     }
 
@@ -251,7 +287,11 @@ public sealed class Server : NetworkHandler
             { (int)ClientPackets.activateObject, ServerHandle.ActivateObject },
             { (int)ClientPackets.stay, ServerHandle.Stay },
             { (int)ClientPackets.revive, ServerHandle.Revive },
-            { (int)ClientPackets.warp, ServerHandle.Warp }
+            { (int)ClientPackets.warp, ServerHandle.Warp },
+            { (int)MasterServerPackets.connectionAccepted, ServerHandle.ConnectionAcceptedMaster },
+            { (int)MasterServerPackets.heartbeat, ServerHandle.HeartbeatMaster },
+            { (int)MasterServerPackets.handshake, ServerHandle.Handshake },
+            { (int)ClientPackets.abilityLimitUsed, ServerHandle.AbilityLimitUsed }
         };
 
         // Initialize connections
@@ -262,6 +302,7 @@ public sealed class Server : NetworkHandler
             Connections.Add(i, new Connection(i, Instance));
             ConnectionStates.Add(i, ConnectionState.None);
         }
+        MasterServer = new Connection(Constants.masterServerId, Instance);
     }
 
     #region ConnectionStates

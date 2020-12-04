@@ -30,7 +30,9 @@ public enum ServerPackets
     playerDisconnected,
     serverStopped,
     activationStateChanged,
-    characterRevived
+    characterRevived,
+    invisibilityActivated,
+    abilityUsed
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -51,21 +53,24 @@ public enum ClientPackets
     activateObject,
     stay,
     revive,
-    warp
+    warp,
+    abilityLimitUsed
 }
 
 
 public enum MasterClientPackets
 {
-    connectionRequest = 1,
+    serverAnnouncement = 1,
     disconnecting,
-    heartbeatResponse
+    heartbeatResponse,
+    handshakeRequest
 }
 
 public enum MasterServerPackets
 {
-    connectionAccepted = 1,
-    heartbeat
+    connectionAccepted = 333,
+    heartbeat,
+    handshake
 }
 
 public delegate void PacketHandler(int connection, Packet packet);

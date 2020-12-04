@@ -48,6 +48,7 @@ public partial class FOVRenderer : MonoBehaviour
     int triangleIndex = 0;
     SampleType lastSampleType = 0;
     int yIteration, xIteration, vertexPair, island;
+    int lastUsed = 0;
 
     //Tweakable values
     public AnimationCurve xIterationCurve;
@@ -87,7 +88,8 @@ public partial class FOVRenderer : MonoBehaviour
         EndOfSightRange,    //Red
         LedgeStartCorner,   //Pink   
         LedgeAtDownAngle,   //Green   
-        LedgeAtUpAngle      //Magenta
+        LedgeAtUpAngle,      //Magenta
+        Concave             //Magenta
     }
 
     [System.Serializable]
@@ -111,6 +113,7 @@ public partial class FOVRenderer : MonoBehaviour
     private Vector3 ConvertLocal(Vector3 inVec) => transform.InverseTransformPoint(inVec);
     private Vector3 LastAddedVertex => vertexPoints.Count > 0 ? LastAddedVertexPoint.vertex : Vector3.positiveInfinity;
     private VertexPoint LastAddedVertexPoint => vertexPoints.Count > 0 ? vertexPoints[vertexPoints.Count - 1] : null;
+    private VertexPoint SecondLastAddedVertexPoint => vertexPoints.Count > 1 ? vertexPoints[vertexPoints.Count - 2] : null;
     private Vector3 FirstVertex => vertexPoints.Count > 0 ? vertexPoints[0].vertex : Vector3.positiveInfinity;
     private Vector3 MeshOrigin => Vector3.zero - Vector3.up * playerHeight;
 
@@ -146,6 +149,7 @@ public partial class FOVRenderer : MonoBehaviour
         StartDebug();
 #endif
 
+        //Init2DCone();
         //SaveAsset();
     }
 
@@ -163,7 +167,11 @@ public partial class FOVRenderer : MonoBehaviour
             return;
 #endif
         if (ShouldUpdateViewCone())
+        {
+            //UpdateViewCone2D();
             UpdateViewCone();
+        }
+
 
         RefreshRendReasons();
     }
@@ -246,7 +254,11 @@ public partial class FOVRenderer : MonoBehaviour
         vertNew.sampleType = sampleType;
         vertNew.y = yIteration;
 
-        AddNeighbourVertices(sample, sampleType, vertNew, vertPrev);
+
+        if (sampleType == SampleType.Concave)
+            AddNeighbourVerticesConcave(sample, sampleType, vertNew, vertPrev);
+        else
+            AddNeighbourVertices(sample, sampleType, vertNew, vertPrev);
 
         vertexPoints.Add(vertNew);
     }
@@ -280,6 +292,105 @@ public partial class FOVRenderer : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void AddNeighbourVerticesConcave(Vector3 sample, SampleType sampleType, VertexPoint vertNew, VertexPoint vertPrev)
+    {
+        if (vertPrev == null)
+            return;
+        bool concaveNeighbours = AreConcaveNeighbours(sampleType, vertPrev);
+        if (concaveNeighbours)
+        {
+            //if (convexNeighbours)
+            vertexPair++;
+
+            bool changingY = vertNew.y > vertPrev.y;
+
+            if (changingY)
+            {
+                if (yIteration > 0)
+                {
+                    int last = GetLastInPrevY(vertPrev.y);
+                    if (last > 0)
+                        vertexPoints[vertexPoints.Count - 1].n2 = last;
+                    //vertexPoints[last].n1 = vertexPoints.Count - 1;
+                }
+            }
+            else if (yIteration % 2 == 0)
+            {
+                vertPrev.n1 = vertexPoints.Count;
+            }
+            else
+            {
+                vertPrev.n1 = vertexPoints.Count - 2;
+            }
+
+            if (yIteration > 0 && !changingY)
+            {
+                int unUsed = GetUnusedFirstY(vertNew.y - 1, lastUsed);
+                if (unUsed >= 0)
+                    vertexPoints[unUsed].n2 = vertexPoints.Count - 1;
+            }
+
+            island++;
+            vertNew.pairNr = vertexPair + yIteration * xRayCount;
+            vertPrev.pairNr = vertexPair + yIteration * xRayCount;
+            vertNew.island = island;
+            vertPrev.island = island;
+
+            /* island++;
+             vertNew.pairNr = vertexPair + yIteration * xRayCount;
+             vertPrev.pairNr = vertexPair + yIteration * xRayCount;
+             vertNew.island = island;
+             vertPrev.island = island;
+             if (yIteration > 0)
+             {
+                 int v1Prev, v2Prev;
+                 if (GetMathingPairNr(yIteration - 1, vertPrev, vertNew, out v1Prev, out v2Prev))
+                 {
+                     Debug.Log(v1Prev + " " + v2Prev);
+                     vertexPoints[v1Prev].n1 = v2Prev;
+                     vertexPoints[v1Prev].n2 = vertexPoints.Count - 1;
+                     vertexPoints[v2Prev].n1 = vertexPoints.Count;
+                     vertexPoints[v2Prev].n2 = vertexPoints.Count - 1;
+                     vertPrev.island = vertexPoints[v1Prev].island;
+                     vertNew.island = vertexPoints[v2Prev].island;
+                 }
+                 else
+                 {
+                     Debug.Log("no island");
+                 }
+             }
+             if (SecondLastAddedVertexPoint != null && LastAddedVertexPoint != null && SecondLastAddedVertexPoint.pairNr == LastAddedVertexPoint.pairNr)
+                 vertexPair++;
+            */
+        }
+    }
+
+    private int GetUnusedFirstY(int y, int lastUsed)
+    {
+        for (int i = lastUsed; i < vertexPoints.Count; i++)
+        {
+            if (vertexPoints[i].y == y && vertexPoints[i].n2 == -1)
+                return i;
+        }
+        return -1;
+    }
+
+    private int GetLastInPrevY(int y)
+    {
+        for (int i = vertexPoints.Count - 1; i > 0; i--)
+        {
+            if (vertexPoints[i].y < y)
+                return i;
+
+        }
+        return -1;
+    }
+
+    private bool AreConcaveNeighbours(SampleType sampleType, VertexPoint vertPrev)
+    {
+        return vertPrev.sampleType == SampleType.Concave && sampleType == SampleType.Concave;
     }
 
     private void ReplaceVertexPointVertex(VertexPoint vertexPoint, Vector3 sample)
@@ -320,6 +431,7 @@ public partial class FOVRenderer : MonoBehaviour
         v2Prev = 0;
         return false;
     }
+
 
     private bool ArePairEdges(VertexPoint v1prev, VertexPoint v2prev, VertexPoint v1, VertexPoint v2, int i)
     {
@@ -397,7 +509,6 @@ public partial class FOVRenderer : MonoBehaviour
         mesh.Clear();
         /* List<Vector4> vertexList = new List<Vector4>();
          List<Vector4> vertexList2 = new List<Vector4>();
-
          vertexList.Add(vertexPoints[0]);
          vertexPoints.RemoveAt(0);
          float firstY = vertexList[0].y;
@@ -410,7 +521,6 @@ public partial class FOVRenderer : MonoBehaviour
                  i--;
              }
          }
-
          for (int i = 1; i < vertexList.Count; i++)
          {
              if (IsSecondPair((SampleType)vertexList[i - 1].w, (SampleType)vertexList[i].w))
@@ -423,7 +533,6 @@ public partial class FOVRenderer : MonoBehaviour
                  i--;
              }
          }
-
          */
         //Debug.Log(vertexList.Count);
 
@@ -450,11 +559,9 @@ public partial class FOVRenderer : MonoBehaviour
         {
             //uv[i] = new Vector2(1, 1);
             //normals[i] = Vector3.up;
-
             if (i > 0 && i < vertices.Length - 1)
             {
                // CreateTriangleQuad(i);
-
                 /*if (i == 1)
                     CreateTriangleQuad(i);
                 else if (AreSimilarLenght(vertices[i], vertices[i - 2], 2f))
@@ -499,56 +606,76 @@ public partial class FOVRenderer : MonoBehaviour
 
     #region 2D version =====================================================================================================================================
 
-    /*
+
+    Vector3[] vertices2D;
+    Vector2[] uv2D;
+    int[] triangles2D;
+    float angle;
+    float startingAngle;
+    float angleIncrease;
+    int rayCount = 50;
+
+    void Init2DCone()
+    {
+        vertices2D = new Vector3[yRayCount + 1 + 1];
+        uv2D = new Vector2[vertices2D.Length];
+        triangles2D = new int[yRayCount * 3];
+    }
+
+    private void UpdateViewCone2D()
+    {
+        SetOrigin(transform.position);
+        SetAimDirection(transform.forward, Y_FOV);
+        UpdateMesh();
+    }
+
     void UpdateMesh2D()
     {
-        yAngle = yStartingAngle;
-        vertices[0] = Vector3.zero;
-        uv[0] = Vector2.zero;
-
-
+        angle = startingAngle;
+        vertices2D[0] = Vector3.zero;
+        uv2D[0] = Vector2.zero;
 
         int vertexIndex = 1;
         int triangleIndex = 0;
-        for (int i = 0; i <= yRayCount; i++)
+        for (int i = 0; i <= rayCount; i++)
         {
             Vector3 vertex;
-            Vector3 direction = Quaternion.Euler(0, yAngle, 0) * Vector2.right;
+            Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector2.right;
             //Debug.DrawRay(origin, direction * viewDistance, Color.green, 10f);
             RaycastHit raycastHit;
             float uvLenght;
 
             if (Physics.Raycast(origin, direction, out raycastHit, SightRange, RayCaster.viewConeLayerMask))
             {
-                vertex = ConvertLocal(origin + direction * raycastHit.distance);
+                vertex = transform.InverseTransformPoint(origin + (direction * raycastHit.distance));
                 uvLenght = raycastHit.distance / SightRange;
             }
             else
             {
-                vertex = ConvertLocal(origin + direction * SightRange);
+                vertex = transform.InverseTransformPoint(origin + (direction * SightRange));
                 uvLenght = 1;
             }
 
 
             //Create Cone shaped uvs
-            float uvAngle = i * yAngleIncrease;
+            float uvAngle = i * angleIncrease;
             float rad = uvAngle * Mathf.Deg2Rad;
-            uv[vertexIndex] = new Vector2(Mathf.Sin(rad) * uvLenght, Mathf.Cos(rad) * uvLenght);
+            uv2D[vertexIndex] = new Vector2(Mathf.Sin(rad) * uvLenght, Mathf.Cos(rad) * uvLenght);
 
 
-            vertices[vertexIndex] = vertex;
+            vertices2D[vertexIndex] = vertex;
 
             if (i > 0)
             {
-                triangles[triangleIndex + 0] = 0;
-                triangles[triangleIndex + 1] = vertexIndex - 1;
-                triangles[triangleIndex + 2] = vertexIndex;
+                triangles2D[triangleIndex + 0] = 0;
+                triangles2D[triangleIndex + 1] = vertexIndex - 1;
+                triangles2D[triangleIndex + 2] = vertexIndex;
 
                 triangleIndex += 3;
             }
 
             vertexIndex++;
-            yAngle -= yAngleIncrease;
+            angle -= angleIncrease;
         }
 
         //foreach (Vector3 vert in vertices)
@@ -559,11 +686,16 @@ public partial class FOVRenderer : MonoBehaviour
 
         mesh.Clear();
 
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
-        mesh.uv = uv;
+        mesh.vertices = vertices2D;
+        mesh.triangles = triangles2D;
+        mesh.uv = uv2D;
     }
-    */
+
+    public void SetAimDirection(Vector3 aimDirection, float fovIn)
+    {
+        startingAngle = transform.rotation.eulerAngles.y + (fovIn / 2f) - 90f;
+        angleIncrease = fovIn / rayCount;
+    }
 
     #endregion
 

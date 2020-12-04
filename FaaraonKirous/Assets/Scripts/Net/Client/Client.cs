@@ -38,7 +38,14 @@ public sealed class Client : NetworkHandler
 
     public override void ConnectionTimeout(int connection)
     {
-        Disconnect();
+        if (connection == Constants.masterServerId)
+        {
+            MasterServerTimeout();
+        }
+        else
+        {
+            Disconnect();
+        }
     }
 
     public void Disconnect()
@@ -109,12 +116,34 @@ public sealed class Client : NetworkHandler
             { (int)ServerPackets.playerDisconnected, ClientHandle.PlayerDisconnected },
             { (int)ServerPackets.serverStopped, ClientHandle.ServerStopped },
             { (int)ServerPackets.activationStateChanged, ClientHandle.ActivationStateChanged },
-            { (int)ServerPackets.characterRevived, ClientHandle.CharacterRevived }
+            { (int)ServerPackets.characterRevived, ClientHandle.CharacterRevived },
+            { (int)MasterServerPackets.connectionAccepted, ClientHandle.ConnectionAcceptedMaster },
+            { (int)MasterServerPackets.heartbeat, ClientHandle.HeartbeatMaster },
+            { (int)ServerPackets.invisibilityActivated, ClientHandle.InvisibilityActivated },
+            { (int)ServerPackets.abilityUsed, ClientHandle.AbilityUsed }
         };
 
         // Initialize connection
         Connection = new Connection(Constants.defaultConnectionId, Instance);
+        MasterServer = new Connection(Constants.masterServerId, Instance);
     }
 
-    
+    public bool ConnectToMasterServer()
+    {
+        Debug.Log("Connecting to master server...");
+
+        // Try get master server IP
+        string masterServerIP = NetTools.GetMasterServerIP();
+        if (masterServerIP == null) return false;
+
+        // Create endpoint
+        IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(masterServerIP), Constants.masterServerPort);
+
+        // Connect
+        MasterServer.Connect(endPoint, Constants.defaultConnectionId);
+
+        return true;
+    }
+
+
 }

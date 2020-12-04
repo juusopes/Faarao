@@ -43,4 +43,6 @@ public class Constants
     public const int maxServers = 512;
     public const string masterServerDNS = "faaraonkirous.ddns.net";
     public const float masterServerHeartbeatFrequency = 10f;
+    public const int masterServerId = masterServerPort;
+    public const string apiAddress = "http://faaraonkirous.ddns.net:5000/";
 }

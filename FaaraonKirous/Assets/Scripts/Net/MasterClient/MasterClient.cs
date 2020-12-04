@@ -41,7 +41,7 @@ public class MasterClient : NetworkHandler
 
         BeginReceive();
 
-        MasterClientSend.ConnectionRequest(name, hasPassword);
+        MasterClientSend.ServerAnnouncement(name, hasPassword);
 
         return true;
     }

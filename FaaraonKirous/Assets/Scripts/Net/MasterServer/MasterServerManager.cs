@@ -43,14 +43,14 @@ public class MasterServerManager : MonoBehaviour
 
     private DBRepository _dbRepository = new DBRepository();
 
-    public Dictionary<int, Guid> ConnectionGuidPairs { get; private set; } = new Dictionary<int, Guid>();
-    public Dictionary<Guid, int> GuidConnectionPairs { get; private set; } = new Dictionary<Guid, int>();
+    public Dictionary<int, Guid> ServerIdGuidPairs { get; private set; } = new Dictionary<int, Guid>();
+    public Dictionary<Guid, int> ServerGuidIdPairs { get; private set; } = new Dictionary<Guid, int>();
 
     public void CreateServerObject(int connection, string name, string endPoint, bool hasPassword)
     {
         ServerDB serverObject = new ServerDB(name, endPoint, hasPassword);
-        ConnectionGuidPairs.Add(connection, serverObject.Id);
-        GuidConnectionPairs.Add(serverObject.Id, connection);
+        ServerIdGuidPairs.Add(connection, serverObject.Id);
+        ServerGuidIdPairs.Add(serverObject.Id, connection);
 
         // Creat to repo
         CreateServerObjectAsync(serverObject);
@@ -58,9 +58,9 @@ public class MasterServerManager : MonoBehaviour
 
     public void RemoveServerObject(int connection)
     {
-        Guid guid = ConnectionGuidPairs[connection];
-        ConnectionGuidPairs.Remove(connection);
-        GuidConnectionPairs.Remove(guid);
+        Guid guid = ServerIdGuidPairs[connection];
+        ServerIdGuidPairs.Remove(connection);
+        ServerGuidIdPairs.Remove(guid);
 
         // Delete from repo
         RemoveServerObjectAsync(guid);
@@ -92,6 +92,21 @@ public class MasterServerManager : MonoBehaviour
 
             yield return new WaitForSeconds(Constants.masterServerHeartbeatFrequency);
         }
+    }
+
+    public void DoHandshake(int clientId, string guidString)
+    {
+        if (!Guid.TryParse(guidString, out Guid guid) || !ServerGuidIdPairs.ContainsKey(guid))
+        {
+            Debug.Log("Handshake failure");
+            // TODO: send fail message
+        }
+
+        int serverId = ServerGuidIdPairs[guid];
+        //string serverEndpoint = MasterServer.Instance.Connections[serverId].EndPoint.ToString();
+        string clientEndpoint = MasterServer.Instance.Connections[clientId].EndPoint.ToString();
+        //MasterServerSend.Handshake(clientId, serverEndpoint);
+        MasterServerSend.Handshake(serverId, clientEndpoint);
     }
 
     private void OnApplicationQuit()

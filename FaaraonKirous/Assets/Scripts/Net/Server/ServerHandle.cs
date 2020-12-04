@@ -1,10 +1,31 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class ServerHandle
 {
+    #region MasterServer
+    public static void ConnectionAcceptedMaster(int connection, Packet packet)
+    {
+        int sendId = packet.ReadInt();
+
+        Server.Instance.MasterServer.SendId = sendId;
+    }
+
+    public static void HeartbeatMaster(int connection, Packet packet)
+    {
+        // Do nothing
+    }
+
+    public static void Handshake(int connection, Packet packet)
+    {
+        string endpoint = packet.ReadString();
+        Server.Instance.TryConnectClient(NetTools.CreateIPEndPoint(endpoint));
+    }
+    #endregion
+
     #region Core
     public static void ConnectionRequest(int connection, Packet packet)
     {
@@ -16,6 +37,7 @@ public class ServerHandle
         // Check password
         if (!password.Equals(Server.Instance.Password))
         {
+            Debug.Log("Incorrect password");
             Server.Instance.DisconnectClient(connection);
         }
 
@@ -210,6 +232,17 @@ public class ServerHandle
         }
     }
 
+    public static void AbilityLimitUsed(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        int abilityNum = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.abilityLimitUsed = abilityNum;
+        }
+    }
     #endregion
 
     #region Activatable

@@ -87,11 +87,11 @@ public class MainMenuAnimation : MonoBehaviour
             blood.SetActive(true);
             yield return StartCoroutine(GoonThrow(goon, 1.5f));
             //StartCoroutine(HieroGlyphAnimation());
-
+            StartCoroutine(AssignFloat(value => titleOpacity = value, new float[] { 1f, 0.1f }, 0.05f / menuTitleSpeed));
             yield return new WaitForSeconds(2f);
             fallingDust.Stop();
             yield return new WaitForSeconds(1f);
-            StartCoroutine(AssignFloat(value => titleOpacity = value, new float[] {1f, 0.1f }, 0.05f / menuTitleSpeed));
+
             StartCoroutine(AssignFloat(value => hieroglyphSaturation = value, new float[] {1.2f, 0.5f }, 0.05f / hieroglyphAnimationSpeed));
 
             yield return new WaitForSeconds(1f);

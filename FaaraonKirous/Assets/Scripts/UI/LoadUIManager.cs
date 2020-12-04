@@ -76,13 +76,11 @@ public class LoadUIManager : MonoBehaviour
     {
         _loadMenuMainMenu.SetActive(false);
         MainMenuUIManager.Instance.Open();
-        // TODO: Not implemented
     }
 
     public void OpenMainMenu()
     {
         _loadMenuMainMenu.SetActive(true);
         UpdateSaveListMainMenu();
-        // TODO: Not implemented
     }
 }

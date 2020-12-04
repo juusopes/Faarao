@@ -22,6 +22,8 @@ public abstract class NetworkHandler
 
     public NetworkSimulator Simulator { get; private set; } = null;
 
+    public Connection MasterServer { get; protected set; } = null;
+
     public void SetNetworkSimulator(NetworkSimulatorConfig config)
     {
         Simulator = new NetworkSimulator(config, SendRaw);
@@ -58,6 +60,7 @@ public abstract class NetworkHandler
                     Simulator.InternalUpdate();
                 }
                 InternalUpdate();
+                if (MasterServer.EndPoint != null) MasterServer.InternalUpdate();
             }
             Debug.Log("Internal update stopped");
         });
@@ -83,7 +86,14 @@ public abstract class NetworkHandler
             var packet = new Packet(data);
             int receiveId = packet.ReadInt();
 
-            BeginHandlePacket(receiveId, endPoint, packet);
+            if (receiveId == Constants.masterServerId)
+            {
+                BeginHandlePacketFromMasterServer(packet);
+            }
+            else
+            {
+                BeginHandlePacket(receiveId, endPoint, packet);
+            }
         }
         catch (Exception ex)
         {
@@ -91,7 +101,25 @@ public abstract class NetworkHandler
             //OnReceiveException();
         }
     }
-    
+
+    public void BeginSendPacketToMasterServer(ChannelType channelType, Packet packet)
+    {
+        MasterServer.BeginSendPacket(channelType, packet);
+    }
+
+    public void BeginHandlePacketFromMasterServer(Packet packet)
+    {
+        MasterServer.BeginHandlePacket(packet);
+    }
+
+    protected void MasterServerTimeout()
+    {
+        ThreadManager._instance.ExecuteOnMainThread(() =>
+        {
+            MasterServer.Disconnect();
+            MasterServer.Reset();
+        });
+    }
 
     public void SendPacket(Packet packet, IPEndPoint endPoint)
     {

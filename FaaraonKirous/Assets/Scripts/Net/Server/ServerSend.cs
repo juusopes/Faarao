@@ -1,7 +1,29 @@
-﻿using UnityEngine;
+﻿using System.Net;
+using UnityEngine;
 
 public class ServerSend
 {
+    #region MasterServer
+
+    public static void ServerAnnouncement(string name, bool hasPassword)
+    {
+        if (Server.Instance.MasterServer.EndPoint == null)
+        {
+            Debug.Log("Not connected to master server, but trying to send packet!");
+            return;
+        }
+
+        Debug.Log("Sending server announcement to master server...");
+
+        var packet = new Packet((int)MasterClientPackets.serverAnnouncement);
+        packet.Write(name);
+        packet.Write(hasPassword);
+
+        Server.Instance.BeginSendPacketToMasterServer(ChannelType.Reliable, packet);
+    }
+    #endregion
+
+
     #region Core
     public static void ConnectionAccepted(int connection)
     {
@@ -26,7 +48,7 @@ public class ServerSend
         packet.Write(timeStamp);
         packet.Write(lastPing);
 
-        Server.Instance.BeginSendPacket(connection, ChannelType.Unreliable, packet);
+        Server.Instance.BeginSendPacket(connection, ChannelType.Reliable, packet);
     }
 
     public static void SyncPlayers(int connection)
@@ -307,6 +329,23 @@ public class ServerSend
         {
             Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
         }
+    }
+
+    public static void InvisibilityActivated(ObjectType character)
+    {
+        var packet = new Packet((int)ServerPackets.invisibilityActivated);
+        packet.Write((short)character);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
+    }
+
+    public static void AbilityUsed(ObjectType character, int abilityNum)
+    {
+        var packet = new Packet((int)ServerPackets.abilityUsed);
+        packet.Write((short)character);
+        packet.Write(abilityNum);
+
+        Server.Instance.BeginSendPacketAll(ChannelType.Reliable, packet, ConnectionState.Synced);
     }
     #endregion
 

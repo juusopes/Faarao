@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class ClientHandle
 {
+    #region MasterServer
+
+    public static void ConnectionAcceptedMaster(int connection, Packet packet)
+    {
+        int sendId = packet.ReadInt();
+
+        Client.Instance.MasterServer.SendId = sendId;
+    }
+
+    public static void HeartbeatMaster(int connection, Packet packet)
+    {
+        // Do nothing
+    }
+
+    public static void Handshake(int connection, Packet packet)
+    {
+        string endpoint = packet.ReadString();
+
+        // TODO: Now try to connect
+    }
+    #endregion
+
     #region Core
     public static void ConnectionAccepted(int connection, Packet packet)
     {
@@ -303,6 +325,29 @@ public class ClientHandle
         {
             PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
             playerNetManager.PlayerController.IsRunning = state;
+        }
+    }
+
+    public static void InvisibilityActivated(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.isInvisible = true;
+        }
+    }
+
+    public static void AbilityUsed(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+        int abilityNum = packet.ReadInt();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.abilityLimitUsed = abilityNum;
         }
     }
     #endregion

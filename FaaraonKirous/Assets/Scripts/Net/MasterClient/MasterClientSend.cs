@@ -7,11 +7,11 @@ using UnityEngine;
 
 public class MasterClientSend
 {
-    public static void ConnectionRequest(string name, bool hasPassword)
+    public static void ServerAnnouncement(string name, bool hasPassword)
     {
         Debug.Log("Sending connection request to master server...");
 
-        var packet = new Packet((int)MasterClientPackets.connectionRequest);
+        var packet = new Packet((int)MasterClientPackets.serverAnnouncement);
         packet.Write(name);
         packet.Write(hasPassword);
 

@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using ParrelSync;
 #endif
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -71,15 +72,6 @@ public class NetworkManager : MonoBehaviour
 #endif
     }
 
-    public bool ConnectToMasterServer(string name, bool hasPassword)
-    {
-        if (MasterClient.Instance.IsOnline) return true;
-
-        if (MasterClient.Instance.ConnectToServer(name, hasPassword)) return true;
-
-        return false;
-    }
-
     public bool HostServer(string name, string password = null)
     {
         if (Client.Instance.IsOnline || Server.Instance.IsOnline)
@@ -104,6 +96,15 @@ public class NetworkManager : MonoBehaviour
 
             return true;
         }
+    }
+
+    public void AttemptHandshake(Guid guid, IPEndPoint endPoint, string password = null)
+    {
+        Debug.Log("Attempting handshake");
+
+        JoinServer(endPoint, password);
+        Client.Instance.ConnectToMasterServer();
+        ClientSend.HandshakeRequest(guid);
     }
 
     public bool JoinServer(IPEndPoint endPoint = null, string password = null)

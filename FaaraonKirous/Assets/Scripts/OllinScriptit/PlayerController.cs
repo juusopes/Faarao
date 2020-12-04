@@ -101,9 +101,12 @@ public class PlayerController : MonoBehaviour
     public UnitInteractions unitInteractions;
     public SoundManager soundFX;
 
+    public PlayerObjectManager manager;
+
     private void Awake()
     {
         Initialize();
+        manager = GetComponent<PlayerObjectManager>();
     }
 
     private void Start()
@@ -132,7 +135,7 @@ public class PlayerController : MonoBehaviour
             {
                 abilityActive = false;
             }
-            Invisibility();  // TODO: Does not work in multiplayer
+            Invisibility();
             if (NetworkManager._instance.IsHost)
             {
                 TestOffLink();
