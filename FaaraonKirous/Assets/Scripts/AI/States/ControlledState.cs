@@ -17,7 +17,6 @@ public class ControlledState : State
     public override void OnStateEnter()
     {
         character.StopNavigation();
-        character.possessedGoToTarget = UtilsClass.GetMinVector();
         controlledTimer = 0;
         character.clickSelector.SetActive(false);
         character.SetSightVisuals(false);
@@ -29,12 +28,17 @@ public class ControlledState : State
         character.clickSelector.SetActive(true);
         character.SetSightVisuals(true);
         character.isPosessed = false;
+        character.possessedGoToTarget = UtilsClass.GetMinVector();
     }
 
     void ActPosessed()
     {
         if (!UtilsClass.IsMinimumVector(character.possessedGoToTarget))
+        {
+            //Debug.Log("Posees" + character.possessedGoToTarget);
             character.SetDestination(character.possessedGoToTarget);
+        }
+
 
         controlledTimer += Time.deltaTime;
         if (controlledTimer >= character.ControlledDuration)
