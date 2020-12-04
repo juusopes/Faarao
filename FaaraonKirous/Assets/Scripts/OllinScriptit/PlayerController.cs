@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
     //Respawn
     [HideInInspector]
     public bool useRespawn;
-    
+
     //Menu
     public LevelController lC;
     public InGameMenu menu;
@@ -127,7 +127,8 @@ public class PlayerController : MonoBehaviour
             {
                 //print("MENU EI OO AKTIIVINE JA CURRENTPLAYER");
                 KeyControls();
-            } else
+            }
+            else
             {
                 abilityActive = false;
             }
@@ -194,7 +195,8 @@ public class PlayerController : MonoBehaviour
             //{
             //    abilityCooldowns[x] = 0;
             //}
-        } else
+        }
+        else
         {
             abilityCooldowns = new float[GetComponent<PriestAbilities>().abilityCDList.Length];
             //for (int x = 0; x < abilityCooldowns.Length - 1; x++)
@@ -202,7 +204,7 @@ public class PlayerController : MonoBehaviour
             //    abilityCooldowns[x] = 0;
             //}
         }
-		
+
         ResetAbilityLimits();
         originalMaterial = transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>().material;
     }
@@ -280,7 +282,7 @@ public class PlayerController : MonoBehaviour
             ClientSend.Stay(PlayerObjectManager.Type);
         }
     }
-    
+
     public void GiveDestination(Vector3 v3)
     {
         targetV3 = v3;
@@ -314,7 +316,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Crouch()
     {
-        if(!IsDead)
+        if (!IsDead)
         {
             unitInteractions.StanceCheckUI();
 
@@ -453,26 +455,36 @@ public class PlayerController : MonoBehaviour
                 //    target = null;
                 //    useInteract = false;
                 //}
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer && !PointerOverUI())
+                {
+                    interactObject = null;
+                    target = null;
+                    useInteract = false;
+                    abilityNum = 0;
+                }
                 if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer && !PointerOverUI())
                 {
                     if (lC.targetObject != null)
                     {
                         target = lC.targetObject;
-                        if (target.tag == "TargetableObject")
+                    }
+                    if (target != null && target.tag == "TargetableObject")
+                    {
+                        if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
                         {
-                            if (Physics.Raycast(ray, out hit, Mathf.Infinity, RayCaster.attackLayerMask))
+                            if (lC.targetObject != null)
                             {
                                 targetV3 = hit.point;
                                 SetDestination(targetV3);
-
-                                groundInd.SetActive(true);
-                                Vector3 tempV3 = target.transform.position;
-                                tempV3.y = targetV3.y + 0.2f;
-                                groundInd.transform.position = tempV3;
+                                lC.targetObject = null;
                             }
-                            useInteract = true;
-                            abilityActive = false;
+                            groundInd.SetActive(true);
+                            Vector3 tempV3 = target.transform.position;
+                            tempV3.y = targetV3.y + 0.2f;
+                            groundInd.transform.position = tempV3;
                         }
+                        useInteract = true;
+                        abilityActive = false;
                     }
                 }
                 if (interactObject != null)
@@ -490,6 +502,7 @@ public class PlayerController : MonoBehaviour
                                 ClientSend.ActivateObject(interactObject.GetComponent<ActivatableObjectManager>().Id);
                             }
                         }
+                        anim.SetTrigger("Attack");
                         interactObject = null;
                         target = null;
                         useInteract = false;
@@ -514,34 +527,39 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
-                //if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
-                //{
-                //    targetEnemy = null;
-                //    target = null;
-                //    useAttack = false;
-                //    abilityNum = 0;
-                //}
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer && !PointerOverUI())
+                {
+                    lC.targetObject = null;
+                    target = null;
+                    attackTarget = null;
+                }
                 if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
                 {
                     if (lC.targetObject != null)
                     {
+                        attackTarget = target;
                         target = lC.targetObject;
-                        if (target.tag == "Enemy")
-                        {
-                            SoundManager.Instance.AttackSound();
+                    }
+                    if (target != null && target.tag == "Enemy")
+                    {
+                        SoundManager.Instance.AttackSound();
 
+                        if (lC.targetObject != null)
+                        {
                             attackTarget = target;
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
-                            useAttack = true;
-                            abilityActive = false;
-
-                            groundInd.SetActive(true);
-                            Vector3 tempV3 = target.transform.position; 
-                            tempV3.y = targetV3.y + 0.2f;
-                            groundInd.transform.position = tempV3;
+                            lC.targetObject = null;
                         }
+                        useAttack = true;
+                        abilityActive = false;
+
+                        groundInd.SetActive(true);
+                        Vector3 tempV3 = target.transform.position;
+                        tempV3.y = targetV3.y + 0.2f;
+                        groundInd.transform.position = tempV3;
                     }
+
                 }
                 if (attackTarget != null)
                 {
@@ -549,7 +567,7 @@ public class PlayerController : MonoBehaviour
                     SetDestination(targetV3);
 
                     groundInd.SetActive(true);
-                    Vector3 tempV3 = target.transform.position;
+                    Vector3 tempV3 = attackTarget.transform.position;
                     tempV3.y = targetV3.y + 0.2f;
                     groundInd.transform.position = tempV3;
                 }
@@ -596,31 +614,34 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
-                //if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
-                //{
-                //    targetEnemy = null;
-                //    target = null;
-                //    useRespawn = false;
-                //    abilityNum = 0;
-                //}
-                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer && !PointerOverUI())
+                {
+                    lC.targetObject = null;
+                    target = null;
+                }
+                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer && !PointerOverUI())
                 {
                     if (lC.targetObject != null)
                     {
                         target = lC.targetObject;
-                        if (target.tag == "Player")
+                    }
+                    if (target != null && target.tag == "Player")
+                    {
+                        if (lC.targetObject != null)
                         {
                             targetV3 = target.transform.position;
                             SetDestination(targetV3);
-                            useRespawn = true;
-                            abilityActive = false;
-
-                            groundInd.SetActive(true);
-                            Vector3 tempV3 = target.transform.position; 
-                            tempV3.y = targetV3.y + 0.2f;
-                            groundInd.transform.position = tempV3;
+                            lC.targetObject = null;
                         }
+                        useRespawn = true;
+                        abilityActive = false;
+
+                        groundInd.SetActive(true);
+                        Vector3 tempV3 = target.transform.position;
+                        tempV3.y = targetV3.y + 0.2f;
+                        groundInd.transform.position = tempV3;
                     }
+
                 }
                 if (targetEnemy != null)
                 {
@@ -637,7 +658,8 @@ public class PlayerController : MonoBehaviour
                             {
                                 ClientSend.Revive(targetEnemy.GetComponent<PlayerObjectManager>().Id);
                             }
-                        }                
+                        }
+                        anim.SetTrigger("Attack");
                         targetEnemy = null;
                         target = null;
                         useRespawn = false;
@@ -675,7 +697,8 @@ public class PlayerController : MonoBehaviour
                         abilityNum = 0;
                     }
                 }
-            } else
+            }
+            else
             {
                 if ((abilityLimits[tempAbilityNum] > 0 && abilityCooldowns[tempAbilityNum] == 0) || GetComponent<PriestAbilities>().abilityLimitList[tempAbilityNum] == 0)
                 {
@@ -757,7 +780,8 @@ public class PlayerController : MonoBehaviour
         if (IsCrouching)
         {
             anim.SetBool("IsCrouching", true);
-        } else
+        }
+        else
         {
             anim.SetBool("IsCrouching", false);
         }
@@ -772,7 +796,8 @@ public class PlayerController : MonoBehaviour
         if (movingCheck == transform.position)
         {
             anim.SetBool("IsWalking", false);
-        } else
+        }
+        else
         {
             anim.SetBool("IsWalking", true);
             movingCheck = transform.position;
@@ -852,8 +877,9 @@ public class PlayerController : MonoBehaviour
     {
         if (abilityLimitUsed > 0)
         {
-            abilityLimits[abilityLimitUsed]--;   
-            if (playerOne) {
+            abilityLimits[abilityLimitUsed]--;
+            if (playerOne)
+            {
                 abilityCooldowns[abilityLimitUsed] = GetComponent<PharaohAbilities>().abilityCDList[abilityLimitUsed];
             }
             else
@@ -864,11 +890,13 @@ public class PlayerController : MonoBehaviour
             //public float[] abilityCooldowns;
             abilityLimitUsed = 0;
         }
-        for (int x = 1; x < abilityCooldowns.Length-1; x++) {
+        for (int x = 1; x < abilityCooldowns.Length - 1; x++)
+        {
             if (abilityCooldowns[x] > 0)
             {
                 abilityCooldowns[x] -= Time.deltaTime;
-            } else
+            }
+            else
             {
                 abilityCooldowns[x] = 0;
             }
@@ -880,7 +908,8 @@ public class PlayerController : MonoBehaviour
         {
             transform.GetChild(0).gameObject.SetActive(false);
             transform.GetChild(1).gameObject.SetActive(true);
-        } else
+        }
+        else
         {
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(false);
