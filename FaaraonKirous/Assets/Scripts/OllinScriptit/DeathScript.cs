@@ -70,6 +70,7 @@ public class DeathScript : MonoBehaviour
         }
         else
         {
+            SoundManager.Instance.AttackSound();
             SoundManager.Instance.DeathSound();
         }
 
