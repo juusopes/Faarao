@@ -95,7 +95,7 @@ public class DeathScript : MonoBehaviour
 
         if (doMessage && CharacterNetManager.List == ObjectList.player)
         {
-            soundFX.ResurrectSound();
+            SoundManager.Instance.ResurrectSound();
 
             MessageLog.Instance.AddMessage(
                 $"{Tools.TypeToString(CharacterNetManager.Type)} was revived", 

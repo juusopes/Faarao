@@ -23,8 +23,25 @@ public class ClientSend
         Debug.Log("Sending request");
 
         var packet = new Packet((int)ClientPackets.connectionRequest);
-        packet.Write(playerName);
-        packet.Write(password);
+        if (string.IsNullOrEmpty(playerName))
+        {
+            packet.Write("no_name");
+        }
+        else
+        {
+            packet.Write(playerName);
+        }
+
+
+        if (string.IsNullOrEmpty(password))
+        {
+            packet.Write("");
+        }
+        else
+        {
+            packet.Write(password);
+        }
+        
 
         Client.Instance.BeginSendPacket(ChannelType.Reliable, packet);
     }

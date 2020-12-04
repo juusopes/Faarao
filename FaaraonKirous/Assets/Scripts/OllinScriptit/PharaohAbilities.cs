@@ -101,7 +101,21 @@ public class PharaohAbilities : MonoBehaviour
                     && invisibilityClicked)
                     {
                         Debug.Log("Invisibility7");
-                        invisibilityTarget.GetComponent<PlayerController>().isInvisible = true;
+                        if (NetworkManager._instance.IsHost)
+                        {
+                            invisibilityTarget.GetComponent<PlayerController>().isInvisible = true;
+                            if (NetworkManager._instance.ShouldSendToClient)
+                            {
+                                ServerSend.InvisibilityActivated(invisibilityTarget.GetComponent<PlayerObjectManager>().Type);
+                            }
+                        }
+                        else
+                        {
+                            if (NetworkManager._instance.ShouldSendToServer)
+                            {
+                                
+                            }
+                        }
                         invisibilityTimer = 0;
                         useInvisibility = true;
                         //GetComponent<PlayerController>().Stay();

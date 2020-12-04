@@ -35,7 +35,16 @@ public sealed class Server : NetworkHandler
         Debug.Log("Starting server...");
 
         Port = port;
-        Password = password;
+
+        if (Password == null)
+        {
+            Password = "";
+        }
+        else
+        {
+            Password = password;
+        }
+        
         Name = name;
 
         InitializeServerData();

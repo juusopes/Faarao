@@ -18,8 +18,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField]
     private InputField _port;
 
-    [SerializeField]
-    private InputField _password;
+    public InputField _password;
 
     [SerializeField]
     private InputField _guid;

@@ -327,6 +327,17 @@ public class ClientHandle
             playerNetManager.PlayerController.IsRunning = state;
         }
     }
+
+    public static void InvisibilityActivated(int connection, Packet packet)
+    {
+        ObjectType character = (ObjectType)packet.ReadShort();
+
+        if (GameManager._instance.TryGetObject(ObjectList.player, (int)character, out ObjectManager netManager))
+        {
+            PlayerObjectManager playerNetManager = (PlayerObjectManager)netManager;
+            playerNetManager.PlayerController.isInvisible = true;
+        }
+    }
     #endregion
 
     #region Activatable
