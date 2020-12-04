@@ -7670,7 +7670,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.6, y: 384}
+  m_AnchoredPosition: {x: -0.6, y: 559.3}
   m_SizeDelta: {x: 307.1164, y: 36.868927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5093382914796561356
@@ -12842,7 +12842,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5874035955034399377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15856,8 +15856,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 244.6}
-  m_SizeDelta: {x: 503.5821, y: 247.63562}
+  m_AnchoredPosition: {x: 0, y: 378.84}
+  m_SizeDelta: {x: 503.5821, y: 329.6792}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5789426462437867853
 CanvasRenderer:
@@ -15900,26 +15900,28 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.6
-  m_Text: 'space - stand & crouch
+  m_Text: 'middle mouse to rotate camera
 
-    left ctrl - interact
+    space - stand & crouch
+
+    left ctrl
+    - interact
 
     A - attack
 
-    Q
-    - ability 1
+    Q - ability 1
 
     W - ability 2
 
-    E - ability 3
+    E - ability
+    3
 
-    1 - select pharaoh (double
+    1 - select pharaoh (double press to locate)
+
+    2 - select priest (double
     press to locate)
 
-    2 - select priest (double press to locate)
-
-    backspace
-    - unselect character'
+    backspace - unselect character'
 --- !u!1 &7966825021503730380
 GameObject:
   m_ObjectHideFlags: 0
