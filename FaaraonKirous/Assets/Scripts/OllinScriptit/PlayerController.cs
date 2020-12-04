@@ -445,7 +445,12 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
-
+                //if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
+                //{
+                //    interactObject = null;
+                //    target = null;
+                //    useInteract = false;
+                //}
                 if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer && !PointerOverUI())
                 {
                     if (lC.targetObject != null)
@@ -463,7 +468,6 @@ public class PlayerController : MonoBehaviour
                                 tempV3.y = targetV3.y + 0.2f;
                                 groundInd.transform.position = tempV3;
                             }
-
                             useInteract = true;
                             abilityActive = false;
                         }
@@ -508,7 +512,14 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
-                if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
+                //if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
+                //{
+                //    targetEnemy = null;
+                //    target = null;
+                //    useAttack = false;
+                //    abilityNum = 0;
+                //}
+                if (Input.GetKeyDown(KeyCode.Mouse1) && IsCurrentPlayer)
                 {
                     if (lC.targetObject != null)
                     {
@@ -569,6 +580,13 @@ public class PlayerController : MonoBehaviour
                 {
                     target = null;
                 }
+                //if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
+                //{
+                //    targetEnemy = null;
+                //    target = null;
+                //    useRespawn = false;
+                //    abilityNum = 0;
+                //}
                 if (Input.GetKeyDown(KeyCode.Mouse0) && IsCurrentPlayer)
                 {
                     if (lC.targetObject != null)
@@ -603,8 +621,7 @@ public class PlayerController : MonoBehaviour
                             {
                                 ClientSend.Revive(targetEnemy.GetComponent<PlayerObjectManager>().Id);
                             }
-                        }
-                        
+                        }                
                         targetEnemy = null;
                         target = null;
                         useRespawn = false;
