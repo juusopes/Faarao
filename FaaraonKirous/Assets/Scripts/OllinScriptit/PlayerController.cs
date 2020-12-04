@@ -101,9 +101,12 @@ public class PlayerController : MonoBehaviour
     public UnitInteractions unitInteractions;
     public SoundManager soundFX;
 
+    public PlayerObjectManager manager;
+
     private void Awake()
     {
         Initialize();
+        manager = GetComponent<PlayerObjectManager>();
     }
 
     private void Start()
