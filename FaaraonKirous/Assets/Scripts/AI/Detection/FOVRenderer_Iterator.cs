@@ -21,7 +21,7 @@ public partial class FOVRenderer
 #endif
 
             vertexPair = 1;
-            lastUsed = 0;
+            //lastUsed = 0;
             IterateX(yIteration, yGlobalAngle);
             //Debug.Log(y + " global y " + yGlobalAngle + " " + yStartingAngle + " " + yFOV);
             yGlobalAngle += yAngleIncrease;
