@@ -47,7 +47,7 @@ public partial class FOVRenderer : MonoBehaviour
     int vertexIndex = 1;
     int triangleIndex = 0;
     SampleType lastSampleType = 0;
-    int yIteration, xIteration, vertexPair, island;
+    int yIteration, xIteration, vertexPair, island, lastUsed;
 
     //Tweakable values
     public AnimationCurve xIterationCurve;
@@ -148,8 +148,8 @@ public partial class FOVRenderer : MonoBehaviour
         StartDebug();
 #endif
 
-        Init2DCone();
-        SaveAsset();
+        //Init2DCone();
+        //SaveAsset();
     }
 
 #if UNITY_EDITOR
@@ -167,8 +167,8 @@ public partial class FOVRenderer : MonoBehaviour
 #endif
         if (ShouldUpdateViewCone())
         {
-            UpdateViewCone2D();
-            //UpdateViewCone();
+            //UpdateViewCone2D();
+            UpdateViewCone();
         }
 
 
@@ -253,22 +253,20 @@ public partial class FOVRenderer : MonoBehaviour
         vertNew.sampleType = sampleType;
         vertNew.y = yIteration;
 
-        AddNeighbourVertices(sample, sampleType, vertNew, vertPrev);
+
+       // if (sampleType == SampleType.Concave)
+         //   AddNeighbourVerticesConcave(sample, sampleType, vertNew, vertPrev);
+        //else
+            AddNeighbourVertices(sample, sampleType, vertNew, vertPrev);
 
         vertexPoints.Add(vertNew);
     }
 
     private void AddNeighbourVertices(Vector3 sample, SampleType sampleType, VertexPoint vertNew, VertexPoint vertPrev)
     {
-        if (vertPrev == null)
-            return;
-        bool convexNeighbours = AreConvexNeighbours(sample, sampleType, vertPrev);
-        bool concaveNeighbours = AreConcaveNeighbours(sampleType, vertPrev);
-        if (convexNeighbours || concaveNeighbours)
+        if (vertPrev != null && IsEndingType(sampleType) && AreSimilarHeight(sample, vertPrev.vertex) && IsStartingType(vertPrev.sampleType))
         {
-           // if (convexNeighbours)
-            //    vertexPair++;
-
+            vertexPair++;
             island++;
             vertNew.pairNr = vertexPair + yIteration * xRayCount;
             vertPrev.pairNr = vertexPair + yIteration * xRayCount;
@@ -280,7 +278,6 @@ public partial class FOVRenderer : MonoBehaviour
                 int v1Prev, v2Prev;
                 if (GetMathingPairNr(yIteration - 1, vertPrev, vertNew, out v1Prev, out v2Prev))
                 {
-                    Debug.Log(v1Prev + " " + v2Prev);
                     vertexPoints[v1Prev].n1 = v2Prev;
                     vertexPoints[v1Prev].n2 = vertexPoints.Count - 1;
                     vertexPoints[v2Prev].n1 = vertexPoints.Count;
@@ -290,18 +287,106 @@ public partial class FOVRenderer : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("no island");
+                    //Debug.Log("no pair");
                 }
             }
-
-            if (convexNeighbours || concaveNeighbours && SecondLastAddedVertexPoint != null && LastAddedVertexPoint != null && SecondLastAddedVertexPoint.pairNr == LastAddedVertexPoint.pairNr)
-                vertexPair++;
         }
     }
 
-    private bool AreConvexNeighbours(Vector3 sample, SampleType sampleType, VertexPoint vertPrev)
+    private void AddNeighbourVerticesConcave(Vector3 sample, SampleType sampleType, VertexPoint vertNew, VertexPoint vertPrev)
     {
-        return IsEndingType(sampleType) && AreSimilarHeight(sample, vertPrev.vertex) && IsStartingType(vertPrev.sampleType);
+        if (vertPrev == null)
+            return;
+        bool concaveNeighbours = AreConcaveNeighbours(sampleType, vertPrev);
+        if (concaveNeighbours)
+        {
+            //if (convexNeighbours)
+            vertexPair++;
+
+            bool changingY = vertNew.y > vertPrev.y;
+
+            if (changingY)
+            {
+                if (yIteration > 0)
+                {
+                    int last = GetLastInPrevY(vertPrev.y);
+                    if (last > 0)
+                        vertexPoints[vertexPoints.Count - 1].n2 = last;
+                    //vertexPoints[last].n1 = vertexPoints.Count - 1;
+                }
+            }
+            else if (yIteration % 2 == 0)
+            {
+                vertPrev.n1 = vertexPoints.Count;
+            }
+            else
+            {
+                vertPrev.n1 = vertexPoints.Count - 2;
+            }
+
+            if (yIteration > 0 && !changingY)
+            {
+                int unUsed = GetUnusedFirstY(vertNew.y - 1, lastUsed);
+                if (unUsed >= 0)
+                    vertexPoints[unUsed].n2 = vertexPoints.Count - 1;
+            }
+
+            island++;
+            vertNew.pairNr = vertexPair + yIteration * xRayCount;
+            vertPrev.pairNr = vertexPair + yIteration * xRayCount;
+            vertNew.island = island;
+            vertPrev.island = island;
+
+            /* island++;
+             vertNew.pairNr = vertexPair + yIteration * xRayCount;
+             vertPrev.pairNr = vertexPair + yIteration * xRayCount;
+             vertNew.island = island;
+             vertPrev.island = island;
+
+             if (yIteration > 0)
+             {
+                 int v1Prev, v2Prev;
+                 if (GetMathingPairNr(yIteration - 1, vertPrev, vertNew, out v1Prev, out v2Prev))
+                 {
+                     Debug.Log(v1Prev + " " + v2Prev);
+                     vertexPoints[v1Prev].n1 = v2Prev;
+                     vertexPoints[v1Prev].n2 = vertexPoints.Count - 1;
+                     vertexPoints[v2Prev].n1 = vertexPoints.Count;
+                     vertexPoints[v2Prev].n2 = vertexPoints.Count - 1;
+                     vertPrev.island = vertexPoints[v1Prev].island;
+                     vertNew.island = vertexPoints[v2Prev].island;
+                 }
+                 else
+                 {
+                     Debug.Log("no island");
+                 }
+             }
+
+             if (SecondLastAddedVertexPoint != null && LastAddedVertexPoint != null && SecondLastAddedVertexPoint.pairNr == LastAddedVertexPoint.pairNr)
+                 vertexPair++;
+            */
+        }
+    }
+
+    private int GetUnusedFirstY(int y, int lastUsed)
+    {
+        for (int i = lastUsed; i < vertexPoints.Count; i++)
+        {
+            if (vertexPoints[i].y == y && vertexPoints[i].n2 == -1)
+                return i;
+        }
+        return -1;
+    }
+
+    private int GetLastInPrevY(int y)
+    {
+        for (int i = vertexPoints.Count - 1; i > 0; i--)
+        {
+            if (vertexPoints[i].y < y)
+                return i;
+
+        }
+        return -1;
     }
 
     private bool AreConcaveNeighbours(SampleType sampleType, VertexPoint vertPrev)
@@ -334,12 +419,9 @@ public partial class FOVRenderer : MonoBehaviour
             if (vertexPoints[i - 1].pairNr != vertexPoints[i].pairNr)
                 continue;
 
-            if (vertexPoints[i - 1].n1 != -1 && vertexPoints[i].n1 != -1)
-                continue;
-
             //Debug.Log("MOi" + AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) + " " + AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f));
 
-            if (ArePairEdges(vertexPoints[i - 1], vertexPoints[i], v1, v2))
+            if (ArePairEdges(vertexPoints[i - 1], vertexPoints[i], v1, v2, i))
             {
                 v1Prev = i - 1;
                 v2Prev = i;
@@ -351,14 +433,13 @@ public partial class FOVRenderer : MonoBehaviour
         return false;
     }
 
-    private bool ArePairEdges(VertexPoint v1Prev, VertexPoint v2Prev, VertexPoint v1, VertexPoint v2)
+
+    private bool ArePairEdges(VertexPoint v1prev, VertexPoint v2prev, VertexPoint v1, VertexPoint v2, int i)
     {
-        bool lenght = AreSimilarLenght(v1Prev.vertex, v1.vertex, mergeDistanceThreshold) || AreSimilarLenght(v2Prev.vertex, v2.vertex, mergeDistanceThreshold);
-        bool height = AreSimilarHeight(v1Prev.vertex, v1.vertex) && AreSimilarHeight(v2Prev.vertex, v2.vertex);
-        bool concave = AreConcaveNeighbours(v1Prev.sampleType, v2Prev) && AreConcaveNeighbours(v1.sampleType, v2);
-        Debug.Log(concave);
+        bool lenght = AreSimilarLenght(v1prev.vertex, v1.vertex, mergeDistanceThreshold) || AreSimilarLenght(v2prev.vertex, v2.vertex, mergeDistanceThreshold);
+        bool height = AreSimilarHeight(v1prev.vertex, v1.vertex) && AreSimilarHeight(v2prev.vertex, v2.vertex);
         //Debug.Log("Index: " + i + " Pair: " + v1prev.pairNr + " " + v1.pairNr + " " + v2prev.pairNr + " " +v2.pairNr + " same lenght: " + lenght + " same height: " + height);;
-        return (lenght && height) || concave;
+        return lenght && height;
     }
 
     private Vector2 GetVertexUV(int y, Vector3 vertex)

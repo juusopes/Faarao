@@ -21,6 +21,7 @@ public partial class FOVRenderer
 #endif
 
             vertexPair = 1;
+            lastUsed = 0;
             IterateX(yIteration, yGlobalAngle);
             //Debug.Log(y + " global y " + yGlobalAngle + " " + yStartingAngle + " " + yFOV);
             yGlobalAngle += yAngleIncrease;
@@ -60,46 +61,46 @@ public partial class FOVRenderer
             previousRayCastHit = xIteration > 0 ? lastColumnSampleRays[xIteration - 1] : new RaycastHit();
             secondPreviousRayCastHit = xIteration > 1 ? lastColumnSampleRays[xIteration - 2] : new RaycastHit();
             Vector3 sample = GetSamplePoint(origin, direction, SightRange, out raycastHit);
-            Vector3 reSampleXCorner = Vector3.zero;
 
             //if (!hasResampled)
             //    hasResampled = TryReTargetingSamplingAngle(x, y, xAngleSampled, yGlobalAngleIn, raycastHit, ref yAngleSampled, ref sample);
 
-            if (raycastHit.collider != null && (raycastHit.collider.gameObject.CompareTag("Stairs") || raycastHit.collider.gameObject.CompareTag("Terrain")))
-            {
-                InspectConcaveSample(sample, raycastHit);
-            }
-            else
-            {
-                reSampleXCorner = InspectSample(false, xIteration, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, sample, lastTrueRayCastHit, secondPreviousRayCastHit, previousRayCastHit, raycastHit);
-            }
+            //if (raycastHit.collider != null && (raycastHit.collider.gameObject.CompareTag("Stairs") || raycastHit.collider.gameObject.CompareTag("Terrain")))
+           // {
+            //    InspectConcaveSample(sample, raycastHit);
+            //}
+           // else
+            //{
+                Vector3 reSampleXCorner = InspectSample(false, xIteration, yAngleSampled, xAngleSampled, secondPreviousSample, previousSample, sample, lastTrueRayCastHit, secondPreviousRayCastHit, previousRayCastHit, raycastHit);
+
 
 
 #if UNITY_EDITOR
-            reSampleXCorner = disableReSampling ? Vector3.zero : reSampleXCorner;
+                reSampleXCorner = disableReSampling ? Vector3.zero : reSampleXCorner;
 #endif
-            //Re adjust the floor if needed
-            if (reSampleXCorner != Vector3.zero && LastAddedVertexPoint.sampleType == SampleType.Floor)
-            {
-                RaycastHit testRayHit;
-                Vector3 reDirection = (ConvertGlobal(reSampleXCorner) - origin + Vector3.up * 0.1f).normalized;
-                float xAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.x;
-                float yAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.y;
-                //Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
-                Vector3 reSample = GetSamplePoint(origin, reDirection, SightRange, out testRayHit, Color.red);
-                //ACylinder(reSample);
-
-                if (AreSimilarHeight(sample, reSample) && HitPointIsUpFacing(testRayHit))
+                //Re adjust the floor if needed
+                if (reSampleXCorner != Vector3.zero && LastAddedVertexPoint.sampleType == SampleType.Floor)
                 {
-                    sample = reSample;
-                    raycastHit = testRayHit;
-                    ReplaceVertexPointVertex(LastAddedVertexPoint, reSample);
-                }
+                    RaycastHit testRayHit;
+                    Vector3 reDirection = (ConvertGlobal(reSampleXCorner) - origin + Vector3.up * 0.1f).normalized;
+                    float xAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.x;
+                    float yAngleReSampled = Quaternion.LookRotation(reDirection, Vector3.up).eulerAngles.y;
+                    //Debug.Log("Resample " + xAngleSampled + " " + yAngleSampled);
+                    Vector3 reSample = GetSamplePoint(origin, reDirection, SightRange, out testRayHit, Color.red);
+                    //ACylinder(reSample);
+                    //
+                    if (AreSimilarHeight(sample, reSample) && HitPointIsUpFacing(testRayHit))
+                    {
+                        sample = reSample;
+                        raycastHit = testRayHit;
+                        ReplaceVertexPointVertex(LastAddedVertexPoint, reSample);
+                    }
 
-                //else
-                //   Debug.Log("Did not replace resample: y: " + y + " x: " + xIteration);
-                //InspectSample(true, xIteration, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
-            }
+                    //else
+                    //   Debug.Log("Did not replace resample: y: " + y + " x: " + xIteration);
+                    //InspectSample(true, xIteration, xAngleReSampled, yAngleReSampled, previousSample, reSample, lastTrueRayCastHit, previousRayCastHit, raycastHit);
+                }
+            //}
 
             //Save sample info for next iteration
 
