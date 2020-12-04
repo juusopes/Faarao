@@ -25,7 +25,7 @@ public class InGameMenu : MonoBehaviour
     }
 
     //[HideInInspector]
-    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, gameplayPanel, background;
+    public GameObject menuPanel, optionsPanel, audioPanel, videoPanel, controlsPanel, background;
     [HideInInspector]
     public GameObject continueButton, loadButton, saveButton, optionsButton, restartButton, mainMenuButton;
     [HideInInspector]
@@ -61,7 +61,6 @@ public class InGameMenu : MonoBehaviour
         audioPanel.SetActive(false);
         videoPanel.SetActive(false);
         controlsPanel.SetActive(false);
-        gameplayPanel.SetActive(false);
 
         startTime = Time.time;
     }
@@ -127,7 +126,6 @@ public class InGameMenu : MonoBehaviour
         audioPanel.SetActive(false);
         videoPanel.SetActive(false);
         controlsPanel.SetActive(false);
-        gameplayPanel.SetActive(false);
     }
 
     public void NewGame()
