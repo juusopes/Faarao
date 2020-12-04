@@ -565,7 +565,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 397, y: -495.96295}
+  m_AnchoredPosition: {x: 339.5, y: -733}
   m_SizeDelta: {x: 110, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &121517248
@@ -2525,8 +2525,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 239.3}
-  m_SizeDelta: {x: 412.227, y: 312.53247}
+  m_AnchoredPosition: {x: 0, y: 343.2}
+  m_SizeDelta: {x: 412.227, y: 340.5923}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &354506124
 MonoBehaviour:
@@ -2561,26 +2561,28 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.6
-  m_Text: 'space - stand & crouch
+  m_Text: 'middlemouse to rotate camera
 
-    left ctrl - interact
+    space - stand & crouch
+
+    left ctrl
+    - interact
 
     A - attack
 
-    Q
-    - ability 1
+    Q - ability 1
 
     W - ability 2
 
-    E - ability 3
+    E - ability
+    3
 
-    1 - select pharaoh (double
+    1 - select pharaoh (double press to locate)
+
+    2 - select priest (double
     press to locate)
 
-    2 - select priest (double press to locate)
-
-    backspace
-    - unselect character'
+    backspace - unselect character'
 --- !u!222 &354506125
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4315,7 +4317,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 627, y: -495.96295}
+  m_AnchoredPosition: {x: 569.5, y: -733}
   m_SizeDelta: {x: 110, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &559936585
@@ -5122,8 +5124,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -1.5000916, y: 408.80005}
-  m_SizeDelta: {x: 307.1164, y: 36.868927}
+  m_AnchoredPosition: {x: -1.5000916, y: 528}
+  m_SizeDelta: {x: 307.1164, y: 40.179092}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &647450188
 MonoBehaviour:
@@ -6854,7 +6856,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 512, y: -495.96295}
+  m_AnchoredPosition: {x: 454.5, y: -733}
   m_SizeDelta: {x: 110, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &893669364
@@ -7115,7 +7117,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 742, y: -495.96295}
+  m_AnchoredPosition: {x: 684.5, y: -733}
   m_SizeDelta: {x: 110, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &980517823
@@ -8415,7 +8417,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 511.9999, y: -541.7033}
+  m_AnchoredPosition: {x: 511.9999, y: -633}
   m_SizeDelta: {x: 110, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1134400053
@@ -18683,7 +18685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1791389114
 MonoBehaviour:
   m_ObjectHideFlags: 0
