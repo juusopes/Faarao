@@ -61,11 +61,11 @@ public class Detector
         bool sim2Reached = SimulationReached(Player2, detectionPercentage);
         bool hasReached = sim1Reached | sim2Reached;
 
-        if (sim1Reached)
+        if (sim1Reached && character.couldDetectPlayer1)
         {
             character.KillPlayer(Player1);
         }
-        if (sim2Reached)
+        if (sim2Reached && character.couldDetectPlayer2)
         {
             character.KillPlayer(Player2);
         }
@@ -164,7 +164,7 @@ public class Detector
     /// </summary>
     /// <param name="player"></param>
     /// <returns></returns>
-    private bool CouldDetectPlayer(GameObject player, PlayerController playerController)
+    public bool CouldDetectPlayer(GameObject player, PlayerController playerController)
     {
         if (IsPlayerDeadOrInvisible(playerController))   //Call this first so we dont mark targets
             return false;
