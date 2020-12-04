@@ -148,7 +148,8 @@ public partial class FOVRenderer : MonoBehaviour
         StartDebug();
 #endif
 
-        //SaveAsset();
+        Init2DCone();
+        SaveAsset();
     }
 
 #if UNITY_EDITOR
@@ -165,7 +166,11 @@ public partial class FOVRenderer : MonoBehaviour
             return;
 #endif
         if (ShouldUpdateViewCone())
-            UpdateViewCone();
+        {
+            UpdateViewCone2D();
+            //UpdateViewCone();
+        }
+
 
         RefreshRendReasons();
     }
@@ -275,6 +280,7 @@ public partial class FOVRenderer : MonoBehaviour
                 int v1Prev, v2Prev;
                 if (GetMathingPairNr(yIteration - 1, vertPrev, vertNew, out v1Prev, out v2Prev))
                 {
+                    Debug.Log(v1Prev + " " + v2Prev);
                     vertexPoints[v1Prev].n1 = v2Prev;
                     vertexPoints[v1Prev].n2 = vertexPoints.Count - 1;
                     vertexPoints[v2Prev].n1 = vertexPoints.Count;
@@ -284,7 +290,7 @@ public partial class FOVRenderer : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("no pair");
+                    Debug.Log("no island");
                 }
             }
 
@@ -328,6 +334,9 @@ public partial class FOVRenderer : MonoBehaviour
             if (vertexPoints[i - 1].pairNr != vertexPoints[i].pairNr)
                 continue;
 
+            if (vertexPoints[i - 1].n1 != -1 && vertexPoints[i].n1 != -1)
+                continue;
+
             //Debug.Log("MOi" + AreSimilarLenght(vertexPoints[i - 1].vertex, v1.vertex, 2f) + " " + AreSimilarLenght(vertexPoints[i].vertex, v2.vertex, 2f));
 
             if (ArePairEdges(vertexPoints[i - 1], vertexPoints[i], v1, v2))
@@ -335,10 +344,6 @@ public partial class FOVRenderer : MonoBehaviour
                 v1Prev = i - 1;
                 v2Prev = i;
                 return true;
-            }
-            else
-            {
-                Debug.Log("No pair");
             }
         }
         v1Prev = 0;
@@ -351,8 +356,9 @@ public partial class FOVRenderer : MonoBehaviour
         bool lenght = AreSimilarLenght(v1Prev.vertex, v1.vertex, mergeDistanceThreshold) || AreSimilarLenght(v2Prev.vertex, v2.vertex, mergeDistanceThreshold);
         bool height = AreSimilarHeight(v1Prev.vertex, v1.vertex) && AreSimilarHeight(v2Prev.vertex, v2.vertex);
         bool concave = AreConcaveNeighbours(v1Prev.sampleType, v2Prev) && AreConcaveNeighbours(v1.sampleType, v2);
+        Debug.Log(concave);
         //Debug.Log("Index: " + i + " Pair: " + v1prev.pairNr + " " + v1.pairNr + " " + v2prev.pairNr + " " +v2.pairNr + " same lenght: " + lenght + " same height: " + height);;
-        return lenght && height || concave;
+        return (lenght && height) || concave;
     }
 
     private Vector2 GetVertexUV(int y, Vector3 vertex)
@@ -525,56 +531,76 @@ public partial class FOVRenderer : MonoBehaviour
 
     #region 2D version =====================================================================================================================================
 
-    /*
+
+    Vector3[] vertices2D;
+    Vector2[] uv2D;
+    int[] triangles2D;
+    float angle;
+    float startingAngle;
+    float angleIncrease;
+    int rayCount = 50;
+
+    void Init2DCone()
+    {
+        vertices2D = new Vector3[yRayCount + 1 + 1];
+        uv2D = new Vector2[vertices2D.Length];
+        triangles2D = new int[yRayCount * 3];
+    }
+
+    private void UpdateViewCone2D()
+    {
+        SetOrigin(transform.position);
+        SetAimDirection(transform.forward, Y_FOV);
+        UpdateMesh();
+    }
+
     void UpdateMesh2D()
     {
-        yAngle = yStartingAngle;
-        vertices[0] = Vector3.zero;
-        uv[0] = Vector2.zero;
-
-
+        angle = startingAngle;
+        vertices2D[0] = Vector3.zero;
+        uv2D[0] = Vector2.zero;
 
         int vertexIndex = 1;
         int triangleIndex = 0;
-        for (int i = 0; i <= yRayCount; i++)
+        for (int i = 0; i <= rayCount; i++)
         {
             Vector3 vertex;
-            Vector3 direction = Quaternion.Euler(0, yAngle, 0) * Vector2.right;
+            Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector2.right;
             //Debug.DrawRay(origin, direction * viewDistance, Color.green, 10f);
             RaycastHit raycastHit;
             float uvLenght;
 
             if (Physics.Raycast(origin, direction, out raycastHit, SightRange, RayCaster.viewConeLayerMask))
             {
-                vertex = ConvertLocal(origin + direction * raycastHit.distance);
+                vertex = transform.InverseTransformPoint(origin + (direction * raycastHit.distance));
                 uvLenght = raycastHit.distance / SightRange;
             }
             else
             {
-                vertex = ConvertLocal(origin + direction * SightRange);
+                vertex = transform.InverseTransformPoint(origin + (direction * SightRange));
                 uvLenght = 1;
             }
 
 
             //Create Cone shaped uvs
-            float uvAngle = i * yAngleIncrease;
+            float uvAngle = i * angleIncrease;
             float rad = uvAngle * Mathf.Deg2Rad;
-            uv[vertexIndex] = new Vector2(Mathf.Sin(rad) * uvLenght, Mathf.Cos(rad) * uvLenght);
+            uv2D[vertexIndex] = new Vector2(Mathf.Sin(rad) * uvLenght, Mathf.Cos(rad) * uvLenght);
 
 
-            vertices[vertexIndex] = vertex;
+            vertices2D[vertexIndex] = vertex;
 
             if (i > 0)
             {
-                triangles[triangleIndex + 0] = 0;
-                triangles[triangleIndex + 1] = vertexIndex - 1;
-                triangles[triangleIndex + 2] = vertexIndex;
+                triangles2D[triangleIndex + 0] = 0;
+                triangles2D[triangleIndex + 1] = vertexIndex - 1;
+                triangles2D[triangleIndex + 2] = vertexIndex;
 
                 triangleIndex += 3;
             }
 
             vertexIndex++;
-            yAngle -= yAngleIncrease;
+            angle -= angleIncrease;
         }
 
         //foreach (Vector3 vert in vertices)
@@ -585,11 +611,16 @@ public partial class FOVRenderer : MonoBehaviour
 
         mesh.Clear();
 
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
-        mesh.uv = uv;
+        mesh.vertices = vertices2D;
+        mesh.triangles = triangles2D;
+        mesh.uv = uv2D;
     }
-    */
+
+    public void SetAimDirection(Vector3 aimDirection, float fovIn)
+    {
+        startingAngle = transform.rotation.eulerAngles.y + (fovIn / 2f) - 90f;
+        angleIncrease = fovIn / rayCount;
+    }
 
     #endregion
 

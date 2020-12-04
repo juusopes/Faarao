@@ -270,6 +270,18 @@ public partial class FOVRenderer
 
         return color;
     }
+
+    void SaveAsset()
+    {
+        var mf = GetComponent<MeshFilter>();
+        if (mf)
+        {
+            var savePath = "Assets/" + "viewConeMesh.asset";
+            Debug.Log("Saved Mesh to:" + savePath);
+
+            AssetDatabase.CreateAsset(mf.mesh, savePath);
+        }
+    }
 }
 
 #endif
