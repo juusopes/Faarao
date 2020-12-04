@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [ExecuteInEditMode]
-public class ColliderDebugger : ScriptableWizard
+public class ColliderDebugger
 {
     [MenuItem("Henkka/Find All Structures with Mesh Colliders")]
     public static void FindMeshColliders()

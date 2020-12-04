@@ -20,6 +20,7 @@ public class NetworkManager : MonoBehaviour
 
     public bool ShouldSendToServer => !IsHost && Client.Instance.IsOnline;
 
+    public bool IsConnectedToMasterServer => MasterClient.Instance.IsOnline;
 
 
     // For testing
@@ -64,13 +65,22 @@ public class NetworkManager : MonoBehaviour
             else
             {
                 // Automatically start server if this is the original editor
-                HostServer();
+                HostServer("placeholder");
             }
         }
 #endif
     }
 
-    public bool HostServer()
+    public bool ConnectToMasterServer(string name, bool hasPassword)
+    {
+        if (MasterClient.Instance.IsOnline) return true;
+
+        if (MasterClient.Instance.ConnectToServer(name, hasPassword)) return true;
+
+        return false;
+    }
+
+    public bool HostServer(string name, string password = null)
     {
         if (Client.Instance.IsOnline || Server.Instance.IsOnline)
         {
@@ -79,7 +89,7 @@ public class NetworkManager : MonoBehaviour
         }
         else
         {
-            Server.Instance.Start(Constants.port);
+            Server.Instance.Start(Constants.port, name, password);
 
             // For testing
             if (_simulateNetwork)
@@ -96,7 +106,7 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public bool JoinServer(IPEndPoint endPoint = null)
+    public bool JoinServer(IPEndPoint endPoint = null, string password = null)
     {
         Debug.Log("Trying to join server");
 
@@ -116,7 +126,7 @@ public class NetworkManager : MonoBehaviour
                 endPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             }
             
-            Client.Instance.ConnectToServer(endPoint);
+            Client.Instance.ConnectToServer(endPoint, GameManager._instance.GetName(), password);
 
             // For testing
             if (_simulateNetwork)
@@ -137,14 +147,17 @@ public class NetworkManager : MonoBehaviour
     {
         Server.Instance.Stop();
         Client.Instance.Disconnect();
+        MasterClient.Instance.Disconnect();
     }
 
     public void ResetNetworking()
     {
         Server.Instance.Stop();
         Client.Instance.Disconnect();
+        MasterClient.Instance.Disconnect();
 
         IsHost = true;
         IsConnectedToServer = false;
+        
     }
 }

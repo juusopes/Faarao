@@ -24,15 +24,19 @@ public sealed class Server : NetworkHandler
     }
     public int MaxPlayers { get; private set; } = Constants.maxPlayers;
     public int Port { get; private set; }
+    public string Password { get; private set; } = null;
+    public string Name { get; private set; }
 
     public Dictionary<int, Connection> Connections { get; private set; }
     public Dictionary<int, ConnectionState> ConnectionStates { get; private set; }
 
-    public void Start(int port)
+    public void Start(int port, string name, string password = null)
     {
         Debug.Log("Starting server...");
 
         Port = port;
+        Password = password;
+        Name = name;
 
         InitializeServerData();
 
@@ -43,6 +47,10 @@ public sealed class Server : NetworkHandler
         StartHeartbeats();
 
         MessageLog.Instance.AddMessage($"Server started on port {Port}", Constants.messageColorNetworking);
+
+        bool hasPassword = !string.IsNullOrEmpty(password);
+
+        NetworkManager._instance.ConnectToMasterServer(name, hasPassword);
     }
 
     public void StartHeartbeats()
@@ -212,7 +220,10 @@ public sealed class Server : NetworkHandler
             // Reset flags
             ResetConnectionFlags(connection, ConnectionState.All);
 
-            GameManager._instance.PlayerDisconnected(connection);
+            if (GameManager._instance.Players.ContainsKey(connection))
+            {
+                GameManager._instance.PlayerDisconnected(connection);
+            }
         });
     }
 
