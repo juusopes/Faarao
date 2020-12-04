@@ -15856,8 +15856,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.6, y: 244.6}
-  m_SizeDelta: {x: 307.1164, y: 247.63562}
+  m_AnchoredPosition: {x: 0, y: 244.6}
+  m_SizeDelta: {x: 503.5821, y: 247.63562}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5789426462437867853
 CanvasRenderer:
@@ -15913,7 +15913,13 @@ MonoBehaviour:
 
     E - ability 3
 
-    backspace - unselect character'
+    1 - select pharaoh (double
+    press to locate)
+
+    2 - select priest (double press to locate)
+
+    backspace
+    - unselect character'
 --- !u!1 &7966825021503730380
 GameObject:
   m_ObjectHideFlags: 0
