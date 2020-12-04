@@ -53,7 +53,7 @@ public class FieldOfViewRenderer : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        material = GetComponent<Renderer>().material;
+        material = GetComponent<MeshRenderer>().material;
         origin = Vector3.zero;
         vertices = new Vector3[rayCount + 1 + 1];
         vertices[0] = origin;
@@ -150,7 +150,8 @@ public class FieldOfViewRenderer : MonoBehaviour
 
     public void UpdateMaterialProperties(LineType background, LineType fill, float percentage)
     {
-        material.SetFloat("_FillScale", percentage);
+        if (material != null)
+            material.SetFloat("_FillScale", percentage);
     }
 
 

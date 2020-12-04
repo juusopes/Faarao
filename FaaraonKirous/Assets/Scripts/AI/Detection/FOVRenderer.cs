@@ -140,7 +140,7 @@ public partial class FOVRenderer : MonoBehaviour
         transform.localRotation = Quaternion.identity;
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        material = GetComponent<Renderer>().material;
+        material = GetComponent<MeshRenderer>().material;
         origin = Vector3.zero;
         lastColumnSamplePoints = new Vector3[xRayCount];
         lastColumnSampleRays = new RaycastHit[xRayCount];
@@ -599,7 +599,8 @@ public partial class FOVRenderer : MonoBehaviour
 
     public void UpdateMaterialProperties(LineType background, LineType fill, float percentage)
     {
-        material.SetFloat("_FillScale", percentage);
+        if (material != null)
+            material.SetFloat("_FillScale", percentage);
     }
 
     #endregion
