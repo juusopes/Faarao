@@ -63,7 +63,15 @@ public class DeathScript : MonoBehaviour
     {
         isDead = true;
         hp = 0;
-        soundFX.DeathSound();
+
+        if(gameObject.CompareTag("Player"))
+        {
+            soundFX.PlayerDeathSound();
+        }
+        else
+        {
+            soundFX.DeathSound();
+        }
 
         //if (doMessage && CharacterNetManager.List == ObjectList.player)
         //{
@@ -83,8 +91,11 @@ public class DeathScript : MonoBehaviour
         isDead = false;
         hp = 1;
 
+
         if (doMessage && CharacterNetManager.List == ObjectList.player)
         {
+            soundFX.ResurrectSound();
+
             MessageLog.Instance.AddMessage(
                 $"{Tools.TypeToString(CharacterNetManager.Type)} was revived", 
                 Color.green);

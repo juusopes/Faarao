@@ -16,6 +16,8 @@ public class SoundManager : MonoBehaviour
     public AudioSource deathSound;
     public AudioSource clickSound;
 
+    public AudioSource playerDeathSound;
+
     public void InvisibilitySound()
     {
         invisibilitySound.Play();
@@ -58,5 +60,10 @@ public class SoundManager : MonoBehaviour
     public void ClickSound()
     {
         clickSound.Play();
+    }
+
+    public void PlayerDeathSound()
+    {
+        playerDeathSound.Play();
     }
 }

@@ -19,7 +19,7 @@ public class Constants
     public const int defaultConnectionId = 0;
     public const int serverConnectionId = defaultConnectionId;
     public const int noId = -1;
-    public const int maxPlayers = 50;
+    public const int maxPlayers = 2;
     public const int defaultPing = 1000;  // ms
     //public const int resendDelay = 30;  // ms
     public const double resendMultiplier = 1.2;
@@ -38,4 +38,9 @@ public class Constants
 
 
     public static readonly Color messageColorNetworking = Color.blue;
+
+    public const int masterServerPort = 26915;
+    public const int maxServers = 512;
+    public const string masterServerDNS = "faaraonkirous.ddns.net";
+    public const float masterServerHeartbeatFrequency = 10f;
 }
