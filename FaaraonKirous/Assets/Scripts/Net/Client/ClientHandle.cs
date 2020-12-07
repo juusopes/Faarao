@@ -86,8 +86,9 @@ public class ClientHandle
 
     public static void ServerStopped(int connection, Packet packet)
     {
-        // TODO: Close game etc.
         Client.Instance.Disconnect();
+        GameManager._instance.ExitToMainMenu();
+        MessageLog.Instance.AddMessage("Server connection lost", Constants.messageColorNetworking);
     }
     #endregion
 

@@ -155,10 +155,7 @@ public class InGameMenu : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        if (NetworkManager._instance.IsHost)
-        {
-            GameManager._instance.ExitToMainMenu();
-        }
+        GameManager._instance.ExitToMainMenu();
     }
 
     public void SaveLevel()
